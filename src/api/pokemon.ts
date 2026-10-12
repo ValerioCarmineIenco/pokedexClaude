@@ -6,14 +6,12 @@ import type {
   PokemonSpeciesResponse,
 } from '@/types/pokeapi';
 import {
-  POKEMON_TYPES,
+  TYPE_NAMES,
   type Pokemon,
   type PokemonSpecies,
-  type PokemonStat,
-  type PokemonType,
-  type StatKey,
+  type StatName,
+  type TypeName,
 } from '@/types/pokemon';
-import { capitalize, formatSlug } from '@/utils/format';
 
 /** La v1 copre solo la prima generazione. */
 export const FIRST_POKEMON_ID = 1;
@@ -23,14 +21,14 @@ export const PAGE_SIZE = 20;
 const ARTWORK_BASE_URL =
   'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork';
 
-const STAT_LABELS: Record<StatKey, string> = {
-  hp: 'PS',
-  attack: 'Attacco',
-  defense: 'Difesa',
-  'special-attack': 'Att. Sp.',
-  'special-defense': 'Dif. Sp.',
-  speed: 'Velocità',
-};
+const STAT_NAMES: readonly string[] = [
+  'hp',
+  'attack',
+  'defense',
+  'special-attack',
+  'special-defense',
+  'speed',
+] satisfies StatName[];
 
 /** Artwork ufficiale, costruito dall'id senza chiamate extra. */
 export function getArtworkUrl(id: number): string {
@@ -52,37 +50,31 @@ export function getIdFromUrl(url: string): number {
   return Number(match[1]);
 }
 
-function isPokemonType(value: string): value is PokemonType {
-  return (POKEMON_TYPES as readonly string[]).includes(value);
+function isTypeName(value: string): value is TypeName {
+  return (TYPE_NAMES as readonly string[]).includes(value);
 }
 
-function isStatKey(value: string): value is StatKey {
-  return value in STAT_LABELS;
+function isStatName(value: string): value is StatName {
+  return STAT_NAMES.includes(value);
 }
 
 export function toPokemon(raw: PokemonResponse): Pokemon {
   return {
     id: raw.id,
-    name: capitalize(raw.name),
+    name: raw.name,
     types: [...raw.types]
       .sort((a, b) => a.slot - b.slot)
       .map((t) => t.type.name)
-      .filter(isPokemonType),
-    heightM: raw.height / 10,
-    weightKg: raw.weight / 10,
+      .filter(isTypeName),
+    artworkUrl: getArtworkUrl(raw.id),
+    height: raw.height,
+    weight: raw.weight,
     abilities: [...raw.abilities]
       .sort((a, b) => a.slot - b.slot)
-      .map((a) => formatSlug(a.ability.name)),
-    stats: raw.stats
-      .filter((s) => isStatKey(s.stat.name))
-      .map(
-        (s): PokemonStat => ({
-          key: s.stat.name as StatKey,
-          label: STAT_LABELS[s.stat.name as StatKey],
-          value: s.base_stat,
-        }),
-      ),
-    imageUrl: getArtworkUrl(raw.id),
+      .map((a) => ({ name: a.ability.name, isHidden: a.is_hidden })),
+    stats: raw.stats.flatMap((s) =>
+      isStatName(s.stat.name) ? [{ name: s.stat.name, value: s.base_stat }] : [],
+    ),
   };
 }
 
@@ -115,7 +107,7 @@ export async function fetchPokemonPage(
     `/pokemon?limit=${limit}&offset=${offset}`,
     signal,
   );
-  return data.results.map((r) => ({ id: getIdFromUrl(r.url), name: capitalize(r.name) }));
+  return data.results.map((r) => ({ id: getIdFromUrl(r.url), name: r.name }));
 }
 
 /** Dettaglio di un Pokémon per id o per nome (minuscolo, come in PokéAPI). */

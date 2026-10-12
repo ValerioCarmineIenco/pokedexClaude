@@ -29,13 +29,13 @@ src/
 
 ## Livello dati
 
-Gli schermi usano solo gli hook di `src/hooks` (React Query, cache salvata in AsyncStorage):
+Gli schermi usano solo gli hook di `src/hooks` (React Query); i tipi restituiti sono in `src/types/pokemon.ts` e ricalcano i view model della UI.
 
 | Hook | Restituisce |
 | --- | --- |
-| `usePokemonList()` | `pokemon`, `isLoading`, `errorMessage`, `refetch`, `hasNextPage`, `fetchNextPage`, `isFetchingNextPage` — Gen 1 a pagine da 20 |
-| `usePokemon(id)` | `pokemon` con tipi, altezza (m), peso (kg), abilità, statistiche con etichette italiane |
-| `usePokemonSpecies(id)` | `species.description` (italiano) e `species.genus` |
+| `usePokemonList()` | `pokemon: Pokemon[]` (Gen 1 a pagine da 20), `isLoading`, `errorMessage`, `refetch`, `hasNextPage`, `fetchNextPage`, `isFetchingNextPage` |
+| `usePokemonDetail(id)` | `pokemon: PokemonDetail` (dati + descrizione italiana), `isLoading`, `errorMessage`, `refetch` |
+| `usePokemon(id)` / `usePokemonSpecies(id)` | le due metà del dettaglio, separate |
 | `usePokemonSearch(pokemon, testo)` | i Pokémon già caricati filtrati per nome |
 
-`id` può essere direttamente il parametro di rotta. Nomi dei tipi in italiano in `src/theme/typeNames.ts`, formattazione (#025, m, kg) in `src/utils/format.ts`, Pokémon precedente/successivo con `getAdjacentIds` in `src/api/pokemon.ts`.
+`id` può essere direttamente il parametro di rotta. Nomi, altezza (dm) e peso (hg) arrivano come in PokéAPI: la formattazione la fa la UI. `getAdjacentIds` in `src/api/pokemon.ts` dà il Pokémon precedente/successivo; `QueryProvider` in `src/api/QueryProvider.tsx` salva la cache in AsyncStorage e va messo in `_layout.tsx` al posto di `QueryClientProvider`.
