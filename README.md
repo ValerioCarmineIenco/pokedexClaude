@@ -26,3 +26,16 @@ src/
 ├── types/            # tipi TypeScript delle risposte API
 └── utils/            # formattazione
 ```
+
+## Livello dati
+
+Gli schermi usano solo gli hook di `src/hooks` (React Query, cache salvata in AsyncStorage):
+
+| Hook | Restituisce |
+| --- | --- |
+| `usePokemonList()` | `pokemon`, `isLoading`, `errorMessage`, `refetch`, `hasNextPage`, `fetchNextPage`, `isFetchingNextPage` — Gen 1 a pagine da 20 |
+| `usePokemon(id)` | `pokemon` con tipi, altezza (m), peso (kg), abilità, statistiche con etichette italiane |
+| `usePokemonSpecies(id)` | `species.description` (italiano) e `species.genus` |
+| `usePokemonSearch(pokemon, testo)` | i Pokémon già caricati filtrati per nome |
+
+`id` può essere direttamente il parametro di rotta. Nomi dei tipi in italiano in `src/theme/typeNames.ts`, formattazione (#025, m, kg) in `src/utils/format.ts`, Pokémon precedente/successivo con `getAdjacentIds` in `src/api/pokemon.ts`.
