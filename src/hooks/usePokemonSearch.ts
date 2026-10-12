@@ -1,13 +1,6 @@
 import { useMemo } from 'react';
 
-/** Toglie maiuscole, accenti e spazi ai bordi, così «PIKA» trova «pikachu». */
-function normalize(value: string): string {
-  return value
-    .normalize('NFD')
-    .replace(/[̀-ͯ]/g, '')
-    .toLowerCase()
-    .trim();
-}
+import { normalizeSearch as normalize } from '@/utils/search';
 
 /** Filtra per nome i Pokémon passati (nessuna chiamata di rete). */
 export function filterPokemonByName<T extends { name: string }>(pokemon: T[], query: string): T[] {

@@ -3,6 +3,7 @@ import itemIndex from '@/data/itemIndex.json';
 import type { ItemResponse, NamedAPIResource } from '@/types/pokeapi';
 import type { Item, ItemCategory, ItemIndexEntry, ItemPage } from '@/types/item';
 import { formatName } from '@/utils/format';
+import { normalizeSearch } from '@/utils/search';
 
 export const ITEM_PAGE_SIZE = 20;
 export const MAX_RELATED_ITEMS = 5;
@@ -16,9 +17,24 @@ const SPRITE_BASE_URL = 'https://raw.githubusercontent.com/PokeAPI/sprites/maste
 const INDEX = itemIndex as ItemIndexEntry[];
 const BY_ID = new Map(INDEX.map((entry) => [entry.id, entry]));
 
-/** Voci dell'indice, eventualmente di una sola categoria. */
-export function getItemIndex(category?: ItemCategory): ItemIndexEntry[] {
-  return category ? INDEX.filter((entry) => entry.category === category) : INDEX;
+/** Testo su cui cerca `search`: nome italiano e slug inglese («pozione potion»). */
+const SEARCH_TEXT = new Map(
+  INDEX.map((entry) => [entry.id, normalizeSearch(`${entry.label} ${entry.name.replace(/-/g, ' ')}`)]),
+);
+
+/**
+ * Voci dell'indice, eventualmente di una sola categoria e/o il cui nome contiene `search`
+ * (anche parziale, senza distinzione di maiuscole e accenti). Nessuna chiamata di rete:
+ * trova anche gli oggetti non ancora caricati.
+ */
+export function getItemIndex(category?: ItemCategory, search = ''): ItemIndexEntry[] {
+  const needle = normalizeSearch(search);
+  if (!category && !needle) return INDEX;
+  return INDEX.filter(
+    (entry) =>
+      (!category || entry.category === category) &&
+      (!needle || SEARCH_TEXT.get(entry.id)!.includes(needle)),
+  );
 }
 
 export function getItemIndexEntry(id: number): ItemIndexEntry | undefined {
@@ -53,16 +69,20 @@ export function parseItemId(value: string | string[] | number | undefined): numb
 }
 
 /** Id degli oggetti di una pagina (da 0), senza chiamate. */
-export function getItemPageIds(page: number, category?: ItemCategory): number[] {
+export function getItemPageIds(page: number, category?: ItemCategory, search?: string): number[] {
   const start = page * ITEM_PAGE_SIZE;
-  return getItemIndex(category)
+  return getItemIndex(category, search)
     .slice(start, start + ITEM_PAGE_SIZE)
     .map((entry) => entry.id);
 }
 
 /** Pagina successiva a `page`, null se è l'ultima. */
-export function getNextItemPage(page: number, category?: ItemCategory): number | null {
-  return (page + 1) * ITEM_PAGE_SIZE < getItemIndex(category).length ? page + 1 : null;
+export function getNextItemPage(
+  page: number,
+  category?: ItemCategory,
+  search?: string,
+): number | null {
+  return (page + 1) * ITEM_PAGE_SIZE < getItemIndex(category, search).length ? page + 1 : null;
 }
 
 const byLanguage = (language: string) => (entry: { language: NamedAPIResource }) =>

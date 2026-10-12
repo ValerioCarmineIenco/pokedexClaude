@@ -42,6 +42,8 @@ export type ItemIndexEntry = {
   id: number;
   /** Slug di PokéAPI (es. `potion`). */
   name: string;
+  /** Nome mostrato (es. «Pozione»): italiano, altrimenti inglese. Serve per la ricerca. */
+  label: string;
   /** Categoria PokéAPI (es. `healing`). */
   group: string;
   category: ItemCategory;
