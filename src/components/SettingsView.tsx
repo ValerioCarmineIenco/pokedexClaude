@@ -15,9 +15,10 @@ const PREVIEW_ID = 25;
 type Props = {
   artworkStyle: ArtworkStyle;
   onArtworkStyleChange: (style: ArtworkStyle) => void;
+  onBack: () => void;
 };
 
-export function SettingsView({ artworkStyle, onArtworkStyleChange }: Props) {
+export function SettingsView({ artworkStyle, onArtworkStyleChange, onBack }: Props) {
   const insets = useSafeAreaInsets();
   return (
     <ScrollView
@@ -26,6 +27,14 @@ export function SettingsView({ artworkStyle, onArtworkStyleChange }: Props) {
         styles.content,
         { paddingTop: insets.top + 8, paddingBottom: insets.bottom + 24 },
       ]}>
+      <Pressable
+        onPress={onBack}
+        hitSlop={6}
+        accessibilityRole="button"
+        accessibilityLabel="Torna all'elenco"
+        style={({ pressed }) => [styles.backButton, pressed && styles.pressed]}>
+        <Icon name="back" size={18} color={colors.text} />
+      </Pressable>
       <View style={styles.titleRow}>
         <PokeBallLogo />
         <Text style={styles.title} accessibilityRole="header">
@@ -89,6 +98,15 @@ const styles = StyleSheet.create({
   content: {
     paddingHorizontal: 16,
     gap: 20,
+  },
+  backButton: {
+    width: 44,
+    height: 44,
+    borderRadius: 22,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginLeft: -10,
+    marginBottom: -16,
   },
   titleRow: {
     flexDirection: 'row',
