@@ -3,24 +3,30 @@ import { useCallback, useEffect, useState } from 'react';
 
 export type ViewMode = 'grid' | 'row';
 
-const STORAGE_KEY = 'pokedex.viewMode';
+const DEFAULT_STORAGE_KEY = 'pokedex.viewMode';
 
-/** Vista dell'elenco (griglia o riga), ricordata tra un'apertura e l'altra. Predefinita: griglia. */
-export function useViewMode() {
+/**
+ * Vista dell'elenco (griglia o riga), ricordata tra un'apertura e l'altra. Predefinita: griglia.
+ * Ogni elenco passa la sua chiave, così Pokédex e Oggetti ricordano viste diverse.
+ */
+export function useViewMode(storageKey: string = DEFAULT_STORAGE_KEY) {
   const [viewMode, setViewModeState] = useState<ViewMode>('grid');
 
   useEffect(() => {
-    AsyncStorage.getItem(STORAGE_KEY)
+    AsyncStorage.getItem(storageKey)
       .then((saved) => {
         if (saved === 'grid' || saved === 'row') setViewModeState(saved);
       })
       .catch(() => {});
-  }, []);
+  }, [storageKey]);
 
-  const setViewMode = useCallback((mode: ViewMode) => {
-    setViewModeState(mode);
-    AsyncStorage.setItem(STORAGE_KEY, mode).catch(() => {});
-  }, []);
+  const setViewMode = useCallback(
+    (mode: ViewMode) => {
+      setViewModeState(mode);
+      AsyncStorage.setItem(storageKey, mode).catch(() => {});
+    },
+    [storageKey],
+  );
 
   return [viewMode, setViewMode] as const;
 }
