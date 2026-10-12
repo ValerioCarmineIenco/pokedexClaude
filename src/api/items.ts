@@ -1,7 +1,7 @@
 import { fetchJson } from '@/api/client';
 import itemIndex from '@/data/itemIndex.json';
 import type { ItemResponse, NamedAPIResource } from '@/types/pokeapi';
-import type { Item, ItemCategory, ItemIndexEntry, ItemPage } from '@/types/item';
+import { ITEM_CATEGORIES, type Item, type ItemCategory, type ItemIndexEntry, type ItemPage } from '@/types/item';
 import { formatName } from '@/utils/format';
 import { normalizeSearch } from '@/utils/search';
 
@@ -11,10 +11,16 @@ export const MAX_RELATED_ITEMS = 5;
 const SPRITE_BASE_URL = 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items';
 
 /**
- * Oggetti mostrati nell'app, in ordine di id (come nei giochi: prima le Poké Ball, poi i
- * rimedi…). Generato da `scripts/generate-item-index.mjs`: solo categorie utili e con immagine.
+ * Oggetti mostrati nell'app, raggruppati per categoria nell'ordine di `ITEM_CATEGORIES` e,
+ * dentro ogni categoria, in ordine di id: l'elenco completo scorre una categoria dopo l'altra.
+ * Generato da `scripts/generate-item-index.mjs`: solo categorie utili e con immagine.
  */
-const INDEX = itemIndex as ItemIndexEntry[];
+const INDEX = (itemIndex as ItemIndexEntry[])
+  .slice()
+  .sort(
+    (a, b) =>
+      ITEM_CATEGORIES.indexOf(a.category) - ITEM_CATEGORIES.indexOf(b.category) || a.id - b.id,
+  );
 const BY_ID = new Map(INDEX.map((entry) => [entry.id, entry]));
 
 /** Testo su cui cerca `search`: nome italiano e slug inglese («pozione potion»). */
