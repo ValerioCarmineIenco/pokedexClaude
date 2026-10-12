@@ -28,14 +28,20 @@ const SHEET_CAP = 72;
 /** Lato delle carte quadrate dei Pokémon. */
 const POKEMON_SIZE = 108;
 
+// Stessa forma di `Ability` del thread dati (`src/types/ability.ts`): quando arriva su main
+// questi tipi si sostituiscono con l'import, senza toccare la vista.
+
 /** Un Pokémon che può avere l'abilità. */
 export type AbilityPokemon = {
   id: number;
   /** Slug di PokéAPI (es. `pikachu`). */
   name: string;
-  types: TypeName[];
   /** Abilità nascosta per questo Pokémon. */
   isHidden: boolean;
+  /** Artwork ufficiale; la vista usa lo stile scelto nelle Impostazioni. */
+  artworkUrl: string;
+  /** Solo per colorare la carta; senza tipi si usa il colore delle abilità. */
+  types?: TypeName[];
 };
 
 /** Dati di `/ability/{id}`, pronti per il dettaglio. */
@@ -45,11 +51,11 @@ export type AbilityDetail = {
   name: string;
   /** Ultima descrizione italiana dei giochi, altrimenti inglese; stringa vuota se assente. */
   description: string;
-  /** Effetto in breve; stringa vuota se assente. */
-  effect: string;
+  /** Effetto per esteso (in inglese su PokéAPI); null se assente. */
+  effect: string | null;
   /** Generazione in cui è stata introdotta. */
   generation: number;
-  /** Pokémon dell'app che la possono avere, in ordine di Pokédex o di PokéAPI. */
+  /** Pokémon dell'app che la possono avere, in ordine di id. */
   pokemon: AbilityPokemon[];
 };
 
@@ -157,7 +163,7 @@ export function AbilityDetailView({
           </View>
         )}
 
-        {ability && ability.effect !== '' && (
+        {ability?.effect && (
           <View style={styles.section}>
             <Text style={styles.sectionTitle} accessibilityRole="header">
               Effetto
@@ -208,7 +214,7 @@ function PokemonTile({ pokemon, onPress }: { pokemon: AbilityPokemon; onPress: (
       accessibilityLabel={`${name}, numero ${pokemon.id}${pokemon.isHidden ? ', abilità nascosta' : ''}`}
       style={({ pressed }) => [
         styles.relatedTile,
-        { backgroundColor: typeTint(primaryType(pokemon.types)) },
+        { backgroundColor: pokemon.types ? typeTint(primaryType(pokemon.types)) : ABILITY_SOFT },
         pressed && styles.relatedPressed,
       ]}>
       {pokemon.isHidden && (
