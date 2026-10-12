@@ -33,6 +33,7 @@ export default function PokemonListScreen() {
       onPressPokemon={(pokemon) =>
         router.push({ pathname: '/pokemon/[id]', params: { id: String(pokemon.id) } })
       }
+      onOpenSettings={() => router.push('/settings')}
     />
   );
 }

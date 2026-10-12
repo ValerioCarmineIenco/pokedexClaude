@@ -17,6 +17,7 @@ export default function RootLayout() {
           }}>
           <Stack.Screen name="index" options={{ title: 'Pokédex' }} />
           <Stack.Screen name="pokemon/[id]" options={{ title: 'Dettaglio' }} />
+          <Stack.Screen name="settings" options={{ title: 'Impostazioni' }} />
         </Stack>
       </FontsGate>
     </QueryProvider>
