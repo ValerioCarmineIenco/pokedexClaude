@@ -57,3 +57,18 @@ export type ItemResponse = {
   effect_entries: { effect: string; short_effect: string; language: NamedAPIResource }[];
   sprites: { default: string | null };
 };
+
+export type AbilityResponse = {
+  id: number;
+  name: string;
+  is_main_series: boolean;
+  generation: NamedAPIResource;
+  names: { name: string; language: NamedAPIResource }[];
+  flavor_text_entries: {
+    flavor_text: string;
+    language: NamedAPIResource;
+    version_group: NamedAPIResource;
+  }[];
+  effect_entries: { effect: string; short_effect: string; language: NamedAPIResource }[];
+  pokemon: { is_hidden: boolean; slot: number; pokemon: NamedAPIResource }[];
+};
