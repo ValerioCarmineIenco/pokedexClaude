@@ -4,6 +4,7 @@ import type { ViewMode } from '@/hooks/useViewMode';
 import { colors } from '@/theme/colors';
 import { fonts } from '@/theme/fonts';
 
+import { GenerationPicker } from './GenerationPicker';
 import { Icon } from './Icon';
 import { PokeBallLogo } from './PokeBallLogo';
 import { SearchBar } from './SearchBar';
@@ -14,9 +15,12 @@ type Props = {
   onSearchTextChange: (text: string) => void;
   viewMode: ViewMode;
   onViewModeChange: (mode: ViewMode) => void;
+  /** Generazione mostrata; null = tutte. */
+  generationId: number | null;
+  onGenerationChange: (generationId: number | null) => void;
   caption: string;
   onOpenSettings: () => void;
-  /** Nasconde ricerca e selettore, ad esempio nello stato di errore. */
+  /** Nasconde ricerca e selettori, ad esempio nello stato di errore. */
   compact?: boolean;
 };
 
@@ -25,6 +29,8 @@ export function ListHeader({
   onSearchTextChange,
   viewMode,
   onViewModeChange,
+  generationId,
+  onGenerationChange,
   caption,
   onOpenSettings,
   compact = false,
@@ -37,7 +43,7 @@ export function ListHeader({
           Pokédex
         </Text>
         <View style={styles.actions}>
-          {!compact && <ViewToggle value={viewMode} onChange={onViewModeChange} />}
+          {!compact && <GenerationPicker value={generationId} onChange={onGenerationChange} />}
           <Pressable
             onPress={onOpenSettings}
             hitSlop={4}
@@ -51,7 +57,12 @@ export function ListHeader({
       {!compact && (
         <>
           <SearchBar value={searchText} onChangeText={onSearchTextChange} />
-          <Text style={styles.caption}>{caption}</Text>
+          <View style={styles.captionRow}>
+            <Text style={styles.caption} numberOfLines={1}>
+              {caption}
+            </Text>
+            <ViewToggle value={viewMode} onChange={onViewModeChange} />
+          </View>
         </>
       )}
     </View>
@@ -94,7 +105,13 @@ const styles = StyleSheet.create({
   pressed: {
     opacity: 0.7,
   },
+  captionRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 12,
+  },
   caption: {
+    flex: 1,
     fontFamily: fonts.bodyBold,
     fontSize: 12,
     letterSpacing: 0.2,

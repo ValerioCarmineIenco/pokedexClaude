@@ -7,7 +7,9 @@ import { usePokemonSearch } from '@/hooks/usePokemonSearch';
 import { useViewMode } from '@/hooks/useViewMode';
 
 export default function PokemonListScreen() {
-  const list = usePokemonList();
+  // Si parte con tutte le generazioni in sequenza.
+  const [generationId, setGenerationId] = useState<number | null>(null);
+  const list = usePokemonList(generationId);
   const [searchText, setSearchText] = useState('');
   const [viewMode, setViewMode] = useViewMode();
   const results = usePokemonSearch(list.pokemon, searchText);
@@ -20,6 +22,8 @@ export default function PokemonListScreen() {
       onSearchTextChange={setSearchText}
       viewMode={viewMode}
       onViewModeChange={setViewMode}
+      generationId={generationId}
+      onGenerationChange={setGenerationId}
       isLoading={list.isLoading}
       errorMessage={list.errorMessage}
       hasNextPage={list.hasNextPage}
