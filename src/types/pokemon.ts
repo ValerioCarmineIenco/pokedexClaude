@@ -33,9 +33,24 @@ export type StatName =
   | 'special-defense'
   | 'speed';
 
+/** Una generazione del Pokédex (es. Generazione I, id 1-151). */
+export type Generation = {
+  /** 1, 2, ... */
+  id: number;
+  /** «Generazione I» */
+  name: string;
+  /** Regione in italiano (es. «Kanto»). */
+  region: string;
+  /** Primo e ultimo id nazionale, inclusi. */
+  firstId: number;
+  lastId: number;
+};
+
 /** Quanto serve per una card dell'elenco. */
 export type PokemonSummary = {
   id: number;
+  /** Generazione di appartenenza (1, 2), ricavata dall'id. */
+  generation: number;
   /** Nome grezzo di PokéAPI (es. `bulbasaur`); l'iniziale maiuscola la mette la UI. */
   name: string;
   /** In ordine di slot: il primo è il tipo principale. */

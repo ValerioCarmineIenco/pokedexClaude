@@ -4,9 +4,10 @@ import type { ViewMode } from '@/hooks/useViewMode';
 import { colors } from '@/theme/colors';
 import { fonts } from '@/theme/fonts';
 
+import { GenerationPicker } from './GenerationPicker';
 import { Icon } from './Icon';
-import { PokeBallLogo } from './PokeBallLogo';
 import { SearchBar } from './SearchBar';
+import { SectionTitle } from './SectionTitle';
 import { ViewToggle } from './ViewToggle';
 
 type Props = {
@@ -14,9 +15,12 @@ type Props = {
   onSearchTextChange: (text: string) => void;
   viewMode: ViewMode;
   onViewModeChange: (mode: ViewMode) => void;
+  /** Generazione mostrata; null = tutte. */
+  generationId: number | null;
+  onGenerationChange: (generationId: number | null) => void;
   caption: string;
   onOpenSettings: () => void;
-  /** Nasconde ricerca e selettore, ad esempio nello stato di errore. */
+  /** Nasconde ricerca e selettori, ad esempio nello stato di errore. */
   compact?: boolean;
 };
 
@@ -25,6 +29,8 @@ export function ListHeader({
   onSearchTextChange,
   viewMode,
   onViewModeChange,
+  generationId,
+  onGenerationChange,
   caption,
   onOpenSettings,
   compact = false,
@@ -32,12 +38,9 @@ export function ListHeader({
   return (
     <View style={styles.container}>
       <View style={styles.titleRow}>
-        <PokeBallLogo />
-        <Text style={styles.title} accessibilityRole="header">
-          Pokédex
-        </Text>
+        <SectionTitle section="pokedex" />
         <View style={styles.actions}>
-          {!compact && <ViewToggle value={viewMode} onChange={onViewModeChange} />}
+          {!compact && <GenerationPicker value={generationId} onChange={onGenerationChange} />}
           <Pressable
             onPress={onOpenSettings}
             hitSlop={4}
@@ -51,7 +54,12 @@ export function ListHeader({
       {!compact && (
         <>
           <SearchBar value={searchText} onChangeText={onSearchTextChange} />
-          <Text style={styles.caption}>{caption}</Text>
+          <View style={styles.captionRow}>
+            <Text style={styles.caption} numberOfLines={1}>
+              {caption}
+            </Text>
+            <ViewToggle value={viewMode} onChange={onViewModeChange} />
+          </View>
         </>
       )}
     </View>
@@ -71,12 +79,6 @@ const styles = StyleSheet.create({
     gap: 10,
     minHeight: 40,
   },
-  title: {
-    fontFamily: fonts.displayBold,
-    fontSize: 30,
-    letterSpacing: -0.6,
-    color: colors.text,
-  },
   actions: {
     marginLeft: 'auto',
     flexDirection: 'row',
@@ -94,7 +96,13 @@ const styles = StyleSheet.create({
   pressed: {
     opacity: 0.7,
   },
+  captionRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 12,
+  },
   caption: {
+    flex: 1,
     fontFamily: fonts.bodyBold,
     fontSize: 12,
     letterSpacing: 0.2,

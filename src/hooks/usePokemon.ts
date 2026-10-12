@@ -23,7 +23,7 @@ export function usePokemon(idParam: string | string[] | number | undefined) {
     pokemon: query.data,
     isLoading: id !== null && query.isPending,
     isError: query.isError,
-    /** L'id non è un Pokémon della Gen 1. */
+    /** L'id non è un Pokémon delle generazioni coperte. */
     isInvalidId: id === null,
     error: query.error,
     errorMessage: query.isError ? getErrorMessage(query.error) : null,

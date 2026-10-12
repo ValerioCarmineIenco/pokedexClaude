@@ -7,3 +7,9 @@ export { filterPokemonByName, usePokemonSearch } from './usePokemonSearch';
 export { usePokemonList } from './usePokemonList';
 export { usePokemonSpecies } from './usePokemonSpecies';
 export { useRelatedItems } from './useRelatedItems';
+export {
+  GENERATIONS,
+  getGenerationById,
+  getGenerationOfPokemon,
+  getPokemonRange,
+} from '@/api/generations';

@@ -1,12 +1,15 @@
 import { FlashList, type ViewToken } from '@shopify/flash-list';
-import { useCallback, useRef, useState } from 'react';
-import { RefreshControl, StyleSheet, View } from 'react-native';
+import { useCallback, useMemo, useRef, useState } from 'react';
+import { RefreshControl, StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-import { LAST_POKEMON_ID } from '@/api/pokemon';
+import { GENERATIONS, getGenerationById, LAST_POKEMON_ID } from '@/api/generations';
 import type { ViewMode } from '@/hooks/useViewMode';
 import { colors } from '@/theme/colors';
-import type { PokemonSummary } from '@/types/pokemon';
+import { fonts } from '@/theme/fonts';
+import type { Generation, PokemonSummary } from '@/types/pokemon';
+import { formatNumber } from '@/utils/format';
+import { generationSize } from '@/utils/generation';
 
 import { ErrorState } from './ErrorState';
 import { ErrorToast } from './ErrorToast';
@@ -17,6 +20,25 @@ import { SkeletonCard } from './Skeleton';
 const GAP = 10;
 const SIDE = 12;
 
+/** Elementi dell'elenco: le card e, con tutte le generazioni, un'intestazione per ciascuna. */
+type ListItem =
+  | { kind: 'pokemon'; pokemon: PokemonSummary }
+  | { kind: 'generation'; generation: Generation; isFirst: boolean };
+
+function buildItems(pokemon: PokemonSummary[], withHeaders: boolean): ListItem[] {
+  const items: ListItem[] = [];
+  let current: number | null = null;
+  for (const p of pokemon) {
+    if (withHeaders && p.generation !== current) {
+      const generation = getGenerationById(p.generation);
+      if (generation) items.push({ kind: 'generation', generation, isFirst: current === null });
+      current = p.generation;
+    }
+    items.push({ kind: 'pokemon', pokemon: p });
+  }
+  return items;
+}
+
 export type PokemonListViewProps = {
   /** Pokémon da mostrare, già filtrati dalla ricerca. */
   pokemon: PokemonSummary[];
@@ -26,6 +48,9 @@ export type PokemonListViewProps = {
   onSearchTextChange: (text: string) => void;
   viewMode: ViewMode;
   onViewModeChange: (mode: ViewMode) => void;
+  /** Generazione mostrata; null = tutte in sequenza. */
+  generationId: number | null;
+  onGenerationChange: (generationId: number | null) => void;
   /** Primo caricamento, nessun dato ancora. */
   isLoading: boolean;
   errorMessage: string | null;
@@ -46,6 +71,8 @@ export function PokemonListView({
   onSearchTextChange,
   viewMode,
   onViewModeChange,
+  generationId,
+  onGenerationChange,
   isLoading,
   errorMessage,
   hasNextPage,
@@ -60,11 +87,14 @@ export function PokemonListView({
   const insets = useSafeAreaInsets();
   const isGrid = viewMode === 'grid';
   const isSearching = searchText.trim().length > 0;
+  const generation = generationId == null ? undefined : getGenerationById(generationId);
+
+  const items = useMemo(() => buildItems(pokemon, generation == null), [pokemon, generation]);
 
   // Primo Pokémon visibile: al cambio di vista l'elenco riparte da lì.
   const firstVisibleIndex = useRef(0);
   const onViewableItemsChanged = useCallback(
-    ({ viewableItems }: { viewableItems: ViewToken<PokemonSummary>[] }) => {
+    ({ viewableItems }: { viewableItems: ViewToken<ListItem>[] }) => {
       const first = viewableItems.find((item) => item.index != null);
       if (first?.index != null) firstVisibleIndex.current = first.index;
     },
@@ -77,10 +107,18 @@ export function PokemonListView({
     setStartIndex(firstVisibleIndex.current || undefined);
     onViewModeChange(mode);
   };
+  // Cambiando generazione l'elenco riparte dall'inizio.
+  const changeGeneration = (id: number | null) => {
+    firstVisibleIndex.current = 0;
+    setStartIndex(undefined);
+    onGenerationChange(id);
+  };
 
   const caption = isSearching
     ? `${pokemon.length} ${pokemon.length === 1 ? 'risultato' : 'risultati'} tra ${loadedCount} Pokémon caricati`
-    : `${LAST_POKEMON_ID} Pokémon · prima generazione`;
+    : generation
+      ? `${generationSize(generation)} Pokémon · ${generation.name} · ${generation.region}`
+      : `${LAST_POKEMON_ID} Pokémon · ${GENERATIONS.length} generazioni`;
 
   const header = (compact = false) => (
     <ListHeader
@@ -88,6 +126,8 @@ export function PokemonListView({
       onSearchTextChange={onSearchTextChange}
       viewMode={viewMode}
       onViewModeChange={changeViewMode}
+      generationId={generationId}
+      onGenerationChange={changeGeneration}
       caption={caption}
       onOpenSettings={onOpenSettings}
       compact={compact}
@@ -126,16 +166,30 @@ export function PokemonListView({
         skeletons(isGrid ? 8 : 9)
       ) : (
         <FlashList
-          key={viewMode}
-          data={pokemon}
+          key={`${viewMode}-${generationId ?? 'all'}`}
+          data={items}
           numColumns={isGrid ? 2 : 1}
           initialScrollIndex={startIndex}
-          keyExtractor={(item) => String(item.id)}
-          renderItem={({ item }) => (
-            <View style={isGrid ? styles.gridCell : styles.rowCell}>
-              <PokemonCard pokemon={item} variant={viewMode} onPress={onPressPokemon} />
-            </View>
-          )}
+          keyExtractor={(item) =>
+            item.kind === 'pokemon' ? String(item.pokemon.id) : `gen-${item.generation.id}`
+          }
+          getItemType={(item) => item.kind}
+          overrideItemLayout={(layout, item, _index, maxColumns) => {
+            if (item.kind === 'generation') layout.span = maxColumns;
+          }}
+          renderItem={({ item }) =>
+            item.kind === 'generation' ? (
+              <GenerationHeader
+                generation={item.generation}
+                isFirst={item.isFirst}
+                inset={isGrid ? GAP / 2 : 0}
+              />
+            ) : (
+              <View style={isGrid ? styles.gridCell : styles.rowCell}>
+                <PokemonCard pokemon={item.pokemon} variant={viewMode} onPress={onPressPokemon} />
+              </View>
+            )
+          }
           contentContainerStyle={{
             paddingHorizontal: isGrid ? SIDE - GAP / 2 : SIDE,
             paddingTop: 2,
@@ -180,6 +234,28 @@ export function PokemonListView({
   );
 }
 
+function GenerationHeader({
+  generation,
+  isFirst,
+  inset,
+}: {
+  generation: Generation;
+  isFirst: boolean;
+  inset: number;
+}) {
+  return (
+    <View
+      style={[styles.genHeader, { paddingHorizontal: inset }, !isFirst && styles.genHeaderSpaced]}
+      accessibilityRole="header">
+      <Text style={styles.genTitle}>{generation.name}</Text>
+      <Text style={styles.genMeta}>
+        {generation.region} · {formatNumber(generation.firstId)}–{formatNumber(generation.lastId)}
+      </Text>
+      <View style={styles.genRule} />
+    </View>
+  );
+}
+
 const styles = StyleSheet.create({
   screen: {
     flex: 1,
@@ -197,6 +273,34 @@ const styles = StyleSheet.create({
   },
   rowCell: {
     paddingBottom: 8,
+  },
+  genHeader: {
+    flexDirection: 'row',
+    alignItems: 'baseline',
+    gap: 8,
+    paddingTop: 4,
+    paddingBottom: 10,
+  },
+  genHeaderSpaced: {
+    paddingTop: 18,
+  },
+  genTitle: {
+    fontFamily: fonts.display,
+    fontSize: 18,
+    letterSpacing: -0.2,
+    color: colors.text,
+  },
+  genMeta: {
+    fontFamily: fonts.bodyBold,
+    fontSize: 12,
+    letterSpacing: 0.2,
+    color: colors.textSubtle,
+  },
+  genRule: {
+    flex: 1,
+    height: StyleSheet.hairlineWidth,
+    backgroundColor: colors.line,
+    alignSelf: 'center',
   },
   skeletons: {
     paddingHorizontal: SIDE,

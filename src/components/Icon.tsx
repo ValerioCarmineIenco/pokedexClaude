@@ -16,6 +16,7 @@ const ICONS = {
   settings: { ios: 'gearshape.fill', android: 'settings', web: 'settings' },
   check: { ios: 'checkmark.circle.fill', android: 'check_circle', web: 'check_circle' },
   expand: { ios: 'chevron.down', android: 'expand_more', web: 'expand_more' },
+  bag: { ios: 'bag.fill', android: 'shopping_bag', web: 'shopping_bag' },
 } satisfies Record<string, SymbolName>;
 
 export type IconName = keyof typeof ICONS;
