@@ -13,6 +13,7 @@ const ICONS = {
   previous: { ios: 'chevron.left', android: 'chevron_left', web: 'chevron_left' },
   next: { ios: 'chevron.right', android: 'chevron_right', web: 'chevron_right' },
   offline: { ios: 'wifi.slash', android: 'wifi_off', web: 'wifi_off' },
+  expand: { ios: 'chevron.down', android: 'expand_more', web: 'expand_more' },
 } satisfies Record<string, SymbolName>;
 
 export type IconName = keyof typeof ICONS;

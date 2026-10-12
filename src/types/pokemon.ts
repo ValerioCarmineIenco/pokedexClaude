@@ -68,3 +68,38 @@ export type PokemonSpecies = {
   /** Categoria in italiano (es. «Pokémon Seme»), null se assente. */
   genus: string | null;
 };
+
+/** Un'immagine della galleria artwork. */
+export type ArtworkImage = {
+  /** Percorso nell'oggetto `sprites` (es. `other/home/front_shiny`), unico per Pokémon. */
+  key: string;
+  /** Etichetta italiana della variante (es. «Retro shiny»). */
+  label: string;
+  url: string;
+};
+
+/** Immagini della stessa fonte o dello stesso gioco. */
+export type ArtworkGroup = {
+  id: string;
+  title: string;
+  images: ArtworkImage[];
+};
+
+/** Sprite dei giochi di una generazione. */
+export type ArtworkGeneration = {
+  id: string;
+  /** «Generazione I» */
+  title: string;
+  games: ArtworkGroup[];
+  imageCount: number;
+};
+
+/** Tutte le immagini di `sprites` di `/pokemon/{id}`, senza i valori null. */
+export type PokemonArtworks = {
+  id: number;
+  /** Artwork ufficiale, HOME, Dream World, Showdown e sprite base. */
+  featured: ArtworkGroup[];
+  /** Sprite per generazione e gioco, dalla I in avanti. */
+  generations: ArtworkGeneration[];
+  imageCount: number;
+};

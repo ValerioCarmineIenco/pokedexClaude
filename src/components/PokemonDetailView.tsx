@@ -5,7 +5,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { colors } from '@/theme/colors';
 import { fonts } from '@/theme/fonts';
 import { primaryType, TYPE_COLORS, typeTint } from '@/theme/typeColors';
-import type { PokemonDetail } from '@/types/pokemon';
+import type { PokemonArtworks, PokemonDetail } from '@/types/pokemon';
 import {
   formatHeight,
   formatName,
@@ -14,6 +14,8 @@ import {
   STAT_LABELS,
 } from '@/utils/format';
 
+import { ArtworkGallery } from './ArtworkGallery';
+import { DetailTabs, type DetailTab } from './DetailTabs';
 import { ErrorState } from './ErrorState';
 import { Icon, type IconName } from './Icon';
 import { PokeBallMark } from './PokeBallMark';
@@ -39,6 +41,13 @@ export type PokemonDetailViewProps = {
   onNavigate: (id: number) => void;
   onBack: () => void;
   onRetry: () => void;
+  tab: DetailTab;
+  onTabChange: (tab: DetailTab) => void;
+  artworks: PokemonArtworks | undefined;
+  /** La galleria della tab Artwork sta arrivando. */
+  isArtworksLoading: boolean;
+  artworksErrorMessage: string | null;
+  onArtworksRetry: () => void;
 };
 
 export function PokemonDetailView({
@@ -52,6 +61,12 @@ export function PokemonDetailView({
   onNavigate,
   onBack,
   onRetry,
+  tab,
+  onTabChange,
+  artworks,
+  isArtworksLoading,
+  artworksErrorMessage,
+  onArtworksRetry,
 }: PokemonDetailViewProps) {
   const insets = useSafeAreaInsets();
   const type = pokemon ? primaryType(pokemon.types) : null;
@@ -151,7 +166,16 @@ export function PokemonDetailView({
       </View>
 
       <View style={styles.sheet}>
-        {pokemon ? (
+        {pokemon && <DetailTabs value={tab} onChange={onTabChange} />}
+        {pokemon && tab === 'artwork' ? (
+          <ArtworkGallery
+            artworks={artworks}
+            isLoading={isArtworksLoading}
+            errorMessage={artworksErrorMessage}
+            pokemonName={formatName(pokemon.name)}
+            onRetry={onArtworksRetry}
+          />
+        ) : pokemon ? (
           <>
             {isDescriptionLoading ? (
               <View style={styles.descriptionSkeleton}>
