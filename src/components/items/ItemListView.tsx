@@ -1,5 +1,5 @@
 import { FlashList } from '@shopify/flash-list';
-import { Pressable, RefreshControl, StyleSheet, Text, View } from 'react-native';
+import { RefreshControl, StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import type { ViewMode } from '@/hooks/useViewMode';
@@ -9,8 +9,7 @@ import type { Item } from '@/types/item';
 
 import { ErrorState } from '../ErrorState';
 import { ErrorToast } from '../ErrorToast';
-import { Icon } from '../Icon';
-import { PokeBallLogo } from '../PokeBallLogo';
+import { SectionTitle } from '../SectionTitle';
 import { SkeletonBlock } from '../Skeleton';
 import { ViewToggle } from '../ViewToggle';
 import { ItemCard, ROW_ITEM_HEIGHT } from './ItemCard';
@@ -35,8 +34,6 @@ export type ItemListViewProps = {
   onRefresh: () => void;
   onRetry: () => void;
   onPressItem: (item: Item) => void;
-  /** Tocco sul titolo: apre il menu delle sezioni. */
-  onPressTitle?: () => void;
 };
 
 export function ItemListView({
@@ -53,7 +50,6 @@ export function ItemListView({
   onRefresh,
   onRetry,
   onPressItem,
-  onPressTitle,
 }: ItemListViewProps) {
   const insets = useSafeAreaInsets();
   const isGrid = viewMode === 'grid';
@@ -62,16 +58,7 @@ export function ItemListView({
   const header = (compact = false) => (
     <View style={styles.header}>
       <View style={styles.titleRow}>
-        <Pressable
-          onPress={onPressTitle}
-          disabled={!onPressTitle}
-          accessibilityRole={onPressTitle ? 'button' : 'header'}
-          accessibilityLabel={onPressTitle ? 'Oggetti, cambia sezione' : 'Oggetti'}
-          style={({ pressed }) => [styles.titleButton, pressed && styles.titlePressed]}>
-          <PokeBallLogo />
-          <Text style={styles.title}>Oggetti</Text>
-          {onPressTitle && <Icon name="expand" size={16} color={colors.textSubtle} />}
-        </Pressable>
+        <SectionTitle section="items" />
         {!compact && (
           <View style={styles.toggle}>
             <ViewToggle value={viewMode} onChange={onViewModeChange} />
@@ -184,20 +171,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     minHeight: 40,
-  },
-  titleButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 10,
-  },
-  titlePressed: {
-    opacity: 0.7,
-  },
-  title: {
-    fontFamily: fonts.displayBold,
-    fontSize: 30,
-    letterSpacing: -0.6,
-    color: colors.text,
   },
   toggle: {
     marginLeft: 'auto',

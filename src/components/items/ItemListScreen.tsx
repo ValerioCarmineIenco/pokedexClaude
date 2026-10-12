@@ -1,17 +1,12 @@
-import { router, type Href } from 'expo-router';
+import { router } from 'expo-router';
 
 import { useItems } from '@/hooks/useItems';
 import { useViewMode } from '@/hooks/useViewMode';
 
 import { ItemListView } from './ItemListView';
 
-type Props = {
-  /** Tocco sul titolo «Oggetti»: apre il menu delle sezioni. */
-  onPressTitle?: () => void;
-};
-
 /** Schermata elenco oggetti di tutte le categorie, pronta da montare in una rotta. */
-export function ItemListScreen({ onPressTitle }: Props) {
+export function ItemListScreen() {
   const list = useItems();
   const [viewMode, setViewMode] = useViewMode('pokedex.items.viewMode');
 
@@ -31,10 +26,8 @@ export function ItemListScreen({ onPressTitle }: Props) {
       }}
       onRefresh={() => list.refetch()}
       onRetry={() => list.refetch()}
-      onPressTitle={onPressTitle}
       onPressItem={(item) =>
-        // La rotta del dettaglio la crea il thread di navigazione: il cast cade quando esiste.
-        router.push({ pathname: '/items/[itemId]', params: { itemId: String(item.id) } } as Href)
+        router.push({ pathname: '/items/[itemId]', params: { itemId: String(item.id) } })
       }
     />
   );
