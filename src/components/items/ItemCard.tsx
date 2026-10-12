@@ -2,12 +2,10 @@ import { Image } from 'expo-image';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 
 import type { ViewMode } from '@/hooks/useViewMode';
+import { getCategoryColors } from '@/theme/categoryColors';
 import { colors } from '@/theme/colors';
 import { fonts } from '@/theme/fonts';
-
 import type { Item } from '@/types/item';
-
-import { getCategoryColors } from './itemFallback';
 
 export const ROW_ITEM_HEIGHT = 84;
 const ROW_TILE = 60;
