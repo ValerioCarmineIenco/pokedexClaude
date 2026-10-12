@@ -1,6 +1,6 @@
 import { StyleSheet, Text, View } from 'react-native';
 
-import type { ItemCategory } from '@/api/itemsFallback';
+import type { ItemCategory } from '@/types/item';
 import { getCategoryColors } from '@/theme/categoryColors';
 import { fonts } from '@/theme/fonts';
 

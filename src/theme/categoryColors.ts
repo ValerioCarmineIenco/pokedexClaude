@@ -1,4 +1,4 @@
-import type { ItemCategory } from '@/api/itemsFallback';
+import { ITEM_CATEGORY_LABELS, type ItemCategory } from '@/types/item';
 
 /** Colore pieno di ciascuna categoria di oggetti, nello stesso spirito dei colori per tipo. */
 export const CATEGORY_COLORS: Record<ItemCategory, string> = {
@@ -10,18 +10,6 @@ export const CATEGORY_COLORS: Record<ItemCategory, string> = {
   berries: '#C93A78',
   evolution: '#F2C230',
   other: '#77737F',
-};
-
-/** Nome italiano della categoria, per etichette e titoli. */
-export const CATEGORY_NAMES_IT: Record<ItemCategory, string> = {
-  remedies: 'Rimedi',
-  tm: 'MT',
-  megaStones: 'Megapietre',
-  pokeballs: 'Poké Ball',
-  battle: 'Strumenti lotta',
-  berries: 'Bacche',
-  evolution: 'Evoluzione',
-  other: 'Altro',
 };
 
 const DARK_TEXT = '#1D1C22';
@@ -39,7 +27,7 @@ export type CategoryColors = {
   tint: string;
   /** Sfondo tenue di carte e riquadri. */
   soft: string;
-  /** Nome italiano della categoria. */
+  /** Nome italiano della categoria (`ITEM_CATEGORY_LABELS`). */
   label: string;
 };
 
@@ -59,6 +47,6 @@ export function getCategoryColors(category: ItemCategory): CategoryColors {
     text: LIGHT_CATEGORIES.has(key) ? DARK_TEXT : LIGHT_TEXT,
     tint: mixWithWhite(color, 0.42),
     soft: mixWithWhite(color, 0.16),
-    label: CATEGORY_NAMES_IT[key],
+    label: ITEM_CATEGORY_LABELS[key],
   };
 }
