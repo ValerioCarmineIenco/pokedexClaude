@@ -1,8 +1,9 @@
 import { fetchJson } from '@/api/client';
 import itemIndex from '@/data/itemIndex.json';
-import type { ItemResponse, NamedAPIResource } from '@/types/pokeapi';
+import type { ItemResponse } from '@/types/pokeapi';
 import { ITEM_CATEGORIES, type Item, type ItemCategory, type ItemIndexEntry, type ItemPage } from '@/types/item';
 import { formatName } from '@/utils/format';
+import { byLanguage, cleanText, latestFlavor } from '@/utils/pokeapiText';
 import { normalizeSearch } from '@/utils/search';
 
 export const ITEM_PAGE_SIZE = 20;
@@ -91,35 +92,13 @@ export function getNextItemPage(
   return (page + 1) * ITEM_PAGE_SIZE < getItemIndex(category, search).length ? page + 1 : null;
 }
 
-const byLanguage = (language: string) => (entry: { language: NamedAPIResource }) =>
-  entry.language.name === language;
-
-/** Le descrizioni arrivano con a capo, trattini di sillabazione e form feed dei giochi. */
-function cleanText(text: string): string {
-  return text
-    .replace(/[­]/g, '')
-    .replace(/-\n(?=\p{Ll})/gu, '')
-    .replace(/[\n\f\r]+/g, ' ')
-    .replace(/\s+/g, ' ')
-    .trim();
-}
-
-/** Ultima descrizione dei giochi in quella lingua, saltando i segnaposto come «- - -». */
-function latestFlavor(raw: ItemResponse, language: string): string | null {
-  const texts = raw.flavor_text_entries
-    .filter(byLanguage(language))
-    .map((entry) => cleanText(entry.text))
-    .filter((text) => /\p{L}/u.test(text));
-  return texts.at(-1) ?? null;
-}
-
 export function toItem(raw: ItemResponse): Item {
   const entry = BY_ID.get(raw.id);
   const name =
     raw.names.find(byLanguage('it'))?.name ?? raw.names.find(byLanguage('en'))?.name ?? formatName(raw.name);
   const description =
-    latestFlavor(raw, 'it') ??
-    latestFlavor(raw, 'en') ??
+    latestFlavor(raw.flavor_text_entries, 'it') ??
+    latestFlavor(raw.flavor_text_entries, 'en') ??
     cleanText(raw.effect_entries.find(byLanguage('en'))?.short_effect ?? '');
   return {
     id: raw.id,
