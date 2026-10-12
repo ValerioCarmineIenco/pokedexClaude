@@ -1,20 +1,29 @@
-import { useLocalSearchParams } from 'expo-router';
-import { StyleSheet, Text, View } from 'react-native';
+import { router, useLocalSearchParams } from 'expo-router';
+
+import { getAdjacentIds } from '@/api/pokemon';
+import { PokemonDetailView } from '@/components/PokemonDetailView';
+// Dati d'esempio finché la UI non viene collegata a usePokemonDetail.
+import { useMockPokemonDetail } from '@/mocks/useMockPokemon';
 
 export default function PokemonDetailScreen() {
-  const { id } = useLocalSearchParams<{ id: string }>();
+  const { id: idParam } = useLocalSearchParams<{ id: string }>();
+  const detail = useMockPokemonDetail(idParam);
+  const { previous, next } =
+    detail.id === null ? { previous: null, next: null } : getAdjacentIds(detail.id);
 
   return (
-    <View style={styles.container}>
-      <Text>Dettaglio del Pokémon #{id}</Text>
-    </View>
+    <PokemonDetailView
+      pokemon={detail.pokemon}
+      isLoading={detail.isLoading}
+      isDescriptionLoading={detail.isDescriptionLoading}
+      errorMessage={detail.errorMessage}
+      isInvalidId={detail.isInvalidId}
+      previousId={previous}
+      nextId={next}
+      // Sostituisce la scheda invece di impilarla: "Indietro" torna sempre all'elenco.
+      onNavigate={(id) => router.replace({ pathname: '/pokemon/[id]', params: { id: String(id) } })}
+      onBack={() => (router.canGoBack() ? router.back() : router.replace('/'))}
+      onRetry={() => detail.refetch()}
+    />
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});

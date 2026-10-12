@@ -1,0 +1,28 @@
+import { SymbolView } from 'expo-symbols';
+import type { ComponentProps } from 'react';
+import type { ColorValue } from 'react-native';
+
+type SymbolName = ComponentProps<typeof SymbolView>['name'];
+
+const ICONS = {
+  search: { ios: 'magnifyingglass', android: 'search', web: 'search' },
+  close: { ios: 'xmark.circle.fill', android: 'close', web: 'close' },
+  grid: { ios: 'square.grid.2x2.fill', android: 'grid_view', web: 'grid_view' },
+  rows: { ios: 'list.bullet', android: 'view_agenda', web: 'view_agenda' },
+  back: { ios: 'chevron.backward', android: 'arrow_back', web: 'arrow_back' },
+  previous: { ios: 'chevron.left', android: 'chevron_left', web: 'chevron_left' },
+  next: { ios: 'chevron.right', android: 'chevron_right', web: 'chevron_right' },
+  offline: { ios: 'wifi.slash', android: 'wifi_off', web: 'wifi_off' },
+} satisfies Record<string, SymbolName>;
+
+export type IconName = keyof typeof ICONS;
+
+type Props = {
+  name: IconName;
+  size?: number;
+  color: ColorValue;
+};
+
+export function Icon({ name, size = 20, color }: Props) {
+  return <SymbolView name={ICONS[name]} size={size} tintColor={color} weight="semibold" />;
+}
