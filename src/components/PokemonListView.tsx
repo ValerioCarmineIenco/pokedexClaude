@@ -61,6 +61,7 @@ export type PokemonListViewProps = {
   onRefresh: () => void;
   onRetry: () => void;
   onPressPokemon: (pokemon: PokemonSummary) => void;
+  onOpenSettings: () => void;
 };
 
 export function PokemonListView({
@@ -81,6 +82,7 @@ export function PokemonListView({
   onRefresh,
   onRetry,
   onPressPokemon,
+  onOpenSettings,
 }: PokemonListViewProps) {
   const insets = useSafeAreaInsets();
   const isGrid = viewMode === 'grid';
@@ -127,6 +129,7 @@ export function PokemonListView({
       generationId={generationId}
       onGenerationChange={changeGeneration}
       caption={caption}
+      onOpenSettings={onOpenSettings}
       compact={compact}
     />
   );

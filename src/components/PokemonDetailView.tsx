@@ -3,6 +3,8 @@ import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { GENERATIONS, LAST_POKEMON_ID } from '@/api/generations';
+import { getArtworkUrl } from '@/api/pokemon';
+import { useArtworkStyle } from '@/hooks/useArtworkStyle';
 import { colors } from '@/theme/colors';
 import { fonts } from '@/theme/fonts';
 import { primaryType, TYPE_COLORS, typeTint } from '@/theme/typeColors';
@@ -75,6 +77,7 @@ export function PokemonDetailView({
   onArtworksRetry,
 }: PokemonDetailViewProps) {
   const insets = useSafeAreaInsets();
+  const [artworkStyle] = useArtworkStyle();
   const type = pokemon ? primaryType(pokemon.types) : null;
 
   const backButton = <NavButton icon="back" label="Torna all'elenco" onPress={onBack} />;
@@ -159,7 +162,7 @@ export function PokemonDetailView({
         <View style={styles.artworkWrap}>
           {pokemon ? (
             <Image
-              source={pokemon.artworkUrl}
+              source={getArtworkUrl(pokemon.id, artworkStyle)}
               style={styles.artwork}
               contentFit="contain"
               transition={200}
