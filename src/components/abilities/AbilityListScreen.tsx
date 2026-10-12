@@ -1,16 +1,15 @@
 import { router } from 'expo-router';
 
-import { useAbilitiesMock } from '@/data/abilitiesMock';
-import { useItemSearch } from '@/hooks/useItemSearch';
+import { useAbilities } from '@/hooks/useAbilities';
+import { useAbilitySearch } from '@/hooks/useAbilitySearch';
 import { useViewMode } from '@/hooks/useViewMode';
 
 import { AbilityListView } from './AbilityListView';
 
 /** Schermata elenco abilità, pronta da montare in una rotta. */
 export function AbilityListScreen() {
-  // Stesso debounce della ricerca degli oggetti.
-  const search = useItemSearch();
-  const list = useAbilitiesMock(search.query);
+  const search = useAbilitySearch();
+  const list = useAbilities(search.query);
   const [viewMode, setViewMode] = useViewMode('pokedex.abilities.viewMode');
 
   return (
