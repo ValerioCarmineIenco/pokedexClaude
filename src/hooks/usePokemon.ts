@@ -5,7 +5,7 @@ import { fetchPokemon, parsePokemonId } from '@/api/pokemon';
 import { queryKeys } from '@/api/queryKeys';
 
 /**
- * Dati di un Pokémon (tipi, altezza, peso, abilità, statistiche).
+ * Dati di un Pokémon (tipi, altezza, peso, abilità, statistiche), senza descrizione.
  * Accetta direttamente il parametro di rotta: `usePokemon(useLocalSearchParams().id)`.
  * Se l'elenco l'ha già caricato, il risultato è immediato.
  */
