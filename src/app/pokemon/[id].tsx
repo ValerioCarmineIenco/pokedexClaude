@@ -2,12 +2,11 @@ import { router, useLocalSearchParams } from 'expo-router';
 
 import { getAdjacentIds } from '@/api/pokemon';
 import { PokemonDetailView } from '@/components/PokemonDetailView';
-// Dati d'esempio finché la UI non viene collegata a usePokemonDetail.
-import { useMockPokemonDetail } from '@/mocks/useMockPokemon';
+import { usePokemonDetail } from '@/hooks/usePokemonDetail';
 
 export default function PokemonDetailScreen() {
   const { id: idParam } = useLocalSearchParams<{ id: string }>();
-  const detail = useMockPokemonDetail(idParam);
+  const detail = usePokemonDetail(idParam);
   const { previous, next } =
     detail.id === null ? { previous: null, next: null } : getAdjacentIds(detail.id);
 
