@@ -6,6 +6,8 @@ export const queryKeys = {
   pokemon: (id: number) => ['pokemon', 'detail', id] as const,
   pokemonSpecies: (id: number) => ['pokemon', 'species', id] as const,
   pokemonArtworks: (id: number) => ['pokemon', 'artworks', id] as const,
-  itemList: (category: ItemCategory | 'all') => ['items', 'list', category] as const,
+  /** `search` già normalizzata (vedi `normalizeSearch`); stringa vuota = nessuna ricerca. */
+  itemList: (category: ItemCategory | 'all', search = '') =>
+    ['items', 'list', category, search] as const,
   item: (id: number) => ['items', 'detail', id] as const,
 };

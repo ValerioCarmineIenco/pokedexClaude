@@ -8,9 +8,15 @@ import { Icon } from './Icon';
 type Props = {
   value: string;
   onChangeText: (text: string) => void;
+  /** Etichetta per lo screen reader; di base parla di Pokémon. */
+  accessibilityLabel?: string;
 };
 
-export function SearchBar({ value, onChangeText }: Props) {
+export function SearchBar({
+  value,
+  onChangeText,
+  accessibilityLabel = 'Cerca un Pokémon per nome',
+}: Props) {
   return (
     <View style={styles.field}>
       <Icon name="search" size={16} color={colors.textSubtle} />
@@ -23,7 +29,7 @@ export function SearchBar({ value, onChangeText }: Props) {
         autoCorrect={false}
         returnKeyType="search"
         clearButtonMode="never"
-        accessibilityLabel="Cerca un Pokémon per nome"
+        accessibilityLabel={accessibilityLabel}
         style={styles.input}
       />
       {value.length > 0 && (

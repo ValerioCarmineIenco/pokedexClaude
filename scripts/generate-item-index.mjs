@@ -1,5 +1,6 @@
 // Genera `src/data/itemIndex.json`: l'elenco degli oggetti mostrati nell'app, con la
-// loro categoria. Nomi e descrizioni non ci sono: l'app li legge da PokéAPI quando servono.
+// loro categoria e il nome italiano (per la ricerca). Le descrizioni non ci sono: l'app le
+// legge da PokéAPI quando servono.
 //
 //   node scripts/generate-item-index.mjs
 //
@@ -109,9 +110,12 @@ const items = await mapLimit(refs, 16, async ({ id, group }) => {
   // Senza immagine l'oggetto non si può mostrare in griglia: lo saltiamo.
   if (!sprite?.startsWith(SPRITE_PREFIX)) return null;
   const file = sprite.slice(SPRITE_PREFIX.length).replace(/\.png$/, '');
+  const label = (language) => raw.names.find((n) => n.language.name === language)?.name;
   return {
     id,
     name: raw.name,
+    // Stesso nome che mostra l'app: italiano, altrimenti inglese.
+    label: label('it') ?? label('en') ?? raw.name,
     group,
     category: CATEGORY_MAP[group],
     // Solo se diverso dal nome (es. le MT usano tutte `tm-normal`).

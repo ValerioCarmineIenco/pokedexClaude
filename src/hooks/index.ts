@@ -1,4 +1,5 @@
 export { useItem } from './useItem';
+export { useItemSearch } from './useItemSearch';
 export { useItems } from './useItems';
 export { usePokemon } from './usePokemon';
 export { usePokemonArtworks } from './usePokemonArtworks';

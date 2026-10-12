@@ -9,6 +9,7 @@ import type { Item } from '@/types/item';
 
 import { ErrorState } from '../ErrorState';
 import { ErrorToast } from '../ErrorToast';
+import { SearchBar } from '../SearchBar';
 import { SectionTitle } from '../SectionTitle';
 import { SkeletonBlock } from '../Skeleton';
 import { ViewToggle } from '../ViewToggle';
@@ -20,8 +21,11 @@ const SIDE = 12;
 
 export type ItemListViewProps = {
   items: Item[];
-  /** Numero totale di oggetti, se noto, per la didascalia. */
+  /** Numero totale di oggetti (o di risultati della ricerca), se noto, per la didascalia. */
   totalCount?: number;
+  /** Valore della barra di ricerca per nome. */
+  searchText: string;
+  onSearchTextChange: (text: string) => void;
   viewMode: ViewMode;
   onViewModeChange: (mode: ViewMode) => void;
   /** Primo caricamento, nessun dato ancora. */
@@ -39,6 +43,8 @@ export type ItemListViewProps = {
 export function ItemListView({
   items,
   totalCount,
+  searchText,
+  onSearchTextChange,
   viewMode,
   onViewModeChange,
   isLoading,
@@ -54,6 +60,7 @@ export function ItemListView({
   const insets = useSafeAreaInsets();
   const isGrid = viewMode === 'grid';
   const count = totalCount ?? items.length;
+  const isSearching = searchText.trim().length > 0;
 
   const header = (compact = false) => (
     <View style={styles.header}>
@@ -66,9 +73,18 @@ export function ItemListView({
         )}
       </View>
       {!compact && (
-        <Text style={styles.caption}>
-          {count} {count === 1 ? 'oggetto' : 'oggetti'}
-        </Text>
+        <>
+          <SearchBar
+            value={searchText}
+            onChangeText={onSearchTextChange}
+            accessibilityLabel="Cerca un oggetto per nome"
+          />
+          <Text style={styles.caption}>
+            {isSearching
+              ? `${count} ${count === 1 ? 'risultato' : 'risultati'}`
+              : `${count} ${count === 1 ? 'oggetto' : 'oggetti'}`}
+          </Text>
+        </>
       )}
     </View>
   );
@@ -134,6 +150,17 @@ export function ItemListView({
           onEndReached={hasNextPage ? onEndReached : undefined}
           onEndReachedThreshold={0.6}
           ListFooterComponent={isFetchingNextPage ? skeletons(isGrid ? COLUMNS : 2) : null}
+          ListEmptyComponent={
+            isSearching ? (
+              <ErrorState
+                title="Nessun risultato"
+                message={`Nessun oggetto si chiama "${searchText.trim()}".`}
+                actionLabel="Cancella ricerca"
+                actionStyle="ghost"
+                onAction={() => onSearchTextChange('')}
+              />
+            ) : null
+          }
           refreshControl={
             <RefreshControl
               refreshing={isRefreshing}
@@ -142,6 +169,8 @@ export function ItemListView({
               colors={[colors.accent]}
             />
           }
+          keyboardDismissMode="on-drag"
+          keyboardShouldPersistTaps="handled"
         />
       )}
       {errorMessage && items.length > 0 && (
