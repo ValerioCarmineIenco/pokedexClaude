@@ -4,6 +4,7 @@ import type { ViewMode } from '@/hooks/useViewMode';
 import { colors } from '@/theme/colors';
 import { fonts } from '@/theme/fonts';
 
+import { GenerationPicker } from './GenerationPicker';
 import { PokeBallLogo } from './PokeBallLogo';
 import { SearchBar } from './SearchBar';
 import { ViewToggle } from './ViewToggle';
@@ -13,6 +14,9 @@ type Props = {
   onSearchTextChange: (text: string) => void;
   viewMode: ViewMode;
   onViewModeChange: (mode: ViewMode) => void;
+  /** Generazione mostrata; null = tutte. */
+  generationId: number | null;
+  onGenerationChange: (generationId: number | null) => void;
   caption: string;
   /** Nasconde ricerca e selettore, ad esempio nello stato di errore. */
   compact?: boolean;
@@ -23,6 +27,8 @@ export function ListHeader({
   onSearchTextChange,
   viewMode,
   onViewModeChange,
+  generationId,
+  onGenerationChange,
   caption,
   compact = false,
 }: Props) {
@@ -34,7 +40,8 @@ export function ListHeader({
           Pokédex
         </Text>
         {!compact && (
-          <View style={styles.toggle}>
+          <View style={styles.actions}>
+            <GenerationPicker value={generationId} onChange={onGenerationChange} />
             <ViewToggle value={viewMode} onChange={onViewModeChange} />
           </View>
         )}
@@ -68,8 +75,11 @@ const styles = StyleSheet.create({
     letterSpacing: -0.6,
     color: colors.text,
   },
-  toggle: {
+  actions: {
     marginLeft: 'auto',
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
   },
   caption: {
     fontFamily: fonts.bodyBold,

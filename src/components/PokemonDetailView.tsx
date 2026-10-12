@@ -2,6 +2,7 @@ import { Image } from 'expo-image';
 import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
+import { GENERATIONS, LAST_POKEMON_ID } from '@/api/generations';
 import { colors } from '@/theme/colors';
 import { fonts } from '@/theme/fonts';
 import { primaryType, TYPE_COLORS, typeTint } from '@/theme/typeColors';
@@ -27,6 +28,11 @@ const ARTWORK_SIZE = 180;
 /** Parte bianca arrotondata in fondo all'intestazione, su cui poggia l'artwork. */
 const SHEET_CAP = 72;
 
+const REGIONS = GENERATIONS.map((g) => g.region);
+const INVALID_ID_MESSAGE = `Questo Pokédex contiene solo i ${LAST_POKEMON_ID} Pokémon di ${
+  REGIONS.length > 1 ? `${REGIONS.slice(0, -1).join(', ')} e ${REGIONS.at(-1)}` : REGIONS[0]
+}.`;
+
 export type PokemonDetailViewProps = {
   pokemon: PokemonDetail | undefined;
   /** Dati principali in arrivo (non ancora in cache). */
@@ -34,7 +40,7 @@ export type PokemonDetailViewProps = {
   /** La descrizione sta ancora arrivando. */
   isDescriptionLoading: boolean;
   errorMessage: string | null;
-  /** L'id della rotta non è un Pokémon della prima generazione. */
+  /** L'id della rotta non è un Pokémon delle generazioni coperte. */
   isInvalidId: boolean;
   previousId: number | null;
   nextId: number | null;
@@ -100,7 +106,7 @@ export function PokemonDetailView({
         {isInvalidId ? (
           <ErrorState
             title="Pokémon non trovato"
-            message="Questo Pokédex contiene solo i 151 Pokémon della prima generazione."
+            message={INVALID_ID_MESSAGE}
             actionLabel="Torna all'elenco"
             actionStyle="ghost"
             onAction={onBack}
