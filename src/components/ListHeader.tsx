@@ -6,8 +6,8 @@ import { fonts } from '@/theme/fonts';
 
 import { GenerationPicker } from './GenerationPicker';
 import { Icon } from './Icon';
-import { PokeBallLogo } from './PokeBallLogo';
 import { SearchBar } from './SearchBar';
+import { SectionTitle } from './SectionTitle';
 import { ViewToggle } from './ViewToggle';
 
 type Props = {
@@ -38,10 +38,7 @@ export function ListHeader({
   return (
     <View style={styles.container}>
       <View style={styles.titleRow}>
-        <PokeBallLogo />
-        <Text style={styles.title} accessibilityRole="header">
-          Pokédex
-        </Text>
+        <SectionTitle section="pokedex" />
         <View style={styles.actions}>
           {!compact && <GenerationPicker value={generationId} onChange={onGenerationChange} />}
           <Pressable
@@ -81,12 +78,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     gap: 10,
     minHeight: 40,
-  },
-  title: {
-    fontFamily: fonts.displayBold,
-    fontSize: 30,
-    letterSpacing: -0.6,
-    color: colors.text,
   },
   actions: {
     marginLeft: 'auto',
