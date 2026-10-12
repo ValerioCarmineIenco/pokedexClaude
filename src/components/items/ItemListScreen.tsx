@@ -1,8 +1,8 @@
 import { router, type Href } from 'expo-router';
 
+import { useItems } from '@/hooks/useItems';
 import { useViewMode } from '@/hooks/useViewMode';
 
-import { FALLBACK_ITEMS } from './itemFallback';
 import { ItemListView } from './ItemListView';
 
 type Props = {
@@ -10,26 +10,27 @@ type Props = {
   onPressTitle?: () => void;
 };
 
-/**
- * Schermata elenco oggetti, pronta da montare in una rotta.
- * Per ora mostra dati di ripiego: quando c'è l'hook della lista oggetti si sostituisce qui.
- */
+/** Schermata elenco oggetti di tutte le categorie, pronta da montare in una rotta. */
 export function ItemListScreen({ onPressTitle }: Props) {
+  const list = useItems();
   const [viewMode, setViewMode] = useViewMode('pokedex.items.viewMode');
 
   return (
     <ItemListView
-      items={FALLBACK_ITEMS}
+      items={list.items}
+      totalCount={list.total}
       viewMode={viewMode}
       onViewModeChange={setViewMode}
-      isLoading={false}
-      errorMessage={null}
-      hasNextPage={false}
-      isFetchingNextPage={false}
-      isRefreshing={false}
-      onEndReached={() => {}}
-      onRefresh={() => {}}
-      onRetry={() => {}}
+      isLoading={list.isLoading}
+      errorMessage={list.errorMessage}
+      hasNextPage={list.hasNextPage}
+      isFetchingNextPage={list.isFetchingNextPage}
+      isRefreshing={list.isRefreshing}
+      onEndReached={() => {
+        if (list.hasNextPage && !list.isFetchingNextPage) list.fetchNextPage();
+      }}
+      onRefresh={() => list.refetch()}
+      onRetry={() => list.refetch()}
       onPressTitle={onPressTitle}
       onPressItem={(item) =>
         // La rotta del dettaglio la crea il thread di navigazione: il cast cade quando esiste.

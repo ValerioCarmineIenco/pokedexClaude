@@ -5,7 +5,9 @@ import type { ViewMode } from '@/hooks/useViewMode';
 import { colors } from '@/theme/colors';
 import { fonts } from '@/theme/fonts';
 
-import { getCategoryColors, type Item } from './itemFallback';
+import type { Item } from '@/types/item';
+
+import { getCategoryColors } from './itemFallback';
 
 export const ROW_ITEM_HEIGHT = 84;
 const ROW_TILE = 60;
@@ -18,23 +20,21 @@ type Props = {
 
 /** Riquadro quadrato con l'immagine dell'oggetto, tinto secondo la categoria. */
 function ItemTile({ item, size }: { item: Item; size?: number }) {
-  const { background } = getCategoryColors(item.category);
+  const { soft } = getCategoryColors(item.category);
   return (
     <View
       style={[
         styles.tile,
-        { backgroundColor: background },
+        { backgroundColor: soft },
         size ? { width: size, height: size } : styles.tileFill,
       ]}>
-      {item.imageUrl && (
-        <Image
-          source={item.imageUrl}
-          style={styles.image}
-          contentFit="contain"
-          transition={150}
-          recyclingKey={String(item.id)}
-        />
-      )}
+      <Image
+        source={item.imageUrl}
+        style={styles.image}
+        contentFit="contain"
+        transition={150}
+        recyclingKey={String(item.id)}
+      />
     </View>
   );
 }
@@ -42,13 +42,13 @@ function ItemTile({ item, size }: { item: Item; size?: number }) {
 /** Oggetto dell'elenco. Griglia: riquadro quadrato e nome. Riga: immagine, nome e descrizione. */
 export function ItemCard({ item, variant, onPress }: Props) {
   const isGrid = variant === 'grid';
-  const { accent } = getCategoryColors(item.category);
+  const { color: accent } = getCategoryColors(item.category);
 
   return (
     <Pressable
       onPress={() => onPress(item)}
       accessibilityRole="button"
-      accessibilityLabel={isGrid ? item.name : `${item.name}. ${item.description}`}
+      accessibilityLabel={isGrid || !item.description ? item.name : `${item.name}. ${item.description}`}
       style={({ pressed }) => [isGrid ? styles.grid : styles.row, pressed && styles.pressed]}>
       {isGrid ? (
         <>
@@ -64,9 +64,11 @@ export function ItemCard({ item, variant, onPress }: Props) {
             <Text style={styles.rowName} numberOfLines={1}>
               {item.name}
             </Text>
-            <Text style={styles.description} numberOfLines={2}>
-              {item.description}
-            </Text>
+            {!!item.description && (
+              <Text style={styles.description} numberOfLines={2}>
+                {item.description}
+              </Text>
+            )}
           </View>
           <View style={[styles.dot, { backgroundColor: accent }]} />
         </>

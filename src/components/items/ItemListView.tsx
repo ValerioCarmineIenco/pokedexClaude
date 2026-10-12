@@ -5,6 +5,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import type { ViewMode } from '@/hooks/useViewMode';
 import { colors } from '@/theme/colors';
 import { fonts } from '@/theme/fonts';
+import type { Item } from '@/types/item';
 
 import { ErrorState } from '../ErrorState';
 import { ErrorToast } from '../ErrorToast';
@@ -13,7 +14,6 @@ import { PokeBallLogo } from '../PokeBallLogo';
 import { SkeletonBlock } from '../Skeleton';
 import { ViewToggle } from '../ViewToggle';
 import { ItemCard, ROW_ITEM_HEIGHT } from './ItemCard';
-import type { Item } from './itemFallback';
 
 const COLUMNS = 3;
 const GAP = 10;
@@ -105,7 +105,9 @@ export function ItemListView({
       {Array.from({ length: n }, (_, i) =>
         isGrid ? (
           <View key={i} style={styles.skeletonGridCell}>
-            <SkeletonBlock width="100%" height={0} radius={16} style={styles.skeletonSquare} />
+            <View style={styles.skeletonSquare}>
+              <SkeletonBlock width="100%" height={0} radius={16} style={styles.skeletonFill} />
+            </View>
             <SkeletonBlock width="60%" height={11} style={styles.skeletonName} />
           </View>
         ) : (
@@ -230,8 +232,12 @@ const styles = StyleSheet.create({
     gap: 6,
   },
   skeletonSquare: {
-    height: undefined,
+    width: '100%',
     aspectRatio: 1,
+  },
+  skeletonFill: {
+    position: 'absolute',
+    height: '100%',
   },
   skeletonName: {
     marginTop: 2,
