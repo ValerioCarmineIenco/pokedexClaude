@@ -1,6 +1,8 @@
 import { Image } from 'expo-image';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 
+import { getArtworkUrl } from '@/api/pokemon';
+import { useArtworkStyle } from '@/hooks/useArtworkStyle';
 import { fonts } from '@/theme/fonts';
 import { primaryType, typeTint } from '@/theme/typeColors';
 import { TYPE_NAMES_IT } from '@/theme/typeNames';
@@ -28,6 +30,8 @@ export function accessibilityLabelFor(pokemon: PokemonSummary): string {
 export function PokemonCard({ pokemon, variant, onPress }: Props) {
   const background = typeTint(primaryType(pokemon.types));
   const isGrid = variant === 'grid';
+  const [artworkStyle] = useArtworkStyle();
+  const artworkUrl = getArtworkUrl(pokemon.id, artworkStyle);
 
   return (
     <Pressable
@@ -54,22 +58,22 @@ export function PokemonCard({ pokemon, variant, onPress }: Props) {
             ))}
           </View>
           <Image
-            source={pokemon.artworkUrl}
+            source={artworkUrl}
             style={styles.gridArt}
             contentFit="contain"
             transition={150}
-            recyclingKey={String(pokemon.id)}
+            recyclingKey={artworkUrl}
           />
         </>
       ) : (
         <>
           <PokeBallMark size={88} thickness={12} style={styles.rowMark} />
           <Image
-            source={pokemon.artworkUrl}
+            source={artworkUrl}
             style={styles.rowArt}
             contentFit="contain"
             transition={150}
-            recyclingKey={String(pokemon.id)}
+            recyclingKey={artworkUrl}
           />
           <View style={styles.rowText}>
             <Text style={styles.number}>{formatNumber(pokemon.id)}</Text>
