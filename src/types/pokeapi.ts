@@ -15,7 +15,9 @@ export type PokemonListResponse = {
 
 export type PokemonResponse = {
   id: number;
+  /** Nome della forma (es. `deoxys-normal`): per il nome mostrato si usa `species.name`. */
   name: string;
+  species: NamedAPIResource;
   height: number; // decimetri
   weight: number; // ettogrammi
   types: { slot: number; type: NamedAPIResource }[];

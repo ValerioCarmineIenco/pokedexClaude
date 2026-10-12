@@ -37,7 +37,7 @@ const STAT_NAMES: readonly string[] = [
 
 /**
  * Stili di artwork principale scelti nelle Impostazioni. Ogni URL si costruisce dall'id,
- * senza chiamate extra; tutti esistono per i Pokémon della Gen 1 e 2.
+ * senza chiamate extra; tutti esistono per i Pokémon della Gen 1, 2 e 3.
  */
 export const ARTWORK_STYLES = [
   {
@@ -124,7 +124,8 @@ function isStatName(value: string): value is StatName {
 export function toPokemon(raw: PokemonResponse): Pokemon {
   return {
     id: raw.id,
-    name: raw.name,
+    // Il nome della specie: per Deoxys (#386) `raw.name` è la forma, «deoxys-normal».
+    name: raw.species.name,
     generation: getGenerationOfPokemon(raw.id),
     types: [...raw.types]
       .sort((a, b) => a.slot - b.slot)
@@ -201,7 +202,7 @@ export async function fetchPokemonSpecies(id: number, signal?: AbortSignal): Pro
   return toPokemonSpecies(raw);
 }
 
-/** Converte il parametro di rotta (`"25"`) in un id coperto dal Pokédex (Gen 1-2), altrimenti null. */
+/** Converte il parametro di rotta (`"25"`) in un id coperto dal Pokédex (Gen 1-3), altrimenti null. */
 export function parsePokemonId(value: string | string[] | number | undefined): number | null {
   const raw = Array.isArray(value) ? value[0] : value;
   const id = Number(raw);

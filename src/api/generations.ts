@@ -4,6 +4,7 @@ import type { Generation } from '@/types/pokemon';
 export const GENERATIONS: readonly Generation[] = [
   { id: 1, name: 'Generazione I', region: 'Kanto', firstId: 1, lastId: 151 },
   { id: 2, name: 'Generazione II', region: 'Johto', firstId: 152, lastId: 251 },
+  { id: 3, name: 'Generazione III', region: 'Hoenn', firstId: 252, lastId: 386 },
 ];
 
 export const FIRST_POKEMON_ID = GENERATIONS[0].firstId;
