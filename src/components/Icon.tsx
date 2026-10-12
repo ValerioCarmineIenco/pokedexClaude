@@ -14,6 +14,8 @@ const ICONS = {
   next: { ios: 'chevron.right', android: 'chevron_right', web: 'chevron_right' },
   offline: { ios: 'wifi.slash', android: 'wifi_off', web: 'wifi_off' },
   expand: { ios: 'chevron.down', android: 'expand_more', web: 'expand_more' },
+  bag: { ios: 'bag.fill', android: 'shopping_bag', web: 'shopping_bag' },
+  check: { ios: 'checkmark', android: 'check', web: 'check' },
 } satisfies Record<string, SymbolName>;
 
 export type IconName = keyof typeof ICONS;
