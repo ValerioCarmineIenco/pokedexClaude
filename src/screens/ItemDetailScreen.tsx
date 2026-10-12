@@ -19,9 +19,11 @@ export default function ItemDetailScreen() {
       isInvalidId={detail.isInvalidId}
       related={detail.related}
       isRelatedLoading={detail.isRelatedLoading}
-      // Ogni correlato si impila: "Indietro" torna all'oggetto precedente.
+      // Un correlato sostituisce il dettaglio corrente invece di impilarsi:
+      // "Indietro" (anche gesto o tasto di sistema) torna sempre all'elenco,
+      // pure dopo una catena di correlati.
       onOpenItem={(id) =>
-        router.push({ pathname: '/items/[itemId]', params: { itemId: String(id) } })
+        router.replace({ pathname: '/items/[itemId]', params: { itemId: String(id) } })
       }
       onBack={() => (router.canGoBack() ? router.back() : router.replace('/items'))}
       onRetry={detail.refetch}
