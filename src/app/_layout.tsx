@@ -21,6 +21,8 @@ export default function RootLayout() {
           {/* Sezione Oggetti: elenco (ItemsList) e dettaglio (ItemDetail, param itemId). */}
           <Stack.Screen name="items/index" options={{ title: 'Oggetti' }} />
           <Stack.Screen name="items/[itemId]" options={{ title: 'Dettaglio oggetto' }} />
+          {/* Sezione Abilità: elenco senza categorie. */}
+          <Stack.Screen name="abilities/index" options={{ title: 'Abilità' }} />
           {/* Menu delle sezioni, aperto toccando il titolo in alto a sinistra. */}
           <Stack.Screen
             name="menu"
