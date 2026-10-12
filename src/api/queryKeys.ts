@@ -6,8 +6,12 @@ export const queryKeys = {
   pokemon: (id: number) => ['pokemon', 'detail', id] as const,
   pokemonSpecies: (id: number) => ['pokemon', 'species', id] as const,
   pokemonArtworks: (id: number) => ['pokemon', 'artworks', id] as const,
-  /** `search` già normalizzata (vedi `normalizeSearch`); stringa vuota = nessuna ricerca. */
+  /**
+   * `search` già normalizzata (vedi `normalizeSearch`); stringa vuota = nessuna ricerca.
+   * `listByCategory`: l'elenco completo ora è ordinato per categoria, le pagine salvate prima no.
+   * La categoria resta in posizione 2 (la legge `placeholderData` di `useItems`).
+   */
   itemList: (category: ItemCategory | 'all', search = '') =>
-    ['items', 'list', category, search] as const,
+    ['items', 'listByCategory', category, search] as const,
   item: (id: number) => ['items', 'detail', id] as const,
 };

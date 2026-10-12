@@ -1,12 +1,11 @@
 import { FlashList, type ViewToken } from '@shopify/flash-list';
 import { useCallback, useMemo, useRef, useState } from 'react';
-import { RefreshControl, StyleSheet, Text, View } from 'react-native';
+import { RefreshControl, StyleSheet, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { GENERATIONS, getGenerationById, LAST_POKEMON_ID } from '@/api/generations';
 import type { ViewMode } from '@/hooks/useViewMode';
 import { colors } from '@/theme/colors';
-import { fonts } from '@/theme/fonts';
 import type { Generation, PokemonSummary } from '@/types/pokemon';
 import { formatNumber } from '@/utils/format';
 import { generationSize } from '@/utils/generation';
@@ -14,6 +13,7 @@ import { generationSize } from '@/utils/generation';
 import { ErrorState } from './ErrorState';
 import { ErrorToast } from './ErrorToast';
 import { ListHeader } from './ListHeader';
+import { ListSectionHeader } from './ListSectionHeader';
 import { PokemonCard } from './PokemonCard';
 import { SkeletonCard } from './Skeleton';
 
@@ -179,8 +179,9 @@ export function PokemonListView({
           }}
           renderItem={({ item }) =>
             item.kind === 'generation' ? (
-              <GenerationHeader
-                generation={item.generation}
+              <ListSectionHeader
+                title={item.generation.name}
+                meta={`${item.generation.region} · ${formatNumber(item.generation.firstId)}–${formatNumber(item.generation.lastId)}`}
                 isFirst={item.isFirst}
                 inset={isGrid ? GAP / 2 : 0}
               />
@@ -234,28 +235,6 @@ export function PokemonListView({
   );
 }
 
-function GenerationHeader({
-  generation,
-  isFirst,
-  inset,
-}: {
-  generation: Generation;
-  isFirst: boolean;
-  inset: number;
-}) {
-  return (
-    <View
-      style={[styles.genHeader, { paddingHorizontal: inset }, !isFirst && styles.genHeaderSpaced]}
-      accessibilityRole="header">
-      <Text style={styles.genTitle}>{generation.name}</Text>
-      <Text style={styles.genMeta}>
-        {generation.region} · {formatNumber(generation.firstId)}–{formatNumber(generation.lastId)}
-      </Text>
-      <View style={styles.genRule} />
-    </View>
-  );
-}
-
 const styles = StyleSheet.create({
   screen: {
     flex: 1,
@@ -273,34 +252,6 @@ const styles = StyleSheet.create({
   },
   rowCell: {
     paddingBottom: 8,
-  },
-  genHeader: {
-    flexDirection: 'row',
-    alignItems: 'baseline',
-    gap: 8,
-    paddingTop: 4,
-    paddingBottom: 10,
-  },
-  genHeaderSpaced: {
-    paddingTop: 18,
-  },
-  genTitle: {
-    fontFamily: fonts.display,
-    fontSize: 18,
-    letterSpacing: -0.2,
-    color: colors.text,
-  },
-  genMeta: {
-    fontFamily: fonts.bodyBold,
-    fontSize: 12,
-    letterSpacing: 0.2,
-    color: colors.textSubtle,
-  },
-  genRule: {
-    flex: 1,
-    height: StyleSheet.hairlineWidth,
-    backgroundColor: colors.line,
-    alignSelf: 'center',
   },
   skeletons: {
     paddingHorizontal: SIDE,

@@ -1,23 +1,48 @@
 import { FlashList } from '@shopify/flash-list';
+import { useMemo } from 'react';
 import { RefreshControl, StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
+import { getItemIndex } from '@/api/items';
 import type { ViewMode } from '@/hooks/useViewMode';
+import { CATEGORY_COLORS } from '@/theme/categoryColors';
 import { colors } from '@/theme/colors';
 import { fonts } from '@/theme/fonts';
-import type { Item } from '@/types/item';
+import { ITEM_CATEGORIES, ITEM_CATEGORY_LABELS, type Item, type ItemCategory } from '@/types/item';
 
 import { ErrorState } from '../ErrorState';
 import { ErrorToast } from '../ErrorToast';
+import { ListSectionHeader } from '../ListSectionHeader';
 import { SearchBar } from '../SearchBar';
 import { SectionTitle } from '../SectionTitle';
 import { SkeletonBlock } from '../Skeleton';
 import { ViewToggle } from '../ViewToggle';
+import { CategoryPicker } from './CategoryPicker';
 import { ItemCard, ROW_ITEM_HEIGHT } from './ItemCard';
 
 const COLUMNS = 3;
 const GAP = 10;
 const SIDE = 12;
+
+/** Elementi dell'elenco: gli oggetti e, con tutte le categorie, un'intestazione per ciascuna. */
+type ListItem =
+  | { kind: 'item'; item: Item }
+  | { kind: 'category'; category: ItemCategory; isFirst: boolean };
+
+function buildItems(items: Item[], withHeaders: boolean): ListItem[] {
+  const list: ListItem[] = [];
+  let current: ItemCategory | null = null;
+  for (const item of items) {
+    if (withHeaders && item.category !== current) {
+      list.push({ kind: 'category', category: item.category, isFirst: current === null });
+      current = item.category;
+    }
+    list.push({ kind: 'item', item });
+  }
+  return list;
+}
+
+const countLabel = (n: number) => `${n} ${n === 1 ? 'oggetto' : 'oggetti'}`;
 
 export type ItemListViewProps = {
   items: Item[];
@@ -28,6 +53,9 @@ export type ItemListViewProps = {
   onSearchTextChange: (text: string) => void;
   viewMode: ViewMode;
   onViewModeChange: (mode: ViewMode) => void;
+  /** Categoria mostrata; null = tutte in sequenza, con un'intestazione per ciascuna. */
+  category: ItemCategory | null;
+  onCategoryChange: (category: ItemCategory | null) => void;
   /** Primo caricamento, nessun dato ancora. */
   isLoading: boolean;
   errorMessage: string | null;
@@ -47,6 +75,8 @@ export function ItemListView({
   onSearchTextChange,
   viewMode,
   onViewModeChange,
+  category,
+  onCategoryChange,
   isLoading,
   errorMessage,
   hasNextPage,
@@ -62,13 +92,20 @@ export function ItemListView({
   const count = totalCount ?? items.length;
   const isSearching = searchText.trim().length > 0;
 
+  const listItems = useMemo(() => buildItems(items, category == null), [items, category]);
+  const caption = isSearching
+    ? [`${count} ${count === 1 ? 'risultato' : 'risultati'}`, category && ITEM_CATEGORY_LABELS[category]]
+        .filter(Boolean)
+        .join(' · ')
+    : `${countLabel(count)} · ${category ? ITEM_CATEGORY_LABELS[category] : `${ITEM_CATEGORIES.length} categorie`}`;
+
   const header = (compact = false) => (
     <View style={styles.header}>
       <View style={styles.titleRow}>
         <SectionTitle section="items" />
         {!compact && (
-          <View style={styles.toggle}>
-            <ViewToggle value={viewMode} onChange={onViewModeChange} />
+          <View style={styles.actions}>
+            <CategoryPicker value={category} onChange={onCategoryChange} />
           </View>
         )}
       </View>
@@ -79,11 +116,12 @@ export function ItemListView({
             onChangeText={onSearchTextChange}
             accessibilityLabel="Cerca un oggetto per nome"
           />
-          <Text style={styles.caption}>
-            {isSearching
-              ? `${count} ${count === 1 ? 'risultato' : 'risultati'}`
-              : `${count} ${count === 1 ? 'oggetto' : 'oggetti'}`}
-          </Text>
+          <View style={styles.captionRow}>
+            <Text style={styles.caption} numberOfLines={1}>
+              {caption}
+            </Text>
+            <ViewToggle value={viewMode} onChange={onViewModeChange} />
+          </View>
         </>
       )}
     </View>
@@ -133,15 +171,31 @@ export function ItemListView({
         skeletons(isGrid ? 12 : 8)
       ) : (
         <FlashList
-          key={viewMode}
-          data={items}
+          key={`${viewMode}-${category ?? 'all'}`}
+          data={listItems}
           numColumns={isGrid ? COLUMNS : 1}
-          keyExtractor={(item) => String(item.id)}
-          renderItem={({ item }) => (
-            <View style={isGrid ? styles.gridCell : styles.rowCell}>
-              <ItemCard item={item} variant={viewMode} onPress={onPressItem} />
-            </View>
-          )}
+          keyExtractor={(entry) =>
+            entry.kind === 'item' ? String(entry.item.id) : `category-${entry.category}`
+          }
+          getItemType={(entry) => entry.kind}
+          overrideItemLayout={(layout, entry, _index, maxColumns) => {
+            if (entry.kind === 'category') layout.span = maxColumns;
+          }}
+          renderItem={({ item: entry }) =>
+            entry.kind === 'category' ? (
+              <ListSectionHeader
+                title={ITEM_CATEGORY_LABELS[entry.category]}
+                meta={countLabel(getItemIndex(entry.category, searchText).length)}
+                swatch={CATEGORY_COLORS[entry.category]}
+                isFirst={entry.isFirst}
+                inset={isGrid ? GAP / 2 : 0}
+              />
+            ) : (
+              <View style={isGrid ? styles.gridCell : styles.rowCell}>
+                <ItemCard item={entry.item} variant={viewMode} onPress={onPressItem} />
+              </View>
+            )
+          }
           contentContainerStyle={{
             paddingHorizontal: isGrid ? SIDE - GAP / 2 : SIDE,
             paddingTop: 2,
@@ -154,7 +208,11 @@ export function ItemListView({
             isSearching ? (
               <ErrorState
                 title="Nessun risultato"
-                message={`Nessun oggetto si chiama "${searchText.trim()}".`}
+                message={
+                  category
+                    ? `Nessun oggetto tra «${ITEM_CATEGORY_LABELS[category]}» si chiama "${searchText.trim()}".`
+                    : `Nessun oggetto si chiama "${searchText.trim()}".`
+                }
                 actionLabel="Cancella ricerca"
                 actionStyle="ghost"
                 onAction={() => onSearchTextChange('')}
@@ -201,10 +259,16 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     minHeight: 40,
   },
-  toggle: {
+  actions: {
     marginLeft: 'auto',
   },
+  captionRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 12,
+  },
   caption: {
+    flex: 1,
     fontFamily: fonts.bodyBold,
     fontSize: 12,
     letterSpacing: 0.2,
