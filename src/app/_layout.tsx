@@ -1,23 +1,51 @@
-import { Stack } from 'expo-router';
+import { Tabs } from 'expo-router/tabs';
 import { StatusBar } from 'expo-status-bar';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { QueryProvider } from '@/api/QueryProvider';
 import { FontsGate } from '@/components/FontsGate';
+import { Icon } from '@/components/Icon';
 import { colors } from '@/theme/colors';
+import { fonts } from '@/theme/fonts';
+
+/** Altezza della barra delle tab sopra la zona sicura in basso. */
+const TAB_BAR_HEIGHT = 58;
 
 export default function RootLayout() {
+  const insets = useSafeAreaInsets();
   return (
     <QueryProvider>
       <FontsGate>
         <StatusBar style="dark" />
-        <Stack
+        <Tabs
           screenOptions={{
             headerShown: false,
-            contentStyle: { backgroundColor: colors.background },
+            tabBarActiveTintColor: colors.accent,
+            tabBarInactiveTintColor: colors.textSubtle,
+            tabBarLabelStyle: { fontFamily: fonts.bodyBold, fontSize: 11, lineHeight: 14 },
+            tabBarStyle: {
+              backgroundColor: colors.surface,
+              borderTopColor: colors.line,
+              height: TAB_BAR_HEIGHT + insets.bottom,
+              paddingTop: 6,
+            },
+            sceneStyle: { backgroundColor: colors.background },
           }}>
-          <Stack.Screen name="index" options={{ title: 'Pokédex' }} />
-          <Stack.Screen name="pokemon/[id]" options={{ title: 'Dettaglio' }} />
-        </Stack>
+          <Tabs.Screen
+            name="(pokedex)"
+            options={{
+              title: 'Pokédex',
+              tabBarIcon: ({ color }) => <Icon name="grid" size={22} color={color} />,
+            }}
+          />
+          <Tabs.Screen
+            name="settings"
+            options={{
+              title: 'Impostazioni',
+              tabBarIcon: ({ color }) => <Icon name="settings" size={22} color={color} />,
+            }}
+          />
+        </Tabs>
       </FontsGate>
     </QueryProvider>
   );
