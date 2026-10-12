@@ -14,4 +14,7 @@ export const queryKeys = {
   itemList: (category: ItemCategory | 'all', search = '') =>
     ['items', 'listByCategory', category, search] as const,
   item: (id: number) => ['items', 'detail', id] as const,
+  /** `search` già normalizzata (vedi `normalizeSearch`); stringa vuota = nessuna ricerca. */
+  abilityList: (search = '') => ['abilities', 'list', search] as const,
+  ability: (id: number) => ['abilities', 'detail', id] as const,
 };
