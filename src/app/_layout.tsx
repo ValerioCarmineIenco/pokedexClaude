@@ -17,6 +17,7 @@ export default function RootLayout() {
           }}>
           <Stack.Screen name="index" options={{ title: 'Pokédex' }} />
           <Stack.Screen name="pokemon/[id]" options={{ title: 'Dettaglio' }} />
+          <Stack.Screen name="settings" options={{ title: 'Impostazioni' }} />
           {/* Sezione Oggetti: elenco (ItemsList) e dettaglio (ItemDetail, param itemId). */}
           <Stack.Screen name="items/index" options={{ title: 'Oggetti' }} />
           <Stack.Screen name="items/[itemId]" options={{ title: 'Dettaglio oggetto' }} />
