@@ -1,4 +1,4 @@
-import { router, useLocalSearchParams, type Href } from 'expo-router';
+import { router, useLocalSearchParams } from 'expo-router';
 
 import { AbilityDetailView } from '@/components/abilities/AbilityDetailView';
 import { useAbility } from '@/hooks/useAbility';
@@ -21,8 +21,7 @@ export default function AbilityDetailScreen() {
       onOpenPokemon={(id) =>
         router.push({ pathname: '/pokemon/[id]', params: { id: String(id) } })
       }
-      // L'elenco abilità arriva con la PR #18: il cast si può togliere quando è su main.
-      onBack={() => (router.canGoBack() ? router.back() : router.replace('/abilities' as Href))}
+      onBack={() => (router.canGoBack() ? router.back() : router.replace('/abilities'))}
       onRetry={() => void detail.refetch()}
     />
   );
