@@ -18,7 +18,11 @@ export class ApiError extends Error {
   }
 }
 
-export async function fetchJson<T>(path: string, signal?: AbortSignal): Promise<T> {
+export async function fetchJson<T>(
+  path: string,
+  signal?: AbortSignal,
+  notFoundMessage = 'Pokémon non trovato.',
+): Promise<T> {
   // AbortSignal.timeout/any non sono garantiti su Hermes: timeout gestito a mano.
   const controller = new AbortController();
   let timedOut = false;
@@ -47,7 +51,7 @@ export async function fetchJson<T>(path: string, signal?: AbortSignal): Promise<
   if (!response.ok) {
     throw new ApiError(
       response.status === 404
-        ? 'Pokémon non trovato.'
+        ? notFoundMessage
         : `Errore del server (${response.status}). Riprova tra poco.`,
       response.status,
     );

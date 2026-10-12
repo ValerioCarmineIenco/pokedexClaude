@@ -43,3 +43,17 @@ export type PokemonSpeciesResponse = {
   }[];
   genera: { genus: string; language: NamedAPIResource }[];
 };
+
+export type ItemResponse = {
+  id: number;
+  name: string;
+  category: NamedAPIResource;
+  names: { name: string; language: NamedAPIResource }[];
+  flavor_text_entries: {
+    text: string;
+    language: NamedAPIResource;
+    version_group: NamedAPIResource;
+  }[];
+  effect_entries: { effect: string; short_effect: string; language: NamedAPIResource }[];
+  sprites: { default: string | null };
+};
