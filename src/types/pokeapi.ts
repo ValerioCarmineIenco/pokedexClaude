@@ -21,12 +21,15 @@ export type PokemonResponse = {
   types: { slot: number; type: NamedAPIResource }[];
   abilities: { is_hidden: boolean; slot: number; ability: NamedAPIResource }[];
   stats: { base_stat: number; effort: number; stat: NamedAPIResource }[];
-  sprites: {
-    front_default: string | null;
-    other?: {
-      'official-artwork'?: { front_default: string | null };
-    };
-  };
+  sprites: SpriteTree;
+};
+
+/**
+ * Oggetto `sprites`: URL (o null) e gruppi annidati per fonte, generazione e gioco
+ * (es. `other.home.front_shiny`, `versions.generation-i.yellow.back_gray`).
+ */
+export type SpriteTree = {
+  [key: string]: string | null | SpriteTree;
 };
 
 export type PokemonSpeciesResponse = {
