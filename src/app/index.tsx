@@ -2,13 +2,12 @@ import { router } from 'expo-router';
 import { useState } from 'react';
 
 import { PokemonListView } from '@/components/PokemonListView';
+import { usePokemonList } from '@/hooks/usePokemonList';
 import { usePokemonSearch } from '@/hooks/usePokemonSearch';
 import { useViewMode } from '@/hooks/useViewMode';
-// Dati d'esempio finché la UI non viene collegata a usePokemonList.
-import { useMockPokemonList } from '@/mocks/useMockPokemon';
 
 export default function PokemonListScreen() {
-  const list = useMockPokemonList();
+  const list = usePokemonList();
   const [searchText, setSearchText] = useState('');
   const [viewMode, setViewMode] = useViewMode();
   const results = usePokemonSearch(list.pokemon, searchText);
