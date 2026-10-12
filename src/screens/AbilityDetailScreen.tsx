@@ -1,7 +1,7 @@
 import { router, useLocalSearchParams, type Href } from 'expo-router';
 
 import { AbilityDetailView } from '@/components/abilities/AbilityDetailView';
-import { useAbilityDetail } from '@/hooks/useAbilityDetail';
+import { useAbility } from '@/hooks/useAbility';
 
 /**
  * Schermata dettaglio abilità. Il file di rotta la riesporta:
@@ -9,7 +9,7 @@ import { useAbilityDetail } from '@/hooks/useAbilityDetail';
  */
 export default function AbilityDetailScreen() {
   const { abilityId } = useLocalSearchParams<{ abilityId: string }>();
-  const detail = useAbilityDetail(abilityId);
+  const detail = useAbility(abilityId);
 
   return (
     <AbilityDetailView
@@ -23,7 +23,7 @@ export default function AbilityDetailScreen() {
       }
       // L'elenco abilità arriva con la PR #18: il cast si può togliere quando è su main.
       onBack={() => (router.canGoBack() ? router.back() : router.replace('/abilities' as Href))}
-      onRetry={detail.refetch}
+      onRetry={() => void detail.refetch()}
     />
   );
 }

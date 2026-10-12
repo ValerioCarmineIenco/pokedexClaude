@@ -4,10 +4,9 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { getArtworkUrl } from '@/api/pokemon';
 import { useArtworkStyle } from '@/hooks/useArtworkStyle';
-import type { TypeName } from '@/types/pokemon';
+import type { Ability, AbilityPokemon } from '@/types/ability';
 import { colors } from '@/theme/colors';
 import { fonts } from '@/theme/fonts';
-import { primaryType, typeTint } from '@/theme/typeColors';
 import { formatName, formatNumber } from '@/utils/format';
 import { romanNumeral } from '@/utils/generation';
 
@@ -28,39 +27,8 @@ const SHEET_CAP = 72;
 /** Lato delle carte quadrate dei Pokémon. */
 const POKEMON_SIZE = 108;
 
-// Stessa forma di `Ability` del thread dati (`src/types/ability.ts`): quando arriva su main
-// questi tipi si sostituiscono con l'import, senza toccare la vista.
-
-/** Un Pokémon che può avere l'abilità. */
-export type AbilityPokemon = {
-  id: number;
-  /** Slug di PokéAPI (es. `pikachu`). */
-  name: string;
-  /** Abilità nascosta per questo Pokémon. */
-  isHidden: boolean;
-  /** Artwork ufficiale; la vista usa lo stile scelto nelle Impostazioni. */
-  artworkUrl: string;
-  /** Solo per colorare la carta; senza tipi si usa il colore delle abilità. */
-  types?: TypeName[];
-};
-
-/** Dati di `/ability/{id}`, pronti per il dettaglio. */
-export type AbilityDetail = {
-  id: number;
-  /** Nome italiano (es. «Statico»), altrimenti inglese. */
-  name: string;
-  /** Ultima descrizione italiana dei giochi, altrimenti inglese; stringa vuota se assente. */
-  description: string;
-  /** Effetto per esteso (in inglese su PokéAPI); null se assente. */
-  effect: string | null;
-  /** Generazione in cui è stata introdotta. */
-  generation: number;
-  /** Pokémon dell'app che la possono avere, in ordine di id. */
-  pokemon: AbilityPokemon[];
-};
-
 export type AbilityDetailViewProps = {
-  ability: AbilityDetail | undefined;
+  ability: Ability | undefined;
   /** Dati in arrivo (non ancora in cache). */
   isLoading: boolean;
   errorMessage: string | null;
@@ -166,7 +134,7 @@ export function AbilityDetailView({
         {ability?.effect && (
           <View style={styles.section}>
             <Text style={styles.sectionTitle} accessibilityRole="header">
-              Effetto
+              Effetto <Text style={styles.sectionNote}>in inglese</Text>
             </Text>
             <View style={styles.effectBox}>
               <Text style={styles.effect}>{ability.effect}</Text>
@@ -214,7 +182,7 @@ function PokemonTile({ pokemon, onPress }: { pokemon: AbilityPokemon; onPress: (
       accessibilityLabel={`${name}, numero ${pokemon.id}${pokemon.isHidden ? ', abilità nascosta' : ''}`}
       style={({ pressed }) => [
         styles.relatedTile,
-        { backgroundColor: pokemon.types ? typeTint(primaryType(pokemon.types)) : ABILITY_SOFT },
+        { backgroundColor: ABILITY_SOFT },
         pressed && styles.relatedPressed,
       ]}>
       {pokemon.isHidden && (
@@ -351,6 +319,11 @@ const styles = StyleSheet.create({
   sectionCount: {
     fontFamily: fonts.mono,
     fontSize: 14,
+    color: colors.textSubtle,
+  },
+  sectionNote: {
+    fontFamily: fonts.body,
+    fontSize: 13,
     color: colors.textSubtle,
   },
   effectBox: {
