@@ -1,6 +1,6 @@
 # Pokédex
 
-App Expo (React Native) per consultare i Pokémon della prima generazione, con i dati di [PokéAPI](https://pokeapi.co/).
+App Expo (React Native) per consultare i Pokémon della prima e della seconda generazione, con i dati di [PokéAPI](https://pokeapi.co/).
 
 ## Avvio
 
@@ -33,10 +33,12 @@ Gli schermi usano solo gli hook di `src/hooks` (React Query); i tipi restituiti 
 
 | Hook | Restituisce |
 | --- | --- |
-| `usePokemonList()` | `pokemon: Pokemon[]` (Gen 1 a pagine da 20), `isLoading`, `errorMessage`, `refetch`, `hasNextPage`, `fetchNextPage`, `isFetchingNextPage` |
+| `usePokemonList(generationId?)` | `pokemon: Pokemon[]` (tutte le generazioni in sequenza, o solo `generationId`, a pagine da 20), `isLoading`, `errorMessage`, `refetch`, `hasNextPage`, `fetchNextPage`, `isFetchingNextPage` |
 | `usePokemonDetail(id)` | `pokemon: PokemonDetail` (dati + descrizione italiana), `isLoading`, `errorMessage`, `refetch` |
 | `usePokemon(id)` / `usePokemonSpecies(id)` | le due metà del dettaglio, separate |
 | `usePokemonArtworks(id, { enabled })` | `artworks: PokemonArtworks` (tutte le immagini di `sprites`, per fonte e per generazione), `isLoading`, `errorMessage`, `refetch` |
 | `usePokemonSearch(pokemon, testo)` | i Pokémon già caricati filtrati per nome |
+
+Ogni `Pokemon` ha `generation` (1 o 2). `GENERATIONS` in `src/api/generations.ts` elenca le generazioni (`id`, `name`, `region`, `firstId`, `lastId`); `fetchGenerationPokemon(id)` in `src/api/pokemon.ts` scarica tutti i Pokémon di una generazione.
 
 `id` può essere direttamente il parametro di rotta. Nomi, altezza (dm) e peso (hg) arrivano come in PokéAPI: la formattazione la fa la UI. `getAdjacentIds` in `src/api/pokemon.ts` dà il Pokémon precedente/successivo; `QueryProvider` in `src/api/QueryProvider.tsx` salva la cache in AsyncStorage e va messo in `_layout.tsx` al posto di `QueryClientProvider`.
