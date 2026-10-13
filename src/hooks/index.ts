@@ -4,6 +4,9 @@ export { useAbilitySearch } from './useAbilitySearch';
 export { useItem } from './useItem';
 export { useItemSearch } from './useItemSearch';
 export { useItems } from './useItems';
+export { useMove } from './useMove';
+export { useMoves } from './useMoves';
+export { useMoveSearch } from './useMoveSearch';
 export { useNatures } from './useNatures';
 export { useNatureSearch } from './useNatureSearch';
 export { usePokemon } from './usePokemon';
@@ -13,6 +16,7 @@ export { filterPokemonByName, usePokemonSearch } from './usePokemonSearch';
 export { usePokemonList } from './usePokemonList';
 export { usePokemonSpecies } from './usePokemonSpecies';
 export { useRelatedItems } from './useRelatedItems';
+export { useTypeMatchups } from './useTypeMatchups';
 export {
   GENERATIONS,
   getGenerationById,
