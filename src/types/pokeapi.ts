@@ -138,3 +138,36 @@ export type TypeResponse = {
     no_damage_from: NamedAPIResource[];
   };
 };
+
+export type LocationResponse = {
+  id: number;
+  name: string;
+  /** Null per poche località senza regione. */
+  region: NamedAPIResource | null;
+  names: { name: string; language: NamedAPIResource }[];
+  areas: NamedAPIResource[];
+};
+
+export type EncounterDetailResponse = {
+  min_level: number;
+  max_level: number;
+  /** Probabilità della singola voce, in percentuale (0 se non nota). */
+  chance: number;
+  method: NamedAPIResource;
+  condition_values: NamedAPIResource[];
+};
+
+export type LocationAreaResponse = {
+  id: number;
+  name: string;
+  names: { name: string; language: NamedAPIResource }[];
+  location: NamedAPIResource;
+  pokemon_encounters: {
+    pokemon: NamedAPIResource;
+    version_details: {
+      version: NamedAPIResource;
+      max_chance: number;
+      encounter_details: EncounterDetailResponse[];
+    }[];
+  }[];
+};
