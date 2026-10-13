@@ -18,6 +18,7 @@ const ICONS = {
   expand: { ios: 'chevron.down', android: 'expand_more', web: 'expand_more' },
   bag: { ios: 'bag.fill', android: 'shopping_bag', web: 'shopping_bag' },
   sparkles: { ios: 'sparkles', android: 'auto_awesome', web: 'auto_awesome' },
+  bolt: { ios: 'bolt.fill', android: 'bolt', web: 'bolt' },
   leaf: { ios: 'leaf.fill', android: 'eco', web: 'eco' },
   up: { ios: 'arrow.up', android: 'arrow_upward', web: 'arrow_upward' },
   down: { ios: 'arrow.down', android: 'arrow_downward', web: 'arrow_downward' },
