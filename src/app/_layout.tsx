@@ -24,7 +24,8 @@ export default function RootLayout() {
           {/* Sezione Abilità: elenco senza categorie e dettaglio (param abilityId). */}
           <Stack.Screen name="abilities/index" options={{ title: 'Abilità' }} />
           <Stack.Screen name="abilities/[abilityId]" options={{ title: 'Dettaglio abilità' }} />
-          {/* Sezione Mosse: dettaglio (param moveId), con l'efficacia del tipo. */}
+          {/* Sezione Mosse: elenco senza categorie e dettaglio (param moveId). */}
+          <Stack.Screen name="moves/index" options={{ title: 'Mosse' }} />
           <Stack.Screen name="moves/[moveId]" options={{ title: 'Dettaglio mossa' }} />
           {/* Sezione Nature: solo elenco, niente dettaglio. */}
           <Stack.Screen name="natures/index" options={{ title: 'Nature' }} />

@@ -23,7 +23,7 @@ export default function MoveDetailScreen() {
       onOpenPokemon={(id) =>
         router.push({ pathname: '/pokemon/[id]', params: { id: String(id) } })
       }
-      onBack={() => (router.canGoBack() ? router.back() : router.replace('/'))}
+      onBack={() => (router.canGoBack() ? router.back() : router.replace('/moves'))}
       onRetry={() => void detail.refetch()}
     />
   );
