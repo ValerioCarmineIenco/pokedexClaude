@@ -17,4 +17,6 @@ export const queryKeys = {
   /** `search` già normalizzata (vedi `normalizeSearch`); stringa vuota = nessuna ricerca. */
   abilityList: (search = '') => ['abilities', 'list', search] as const,
   ability: (id: number) => ['abilities', 'detail', id] as const,
+  /** Tutte le 25 nature: la ricerca filtra in locale, senza chiavi separate. */
+  natures: () => ['natures', 'list'] as const,
 };

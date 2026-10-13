@@ -4,6 +4,8 @@ export { useAbilitySearch } from './useAbilitySearch';
 export { useItem } from './useItem';
 export { useItemSearch } from './useItemSearch';
 export { useItems } from './useItems';
+export { useNatures } from './useNatures';
+export { useNatureSearch } from './useNatureSearch';
 export { usePokemon } from './usePokemon';
 export { usePokemonArtworks } from './usePokemonArtworks';
 export { usePokemonDetail } from './usePokemonDetail';

@@ -74,3 +74,14 @@ export type AbilityResponse = {
   effect_entries: { effect: string; short_effect: string; language: NamedAPIResource }[];
   pokemon: { is_hidden: boolean; slot: number; pokemon: NamedAPIResource }[];
 };
+
+export type NatureResponse = {
+  id: number;
+  name: string;
+  /** Null per le nature neutre. */
+  increased_stat: NamedAPIResource | null;
+  decreased_stat: NamedAPIResource | null;
+  likes_flavor: NamedAPIResource | null;
+  hates_flavor: NamedAPIResource | null;
+  names: { name: string; language: NamedAPIResource }[];
+};
