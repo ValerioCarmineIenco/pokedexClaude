@@ -9,7 +9,7 @@ import type { MoveSummary } from '@/types/move';
 import { PokeBallMark } from '../PokeBallMark';
 import { TypeBadge } from '../TypeBadge';
 
-export const ROW_MOVE_HEIGHT = 84;
+export const ROW_MOVE_HEIGHT = 72;
 export const GRID_MOVE_HEIGHT = 124;
 
 type Props = {
@@ -27,9 +27,9 @@ export function accessibilityLabelFor(move: MoveSummary): string {
   return `${move.name}, tipo ${TYPE_NAMES_IT[move.type]}, ${move.damageClassLabel}, ${power}, ${accuracy}, ${move.pp} PP`;
 }
 
-function Stat({ caption, value }: { caption: string; value: string }) {
+function Stat({ caption, value, compact }: { caption: string; value: string; compact: boolean }) {
   return (
-    <View style={styles.stat}>
+    <View style={[styles.stat, compact ? styles.statCompact : styles.statFill]}>
       <Text style={styles.statCaption}>{caption}</Text>
       <Text style={styles.statValue} numberOfLines={1}>
         {value}
@@ -38,12 +38,16 @@ function Stat({ caption, value }: { caption: string; value: string }) {
   );
 }
 
-function Stats({ move }: { move: MoveSummary }) {
+/**
+ * `compact` (riga): caselle a larghezza fissa, così su iOS/Android non si allargano fino a
+ * schiacciare nome e tipo. In griglia si dividono la larghezza della scheda.
+ */
+function Stats({ move, compact = false }: { move: MoveSummary; compact?: boolean }) {
   return (
-    <View style={styles.stats}>
-      <Stat caption="Pot." value={formatPower(move.power)} />
-      <Stat caption="Prec." value={formatAccuracy(move.accuracy)} />
-      <Stat caption="PP" value={String(move.pp)} />
+    <View style={[styles.stats, compact && styles.statsCompact]}>
+      <Stat caption="Pot." value={formatPower(move.power)} compact={compact} />
+      <Stat caption="Prec." value={formatAccuracy(move.accuracy)} compact={compact} />
+      <Stat caption="PP" value={String(move.pp)} compact={compact} />
     </View>
   );
 }
@@ -95,7 +99,7 @@ export function MoveCard({ move, variant, onPress }: Props) {
               </Text>
             </View>
           </View>
-          <Stats move={move} />
+          <Stats move={move} compact />
         </>
       )}
     </Pressable>
@@ -137,7 +141,7 @@ const styles = StyleSheet.create({
   rowText: {
     flex: 1,
     minWidth: 0,
-    gap: 6,
+    gap: 4,
   },
   name: {
     fontFamily: fonts.display,
@@ -160,14 +164,22 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     gap: 6,
   },
+  statsCompact: {
+    flexShrink: 0,
+    gap: 4,
+  },
   stat: {
-    minWidth: 44,
-    flexGrow: 1,
-    paddingHorizontal: 6,
+    paddingHorizontal: 4,
     paddingVertical: 4,
     borderRadius: 10,
     backgroundColor: 'rgba(255, 255, 255, 0.6)',
     alignItems: 'center',
+  },
+  statFill: {
+    flex: 1,
+  },
+  statCompact: {
+    width: 46,
   },
   statCaption: {
     fontFamily: fonts.bodyBold,
