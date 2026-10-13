@@ -14,6 +14,9 @@ export const colors = {
   skeletonLine: '#E2DED9',
   toast: '#1D1C22',
   toastAction: '#FFB39F',
+  /** Statistica aumentata / diminuita dalla natura. */
+  statUp: '#2F9E62',
+  statDown: '#D6402B',
 } as const;
 
 export const radius = {
