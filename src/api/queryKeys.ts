@@ -22,5 +22,7 @@ export const queryKeys = {
   natures: () => ['natures', 'list'] as const,
   /** L'elenco delle mosse viene dall'indice locale: serve solo il dettaglio. */
   move: (id: number) => ['moves', 'detail', id] as const,
+  /** L'elenco delle località viene dall'indice locale: serve solo il dettaglio. */
+  location: (id: number) => ['locations', 'detail', id] as const,
   typeMatchups: (type: TypeName) => ['types', 'matchups', type] as const,
 };
