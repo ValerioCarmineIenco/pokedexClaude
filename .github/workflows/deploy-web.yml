@@ -1,0 +1,57 @@
+# Publishes the web version of the app to GitHub Pages, so it can be opened
+# from any phone browser at https://<owner>.github.io/<repo>/
+name: Deploy web to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      # Pages serves the site under /<repo>/, so assets and routes need that prefix.
+      - name: Set web base URL
+        env:
+          BASE_URL: /${{ github.event.repository.name }}
+        run: |
+          node -e '
+            const fs = require("fs");
+            const app = JSON.parse(fs.readFileSync("app.json", "utf8"));
+            app.expo.experiments = { ...app.expo.experiments, baseUrl: process.env.BASE_URL };
+            fs.writeFileSync("app.json", JSON.stringify(app, null, 2));
+          '
+      - run: npx expo export --platform web
+      # Pages has no rewrites: unknown paths (e.g. /pokemon/25) fall back to
+      # 404.html, which boots the router and renders the right screen.
+      - run: cp dist/index.html dist/404.html
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v4
+        with:
+          path: dist
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4
