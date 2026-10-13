@@ -1,4 +1,5 @@
 import type { ItemCategory } from '@/types/item';
+import type { TypeName } from '@/types/pokemon';
 
 export const queryKeys = {
   /** `null` = tutte le generazioni in sequenza. */
@@ -19,4 +20,7 @@ export const queryKeys = {
   ability: (id: number) => ['abilities', 'detail', id] as const,
   /** Tutte le 25 nature: la ricerca filtra in locale, senza chiavi separate. */
   natures: () => ['natures', 'list'] as const,
+  /** L'elenco delle mosse viene dall'indice locale: serve solo il dettaglio. */
+  move: (id: number) => ['moves', 'detail', id] as const,
+  typeMatchups: (type: TypeName) => ['types', 'matchups', type] as const,
 };
