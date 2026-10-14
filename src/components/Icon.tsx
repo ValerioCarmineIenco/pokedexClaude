@@ -20,6 +20,7 @@ const ICONS = {
   sparkles: { ios: 'sparkles', android: 'auto_awesome', web: 'auto_awesome' },
   bolt: { ios: 'bolt.fill', android: 'bolt', web: 'bolt' },
   leaf: { ios: 'leaf.fill', android: 'eco', web: 'eco' },
+  location: { ios: 'mappin.and.ellipse', android: 'location_on', web: 'location_on' },
   up: { ios: 'arrow.up', android: 'arrow_upward', web: 'arrow_upward' },
   down: { ios: 'arrow.down', android: 'arrow_downward', web: 'arrow_downward' },
   map: { ios: 'map.fill', android: 'map', web: 'map' },

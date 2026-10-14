@@ -22,7 +22,7 @@ export default function LocationDetailScreen() {
       onOpenPokemon={(id) =>
         router.push({ pathname: '/pokemon/[id]', params: { id: String(id) } })
       }
-      onBack={() => (router.canGoBack() ? router.back() : router.replace('/'))}
+      onBack={() => (router.canGoBack() ? router.back() : router.replace('/locations'))}
       onRetry={() => void detail.refetch()}
     />
   );

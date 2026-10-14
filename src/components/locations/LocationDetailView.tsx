@@ -22,8 +22,8 @@ import { Icon } from '../Icon';
 import { SkeletonBlock } from '../Skeleton';
 
 /** Verde acqua delle località: badge della regione, etichette dei metodi, livelli. */
-const LOCATION_COLOR = '#178F8C';
-const LOCATION_SOFT = '#D5EEEE';
+const LOCATION_COLOR = colors.pokemonBadgeText;
+const LOCATION_SOFT = colors.pokemonBadge;
 /** Barra sotto l'area selezionata. */
 const TAB_ACCENT = '#5E7A8A';
 const RATE_COLOR = '#2E8B57';
@@ -76,7 +76,7 @@ export function LocationDetailView({
         <Icon name="back" size={18} color={colors.text} />
       </Pressable>
       <Text style={styles.title} numberOfLines={2} accessibilityRole="header">
-        {header?.name.toLocaleUpperCase('it-IT') ?? ''}
+        {header?.name.toUpperCase() ?? ''}
       </Text>
       <View style={styles.navSide}>
         {header?.region && (

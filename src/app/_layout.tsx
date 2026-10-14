@@ -29,7 +29,8 @@ export default function RootLayout() {
           <Stack.Screen name="moves/[moveId]" options={{ title: 'Dettaglio mossa' }} />
           {/* Sezione Nature: solo elenco, niente dettaglio. */}
           <Stack.Screen name="natures/index" options={{ title: 'Nature' }} />
-          {/* Sezione Località: dettaglio (param locationId, id numerico di PokéAPI). */}
+          {/* Sezione Località: elenco per regione e dettaglio (param locationId). */}
+          <Stack.Screen name="locations/index" options={{ title: 'Località' }} />
           <Stack.Screen name="locations/[locationId]" options={{ title: 'Dettaglio località' }} />
           {/* Menu delle sezioni, aperto toccando il titolo in alto a sinistra. */}
           <Stack.Screen

@@ -3,7 +3,7 @@ import type { Href } from 'expo-router';
 import type { IconName } from '@/components/Icon';
 
 /** Sezioni dell'app che si scelgono dal menu del titolo. */
-export type SectionKey = 'pokedex' | 'items' | 'abilities' | 'moves' | 'natures';
+export type SectionKey = 'pokedex' | 'items' | 'abilities' | 'moves' | 'natures' | 'locations';
 
 export type Section = {
   key: SectionKey;
@@ -50,6 +50,13 @@ export const SECTIONS: Section[] = [
     description: 'Statistiche e sapori di ogni natura',
     href: '/natures',
     icon: 'leaf',
+  },
+  {
+    key: 'locations',
+    title: 'Località',
+    description: 'Dove trovare i Pokémon, regione per regione',
+    href: '/locations',
+    icon: 'location',
   },
 ];
 
