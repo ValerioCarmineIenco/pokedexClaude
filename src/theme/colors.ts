@@ -17,6 +17,11 @@ export const colors = {
   /** Statistica aumentata / diminuita dalla natura. */
   statUp: '#2F9E62',
   statDown: '#D6402B',
+  /** Badge delle località: numero di Pokémon e di giochi. */
+  pokemonBadge: '#D7EFEE',
+  pokemonBadgeText: '#1E8C88',
+  gamesBadge: '#FDEBD3',
+  gamesBadgeText: '#C26A0A',
 } as const;
 
 export const radius = {
