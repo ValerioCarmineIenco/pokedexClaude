@@ -24,6 +24,8 @@ const ICONS = {
   up: { ios: 'arrow.up', android: 'arrow_upward', web: 'arrow_upward' },
   down: { ios: 'arrow.down', android: 'arrow_downward', web: 'arrow_downward' },
   map: { ios: 'map.fill', android: 'map', web: 'map' },
+  heart: { ios: 'heart.fill', android: 'favorite', web: 'favorite' },
+  heartOutline: { ios: 'heart', android: 'favorite_border', web: 'favorite_border' },
 } satisfies Record<string, SymbolName>;
 
 export type IconName = keyof typeof ICONS;
