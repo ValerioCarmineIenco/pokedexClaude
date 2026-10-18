@@ -3,12 +3,17 @@ import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { colors } from '@/theme/colors';
 import { fonts } from '@/theme/fonts';
 
-export type DetailTab = 'info' | 'artwork';
+export type DetailTab = 'info' | 'evolutions' | 'artwork';
 
 const TABS: { tab: DetailTab; label: string }[] = [
   { tab: 'info', label: 'Info' },
+  { tab: 'evolutions', label: 'Evoluzioni' },
   { tab: 'artwork', label: 'Artwork' },
 ];
+
+export function isDetailTab(value: unknown): value is DetailTab {
+  return TABS.some(({ tab }) => tab === value);
+}
 
 type Props = {
   value: DetailTab;

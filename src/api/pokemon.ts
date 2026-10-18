@@ -158,6 +158,7 @@ export function toPokemonSpecies(raw: PokemonSpeciesResponse): PokemonSpecies {
     id: raw.id,
     description: flavor ? cleanFlavorText(flavor.flavor_text) : null,
     genus: genus?.genus ?? null,
+    evolutionChainId: raw.evolution_chain ? getIdFromUrl(raw.evolution_chain.url) : null,
   };
 }
 

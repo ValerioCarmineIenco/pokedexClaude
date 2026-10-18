@@ -2,17 +2,19 @@ import { router, useLocalSearchParams } from 'expo-router';
 import { useState } from 'react';
 
 import { getAdjacentIds } from '@/api/pokemon';
-import type { DetailTab } from '@/components/DetailTabs';
+import { isDetailTab, type DetailTab } from '@/components/DetailTabs';
 import { PokemonDetailView } from '@/components/PokemonDetailView';
+import { useEvolutionChain } from '@/hooks/useEvolutionChain';
 import { usePokemonArtworks } from '@/hooks/usePokemonArtworks';
 import { usePokemonDetail } from '@/hooks/usePokemonDetail';
 
 export default function PokemonDetailScreen() {
-  const { id: idParam } = useLocalSearchParams<{ id: string }>();
+  const { id: idParam, tab: tabParam } = useLocalSearchParams<{ id: string; tab?: string }>();
   const detail = usePokemonDetail(idParam);
-  const [tab, setTab] = useState<DetailTab>('info');
-  // La galleria si scarica solo quando si apre la tab Artwork.
+  const [tab, setTab] = useState<DetailTab>(isDetailTab(tabParam) ? tabParam : 'info');
+  // La galleria e la catena si scaricano solo quando si apre la loro tab.
   const gallery = usePokemonArtworks(idParam, { enabled: tab === 'artwork' });
+  const evolutions = useEvolutionChain(idParam, { enabled: tab === 'evolutions' });
   const { previous, next } =
     detail.id === null ? { previous: null, next: null } : getAdjacentIds(detail.id);
 
@@ -35,6 +37,18 @@ export default function PokemonDetailScreen() {
       isArtworksLoading={gallery.isLoading}
       artworksErrorMessage={gallery.errorMessage}
       onArtworksRetry={() => void gallery.refetch()}
+      evolutionChain={evolutions.chain}
+      isEvolutionsLoading={evolutions.isLoading}
+      evolutionsErrorMessage={evolutions.errorMessage}
+      onEvolutionsRetry={() => void evolutions.refetch()}
+      // Resta sulla tab Evoluzioni, così si può scorrere la catena da un membro all'altro.
+      onOpenEvolution={(id) =>
+        router.replace({ pathname: '/pokemon/[id]', params: { id: String(id), tab: 'evolutions' } })
+      }
+      onOpenItem={(id) => router.push({ pathname: '/items/[itemId]', params: { itemId: String(id) } })}
+      onOpenLocation={(id) =>
+        router.push({ pathname: '/locations/[locationId]', params: { locationId: String(id) } })
+      }
     />
   );
 }

@@ -8,6 +8,7 @@ import { useArtworkStyle } from '@/hooks/useArtworkStyle';
 import { colors } from '@/theme/colors';
 import { fonts } from '@/theme/fonts';
 import { primaryType, TYPE_COLORS, typeTint } from '@/theme/typeColors';
+import type { EvolutionChain as Chain } from '@/types/evolution';
 import type { PokemonArtworks, PokemonDetail } from '@/types/pokemon';
 import {
   formatHeight,
@@ -20,6 +21,7 @@ import {
 import { ArtworkGallery } from './ArtworkGallery';
 import { DetailTabs, type DetailTab } from './DetailTabs';
 import { ErrorState } from './ErrorState';
+import { EvolutionChain } from './EvolutionChain';
 import { Icon, type IconName } from './Icon';
 import { PokeBallMark } from './PokeBallMark';
 import { SkeletonBlock } from './Skeleton';
@@ -56,6 +58,15 @@ export type PokemonDetailViewProps = {
   isArtworksLoading: boolean;
   artworksErrorMessage: string | null;
   onArtworksRetry: () => void;
+  evolutionChain: Chain | undefined;
+  /** La catena della tab Evoluzioni sta arrivando. */
+  isEvolutionsLoading: boolean;
+  evolutionsErrorMessage: string | null;
+  onEvolutionsRetry: () => void;
+  /** Apre un altro Pokémon della catena. */
+  onOpenEvolution: (id: number) => void;
+  onOpenItem: (id: number) => void;
+  onOpenLocation: (id: number) => void;
 };
 
 export function PokemonDetailView({
@@ -75,6 +86,13 @@ export function PokemonDetailView({
   isArtworksLoading,
   artworksErrorMessage,
   onArtworksRetry,
+  evolutionChain,
+  isEvolutionsLoading,
+  evolutionsErrorMessage,
+  onEvolutionsRetry,
+  onOpenEvolution,
+  onOpenItem,
+  onOpenLocation,
 }: PokemonDetailViewProps) {
   const insets = useSafeAreaInsets();
   const [artworkStyle] = useArtworkStyle();
@@ -183,6 +201,17 @@ export function PokemonDetailView({
             errorMessage={artworksErrorMessage}
             pokemonName={formatName(pokemon.name)}
             onRetry={onArtworksRetry}
+          />
+        ) : pokemon && tab === 'evolutions' ? (
+          <EvolutionChain
+            chain={evolutionChain}
+            isLoading={isEvolutionsLoading}
+            errorMessage={evolutionsErrorMessage}
+            currentId={pokemon.id}
+            onOpenPokemon={onOpenEvolution}
+            onOpenItem={onOpenItem}
+            onOpenLocation={onOpenLocation}
+            onRetry={onEvolutionsRetry}
           />
         ) : pokemon ? (
           <>

@@ -1,6 +1,7 @@
 export { useAbilities } from './useAbilities';
 export { useAbility } from './useAbility';
 export { useAbilitySearch } from './useAbilitySearch';
+export { useEvolutionChain } from './useEvolutionChain';
 export { useItem } from './useItem';
 export { useItemSearch } from './useItemSearch';
 export { useItems } from './useItems';
