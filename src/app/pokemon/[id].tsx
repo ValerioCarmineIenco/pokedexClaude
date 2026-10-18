@@ -8,6 +8,7 @@ import { useEvolutionChain } from '@/hooks/useEvolutionChain';
 import { useFavorites } from '@/hooks/useFavorites';
 import { usePokemonArtworks } from '@/hooks/usePokemonArtworks';
 import { usePokemonDetail } from '@/hooks/usePokemonDetail';
+import { usePokemonEncounters } from '@/hooks/usePokemonEncounters';
 import { usePokemonForms } from '@/hooks/usePokemonForms';
 import { usePokemonLearnset } from '@/hooks/usePokemonLearnset';
 import { usePokemonTypeDefense } from '@/hooks/usePokemonTypeDefense';
@@ -25,6 +26,7 @@ export default function PokemonDetailScreen() {
   const [shinyCaught, toggleShinyCaught] = useShinyCaught();
   const typeDefense = usePokemonTypeDefense(detail.pokemon?.types);
   const forms = usePokemonForms(idParam, { enabled: tab === 'info' });
+  const encounters = usePokemonEncounters(idParam, { enabled: tab === 'info' });
   const { previous, next } =
     detail.id === null ? { previous: null, next: null } : getAdjacentIds(detail.id);
 
@@ -66,6 +68,9 @@ export default function PokemonDetailScreen() {
       onOpenLocation={(id) =>
         router.push({ pathname: '/locations/[locationId]', params: { locationId: String(id) } })
       }
+      onOpenAbility={(id) =>
+        router.push({ pathname: '/abilities/[abilityId]', params: { abilityId: String(id) } })
+      }
       learnset={learnset.learnset}
       isLearnsetLoading={learnset.isLoading}
       learnsetErrorMessage={learnset.errorMessage}
@@ -81,6 +86,10 @@ export default function PokemonDetailScreen() {
       isFormsLoading={forms.isLoading}
       formsErrorMessage={forms.errorMessage}
       onFormsRetry={() => void forms.refetch()}
+      encounters={encounters.groups}
+      isEncountersLoading={encounters.isLoading}
+      encountersErrorMessage={encounters.errorMessage}
+      onEncountersRetry={() => void encounters.refetch()}
     />
   );
 }

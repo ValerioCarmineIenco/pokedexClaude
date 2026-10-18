@@ -250,3 +250,13 @@ export type EvolutionChainResponse = {
   id: number;
   chain: ChainLinkResponse;
 };
+
+/** Una voce di `/pokemon/{id}/encounters`: un'area e i giochi in cui vi si incontra. */
+export type PokemonEncounterResponse = {
+  location_area: NamedAPIResource;
+  version_details: {
+    version: NamedAPIResource;
+    max_chance: number;
+    encounter_details: EncounterDetailResponse[];
+  }[];
+};

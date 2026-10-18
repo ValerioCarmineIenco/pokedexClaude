@@ -35,6 +35,13 @@ export function getAbilityIndex(search = ''): AbilityIndexEntry[] {
   return INDEX.filter((entry) => SEARCH_TEXT.get(entry.id)!.includes(needle));
 }
 
+const BY_NAME = new Map(INDEX.map((entry) => [entry.name, entry]));
+
+/** Voce dell'indice dallo slug di PokéAPI (es. `static`), per i link dalla scheda Pokémon. */
+export function getAbilityIndexEntryByName(name: string): AbilityIndexEntry | undefined {
+  return BY_NAME.get(name);
+}
+
 export function getAbilityIndexEntry(id: number): AbilityIndexEntry | undefined {
   return BY_ID.get(id);
 }
