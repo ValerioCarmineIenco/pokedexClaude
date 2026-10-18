@@ -12,7 +12,7 @@ import { primaryType, TYPE_COLORS, typeTint } from '@/theme/typeColors';
 import type { EvolutionChain as Chain } from '@/types/evolution';
 import type { PokemonLearnset } from '@/types/learnset';
 import type { MoveSummary } from '@/types/move';
-import type { PokemonArtworks, PokemonDetail } from '@/types/pokemon';
+import type { PokemonArtworks, PokemonDetail, PokemonForm } from '@/types/pokemon';
 import type { DefenseGroup } from '@/utils/typeEffectiveness';
 import {
   formatHeight,
@@ -29,6 +29,7 @@ import { EvolutionChain } from './EvolutionChain';
 import { Icon, type IconName } from './Icon';
 import { LearnedMoves } from './moves/LearnedMoves';
 import { PokeBallMark } from './PokeBallMark';
+import { PokemonForms } from './PokemonForms';
 import { ShinyControls } from './ShinyControls';
 import { SkeletonBlock } from './Skeleton';
 import { StatBar } from './StatBar';
@@ -62,6 +63,8 @@ export type PokemonDetailViewProps = {
   /** Lo shiny di questo Pokémon è stato ottenuto. */
   isShinyCaught: boolean;
   onToggleShinyCaught: () => void;
+  /** Apre il confronto con un altro Pokémon. */
+  onCompare: () => void;
   onBack: () => void;
   onRetry: () => void;
   tab: DetailTab;
@@ -91,6 +94,11 @@ export type PokemonDetailViewProps = {
   isTypeDefenseLoading: boolean;
   typeDefenseErrorMessage: string | null;
   onTypeDefenseRetry: () => void;
+  /** Forme alternative della specie; undefined se ne ha una sola. */
+  forms: PokemonForm[] | undefined;
+  isFormsLoading: boolean;
+  formsErrorMessage: string | null;
+  onFormsRetry: () => void;
 };
 
 export function PokemonDetailView({
@@ -106,6 +114,7 @@ export function PokemonDetailView({
   onToggleFavorite,
   isShinyCaught,
   onToggleShinyCaught,
+  onCompare,
   onBack,
   onRetry,
   tab,
@@ -130,6 +139,10 @@ export function PokemonDetailView({
   isTypeDefenseLoading,
   typeDefenseErrorMessage,
   onTypeDefenseRetry,
+  forms,
+  isFormsLoading,
+  formsErrorMessage,
+  onFormsRetry,
 }: PokemonDetailViewProps) {
   const insets = useSafeAreaInsets();
   const [artworkStyle] = useArtworkStyle();
@@ -299,6 +312,15 @@ export function PokemonDetailView({
               <Fact label="Peso" value={formatWeight(pokemon.weight)} />
             </View>
 
+            <Pressable
+              onPress={onCompare}
+              accessibilityRole="button"
+              accessibilityLabel={`Confronta ${formatName(pokemon.name)} con un altro Pokémon`}
+              style={({ pressed }) => [styles.compare, pressed && styles.comparePressed]}>
+              <Icon name="compare" size={16} color={colors.text} />
+              <Text style={styles.compareLabel}>Confronta con un altro Pokémon</Text>
+            </Pressable>
+
             <Section title="Abilità">
               <View style={styles.abilities}>
                 {pokemon.abilities.map((ability) => (
@@ -335,6 +357,15 @@ export function PokemonDetailView({
               isLoading={isTypeDefenseLoading}
               errorMessage={typeDefenseErrorMessage}
               onRetry={onTypeDefenseRetry}
+            />
+
+            <PokemonForms
+              key={pokemon.id}
+              forms={forms}
+              isLoading={isFormsLoading}
+              errorMessage={formsErrorMessage}
+              pokemonName={formatName(pokemon.name)}
+              onRetry={onFormsRetry}
             />
           </>
         ) : (
@@ -550,6 +581,24 @@ const styles = StyleSheet.create({
   factValue: {
     fontFamily: fonts.bodyBold,
     fontSize: 16,
+    color: colors.text,
+  },
+  compare: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 8,
+    minHeight: 44,
+    borderRadius: 999,
+    borderWidth: 1,
+    borderColor: colors.line,
+  },
+  comparePressed: {
+    backgroundColor: colors.factBackground,
+  },
+  compareLabel: {
+    fontFamily: fonts.bodyBold,
+    fontSize: 14,
     color: colors.text,
   },
   section: {

@@ -180,11 +180,11 @@ export function getIdFromUrl(url: string): number {
   return Number(match[1]);
 }
 
-function isTypeName(value: string): value is TypeName {
+export function isTypeName(value: string): value is TypeName {
   return (TYPE_NAMES as readonly string[]).includes(value);
 }
 
-function isStatName(value: string): value is StatName {
+export function isStatName(value: string): value is StatName {
   return STAT_NAMES.includes(value);
 }
 
@@ -226,6 +226,11 @@ export function toPokemonSpecies(raw: PokemonSpeciesResponse): PokemonSpecies {
     description: flavor ? cleanFlavorText(flavor.flavor_text) : null,
     genus: genus?.genus ?? null,
     evolutionChainId: raw.evolution_chain ? getIdFromUrl(raw.evolution_chain.url) : null,
+    varieties: raw.varieties.map((v) => ({
+      pokemonId: getIdFromUrl(v.pokemon.url),
+      name: v.pokemon.name,
+      isDefault: v.is_default,
+    })),
   };
 }
 

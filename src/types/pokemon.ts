@@ -87,6 +87,36 @@ export type PokemonSpecies = {
   genus: string | null;
   /** Id di `/evolution-chain/{id}`; assente nelle schede salvate in cache prima delle evoluzioni. */
   evolutionChainId?: number | null;
+  /** Forme della specie, in ordine di PokéAPI; assente nelle schede salvate in cache prima delle forme. */
+  varieties?: PokemonVariety[];
+};
+
+/** Una voce di `species.varieties`: il Pokémon (con id proprio, da 10001 per le forme) di una forma. */
+export type PokemonVariety = {
+  /** Id di `/pokemon/{id}`. */
+  pokemonId: number;
+  /** Slug di PokéAPI (es. `charizard-mega-x`). */
+  name: string;
+  isDefault: boolean;
+};
+
+export type PokemonFormKind = 'base' | 'mega' | 'regional' | 'gmax' | 'special';
+
+/** Una forma della specie, con tipi, abilità e statistiche proprie. */
+export type PokemonForm = {
+  /** Id di `/pokemon/{id}` (es. 10034 per Mega Charizard X). */
+  id: number;
+  /** Slug di PokéAPI (es. `charizard-mega-x`). */
+  name: string;
+  /** Nome della forma in italiano (es. «Mega X», «Forma di Alola»). */
+  label: string;
+  kind: PokemonFormKind;
+  isDefault: boolean;
+  types: TypeName[];
+  /** `label`: nome italiano dell'abilità se è nell'indice, altrimenti lo slug leggibile. */
+  abilities: { name: string; label: string; isHidden: boolean }[];
+  stats: { name: StatName; value: number }[];
+  artworkUrl: string;
 };
 
 /** Un'immagine della galleria artwork. */

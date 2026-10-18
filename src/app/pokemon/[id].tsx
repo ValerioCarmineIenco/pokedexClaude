@@ -8,6 +8,7 @@ import { useEvolutionChain } from '@/hooks/useEvolutionChain';
 import { useFavorites } from '@/hooks/useFavorites';
 import { usePokemonArtworks } from '@/hooks/usePokemonArtworks';
 import { usePokemonDetail } from '@/hooks/usePokemonDetail';
+import { usePokemonForms } from '@/hooks/usePokemonForms';
 import { usePokemonLearnset } from '@/hooks/usePokemonLearnset';
 import { usePokemonTypeDefense } from '@/hooks/usePokemonTypeDefense';
 import { useShinyCaught } from '@/hooks/useShinyCaught';
@@ -23,6 +24,7 @@ export default function PokemonDetailScreen() {
   const [favorites, toggleFavorite] = useFavorites();
   const [shinyCaught, toggleShinyCaught] = useShinyCaught();
   const typeDefense = usePokemonTypeDefense(detail.pokemon?.types);
+  const forms = usePokemonForms(idParam, { enabled: tab === 'info' });
   const { previous, next } =
     detail.id === null ? { previous: null, next: null } : getAdjacentIds(detail.id);
 
@@ -41,6 +43,9 @@ export default function PokemonDetailScreen() {
       onToggleFavorite={() => detail.id !== null && toggleFavorite(detail.id)}
       isShinyCaught={detail.id !== null && shinyCaught.has(detail.id)}
       onToggleShinyCaught={() => detail.id !== null && toggleShinyCaught(detail.id)}
+      onCompare={() =>
+        detail.id !== null && router.push({ pathname: '/compare', params: { a: String(detail.id) } })
+      }
       onBack={() => (router.canGoBack() ? router.back() : router.replace('/'))}
       onRetry={() => detail.refetch()}
       tab={tab}
@@ -72,6 +77,10 @@ export default function PokemonDetailScreen() {
       isTypeDefenseLoading={typeDefense.isLoading}
       typeDefenseErrorMessage={typeDefense.errorMessage}
       onTypeDefenseRetry={() => void typeDefense.refetch()}
+      forms={forms.forms}
+      isFormsLoading={forms.isLoading}
+      formsErrorMessage={forms.errorMessage}
+      onFormsRetry={() => void forms.refetch()}
     />
   );
 }
