@@ -47,6 +47,9 @@ export type Generation = {
 };
 
 /** Quanto serve per una card dell'elenco. */
+/** Raccolte personali con cui filtrare l'elenco: preferiti e shiny ottenuti. */
+export type PokemonCollection = 'favorites' | 'shiny';
+
 export type PokemonSummary = {
   id: number;
   /** Generazione di appartenenza (1, 2), ricavata dall'id. */

@@ -22,6 +22,9 @@ export const colors = {
   pokemonBadgeText: '#1E8C88',
   gamesBadge: '#FDEBD3',
   gamesBadgeText: '#C26A0A',
+  /** Shiny tracker: interruttori attivi e contatore. */
+  shiny: '#FCEFC4',
+  shinyText: '#9A6B00',
 } as const;
 
 export const radius = {

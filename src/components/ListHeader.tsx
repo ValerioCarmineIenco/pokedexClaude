@@ -1,11 +1,12 @@
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 
 import type { ViewMode } from '@/hooks/useViewMode';
+import type { PokemonCollection } from '@/types/pokemon';
 import { colors } from '@/theme/colors';
 import { fonts } from '@/theme/fonts';
 
 import { GenerationPicker } from './GenerationPicker';
-import { Icon } from './Icon';
+import { Icon, type IconName } from './Icon';
 import { SearchBar } from './SearchBar';
 import { SectionTitle } from './SectionTitle';
 import { ViewToggle } from './ViewToggle';
@@ -18,9 +19,12 @@ type Props = {
   /** Generazione mostrata; null = tutte. */
   generationId: number | null;
   onGenerationChange: (generationId: number | null) => void;
-  /** Mostra solo i Pokémon preferiti. */
-  favoritesOnly: boolean;
-  onFavoritesOnlyChange: (favoritesOnly: boolean) => void;
+  /** Mostra solo i preferiti o solo gli shiny ottenuti; null = tutti. */
+  collection: PokemonCollection | null;
+  onCollectionChange: (collection: PokemonCollection | null) => void;
+  /** Shiny ottenuti tra i Pokémon della generazione mostrata (o di tutte), e quanti sono in tutto. */
+  shinyCount: number;
+  shinyTotal: number;
   caption: string;
   onOpenSettings: () => void;
   /** Nasconde ricerca e selettori, ad esempio nello stato di errore. */
@@ -34,8 +38,10 @@ export function ListHeader({
   onViewModeChange,
   generationId,
   onGenerationChange,
-  favoritesOnly,
-  onFavoritesOnlyChange,
+  collection,
+  onCollectionChange,
+  shinyCount,
+  shinyTotal,
   caption,
   onOpenSettings,
   compact = false,
@@ -48,23 +54,12 @@ export function ListHeader({
           {!compact && (
             <>
               <GenerationPicker value={generationId} onChange={onGenerationChange} />
-              <Pressable
-                onPress={() => onFavoritesOnlyChange(!favoritesOnly)}
-                hitSlop={4}
-                accessibilityRole="switch"
-                accessibilityLabel="Solo preferiti"
-                accessibilityState={{ checked: favoritesOnly }}
-                style={({ pressed }) => [
-                  styles.iconButton,
-                  favoritesOnly && styles.iconButtonActive,
-                  pressed && styles.pressed,
-                ]}>
-                <Icon
-                  name={favoritesOnly ? 'heart' : 'heartOutline'}
-                  size={18}
-                  color={favoritesOnly ? colors.surface : colors.textMuted}
-                />
-              </Pressable>
+              <CollectionButton
+                icon={collection === 'favorites' ? 'heart' : 'heartOutline'}
+                label="Solo preferiti"
+                checked={collection === 'favorites'}
+                onPress={() => onCollectionChange(collection === 'favorites' ? null : 'favorites')}
+              />
             </>
           )}
           <Pressable
@@ -84,11 +79,51 @@ export function ListHeader({
             <Text style={styles.caption} numberOfLines={1}>
               {caption}
             </Text>
+            <Pressable
+              onPress={() => onCollectionChange(collection === 'shiny' ? null : 'shiny')}
+              hitSlop={4}
+              accessibilityRole="switch"
+              accessibilityLabel={`Solo shiny ottenuti, ${shinyCount} su ${shinyTotal}`}
+              accessibilityState={{ checked: collection === 'shiny' }}
+              style={({ pressed }) => [
+                styles.shinyChip,
+                collection === 'shiny' && styles.shinyChipActive,
+                pressed && styles.pressed,
+              ]}>
+              <Icon name="sparkles" size={14} color={colors.shinyText} />
+              <Text style={styles.shinyCount}>
+                {shinyCount}/{shinyTotal}
+              </Text>
+            </Pressable>
             <ViewToggle value={viewMode} onChange={onViewModeChange} />
           </View>
         </>
       )}
     </View>
+  );
+}
+
+function CollectionButton({
+  icon,
+  label,
+  checked,
+  onPress,
+}: {
+  icon: IconName;
+  label: string;
+  checked: boolean;
+  onPress: () => void;
+}) {
+  return (
+    <Pressable
+      onPress={onPress}
+      hitSlop={4}
+      accessibilityRole="switch"
+      accessibilityLabel={label}
+      accessibilityState={{ checked }}
+      style={({ pressed }) => [styles.iconButton, checked && styles.iconButtonActive, pressed && styles.pressed]}>
+      <Icon name={icon} size={18} color={checked ? colors.surface : colors.textMuted} />
+    </Pressable>
   );
 }
 
@@ -129,6 +164,25 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 12,
+  },
+  shinyChip: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
+    height: 40,
+    paddingHorizontal: 10,
+    borderRadius: 12,
+    borderWidth: 1.5,
+    borderColor: 'transparent',
+    backgroundColor: colors.shiny,
+  },
+  shinyChipActive: {
+    borderColor: colors.shinyText,
+  },
+  shinyCount: {
+    fontFamily: fonts.monoBold,
+    fontSize: 12,
+    color: colors.shinyText,
   },
   caption: {
     flex: 1,

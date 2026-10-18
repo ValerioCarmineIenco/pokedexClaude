@@ -6,7 +6,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { GENERATIONS, getGenerationById, LAST_POKEMON_ID } from '@/api/generations';
 import type { ViewMode } from '@/hooks/useViewMode';
 import { colors } from '@/theme/colors';
-import type { Generation, PokemonSummary } from '@/types/pokemon';
+import type { Generation, PokemonCollection, PokemonSummary } from '@/types/pokemon';
 import { formatNumber } from '@/utils/format';
 import { generationSize } from '@/utils/generation';
 
@@ -51,11 +51,13 @@ export type PokemonListViewProps = {
   /** Generazione mostrata; null = tutte in sequenza. */
   generationId: number | null;
   onGenerationChange: (generationId: number | null) => void;
-  /** Mostra solo i preferiti (`pokemon` sono allora i preferiti, già filtrati). */
-  favoritesOnly: boolean;
-  onFavoritesOnlyChange: (favoritesOnly: boolean) => void;
-  /** Quanti preferiti ci sono in tutto, senza filtri di generazione o ricerca. */
-  favoritesCount: number;
+  /** Mostra solo preferiti o shiny ottenuti (`pokemon` sono allora quelli, già filtrati); null = tutti. */
+  collection: PokemonCollection | null;
+  onCollectionChange: (collection: PokemonCollection | null) => void;
+  /** Quanti Pokémon ha in tutto la raccolta mostrata, senza filtri di generazione o ricerca. */
+  collectionCount: number;
+  /** Shiny ottenuti tra i Pokémon della generazione mostrata (o di tutte). */
+  shinyCount: number;
   /** Primo caricamento, nessun dato ancora. */
   isLoading: boolean;
   errorMessage: string | null;
@@ -78,9 +80,10 @@ export function PokemonListView({
   onViewModeChange,
   generationId,
   onGenerationChange,
-  favoritesOnly,
-  onFavoritesOnlyChange,
-  favoritesCount,
+  collection,
+  onCollectionChange,
+  collectionCount,
+  shinyCount,
   isLoading,
   errorMessage,
   hasNextPage,
@@ -121,14 +124,14 @@ export function PokemonListView({
     setStartIndex(undefined);
     onGenerationChange(id);
   };
-  const changeFavoritesOnly = (value: boolean) => {
+  const changeCollection = (value: PokemonCollection | null) => {
     firstVisibleIndex.current = 0;
     setStartIndex(undefined);
-    onFavoritesOnlyChange(value);
+    onCollectionChange(value);
   };
 
-  const caption = favoritesOnly
-    ? favoritesCaption(pokemon.length, isSearching, generation)
+  const caption = collection
+    ? collectionCaption(collection, pokemon.length, isSearching, generation)
     : isSearching
       ? `${pokemon.length} ${pokemon.length === 1 ? 'risultato' : 'risultati'} tra ${
           generation ? `${generationSize(generation)} Pokémon di ${generation.region}` : `${LAST_POKEMON_ID} Pokémon`
@@ -145,16 +148,18 @@ export function PokemonListView({
       onViewModeChange={changeViewMode}
       generationId={generationId}
       onGenerationChange={changeGeneration}
-      favoritesOnly={favoritesOnly}
-      onFavoritesOnlyChange={changeFavoritesOnly}
+      collection={collection}
+      onCollectionChange={changeCollection}
+      shinyCount={shinyCount}
+      shinyTotal={generation ? generationSize(generation) : LAST_POKEMON_ID}
       caption={caption}
       onOpenSettings={onOpenSettings}
       compact={compact}
     />
   );
 
-  // I preferiti vengono dall'indice locale: niente caricamento né errori di rete.
-  const usesNetwork = !favoritesOnly && !isSearching;
+  // Preferiti e shiny vengono dall'indice locale: niente caricamento né errori di rete.
+  const usesNetwork = !collection && !isSearching;
 
   // Errore senza nulla da mostrare: schermo intero con Riprova.
   if (errorMessage && loadedCount === 0 && usesNetwork) {
@@ -188,7 +193,7 @@ export function PokemonListView({
         skeletons(isGrid ? 8 : 9)
       ) : (
         <FlashList
-          key={`${viewMode}-${generationId ?? 'all'}-${favoritesOnly ? 'favorites' : 'all'}`}
+          key={`${viewMode}-${generationId ?? 'all'}-${collection ?? 'all'}`}
           data={items}
           numColumns={isGrid ? 2 : 1}
           initialScrollIndex={startIndex}
@@ -226,24 +231,24 @@ export function PokemonListView({
             isSearching ? (
               <ErrorState
                 title="Nessun risultato"
-                message={`Nessun ${favoritesOnly ? 'preferito' : 'Pokémon'} ${generation ? `di ${generation.region} ` : ''}si chiama "${searchText.trim()}".`}
+                message={`Nessun ${collection ? COLLECTION_TEXT[collection].one : 'Pokémon'} ${generation ? `di ${generation.region} ` : ''}si chiama "${searchText.trim()}".`}
                 actionLabel="Cancella ricerca"
                 actionStyle="ghost"
                 onAction={() => onSearchTextChange('')}
               />
-            ) : favoritesOnly ? (
+            ) : collection ? (
               <ErrorState
-                title={favoritesCount === 0 ? 'Nessun preferito' : `Nessun preferito di ${generation?.region}`}
-                message="Apri la scheda di un Pokémon e tocca il cuore in alto per aggiungerlo ai preferiti."
-                glyph="♡"
+                title={`${COLLECTION_TEXT[collection].none}${collectionCount === 0 ? '' : ` di ${generation?.region}`}`}
+                message={COLLECTION_TEXT[collection].hint}
+                glyph={COLLECTION_TEXT[collection].glyph}
                 actionLabel="Mostra tutti i Pokémon"
                 actionStyle="ghost"
-                onAction={() => changeFavoritesOnly(false)}
+                onAction={() => changeCollection(null)}
               />
             ) : null
           }
           refreshControl={
-            favoritesOnly ? undefined : (
+            collection ? undefined : (
               <RefreshControl
                 refreshing={isRefreshing}
                 onRefresh={onRefresh}
@@ -256,7 +261,7 @@ export function PokemonListView({
           keyboardShouldPersistTaps="handled"
         />
       )}
-      {errorMessage && loadedCount > 0 && !favoritesOnly && (
+      {errorMessage && loadedCount > 0 && !collection && (
         <ErrorToast
           message={errorMessage}
           actionLabel="Riprova"
@@ -268,9 +273,33 @@ export function PokemonListView({
   );
 }
 
-function favoritesCaption(shown: number, isSearching: boolean, generation: Generation | undefined): string {
+const COLLECTION_TEXT: Record<PokemonCollection, { one: string; none: string; hint: string; glyph: string }> = {
+  favorites: {
+    one: 'preferito',
+    none: 'Nessun preferito',
+    hint: 'Apri la scheda di un Pokémon e tocca il cuore in alto per aggiungerlo ai preferiti.',
+    glyph: '♡',
+  },
+  shiny: {
+    one: 'shiny ottenuto',
+    none: 'Nessuno shiny ottenuto',
+    hint: "Apri la scheda di un Pokémon e tocca «Segna shiny ottenuto» sotto l'artwork.",
+    glyph: '✦',
+  },
+};
+
+function collectionCaption(
+  collection: PokemonCollection,
+  shown: number,
+  isSearching: boolean,
+  generation: Generation | undefined,
+): string {
   const where = generation ? ` · ${generation.name} · ${generation.region}` : '';
-  if (isSearching) return `${shown} ${shown === 1 ? 'risultato' : 'risultati'} tra i preferiti${where}`;
+  if (isSearching) {
+    const among = collection === 'favorites' ? 'i preferiti' : 'gli shiny ottenuti';
+    return `${shown} ${shown === 1 ? 'risultato' : 'risultati'} tra ${among}${where}`;
+  }
+  if (collection === 'shiny') return `${shown} ${shown === 1 ? 'shiny ottenuto' : 'shiny ottenuti'}${where}`;
   return `${shown} ${shown === 1 ? 'preferito' : 'preferiti'}${where}`;
 }
 

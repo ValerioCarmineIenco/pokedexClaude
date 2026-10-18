@@ -1,9 +1,10 @@
 import { Image } from 'expo-image';
+import { useState } from 'react';
 import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { GENERATIONS, LAST_POKEMON_ID } from '@/api/generations';
-import { getArtworkUrl } from '@/api/pokemon';
+import { getArtworkUrl, getShinyArtworkUrl } from '@/api/pokemon';
 import { useArtworkStyle } from '@/hooks/useArtworkStyle';
 import { colors } from '@/theme/colors';
 import { fonts } from '@/theme/fonts';
@@ -28,6 +29,7 @@ import { EvolutionChain } from './EvolutionChain';
 import { Icon, type IconName } from './Icon';
 import { LearnedMoves } from './moves/LearnedMoves';
 import { PokeBallMark } from './PokeBallMark';
+import { ShinyControls } from './ShinyControls';
 import { SkeletonBlock } from './Skeleton';
 import { StatBar } from './StatBar';
 import { TypeBadge } from './TypeBadge';
@@ -57,6 +59,9 @@ export type PokemonDetailViewProps = {
   /** Il Pokémon è tra i preferiti. */
   isFavorite: boolean;
   onToggleFavorite: () => void;
+  /** Lo shiny di questo Pokémon è stato ottenuto. */
+  isShinyCaught: boolean;
+  onToggleShinyCaught: () => void;
   onBack: () => void;
   onRetry: () => void;
   tab: DetailTab;
@@ -99,6 +104,8 @@ export function PokemonDetailView({
   onNavigate,
   isFavorite,
   onToggleFavorite,
+  isShinyCaught,
+  onToggleShinyCaught,
   onBack,
   onRetry,
   tab,
@@ -126,6 +133,8 @@ export function PokemonDetailView({
 }: PokemonDetailViewProps) {
   const insets = useSafeAreaInsets();
   const [artworkStyle] = useArtworkStyle();
+  // «Mostra shiny» cambia solo l'artwork in alto, non lo stile scelto nelle Impostazioni.
+  const [showShiny, setShowShiny] = useState(false);
   const type = pokemon ? primaryType(pokemon.types) : null;
 
   const backButton = <NavButton icon="back" label="Torna all'elenco" onPress={onBack} />;
@@ -218,11 +227,13 @@ export function PokemonDetailView({
         <View style={styles.artworkWrap}>
           {pokemon ? (
             <Image
-              source={getArtworkUrl(pokemon.id, artworkStyle)}
+              source={
+                showShiny ? getShinyArtworkUrl(pokemon.id, artworkStyle) : getArtworkUrl(pokemon.id, artworkStyle)
+              }
               style={styles.artwork}
               contentFit="contain"
               transition={200}
-              accessibilityLabel={`Artwork di ${formatName(pokemon.name)}`}
+              accessibilityLabel={`Artwork ${showShiny ? 'shiny ' : ''}di ${formatName(pokemon.name)}`}
             />
           ) : (
             <SkeletonBlock width={140} height={140} radius={70} style={styles.artworkSkeleton} />
@@ -231,6 +242,14 @@ export function PokemonDetailView({
       </View>
 
       <View style={styles.sheet}>
+        {pokemon && (
+          <ShinyControls
+            showShiny={showShiny}
+            onShowShinyChange={setShowShiny}
+            isCaught={isShinyCaught}
+            onToggleCaught={onToggleShinyCaught}
+          />
+        )}
         {pokemon && <DetailTabs value={tab} onChange={onTabChange} />}
         {pokemon && tab === 'artwork' ? (
           <ArtworkGallery

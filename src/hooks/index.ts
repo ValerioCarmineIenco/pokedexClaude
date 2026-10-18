@@ -23,6 +23,7 @@ export { usePokemonList } from './usePokemonList';
 export { usePokemonSpecies } from './usePokemonSpecies';
 export { usePokemonTypeDefense } from './usePokemonTypeDefense';
 export { useRelatedItems } from './useRelatedItems';
+export { toggleShinyCaught, useShinyCaught } from './useShinyCaught';
 export { useTypeMatchups } from './useTypeMatchups';
 export {
   GENERATIONS,

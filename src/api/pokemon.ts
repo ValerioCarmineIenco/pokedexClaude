@@ -116,6 +116,22 @@ export function getArtworkUrl(id: number, style: ArtworkStyle = DEFAULT_ARTWORK_
   return `${SPRITES_BASE_URL}/${entry.path(id)}`;
 }
 
+// Versione shiny di ogni stile; Dream World non ne ha, ripiega sull'artwork ufficiale shiny.
+const SHINY_PATHS: Record<ArtworkStyle, (id: number) => string> = {
+  official: (id) => `other/official-artwork/shiny/${id}.png`,
+  'official-shiny': (id) => `other/official-artwork/shiny/${id}.png`,
+  home: (id) => `other/home/shiny/${id}.png`,
+  'home-shiny': (id) => `other/home/shiny/${id}.png`,
+  'dream-world': (id) => `other/official-artwork/shiny/${id}.png`,
+  showdown: (id) => `other/showdown/shiny/${id}.gif`,
+  sprite: (id) => `shiny/${id}.png`,
+};
+
+/** Artwork cromatico (shiny) del Pokémon, nello stile scelto quando esiste. */
+export function getShinyArtworkUrl(id: number, style: ArtworkStyle = DEFAULT_ARTWORK_STYLE): string {
+  return `${SPRITES_BASE_URL}/${SHINY_PATHS[style](id)}`;
+}
+
 /**
  * Pokémon il cui nome contiene `search` (anche parziale, senza maiuscole e accenti), tra
  * tutti quelli di una generazione o di tutte se `generationId` è null. Nessuna chiamata di
