@@ -6,3 +6,4 @@ export * from './move';
 export * from './nature';
 export * from './pokemon';
 export type * from './pokeapi';
+export * from './team';

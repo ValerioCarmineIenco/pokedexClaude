@@ -3,7 +3,7 @@ import type { Href } from 'expo-router';
 import type { IconName } from '@/components/Icon';
 
 /** Sezioni dell'app che si scelgono dal menu del titolo. */
-export type SectionKey = 'pokedex' | 'items' | 'abilities' | 'moves' | 'natures' | 'locations' | 'types';
+export type SectionKey = 'pokedex' | 'items' | 'abilities' | 'moves' | 'natures' | 'locations' | 'types' | 'teams';
 
 export type Section = {
   key: SectionKey;
@@ -64,6 +64,13 @@ export const SECTIONS: Section[] = [
     description: 'Efficacie in attacco e in difesa di ogni tipo',
     href: '/types',
     icon: 'types',
+  },
+  {
+    key: 'teams',
+    title: 'Squadre',
+    description: 'Squadre da 6 e la loro copertura di tipo',
+    href: '/teams',
+    icon: 'team',
   },
 ];
 

@@ -26,6 +26,7 @@ export { usePokemonSpecies } from './usePokemonSpecies';
 export { usePokemonTypeDefense } from './usePokemonTypeDefense';
 export { useRelatedItems } from './useRelatedItems';
 export { toggleShinyCaught, useShinyCaught } from './useShinyCaught';
+export { useTeam, useTeams } from './useTeams';
 export { useTypeMatchups } from './useTypeMatchups';
 export {
   GENERATIONS,
