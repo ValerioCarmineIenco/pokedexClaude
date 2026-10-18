@@ -1,5 +1,5 @@
 import { Image } from 'expo-image';
-import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { Pressable, StyleSheet, Text, View, type StyleProp, type ViewStyle } from 'react-native';
 
 import { getArtworkUrl } from '@/api/pokemon';
 import { useArtworkStyle } from '@/hooks/useArtworkStyle';
@@ -20,6 +20,8 @@ type Props = {
   pokemon: PokemonSummary;
   variant: ViewMode;
   onPress: (pokemon: PokemonSummary) => void;
+  /** Statistica usata per ordinare l'elenco, mostrata sulla card (es. Velocità 160). */
+  stat?: { label: string; value: number };
 };
 
 export function accessibilityLabelFor(pokemon: PokemonSummary): string {
@@ -27,7 +29,7 @@ export function accessibilityLabelFor(pokemon: PokemonSummary): string {
   return `${formatName(pokemon.name)}, numero ${pokemon.id}, tipo ${types}`;
 }
 
-export function PokemonCard({ pokemon, variant, onPress }: Props) {
+export function PokemonCard({ pokemon, variant, onPress, stat }: Props) {
   const background = typeTint(primaryType(pokemon.types));
   const isGrid = variant === 'grid';
   const [artworkStyle] = useArtworkStyle();
@@ -37,7 +39,9 @@ export function PokemonCard({ pokemon, variant, onPress }: Props) {
     <Pressable
       onPress={() => onPress(pokemon)}
       accessibilityRole="button"
-      accessibilityLabel={accessibilityLabelFor(pokemon)}
+      accessibilityLabel={
+        stat ? `${accessibilityLabelFor(pokemon)}, ${stat.label} ${stat.value}` : accessibilityLabelFor(pokemon)
+      }
       style={({ pressed }) => [
         isGrid ? styles.grid : styles.row,
         { backgroundColor: background },
@@ -46,6 +50,7 @@ export function PokemonCard({ pokemon, variant, onPress }: Props) {
       {isGrid ? (
         <>
           <PokeBallMark size={104} thickness={14} style={styles.gridMark} />
+          {stat && <StatPill stat={stat} style={styles.gridStat} />}
           <View>
             <Text style={styles.number}>{formatNumber(pokemon.id)}</Text>
             <Text style={styles.name} numberOfLines={1}>
@@ -81,6 +86,7 @@ export function PokemonCard({ pokemon, variant, onPress }: Props) {
               {formatName(pokemon.name)}
             </Text>
           </View>
+          {stat && <StatPill stat={stat} />}
           <View style={styles.rowTypes}>
             {pokemon.types.map((type) => (
               <TypeBadge key={type} type={type} />
@@ -92,7 +98,39 @@ export function PokemonCard({ pokemon, variant, onPress }: Props) {
   );
 }
 
+function StatPill({ stat, style }: { stat: { label: string; value: number }; style?: StyleProp<ViewStyle> }) {
+  return (
+    <View style={[styles.stat, style]}>
+      <Text style={styles.statLabel}>{stat.label}</Text>
+      <Text style={styles.statValue}>{stat.value}</Text>
+    </View>
+  );
+}
+
 const styles = StyleSheet.create({
+  stat: {
+    alignItems: 'center',
+    minWidth: 44,
+    paddingHorizontal: 6,
+    paddingVertical: 2,
+    borderRadius: 8,
+    backgroundColor: 'rgba(255, 255, 255, 0.7)',
+  },
+  gridStat: {
+    position: 'absolute',
+    top: 10,
+    right: 10,
+  },
+  statLabel: {
+    fontFamily: fonts.bodyBold,
+    fontSize: 9,
+    color: 'rgba(29, 28, 34, 0.6)',
+  },
+  statValue: {
+    fontFamily: fonts.monoBold,
+    fontSize: 13,
+    color: '#1D1C22',
+  },
   grid: {
     height: GRID_CARD_HEIGHT,
     borderRadius: 16,

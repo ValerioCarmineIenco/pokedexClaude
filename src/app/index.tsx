@@ -1,14 +1,14 @@
 import { router } from 'expo-router';
 import { useMemo, useState } from 'react';
 
-import { getPokemonSummaries } from '@/api/pokemon';
+import { getPokemonSummaries, queryPokemonIndex } from '@/api/pokemon';
+import { countActiveFilters } from '@/components/PokemonFilterSheet';
 import { PokemonListView } from '@/components/PokemonListView';
 import { useFavorites } from '@/hooks/useFavorites';
 import { usePokemonList } from '@/hooks/usePokemonList';
-import { filterPokemonByName, usePokemonSearch } from '@/hooks/usePokemonSearch';
 import { useShinyCaught } from '@/hooks/useShinyCaught';
 import { useViewMode } from '@/hooks/useViewMode';
-import type { PokemonCollection } from '@/types/pokemon';
+import { DEFAULT_POKEMON_FILTERS, type PokemonCollection, type PokemonFilters } from '@/types/pokemon';
 
 export default function PokemonListScreen() {
   // Si parte con tutte le generazioni in sequenza.
@@ -16,8 +16,9 @@ export default function PokemonListScreen() {
   const list = usePokemonList(generationId);
   const [searchText, setSearchText] = useState('');
   const [viewMode, setViewMode] = useViewMode();
-  const results = usePokemonSearch(searchText, generationId);
+  const [filters, setFilters] = useState<PokemonFilters>(DEFAULT_POKEMON_FILTERS);
   const isSearching = searchText.trim().length > 0;
+  const isFiltering = countActiveFilters(filters) > 0;
   const [favorites] = useFavorites();
   const [shinyCaught] = useShinyCaught();
   const [collection, setCollection] = useState<PokemonCollection | null>(null);
@@ -26,14 +27,21 @@ export default function PokemonListScreen() {
     [shinyCaught, generationId],
   );
   const collectionIds = collection === 'shiny' ? shinyCaught : favorites;
-  const collectionPokemon = useMemo(
-    () => filterPokemonByName(getPokemonSummaries(collectionIds, generationId), searchText),
-    [collectionIds, generationId, searchText],
+  // Ricerca, raccolte e filtri leggono l'indice statico: tutti i Pokémon, anche non caricati.
+  const matches = useMemo(
+    () =>
+      queryPokemonIndex({
+        search: searchText,
+        generationId,
+        ids: collection ? collectionIds : undefined,
+        filters,
+      }),
+    [searchText, generationId, collection, collectionIds, filters],
   );
 
   return (
     <PokemonListView
-      pokemon={collection ? collectionPokemon : isSearching ? results : list.pokemon}
+      pokemon={collection || isSearching || isFiltering ? matches : list.pokemon}
       loadedCount={list.pokemon.length}
       searchText={searchText}
       onSearchTextChange={setSearchText}
@@ -45,6 +53,9 @@ export default function PokemonListScreen() {
       onCollectionChange={setCollection}
       collectionCount={collectionIds.size}
       shinyCount={shinyInScope}
+      filters={filters}
+      onFiltersChange={setFilters}
+      matchCount={matches.length}
       isLoading={list.isLoading}
       errorMessage={list.errorMessage}
       hasNextPage={list.hasNextPage}

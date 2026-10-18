@@ -29,6 +29,7 @@ const ICONS = {
   heartOutline: { ios: 'heart', android: 'favorite_border', web: 'favorite_border' },
   checkOutline: { ios: 'circle', android: 'radio_button_unchecked', web: 'radio_button_unchecked' },
   compare: { ios: 'arrow.left.arrow.right', android: 'compare_arrows', web: 'compare_arrows' },
+  filter: { ios: 'line.3.horizontal.decrease', android: 'filter_list', web: 'filter_list' },
 } satisfies Record<string, SymbolName>;
 
 export type IconName = keyof typeof ICONS;
