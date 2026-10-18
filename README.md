@@ -27,6 +27,13 @@ src/
 └── utils/            # formattazione
 ```
 
+## Pubblicità
+
+Banner fisso in fondo allo schermo e interstiziali con AdMob (`react-native-google-mobile-ads`), codice in `src/ads/`. Un interstiziale compare al cambio schermata dopo 30 minuti nell'app (in primo piano) oppure dopo 30 schede dettaglio, il primo dei due; dopo averlo mostrato si azzerano entrambi.
+
+- Configurazione in `src/ads/config.ts`: interruttore, soglie, rotte che contano come dettaglio e ID delle unità. Ora ci sono gli ID di prova di Google; gli ID dell'app vanno anche nelle opzioni del plugin in `app.json`.
+- AdMob ha codice nativo: serve una development build (`npx expo run:android|ios` o `npx eas-cli@latest build --profile development`). In Expo Go e sul web l'app funziona normalmente, senza pubblicità.
+
 ## Livello dati
 
 Gli schermi usano solo gli hook di `src/hooks` (React Query); i tipi restituiti sono in `src/types/pokemon.ts` e ricalcano i view model della UI.
