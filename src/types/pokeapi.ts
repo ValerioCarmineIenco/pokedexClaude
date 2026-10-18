@@ -24,6 +24,20 @@ export type PokemonResponse = {
   abilities: { is_hidden: boolean; slot: number; ability: NamedAPIResource }[];
   stats: { base_stat: number; effort: number; stat: NamedAPIResource }[];
   sprites: SpriteTree;
+  moves: PokemonMoveResponse[];
+};
+
+/** Una mossa di `pokemon.moves`, con come e dove si impara in ogni gruppo di giochi. */
+export type PokemonMoveResponse = {
+  move: NamedAPIResource;
+  version_group_details: {
+    /** 0 per i metodi diversi dal livello (e per le mosse imparate evolvendosi). */
+    level_learned_at: number;
+    move_learn_method: NamedAPIResource;
+    version_group: NamedAPIResource;
+    /** Ordine tra le mosse dello stesso livello; null se non conta. */
+    order: number | null;
+  }[];
 };
 
 /**

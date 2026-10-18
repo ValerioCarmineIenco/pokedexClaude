@@ -1,5 +1,5 @@
 import { useRef, useState } from 'react';
-import { Modal, Pressable, StyleSheet, Text, useWindowDimensions, View } from 'react-native';
+import { Modal, Pressable, ScrollView, StyleSheet, Text, useWindowDimensions, View } from 'react-native';
 
 import { colors, radius } from '@/theme/colors';
 import { fonts } from '@/theme/fonts';
@@ -38,7 +38,7 @@ export function OptionPicker<T extends string | number>({
   accessibilityHint,
 }: Props<T>) {
   const buttonRef = useRef<View>(null);
-  const { width: windowWidth } = useWindowDimensions();
+  const { width: windowWidth, height: windowHeight } = useWindowDimensions();
   const [anchor, setAnchor] = useState<Anchor | null>(null);
 
   const open = () => {
@@ -66,38 +66,51 @@ export function OptionPicker<T extends string | number>({
       <Modal visible={anchor != null} transparent animationType="fade" onRequestClose={close}>
         <Pressable style={styles.backdrop} onPress={close} accessibilityLabel="Chiudi" />
         {anchor && (
-          <View style={[styles.menu, anchor]} accessibilityRole="radiogroup">
-            {options.map((option, index) => {
-              const isSelected = option.id === value;
-              return (
-                <Pressable
-                  key={option.id ?? 'all'}
-                  onPress={() => {
-                    close();
-                    if (!isSelected) onChange(option.id);
-                  }}
-                  accessibilityRole="radio"
-                  accessibilityState={{ selected: isSelected }}
-                  style={({ pressed }) => [
-                    styles.option,
-                    index > 0 && styles.optionDivider,
-                    pressed && styles.optionPressed,
-                  ]}>
-                  <View style={[styles.marker, isSelected && styles.markerSelected]} />
-                  <View style={styles.optionText}>
-                    <View style={styles.optionTitleRow}>
-                      {option.swatch && (
-                        <View style={[styles.swatch, { backgroundColor: option.swatch }]} />
-                      )}
-                      <Text style={[styles.optionTitle, isSelected && styles.optionTitleSelected]}>
-                        {option.title}
-                      </Text>
+          // Non esce dallo schermo: le voci in più scorrono e i titoli lunghi vanno a capo
+          // (es. i giochi nella tab Mosse).
+          <View
+            style={[
+              styles.menu,
+              anchor,
+              {
+                maxHeight: Math.max(160, windowHeight - anchor.top - 16),
+                maxWidth: windowWidth - anchor.right - 8,
+              },
+            ]}
+            accessibilityRole="radiogroup">
+            <ScrollView bounces={false}>
+              {options.map((option, index) => {
+                const isSelected = option.id === value;
+                return (
+                  <Pressable
+                    key={option.id ?? 'all'}
+                    onPress={() => {
+                      close();
+                      if (!isSelected) onChange(option.id);
+                    }}
+                    accessibilityRole="radio"
+                    accessibilityState={{ selected: isSelected }}
+                    style={({ pressed }) => [
+                      styles.option,
+                      index > 0 && styles.optionDivider,
+                      pressed && styles.optionPressed,
+                    ]}>
+                    <View style={[styles.marker, isSelected && styles.markerSelected]} />
+                    <View style={styles.optionText}>
+                      <View style={styles.optionTitleRow}>
+                        {option.swatch && (
+                          <View style={[styles.swatch, { backgroundColor: option.swatch }]} />
+                        )}
+                        <Text style={[styles.optionTitle, isSelected && styles.optionTitleSelected]}>
+                          {option.title}
+                        </Text>
+                      </View>
+                      <Text style={styles.optionRange}>{option.subtitle}</Text>
                     </View>
-                    <Text style={styles.optionRange}>{option.subtitle}</Text>
-                  </View>
-                </Pressable>
-              );
-            })}
+                  </Pressable>
+                );
+              })}
+            </ScrollView>
           </View>
         )}
       </Modal>
@@ -159,6 +172,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.accent,
   },
   optionText: {
+    flexShrink: 1,
     gap: 1,
   },
   optionTitleRow: {
@@ -172,6 +186,7 @@ const styles = StyleSheet.create({
     borderRadius: 5,
   },
   optionTitle: {
+    flexShrink: 1,
     fontFamily: fonts.bodyMedium,
     fontSize: 15,
     color: colors.text,

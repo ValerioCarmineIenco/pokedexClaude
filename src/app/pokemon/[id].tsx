@@ -7,15 +7,17 @@ import { PokemonDetailView } from '@/components/PokemonDetailView';
 import { useEvolutionChain } from '@/hooks/useEvolutionChain';
 import { usePokemonArtworks } from '@/hooks/usePokemonArtworks';
 import { usePokemonDetail } from '@/hooks/usePokemonDetail';
+import { usePokemonLearnset } from '@/hooks/usePokemonLearnset';
 import { usePokemonTypeDefense } from '@/hooks/usePokemonTypeDefense';
 
 export default function PokemonDetailScreen() {
   const { id: idParam, tab: tabParam } = useLocalSearchParams<{ id: string; tab?: string }>();
   const detail = usePokemonDetail(idParam);
   const [tab, setTab] = useState<DetailTab>(isDetailTab(tabParam) ? tabParam : 'info');
-  // La galleria e la catena si scaricano solo quando si apre la loro tab.
+  // Galleria, catena e mosse si scaricano solo quando si apre la loro tab.
   const gallery = usePokemonArtworks(idParam, { enabled: tab === 'artwork' });
   const evolutions = useEvolutionChain(idParam, { enabled: tab === 'evolutions' });
+  const learnset = usePokemonLearnset(idParam, { enabled: tab === 'moves' });
   const typeDefense = usePokemonTypeDefense(detail.pokemon?.types);
   const { previous, next } =
     detail.id === null ? { previous: null, next: null } : getAdjacentIds(detail.id);
@@ -50,6 +52,13 @@ export default function PokemonDetailScreen() {
       onOpenItem={(id) => router.push({ pathname: '/items/[itemId]', params: { itemId: String(id) } })}
       onOpenLocation={(id) =>
         router.push({ pathname: '/locations/[locationId]', params: { locationId: String(id) } })
+      }
+      learnset={learnset.learnset}
+      isLearnsetLoading={learnset.isLoading}
+      learnsetErrorMessage={learnset.errorMessage}
+      onLearnsetRetry={() => void learnset.refetch()}
+      onOpenMove={(move) =>
+        router.push({ pathname: '/moves/[moveId]', params: { moveId: String(move.id) } })
       }
       typeDefense={typeDefense.groups}
       isTypeDefenseLoading={typeDefense.isLoading}
