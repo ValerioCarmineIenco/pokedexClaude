@@ -3,6 +3,7 @@ import { StatusBar } from 'expo-status-bar';
 
 import { QueryProvider } from '@/api/QueryProvider';
 import { FontsGate } from '@/components/FontsGate';
+import { StartupLoader } from '@/components/LoadingScreen';
 import { colors, radius } from '@/theme/colors';
 
 export default function RootLayout() {
@@ -45,6 +46,8 @@ export default function RootLayout() {
             }}
           />
         </Stack>
+        {/* Schermata di caricamento iniziale, sopra lo Stack finché la cache non è pronta. */}
+        <StartupLoader />
       </FontsGate>
     </QueryProvider>
   );
