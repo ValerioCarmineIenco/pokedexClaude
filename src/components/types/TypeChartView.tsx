@@ -4,17 +4,16 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { getEffectiveness } from '@/api/types';
 import { colors } from '@/theme/colors';
 import { fonts } from '@/theme/fonts';
-import { TYPE_COLORS, typeTextColor } from '@/theme/typeColors';
 import { TYPE_NAMES_IT } from '@/theme/typeNames';
 import { TYPE_NAMES, type TypeName } from '@/types/pokemon';
 
 import { SectionTitle } from '../SectionTitle';
 import { TypeBadge } from '../TypeBadge';
 
+import { TypeIcon } from './TypeIcon';
+
 /** Lato di una casella della tabella. */
 const CELL = 30;
-/** Larghezza della colonna con i nomi dei tipi attaccanti. */
-const LABEL_WIDTH = 86;
 const SIDE = 16;
 
 /** Aspetto delle caselle diverse da ×1. */
@@ -23,9 +22,6 @@ const CELL_STYLES: Record<number, { label: string; background: string; text: str
   0.5: { label: '½', background: colors.statDown, text: '#FFFFFF', spoken: 'poco efficace, per un mezzo' },
   0: { label: '0', background: colors.text, text: '#FFFFFF', spoken: 'nessun effetto' },
 };
-
-/** Abbreviazione di tre lettere per le colonne («Fuo», «Acq»): sono tutte diverse. */
-const shortName = (type: TypeName) => TYPE_NAMES_IT[type].slice(0, 3);
 
 export type TypeChartViewProps = {
   onPressType: (type: TypeName) => void;
@@ -73,8 +69,8 @@ export function TypeChartView({ onPressType }: TypeChartViewProps) {
           Tabella delle efficacie
         </Text>
         <Text style={styles.hint}>
-          Righe: tipo della mossa. Colonne: tipo del Pokémon colpito. Le caselle vuote sono danno normale
-          (×1).
+          Righe: tipo della mossa. Colonne: tipo del Pokémon colpito. Tocca un’icona per il dettaglio del
+          tipo. Le caselle vuote sono danno normale (×1).
         </Text>
         <View style={styles.legend}>
           {[2, 0.5, 0].map((multiplier) => {
@@ -95,23 +91,15 @@ export function TypeChartView({ onPressType }: TypeChartViewProps) {
 
       <View style={styles.chart}>
         <View style={styles.labels}>
-          <View style={styles.corner}>
-            <Text style={styles.cornerLabel}>Att. ↓ Dif. →</Text>
-          </View>
+          <View style={styles.corner} />
           {TYPE_NAMES.map((type) => (
             <Pressable
               key={type}
               onPress={() => onPressType(type)}
               accessibilityRole="button"
               accessibilityLabel={`Tipo ${TYPE_NAMES_IT[type]}`}
-              style={({ pressed }) => [
-                styles.rowLabel,
-                { backgroundColor: TYPE_COLORS[type] },
-                pressed && styles.pressed,
-              ]}>
-              <Text style={[styles.rowLabelText, { color: typeTextColor(type) }]} numberOfLines={1}>
-                {TYPE_NAMES_IT[type]}
-              </Text>
+              style={({ pressed }) => pressed && styles.pressed}>
+              <TypeIcon type={type} size={CELL} />
             </Pressable>
           ))}
         </View>
@@ -124,14 +112,8 @@ export function TypeChartView({ onPressType }: TypeChartViewProps) {
                   onPress={() => onPressType(type)}
                   accessibilityRole="button"
                   accessibilityLabel={`Tipo ${TYPE_NAMES_IT[type]}`}
-                  style={({ pressed }) => [
-                    styles.columnLabel,
-                    { backgroundColor: TYPE_COLORS[type] },
-                    pressed && styles.pressed,
-                  ]}>
-                  <Text style={[styles.columnLabelText, { color: typeTextColor(type) }]}>
-                    {shortName(type)}
-                  </Text>
+                  style={({ pressed }) => pressed && styles.pressed}>
+                  <TypeIcon type={type} size={CELL} />
                 </Pressable>
               ))}
             </View>
@@ -228,31 +210,12 @@ const styles = StyleSheet.create({
     paddingLeft: SIDE,
   },
   labels: {
-    width: LABEL_WIDTH,
     gap: 2,
     marginRight: 2,
   },
   corner: {
-    height: CELL + 6,
-    justifyContent: 'flex-end',
-    paddingBottom: 4,
-  },
-  cornerLabel: {
-    fontFamily: fonts.bodyBold,
-    fontSize: 9,
-    letterSpacing: 0.2,
-    color: colors.textSubtle,
-  },
-  rowLabel: {
+    width: CELL,
     height: CELL,
-    borderRadius: 8,
-    paddingHorizontal: 8,
-    justifyContent: 'center',
-  },
-  rowLabelText: {
-    fontFamily: fonts.bodyBold,
-    fontSize: 11,
-    letterSpacing: 0.2,
   },
   grid: {
     paddingRight: SIDE,
@@ -261,18 +224,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     gap: 2,
     marginBottom: 2,
-  },
-  columnLabel: {
-    width: CELL,
-    height: CELL + 6,
-    borderRadius: 8,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  columnLabelText: {
-    fontFamily: fonts.bodyBold,
-    fontSize: 9,
-    letterSpacing: 0.2,
   },
   cell: {
     width: CELL,
