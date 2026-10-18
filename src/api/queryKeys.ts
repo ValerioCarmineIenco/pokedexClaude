@@ -9,6 +9,8 @@ export const queryKeys = {
   pokemonArtworks: (id: number) => ['pokemon', 'artworks', id] as const,
   /** Catena evolutiva vista dalla scheda della specie `speciesId`. */
   evolutionChain: (speciesId: number) => ['pokemon', 'evolutions', speciesId] as const,
+  /** Forme alternative della specie (Mega, regionali, Gigamax…). */
+  pokemonForms: (speciesId: number) => ['pokemon', 'forms', speciesId] as const,
   pokemonLearnset: (id: number) => ['pokemon', 'learnset', id] as const,
   /**
    * `search` già normalizzata (vedi `normalizeSearch`); stringa vuota = nessuna ricerca.
