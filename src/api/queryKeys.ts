@@ -9,6 +9,7 @@ export const queryKeys = {
   pokemonArtworks: (id: number) => ['pokemon', 'artworks', id] as const,
   /** Catena evolutiva vista dalla scheda della specie `speciesId`. */
   evolutionChain: (speciesId: number) => ['pokemon', 'evolutions', speciesId] as const,
+  pokemonLearnset: (id: number) => ['pokemon', 'learnset', id] as const,
   /**
    * `search` già normalizzata (vedi `normalizeSearch`); stringa vuota = nessuna ricerca.
    * `listByCategory`: l'elenco completo ora è ordinato per categoria, le pagine salvate prima no.

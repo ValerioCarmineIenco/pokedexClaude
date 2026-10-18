@@ -9,6 +9,8 @@ import { colors } from '@/theme/colors';
 import { fonts } from '@/theme/fonts';
 import { primaryType, TYPE_COLORS, typeTint } from '@/theme/typeColors';
 import type { EvolutionChain as Chain } from '@/types/evolution';
+import type { PokemonLearnset } from '@/types/learnset';
+import type { MoveSummary } from '@/types/move';
 import type { PokemonArtworks, PokemonDetail } from '@/types/pokemon';
 import type { DefenseGroup } from '@/utils/typeEffectiveness';
 import {
@@ -24,6 +26,7 @@ import { DetailTabs, type DetailTab } from './DetailTabs';
 import { ErrorState } from './ErrorState';
 import { EvolutionChain } from './EvolutionChain';
 import { Icon, type IconName } from './Icon';
+import { LearnedMoves } from './moves/LearnedMoves';
 import { PokeBallMark } from './PokeBallMark';
 import { SkeletonBlock } from './Skeleton';
 import { StatBar } from './StatBar';
@@ -72,6 +75,12 @@ export type PokemonDetailViewProps = {
   onOpenEvolution: (id: number) => void;
   onOpenItem: (id: number) => void;
   onOpenLocation: (id: number) => void;
+  learnset: PokemonLearnset | undefined;
+  /** Le mosse della tab Mosse stanno arrivando. */
+  isLearnsetLoading: boolean;
+  learnsetErrorMessage: string | null;
+  onLearnsetRetry: () => void;
+  onOpenMove: (move: MoveSummary) => void;
   /** Debolezze e resistenze, calcolate sui tipi del Pokémon. */
   typeDefense: DefenseGroup[] | undefined;
   isTypeDefenseLoading: boolean;
@@ -105,6 +114,11 @@ export function PokemonDetailView({
   onOpenEvolution,
   onOpenItem,
   onOpenLocation,
+  learnset,
+  isLearnsetLoading,
+  learnsetErrorMessage,
+  onLearnsetRetry,
+  onOpenMove,
   typeDefense,
   isTypeDefenseLoading,
   typeDefenseErrorMessage,
@@ -236,6 +250,16 @@ export function PokemonDetailView({
             onOpenItem={onOpenItem}
             onOpenLocation={onOpenLocation}
             onRetry={onEvolutionsRetry}
+          />
+        ) : pokemon && tab === 'moves' ? (
+          <LearnedMoves
+            key={pokemon.id}
+            learnset={learnset}
+            isLoading={isLearnsetLoading}
+            errorMessage={learnsetErrorMessage}
+            pokemonName={formatName(pokemon.name)}
+            onOpenMove={onOpenMove}
+            onRetry={onLearnsetRetry}
           />
         ) : pokemon ? (
           <>

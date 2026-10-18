@@ -3,11 +3,12 @@ import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { colors } from '@/theme/colors';
 import { fonts } from '@/theme/fonts';
 
-export type DetailTab = 'info' | 'evolutions' | 'artwork';
+export type DetailTab = 'info' | 'evolutions' | 'moves' | 'artwork';
 
 const TABS: { tab: DetailTab; label: string }[] = [
   { tab: 'info', label: 'Info' },
   { tab: 'evolutions', label: 'Evoluzioni' },
+  { tab: 'moves', label: 'Mosse' },
   { tab: 'artwork', label: 'Artwork' },
 ];
 
