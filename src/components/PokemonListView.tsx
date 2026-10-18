@@ -51,6 +51,11 @@ export type PokemonListViewProps = {
   /** Generazione mostrata; null = tutte in sequenza. */
   generationId: number | null;
   onGenerationChange: (generationId: number | null) => void;
+  /** Mostra solo i preferiti (`pokemon` sono allora i preferiti, già filtrati). */
+  favoritesOnly: boolean;
+  onFavoritesOnlyChange: (favoritesOnly: boolean) => void;
+  /** Quanti preferiti ci sono in tutto, senza filtri di generazione o ricerca. */
+  favoritesCount: number;
   /** Primo caricamento, nessun dato ancora. */
   isLoading: boolean;
   errorMessage: string | null;
@@ -73,6 +78,9 @@ export function PokemonListView({
   onViewModeChange,
   generationId,
   onGenerationChange,
+  favoritesOnly,
+  onFavoritesOnlyChange,
+  favoritesCount,
   isLoading,
   errorMessage,
   hasNextPage,
@@ -113,14 +121,21 @@ export function PokemonListView({
     setStartIndex(undefined);
     onGenerationChange(id);
   };
+  const changeFavoritesOnly = (value: boolean) => {
+    firstVisibleIndex.current = 0;
+    setStartIndex(undefined);
+    onFavoritesOnlyChange(value);
+  };
 
-  const caption = isSearching
-    ? `${pokemon.length} ${pokemon.length === 1 ? 'risultato' : 'risultati'} tra ${
-        generation ? `${generationSize(generation)} Pokémon di ${generation.region}` : `${LAST_POKEMON_ID} Pokémon`
-      }`
-    : generation
-      ? `${generationSize(generation)} Pokémon · ${generation.name} · ${generation.region}`
-      : `${LAST_POKEMON_ID} Pokémon · ${GENERATIONS.length} generazioni`;
+  const caption = favoritesOnly
+    ? favoritesCaption(pokemon.length, isSearching, generation)
+    : isSearching
+      ? `${pokemon.length} ${pokemon.length === 1 ? 'risultato' : 'risultati'} tra ${
+          generation ? `${generationSize(generation)} Pokémon di ${generation.region}` : `${LAST_POKEMON_ID} Pokémon`
+        }`
+      : generation
+        ? `${generationSize(generation)} Pokémon · ${generation.name} · ${generation.region}`
+        : `${LAST_POKEMON_ID} Pokémon · ${GENERATIONS.length} generazioni`;
 
   const header = (compact = false) => (
     <ListHeader
@@ -130,14 +145,19 @@ export function PokemonListView({
       onViewModeChange={changeViewMode}
       generationId={generationId}
       onGenerationChange={changeGeneration}
+      favoritesOnly={favoritesOnly}
+      onFavoritesOnlyChange={changeFavoritesOnly}
       caption={caption}
       onOpenSettings={onOpenSettings}
       compact={compact}
     />
   );
 
+  // I preferiti vengono dall'indice locale: niente caricamento né errori di rete.
+  const usesNetwork = !favoritesOnly && !isSearching;
+
   // Errore senza nulla da mostrare: schermo intero con Riprova.
-  if (errorMessage && loadedCount === 0 && !isSearching) {
+  if (errorMessage && loadedCount === 0 && usesNetwork) {
     return (
       <View style={[styles.screen, { paddingTop: insets.top }]}>
         {header(true)}
@@ -164,11 +184,11 @@ export function PokemonListView({
   return (
     <View style={[styles.screen, { paddingTop: insets.top }]}>
       {header()}
-      {isLoading && !isSearching ? (
+      {isLoading && usesNetwork ? (
         skeletons(isGrid ? 8 : 9)
       ) : (
         <FlashList
-          key={`${viewMode}-${generationId ?? 'all'}`}
+          key={`${viewMode}-${generationId ?? 'all'}-${favoritesOnly ? 'favorites' : 'all'}`}
           data={items}
           numColumns={isGrid ? 2 : 1}
           initialScrollIndex={startIndex}
@@ -199,33 +219,44 @@ export function PokemonListView({
             paddingBottom: insets.bottom + 24,
           }}
           onViewableItemsChanged={onViewableItemsChanged}
-          onEndReached={!isSearching && hasNextPage ? onEndReached : undefined}
+          onEndReached={usesNetwork && hasNextPage ? onEndReached : undefined}
           onEndReachedThreshold={0.6}
-          ListFooterComponent={isFetchingNextPage && !isSearching ? skeletons(2) : null}
+          ListFooterComponent={isFetchingNextPage && usesNetwork ? skeletons(2) : null}
           ListEmptyComponent={
             isSearching ? (
               <ErrorState
                 title="Nessun risultato"
-                message={`Nessun Pokémon ${generation ? `di ${generation.region} ` : ''}si chiama "${searchText.trim()}".`}
+                message={`Nessun ${favoritesOnly ? 'preferito' : 'Pokémon'} ${generation ? `di ${generation.region} ` : ''}si chiama "${searchText.trim()}".`}
                 actionLabel="Cancella ricerca"
                 actionStyle="ghost"
                 onAction={() => onSearchTextChange('')}
               />
+            ) : favoritesOnly ? (
+              <ErrorState
+                title={favoritesCount === 0 ? 'Nessun preferito' : `Nessun preferito di ${generation?.region}`}
+                message="Apri la scheda di un Pokémon e tocca il cuore in alto per aggiungerlo ai preferiti."
+                glyph="♡"
+                actionLabel="Mostra tutti i Pokémon"
+                actionStyle="ghost"
+                onAction={() => changeFavoritesOnly(false)}
+              />
             ) : null
           }
           refreshControl={
-            <RefreshControl
-              refreshing={isRefreshing}
-              onRefresh={onRefresh}
-              tintColor={colors.accent}
-              colors={[colors.accent]}
-            />
+            favoritesOnly ? undefined : (
+              <RefreshControl
+                refreshing={isRefreshing}
+                onRefresh={onRefresh}
+                tintColor={colors.accent}
+                colors={[colors.accent]}
+              />
+            )
           }
           keyboardDismissMode="on-drag"
           keyboardShouldPersistTaps="handled"
         />
       )}
-      {errorMessage && loadedCount > 0 && (
+      {errorMessage && loadedCount > 0 && !favoritesOnly && (
         <ErrorToast
           message={errorMessage}
           actionLabel="Riprova"
@@ -235,6 +266,12 @@ export function PokemonListView({
       )}
     </View>
   );
+}
+
+function favoritesCaption(shown: number, isSearching: boolean, generation: Generation | undefined): string {
+  const where = generation ? ` · ${generation.name} · ${generation.region}` : '';
+  if (isSearching) return `${shown} ${shown === 1 ? 'risultato' : 'risultati'} tra i preferiti${where}`;
+  return `${shown} ${shown === 1 ? 'preferito' : 'preferiti'}${where}`;
 }
 
 const styles = StyleSheet.create({

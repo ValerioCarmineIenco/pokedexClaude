@@ -1,9 +1,11 @@
 import { router } from 'expo-router';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 
+import { getPokemonSummaries } from '@/api/pokemon';
 import { PokemonListView } from '@/components/PokemonListView';
+import { useFavorites } from '@/hooks/useFavorites';
 import { usePokemonList } from '@/hooks/usePokemonList';
-import { usePokemonSearch } from '@/hooks/usePokemonSearch';
+import { filterPokemonByName, usePokemonSearch } from '@/hooks/usePokemonSearch';
 import { useViewMode } from '@/hooks/useViewMode';
 
 export default function PokemonListScreen() {
@@ -14,10 +16,16 @@ export default function PokemonListScreen() {
   const [viewMode, setViewMode] = useViewMode();
   const results = usePokemonSearch(searchText, generationId);
   const isSearching = searchText.trim().length > 0;
+  const [favorites] = useFavorites();
+  const [favoritesOnly, setFavoritesOnly] = useState(false);
+  const favoritePokemon = useMemo(
+    () => filterPokemonByName(getPokemonSummaries(favorites, generationId), searchText),
+    [favorites, generationId, searchText],
+  );
 
   return (
     <PokemonListView
-      pokemon={isSearching ? results : list.pokemon}
+      pokemon={favoritesOnly ? favoritePokemon : isSearching ? results : list.pokemon}
       loadedCount={list.pokemon.length}
       searchText={searchText}
       onSearchTextChange={setSearchText}
@@ -25,6 +33,9 @@ export default function PokemonListScreen() {
       onViewModeChange={setViewMode}
       generationId={generationId}
       onGenerationChange={setGenerationId}
+      favoritesOnly={favoritesOnly}
+      onFavoritesOnlyChange={setFavoritesOnly}
+      favoritesCount={favorites.size}
       isLoading={list.isLoading}
       errorMessage={list.errorMessage}
       hasNextPage={list.hasNextPage}
