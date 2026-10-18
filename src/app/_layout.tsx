@@ -33,6 +33,9 @@ export default function RootLayout() {
           {/* Sezione Località: elenco per regione e dettaglio (param locationId). */}
           <Stack.Screen name="locations/index" options={{ title: 'Località' }} />
           <Stack.Screen name="locations/[locationId]" options={{ title: 'Dettaglio località' }} />
+          {/* Sezione Tipi: tabella delle efficacie e dettaglio (param typeId, es. «dragon»). */}
+          <Stack.Screen name="types/index" options={{ title: 'Tipi' }} />
+          <Stack.Screen name="types/[typeId]" options={{ title: 'Dettaglio tipo' }} />
           {/* Menu delle sezioni, aperto toccando il titolo in alto a sinistra. */}
           <Stack.Screen
             name="menu"
