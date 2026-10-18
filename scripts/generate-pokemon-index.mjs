@@ -1,6 +1,7 @@
-// Genera `src/data/pokemonIndex.json`: per ogni Pokémon del Pokédex nazionale id, nome e
-// tipi, così la ricerca trova anche i Pokémon non ancora caricati nell'elenco (es. Sprigatito
-// senza scorrere fino al #906). `missingArtwork` elenca gli stili di artwork che PokéAPI non
+// Genera `src/data/pokemonIndex.json`: per ogni Pokémon del Pokédex nazionale id, nome,
+// tipi, statistiche base e categoria (leggendario, misterioso, baby), così ricerca e filtri
+// trovano anche i Pokémon non ancora caricati nell'elenco (es. Sprigatito senza scorrere
+// fino al #906) e l'ordinamento per statistica non fa chiamate. `missingArtwork` elenca gli stili di artwork che PokéAPI non
 // ha per quel Pokémon (Dream World e Showdown non coprono tutte le generazioni): l'app ripiega
 // sull'artwork ufficiale.
 //
@@ -61,8 +62,11 @@ const ids = list.results
   .sort((a, b) => a - b);
 
 let done = 0;
+/** Ordine delle statistiche in `stats`, lo stesso di `STAT_NAMES` in src/api/pokemon.ts. */
+const STATS = ['hp', 'attack', 'defense', 'special-attack', 'special-defense', 'speed'];
+
 const index = await mapLimit(ids, 16, async (id) => {
-  const raw = await getJson(`pokemon/${id}`);
+  const [raw, species] = await Promise.all([getJson(`pokemon/${id}`), getJson(`pokemon-species/${id}`)]);
   if (++done % 100 === 0) console.log(`${done}/${ids.length}`);
   const missingArtwork = Object.entries(ARTWORK_SPRITES)
     .filter(([, sprite]) => !sprite(raw.sprites))
@@ -72,6 +76,10 @@ const index = await mapLimit(ids, 16, async (id) => {
     // Il nome della specie: per Deoxys `raw.name` è la forma, «deoxys-normal».
     name: raw.species.name,
     types: [...raw.types].sort((a, b) => a.slot - b.slot).map((t) => t.type.name),
+    stats: STATS.map((name) => raw.stats.find((s) => s.stat.name === name).base_stat),
+    ...(species.is_legendary ? { legendary: true } : {}),
+    ...(species.is_mythical ? { mythical: true } : {}),
+    ...(species.is_baby ? { baby: true } : {}),
     ...(missingArtwork.length ? { missingArtwork } : {}),
   };
 });

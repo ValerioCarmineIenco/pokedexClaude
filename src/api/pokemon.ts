@@ -15,6 +15,8 @@ import type {
 import {
   TYPE_NAMES,
   type Pokemon,
+  type PokemonFilters,
+  type PokemonSort,
   type PokemonSpecies,
   type PokemonSummary,
   type StatName,
@@ -96,10 +98,21 @@ export function isArtworkStyle(value: unknown): value is ArtworkStyle {
   return ARTWORK_STYLES.some((style) => style.id === value);
 }
 
-type PokemonIndexEntry = { id: number; name: string; types: string[]; missingArtwork?: string[] };
+type PokemonIndexEntry = {
+  id: number;
+  name: string;
+  types: string[];
+  /** Statistiche base nell'ordine di `STAT_NAMES`. */
+  stats: number[];
+  legendary?: true;
+  mythical?: true;
+  baby?: true;
+  missingArtwork?: string[];
+};
 
 /**
- * Tutti i Pokémon del Pokédex (id, nome, tipi), in ordine di id, per cercare senza chiamate.
+ * Tutti i Pokémon del Pokédex (id, nome, tipi, statistiche, categoria), in ordine di id, per
+ * cercare e filtrare senza chiamate.
  * Generato da `scripts/generate-pokemon-index.mjs`.
  */
 const INDEX = (pokemonIndex as PokemonIndexEntry[]).filter((entry) => entry.id <= LAST_POKEMON_ID);
@@ -153,6 +166,56 @@ export function getPokemonSummaries(ids: Iterable<number>, generationId?: number
   return INDEX.filter((entry) => wanted.has(entry.id) && entry.id >= firstId && entry.id <= lastId).map(
     toSummary,
   );
+}
+
+const INDEX_BY_ID = new Map(INDEX.map((entry) => [entry.id, entry]));
+
+/** Valore di una statistica base (o del totale) letto dall'indice; null per numero e nome. */
+export function getIndexStat(id: number, sort: PokemonSort): number | null {
+  const entry = INDEX_BY_ID.get(id);
+  if (!entry || sort === 'number' || sort === 'name') return null;
+  if (sort === 'total') return entry.stats.reduce((sum, value) => sum + value, 0);
+  return entry.stats[STAT_NAMES.indexOf(sort)];
+}
+
+/**
+ * Elenco filtrato e ordinato dall'indice, senza chiamate: generazione (null = tutte), ricerca
+ * per nome, solo gli id di `ids` se passati (preferiti, shiny), tipi e categoria di `filters`.
+ * Gli ex aequo restano in ordine di numero.
+ */
+export function queryPokemonIndex({
+  search,
+  generationId,
+  ids,
+  filters,
+}: {
+  search: string;
+  generationId: number | null;
+  ids?: ReadonlySet<number>;
+  filters: PokemonFilters;
+}): PokemonSummary[] {
+  const needle = normalizeSearch(search).replace(/-/g, ' ');
+  const { firstId, lastId } = getPokemonRange(generationId);
+  const { types, category, sort, reversed } = filters;
+  const entries = INDEX.filter(
+    (entry) =>
+      entry.id >= firstId &&
+      entry.id <= lastId &&
+      (!ids || ids.has(entry.id)) &&
+      (!needle || SEARCH_TEXT.get(entry.id)!.includes(needle)) &&
+      types.every((type) => entry.types.includes(type)) &&
+      (!category || entry[category]),
+  );
+  // Numero e nome crescenti, statistiche dalla più alta; `reversed` capovolge.
+  const direction = reversed ? -1 : 1;
+  if (sort === 'name') {
+    entries.sort((a, b) => direction * a.name.localeCompare(b.name));
+  } else if (sort !== 'number') {
+    entries.sort((a, b) => direction * (getIndexStat(b.id, sort)! - getIndexStat(a.id, sort)!) || a.id - b.id);
+  } else if (reversed) {
+    entries.reverse();
+  }
+  return entries.map(toSummary);
 }
 
 function toSummary(entry: PokemonIndexEntry): PokemonSummary {

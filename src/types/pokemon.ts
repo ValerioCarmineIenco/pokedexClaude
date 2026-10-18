@@ -50,6 +50,30 @@ export type Generation = {
 /** Raccolte personali con cui filtrare l'elenco: preferiti e shiny ottenuti. */
 export type PokemonCollection = 'favorites' | 'shiny';
 
+/** Categoria della specie per i filtri dell'elenco. */
+export type PokemonCategory = 'legendary' | 'mythical' | 'baby';
+
+/** Ordinamento dell'elenco: per numero, per nome o per una statistica base (o il totale). */
+export type PokemonSort = 'number' | 'name' | StatName | 'total';
+
+/** Filtri avanzati dell'elenco Pokédex (la generazione resta a parte, nel suo selettore). */
+export type PokemonFilters = {
+  /** Zero, uno o due tipi: il Pokémon deve averli tutti. */
+  types: TypeName[];
+  /** null = tutte le categorie. */
+  category: PokemonCategory | null;
+  sort: PokemonSort;
+  /** Inverte l'ordine: numero e nome partono crescenti, le statistiche dalla più alta. */
+  reversed: boolean;
+};
+
+export const DEFAULT_POKEMON_FILTERS: PokemonFilters = {
+  types: [],
+  category: null,
+  sort: 'number',
+  reversed: false,
+};
+
 export type PokemonSummary = {
   id: number;
   /** Generazione di appartenenza (1, 2), ricavata dall'id. */

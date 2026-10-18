@@ -29,6 +29,7 @@ const ICONS = {
   heartOutline: { ios: 'heart', android: 'favorite_border', web: 'favorite_border' },
   checkOutline: { ios: 'circle', android: 'radio_button_unchecked', web: 'radio_button_unchecked' },
   compare: { ios: 'arrow.left.arrow.right', android: 'compare_arrows', web: 'compare_arrows' },
+  filter: { ios: 'line.3.horizontal.decrease', android: 'filter_list', web: 'filter_list' },
   team: { ios: 'person.3.fill', android: 'groups', web: 'groups' },
   drag: { ios: 'line.3.horizontal', android: 'drag_indicator', web: 'drag_indicator' },
   share: { ios: 'square.and.arrow.up', android: 'share', web: 'share' },
