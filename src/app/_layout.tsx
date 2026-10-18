@@ -18,6 +18,8 @@ export default function RootLayout() {
           }}>
           <Stack.Screen name="index" options={{ title: 'Pokédex' }} />
           <Stack.Screen name="pokemon/[id]" options={{ title: 'Dettaglio' }} />
+          {/* Confronto tra due Pokémon (param a e b, i due id). */}
+          <Stack.Screen name="compare" options={{ title: 'Confronto' }} />
           <Stack.Screen name="settings" options={{ title: 'Impostazioni' }} />
           {/* Sezione Oggetti: elenco (ItemsList) e dettaglio (ItemDetail, param itemId). */}
           <Stack.Screen name="items/index" options={{ title: 'Oggetti' }} />
