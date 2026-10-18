@@ -24,6 +24,7 @@ const ICONS = {
   up: { ios: 'arrow.up', android: 'arrow_upward', web: 'arrow_upward' },
   down: { ios: 'arrow.down', android: 'arrow_downward', web: 'arrow_downward' },
   map: { ios: 'map.fill', android: 'map', web: 'map' },
+  types: { ios: 'circle.hexagongrid.fill', android: 'category', web: 'category' },
 } satisfies Record<string, SymbolName>;
 
 export type IconName = keyof typeof ICONS;
