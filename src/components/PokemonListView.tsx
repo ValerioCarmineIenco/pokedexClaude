@@ -19,6 +19,7 @@ import {
 } from '@/types/pokemon';
 import { formatNumber } from '@/utils/format';
 import { generationSize } from '@/utils/generation';
+import { useScrollRestoration } from '@/hooks/useScrollRestoration';
 
 import { ErrorState } from './ErrorState';
 import { ErrorToast } from './ErrorToast';
@@ -121,6 +122,7 @@ export function PokemonListView({
 }: PokemonListViewProps) {
   const { t } = useTranslation('pokedex');
   const insets = useSafeAreaInsets();
+  const { ref: scrollRef, onScroll } = useScrollRestoration();
   const isGrid = viewMode === 'grid';
   const isSearching = searchText.trim().length > 0;
   const generation = generationId == null ? undefined : getGenerationById(generationId);
@@ -244,6 +246,8 @@ export function PokemonListView({
         skeletons(isGrid ? 8 : 9)
       ) : (
         <FlashList
+          ref={scrollRef}
+          onScroll={onScroll}
           key={`${viewMode}-${generationId ?? 'all'}-${collection ?? 'all'}-${filters.types.join('+')}-${filters.category ?? 'all'}-${filters.sort}-${filters.reversed}`}
           data={items}
           numColumns={isGrid ? 2 : 1}

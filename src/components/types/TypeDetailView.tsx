@@ -11,6 +11,7 @@ import { TYPE_COLORS, typeTextColor, typeTint } from '@/theme/typeColors';
 import { TYPE_LABELS } from '@/theme/typeNames';
 import type { MatchupType, MoveSummary } from '@/types/move';
 import type { PokemonSummary, TypeName } from '@/types/pokemon';
+import { useScrollRestoration } from '@/hooks/useScrollRestoration';
 
 import { ErrorState } from '../ErrorState';
 import { Icon } from '../Icon';
@@ -39,6 +40,7 @@ export type TypeDetailViewProps = {
 export function TypeDetailView({ type, onOpenPokemon, onOpenMove, onOpenType, onBack }: TypeDetailViewProps) {
   const { t } = useTranslation('types');
   const insets = useSafeAreaInsets();
+  const { ref: scrollRef, onScroll } = useScrollRestoration();
   const [tab, setTab] = useState<Tab>('pokemon');
 
   const data = useMemo(() => {
@@ -183,6 +185,8 @@ export function TypeDetailView({ type, onOpenPokemon, onOpenMove, onOpenType, on
   return (
     <View style={styles.screen}>
       <FlashList
+        ref={scrollRef}
+        onScroll={onScroll}
         key={tab}
         data={rows}
         ListHeaderComponent={header}

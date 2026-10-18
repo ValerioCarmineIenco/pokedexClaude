@@ -6,6 +6,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import type { LocationRegion, LocationSummary } from '@/types/location';
 import { colors } from '@/theme/colors';
 import { fonts } from '@/theme/fonts';
+import { useScrollRestoration } from '@/hooks/useScrollRestoration';
 
 import { ErrorState } from '../ErrorState';
 import { Icon } from '../Icon';
@@ -45,6 +46,7 @@ export function LocationListView({
 }: LocationListViewProps) {
   const { t } = useTranslation('locations');
   const insets = useSafeAreaInsets();
+  const { ref: scrollRef, onScroll } = useScrollRestoration();
   const query = searchText.trim();
   const isSearching = query.length > 0;
   const count = locations.length;
@@ -84,6 +86,8 @@ export function LocationListView({
         </Text>
       </View>
       <FlashList
+        ref={scrollRef}
+        onScroll={onScroll}
         data={locations}
         keyExtractor={(location) => String(location.id)}
         renderItem={({ item: location }) => (

@@ -12,6 +12,7 @@ import { colors } from '@/theme/colors';
 import { fonts } from '@/theme/fonts';
 import { formatNumber } from '@/utils/format';
 import { romanNumeral } from '@/utils/generation';
+import { useScrollRestoration } from '@/hooks/useScrollRestoration';
 
 import { ErrorState } from '../ErrorState';
 import { Icon } from '../Icon';
@@ -54,6 +55,7 @@ export function AbilityDetailView({
   const { t } = useTranslation('abilities');
   const language = useLanguage();
   const insets = useSafeAreaInsets();
+  const { ref: scrollRef, onScroll } = useScrollRestoration();
   // L'effetto per esteso spesso c'è solo in inglese: lo si dice accanto al titolo.
   const isEffectFallback = !!ability?.effectLanguage && language !== 'en' && ability.effectLanguage === 'en';
 
@@ -94,6 +96,8 @@ export function AbilityDetailView({
 
   return (
     <ScrollView
+      ref={scrollRef}
+      onScroll={onScroll}
       style={styles.screen}
       contentContainerStyle={{ flexGrow: 1, paddingBottom: insets.bottom }}
       showsVerticalScrollIndicator={false}>

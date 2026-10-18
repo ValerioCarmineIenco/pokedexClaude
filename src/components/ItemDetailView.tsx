@@ -7,6 +7,7 @@ import type { Item } from '@/types/item';
 import { getCategoryColors } from '@/theme/categoryColors';
 import { colors } from '@/theme/colors';
 import { fonts } from '@/theme/fonts';
+import { useScrollRestoration } from '@/hooks/useScrollRestoration';
 
 import { CategoryBadge } from './CategoryBadge';
 import { ErrorState } from './ErrorState';
@@ -49,6 +50,7 @@ export function ItemDetailView({
 }: ItemDetailViewProps) {
   const { t } = useTranslation('items');
   const insets = useSafeAreaInsets();
+  const { ref: scrollRef, onScroll } = useScrollRestoration();
   const palette = item ? getCategoryColors(item.category) : null;
 
   const backButton = (
@@ -88,6 +90,8 @@ export function ItemDetailView({
 
   return (
     <ScrollView
+      ref={scrollRef}
+      onScroll={onScroll}
       style={styles.screen}
       contentContainerStyle={{ flexGrow: 1, paddingBottom: insets.bottom }}
       showsVerticalScrollIndicator={false}>

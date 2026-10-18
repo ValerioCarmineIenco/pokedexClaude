@@ -1,7 +1,7 @@
 import { Image } from 'expo-image';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { Platform, Pressable, StyleSheet, Text, View } from 'react-native';
 import Animated, {
   Extrapolation,
   interpolate,
@@ -13,11 +13,13 @@ import Animated, {
   type SharedValue,
 } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { scheduleOnRN } from 'react-native-worklets';
 
 import { GENERATIONS, LAST_POKEMON_ID } from '@/api/generations';
 import { getAbilityIndexEntryByName } from '@/api/abilities';
 import { getArtworkUrl, getShinyArtworkUrl } from '@/api/pokemon';
 import { useArtworkStyle } from '@/hooks/useArtworkStyle';
+import { useScrollRestoration } from '@/hooks/useScrollRestoration';
 import { t as translate } from '@/i18n';
 import { localName, pokemonName } from '@/i18n/names';
 import { colors } from '@/theme/colors';
@@ -194,8 +196,12 @@ export function PokemonDetailView({
   // l'intestazione grande è sparita e compare quella compatta, fissa in alto.
   const scrollY = useSharedValue(0);
   const collapseAt = useSharedValue(100);
+  // Sul web la scheda coperta da un'altra (evoluzione, mossa…) perde lo scorrimento: va ricordato.
+  const { ref: scrollRef, onScrollOffset } = useScrollRestoration();
+  const rememberOffset = Platform.OS === 'web' ? onScrollOffset : null;
   const onScroll = useAnimatedScrollHandler((event) => {
     scrollY.value = event.contentOffset.y;
+    if (rememberOffset) scheduleOnRN(rememberOffset, event.contentOffset.y);
   });
   const heroFade = useAnimatedStyle(() => {
     const progress = interpolate(scrollY.value, [0, collapseAt.value], [0, 1], Extrapolation.CLAMP);
@@ -264,6 +270,7 @@ export function PokemonDetailView({
   return (
     <View style={styles.screen}>
       <Animated.ScrollView
+        ref={scrollRef}
         style={styles.screen}
         contentContainerStyle={{ flexGrow: 1, paddingBottom: insets.bottom }}
         onScroll={onScroll}

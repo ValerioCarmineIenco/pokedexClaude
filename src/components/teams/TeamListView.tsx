@@ -11,6 +11,7 @@ import { fonts } from '@/theme/fonts';
 import { TYPE_LABELS } from '@/theme/typeNames';
 import { TEAM_SIZE, type Team } from '@/types/team';
 import { analyzeTeam, getTeamMembers } from '@/utils/teamAnalysis';
+import { useScrollRestoration } from '@/hooks/useScrollRestoration';
 
 import { ErrorState } from '../ErrorState';
 import { Icon } from '../Icon';
@@ -26,6 +27,7 @@ export type TeamListViewProps = {
 export function TeamListView({ teams, onCreate, onOpen }: TeamListViewProps) {
   const { t } = useTranslation('teams');
   const insets = useSafeAreaInsets();
+  const { ref: scrollRef, onScroll } = useScrollRestoration();
 
   return (
     <View style={[styles.screen, { paddingTop: insets.top }]}>
@@ -42,6 +44,8 @@ export function TeamListView({ teams, onCreate, onOpen }: TeamListViewProps) {
         </Pressable>
       </View>
       <FlatList
+        ref={scrollRef}
+        onScroll={onScroll}
         data={teams}
         keyExtractor={(team) => team.id}
         renderItem={({ item }) => <TeamCard team={item} onPress={() => onOpen(item)} />}

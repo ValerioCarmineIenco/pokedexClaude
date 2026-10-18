@@ -15,6 +15,7 @@ import { fonts } from '@/theme/fonts';
 import { TYPE_COLORS, typeTextColor, typeTint } from '@/theme/typeColors';
 import { formatNumber } from '@/utils/format';
 import { romanNumeral } from '@/utils/generation';
+import { useScrollRestoration } from '@/hooks/useScrollRestoration';
 
 import { ErrorState } from '../ErrorState';
 import { Icon } from '../Icon';
@@ -59,6 +60,7 @@ export function MoveDetailView({
 }: MoveDetailViewProps) {
   const { t } = useTranslation('moves');
   const insets = useSafeAreaInsets();
+  const { ref: scrollRef, onScroll } = useScrollRestoration();
   // L'intestazione usa i dati completi se ci sono, altrimenti quelli dell'indice.
   const head = move ?? summary;
 
@@ -96,6 +98,8 @@ export function MoveDetailView({
 
   return (
     <ScrollView
+      ref={scrollRef}
+      onScroll={onScroll}
       style={styles.screen}
       contentContainerStyle={{ flexGrow: 1, paddingBottom: insets.bottom }}
       showsVerticalScrollIndicator={false}>

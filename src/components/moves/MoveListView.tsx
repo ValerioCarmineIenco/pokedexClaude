@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
+import { useScrollRestoration } from '@/hooks/useScrollRestoration';
 import type { ViewMode } from '@/hooks/useViewMode';
 import { colors } from '@/theme/colors';
 import { fonts } from '@/theme/fonts';
@@ -49,6 +50,7 @@ export function MoveListView({
   const count = totalCount ?? moves.length;
   const isSearching = searchText.trim().length > 0;
   const caption = isSearching ? t('list.results', { count }) : t('count', { count });
+  const { ref: scrollRef, onScroll } = useScrollRestoration();
 
   return (
     <View style={[styles.screen, { paddingTop: insets.top }]}>
@@ -70,6 +72,8 @@ export function MoveListView({
       </View>
       <FlashList
         key={viewMode}
+        ref={scrollRef}
+        onScroll={onScroll}
         data={moves}
         numColumns={isGrid ? COLUMNS : 1}
         keyExtractor={(move) => String(move.id)}

@@ -10,6 +10,7 @@ import { CATEGORY_COLORS } from '@/theme/categoryColors';
 import { colors } from '@/theme/colors';
 import { fonts } from '@/theme/fonts';
 import { ITEM_CATEGORIES, ITEM_CATEGORY_LABELS, type Item, type ItemCategory } from '@/types/item';
+import { useScrollRestoration } from '@/hooks/useScrollRestoration';
 
 import { ErrorState } from '../ErrorState';
 import { ErrorToast } from '../ErrorToast';
@@ -88,6 +89,7 @@ export function ItemListView({
 }: ItemListViewProps) {
   const { t } = useTranslation('items');
   const insets = useSafeAreaInsets();
+  const { ref: scrollRef, onScroll } = useScrollRestoration();
   const countLabel = (n: number) => t('list.count', { count: n });
   const isGrid = viewMode === 'grid';
   const count = totalCount ?? items.length;
@@ -172,6 +174,8 @@ export function ItemListView({
         skeletons(isGrid ? 12 : 8)
       ) : (
         <FlashList
+          ref={scrollRef}
+          onScroll={onScroll}
           key={`${viewMode}-${category ?? 'all'}`}
           data={listItems}
           numColumns={isGrid ? COLUMNS : 1}

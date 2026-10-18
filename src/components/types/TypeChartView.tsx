@@ -7,6 +7,7 @@ import { colors } from '@/theme/colors';
 import { fonts } from '@/theme/fonts';
 import { TYPE_LABELS } from '@/theme/typeNames';
 import { TYPE_NAMES, type TypeName } from '@/types/pokemon';
+import { useScrollRestoration } from '@/hooks/useScrollRestoration';
 
 import { SectionTitle } from '../SectionTitle';
 import { TypeBadge } from '../TypeBadge';
@@ -37,9 +38,12 @@ export type TypeChartViewProps = {
 export function TypeChartView({ onPressType }: TypeChartViewProps) {
   const { t } = useTranslation('types');
   const insets = useSafeAreaInsets();
+  const { ref: scrollRef, onScroll } = useScrollRestoration();
 
   return (
     <ScrollView
+      ref={scrollRef}
+      onScroll={onScroll}
       style={[styles.screen, { paddingTop: insets.top }]}
       contentContainerStyle={{ paddingBottom: insets.bottom + 28 }}
       showsVerticalScrollIndicator={false}>
