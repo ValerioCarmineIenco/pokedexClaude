@@ -18,6 +18,7 @@ export { usePokemonDetail } from './usePokemonDetail';
 export { filterPokemonByName, usePokemonSearch } from './usePokemonSearch';
 export { usePokemonList } from './usePokemonList';
 export { usePokemonSpecies } from './usePokemonSpecies';
+export { usePokemonTypeDefense } from './usePokemonTypeDefense';
 export { useRelatedItems } from './useRelatedItems';
 export { useTypeMatchups } from './useTypeMatchups';
 export {
