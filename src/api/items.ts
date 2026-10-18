@@ -2,8 +2,10 @@ import { fetchJson } from '@/api/client';
 import itemIndex from '@/data/itemIndex.json';
 import type { ItemResponse } from '@/types/pokeapi';
 import { ITEM_CATEGORIES, type Item, type ItemCategory, type ItemIndexEntry, type ItemPage } from '@/types/item';
+import { perLanguage, t } from '@/i18n';
+import { localName } from '@/i18n/names';
 import { formatName } from '@/utils/format';
-import { byLanguage, cleanText, latestFlavor } from '@/utils/pokeapiText';
+import { cleanText, latestLocalizedFlavor, localized } from '@/utils/pokeapiText';
 import { normalizeSearch } from '@/utils/search';
 
 export const ITEM_PAGE_SIZE = 20;
@@ -24,9 +26,23 @@ const INDEX = (itemIndex as ItemIndexEntry[])
   );
 const BY_ID = new Map(INDEX.map((entry) => [entry.id, entry]));
 
-/** Testo su cui cerca `search`: nome italiano e slug inglese («pozione potion»). */
-const SEARCH_TEXT = new Map(
-  INDEX.map((entry) => [entry.id, normalizeSearch(`${entry.label} ${entry.name.replace(/-/g, ' ')}`)]),
+/** Nome dell'oggetto nella lingua in uso, dall'indice (senza chiamate). */
+export function getItemLabel(entry: ItemIndexEntry): string {
+  return localName('item', entry.id, entry.label);
+}
+
+/**
+ * Testo su cui cerca `search`: nome nella lingua in uso e slug inglese («pozione potion»).
+ * Ricalcolato al cambio di lingua.
+ */
+const searchText = perLanguage(
+  () =>
+    new Map(
+      INDEX.map((entry) => [
+        entry.id,
+        normalizeSearch(`${getItemLabel(entry)} ${entry.name.replace(/-/g, ' ')}`),
+      ]),
+    ),
 );
 
 /**
@@ -37,10 +53,11 @@ const SEARCH_TEXT = new Map(
 export function getItemIndex(category?: ItemCategory, search = ''): ItemIndexEntry[] {
   const needle = normalizeSearch(search);
   if (!category && !needle) return INDEX;
+  const texts = searchText();
   return INDEX.filter(
     (entry) =>
       (!category || entry.category === category) &&
-      (!needle || SEARCH_TEXT.get(entry.id)!.includes(needle)),
+      (!needle || texts.get(entry.id)!.includes(needle)),
   );
 }
 
@@ -94,12 +111,10 @@ export function getNextItemPage(
 
 export function toItem(raw: ItemResponse): Item {
   const entry = BY_ID.get(raw.id);
-  const name =
-    raw.names.find(byLanguage('it'))?.name ?? raw.names.find(byLanguage('en'))?.name ?? formatName(raw.name);
+  const name = localized(raw.names)?.name ?? (entry ? getItemLabel(entry) : formatName(raw.name));
   const description =
-    latestFlavor(raw.flavor_text_entries, 'it') ??
-    latestFlavor(raw.flavor_text_entries, 'en') ??
-    cleanText(raw.effect_entries.find(byLanguage('en'))?.short_effect ?? '');
+    latestLocalizedFlavor(raw.flavor_text_entries) ??
+    cleanText(localized(raw.effect_entries)?.short_effect ?? '');
   return {
     id: raw.id,
     name,
@@ -112,7 +127,7 @@ export function toItem(raw: ItemResponse): Item {
 
 /** Dettaglio di un oggetto. */
 export async function getItem(id: number, signal?: AbortSignal): Promise<Item> {
-  const raw = await fetchJson<ItemResponse>(`/item/${id}`, signal, 'Oggetto non trovato.');
+  const raw = await fetchJson<ItemResponse>(`/item/${id}`, signal, t('items:errors.notFound'));
   return toItem(raw);
 }
 

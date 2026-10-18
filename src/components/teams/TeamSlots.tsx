@@ -1,4 +1,5 @@
 import { useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Pressable, StyleSheet, View } from 'react-native';
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import Animated, {
@@ -12,7 +13,7 @@ import { scheduleOnRN } from 'react-native-worklets';
 
 import { colors } from '@/theme/colors';
 import type { PokemonSummary } from '@/types/pokemon';
-import { formatName } from '@/utils/format';
+import { pokemonName } from '@/i18n/names';
 
 import { Icon } from '../Icon';
 import { PokemonCard, ROW_CARD_HEIGHT } from '../PokemonCard';
@@ -128,7 +129,8 @@ function DraggableRow({
     shadowOpacity: withSpring(dragging.value ? 0.18 : 0, SPRING),
   }));
 
-  const name = formatName(pokemon.name);
+  const { t } = useTranslation('teams');
+  const name = pokemonName(pokemon.id, pokemon.name);
 
   return (
     <Animated.View style={[styles.row, style]}>
@@ -137,11 +139,11 @@ function DraggableRow({
           style={styles.handle}
           accessible
           accessibilityRole="adjustable"
-          accessibilityLabel={`Sposta ${name}`}
-          accessibilityHint="Trascina per cambiare l'ordine"
+          accessibilityLabel={t('slots.moveA11y', { name })}
+          accessibilityHint={t('slots.moveHint')}
           accessibilityActions={[
-            { name: 'increment', label: 'Sposta giù' },
-            { name: 'decrement', label: 'Sposta su' },
+            { name: 'increment', label: t('slots.moveDown') },
+            { name: 'decrement', label: t('slots.moveUp') },
           ]}
           onAccessibilityAction={(event) => onMove(event.nativeEvent.actionName === 'increment' ? 1 : -1)}>
           <Icon name="drag" size={20} color={colors.textSubtle} />
@@ -154,7 +156,7 @@ function DraggableRow({
         onPress={onRemove}
         hitSlop={6}
         accessibilityRole="button"
-        accessibilityLabel={`Togli ${name} dalla squadra`}
+        accessibilityLabel={t('slots.removeA11y', { name })}
         style={({ pressed }) => [styles.remove, pressed && styles.pressed]}>
         <Icon name="remove" size={20} color={colors.textSubtle} />
       </Pressable>

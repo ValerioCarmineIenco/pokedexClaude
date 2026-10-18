@@ -1,8 +1,11 @@
 import { Image } from 'expo-image';
+import { useTranslation } from 'react-i18next';
 import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
+import { getAbilityIndexEntryByName, getAbilityLabel } from '@/api/abilities';
 import { getArtworkUrl } from '@/api/pokemon';
+import { pokemonName } from '@/i18n/names';
 import { useArtworkStyle } from '@/hooks/useArtworkStyle';
 import { colors } from '@/theme/colors';
 import { fonts } from '@/theme/fonts';
@@ -38,8 +41,18 @@ export type CompareViewProps = {
   onOpenPokemon: (id: number) => void;
 };
 
+/** Nome mostrato del Pokémon: quello della specie nella lingua in uso. */
+const nameOf = (pokemon: Pokemon) => pokemonName(pokemon.id, pokemon.name);
+
+/** Nome dell'abilità nella lingua in uso, dall'indice; lo slug leggibile se non c'è. */
+function abilityName(slug: string): string {
+  const entry = getAbilityIndexEntryByName(slug);
+  return entry ? getAbilityLabel(entry) : formatName(slug);
+}
+
 /** Due Pokémon a confronto: tipi, statistiche base con la differenza, abilità e resistenze. */
 export function CompareView({ first, second, onBack, onRetry, onChange, onOpenPokemon }: CompareViewProps) {
+  const { t } = useTranslation('compare');
   const insets = useSafeAreaInsets();
   const sides = [first, second] as const;
   const a = first.pokemon;
@@ -56,20 +69,20 @@ export function CompareView({ first, second, onBack, onRetry, onChange, onOpenPo
           onPress={onBack}
           hitSlop={6}
           accessibilityRole="button"
-          accessibilityLabel="Indietro"
+          accessibilityLabel={t('back')}
           style={({ pressed }) => [styles.navButton, pressed && styles.pressed]}>
           <Icon name="back" size={18} color={colors.text} />
         </Pressable>
         <Text style={styles.navTitle} accessibilityRole="header">
-          Confronto
+          {t('title')}
         </Text>
       </View>
 
       {failed ? (
         <ErrorState
-          title="Nessuna connessione"
-          message={failed.errorMessage ?? 'Non riesco a raggiungere il Pokédex. Controlla la rete e riprova.'}
-          actionLabel="Riprova"
+          title={t('offlineTitle')}
+          message={failed.errorMessage ?? t('offlineMessage')}
+          actionLabel={t('retry')}
           onAction={onRetry}
         />
       ) : (
@@ -87,35 +100,32 @@ export function CompareView({ first, second, onBack, onRetry, onChange, onOpenPo
 
           {a && b ? (
             <>
-              <Section title="Statistiche base">
+              <Section title={t('sections.stats')}>
                 <StatsComparison first={a} second={b} />
               </Section>
-              <Section title="Abilità">
+              <Section title={t('sections.abilities')}>
                 <View style={styles.columns}>
                   {[a, b].map((pokemon, index) => (
                     <View key={index} style={styles.abilities}>
                       {pokemon.abilities.map((ability) => (
                         <View key={ability.name} style={styles.ability}>
-                          <Text style={styles.abilityName}>{formatName(ability.name)}</Text>
-                          {ability.isHidden && <Text style={styles.abilityHidden}>Nascosta</Text>}
+                          <Text style={styles.abilityName}>{abilityName(ability.name)}</Text>
+                          {ability.isHidden && <Text style={styles.abilityHidden}>{t('hiddenAbility')}</Text>}
                         </View>
                       ))}
                     </View>
                   ))}
                 </View>
               </Section>
-              <Section title="Efficacia dei tipi">
-                <Text style={styles.hint}>
-                  Danno subito dalle mosse di ciascun tipo. Sono elencati solo i tipi che non fanno danno
-                  normale (×1) a entrambi; in verde il Pokémon che subisce meno.
-                </Text>
+              <Section title={t('sections.typeEffectiveness')}>
+                <Text style={styles.hint}>{t('typeEffectivenessHint')}</Text>
                 {first.defense && second.defense ? (
                   <DefenseComparison first={a} second={b} firstGroups={first.defense} secondGroups={second.defense} />
                 ) : first.isDefenseLoading || second.isDefenseLoading ? (
                   <SkeletonBlock width="100%" height={240} radius={16} />
                 ) : (
                   <Text style={styles.hint}>
-                    {first.defenseErrorMessage ?? second.defenseErrorMessage ?? 'Efficacia non disponibile.'}
+                    {first.defenseErrorMessage ?? second.defenseErrorMessage ?? t('defenseUnavailable')}
                   </Text>
                 )}
               </Section>
@@ -142,6 +152,7 @@ function PokemonColumn({
   onOpen: (id: number) => void;
   onChange: () => void;
 }) {
+  const { t } = useTranslation('compare');
   const [artworkStyle] = useArtworkStyle();
   if (!pokemon) {
     return (
@@ -151,20 +162,20 @@ function PokemonColumn({
       </View>
     );
   }
-  const name = formatName(pokemon.name);
+  const name = nameOf(pokemon);
   return (
     <View style={[styles.column, { backgroundColor: typeTint(primaryType(pokemon.types), 0.32) }]}>
       <Pressable
         onPress={() => onOpen(pokemon.id)}
         accessibilityRole="button"
-        accessibilityLabel={`Apri la scheda di ${name}`}
+        accessibilityLabel={t('openA11y', { name })}
         style={({ pressed }) => [styles.columnMain, pressed && styles.columnPressed]}>
         <Image
           source={getArtworkUrl(pokemon.id, artworkStyle)}
           style={styles.artwork}
           contentFit="contain"
           transition={150}
-          accessibilityLabel={`Artwork di ${name}`}
+          accessibilityLabel={t('artworkA11y', { name })}
         />
         <Text style={styles.number}>{formatNumber(pokemon.id)}</Text>
         <Text style={styles.name} numberOfLines={1} adjustsFontSizeToFit>
@@ -180,15 +191,16 @@ function PokemonColumn({
         onPress={onChange}
         hitSlop={6}
         accessibilityRole="button"
-        accessibilityLabel={`Scegli un altro Pokémon al posto di ${name}`}
+        accessibilityLabel={t('changeA11y', { name })}
         style={({ pressed }) => [styles.change, pressed && styles.pressed]}>
-        <Text style={styles.changeLabel}>Cambia</Text>
+        <Text style={styles.changeLabel}>{t('change')}</Text>
       </Pressable>
     </View>
   );
 }
 
 function StatsComparison({ first, second }: { first: Pokemon; second: Pokemon }) {
+  const { t } = useTranslation('compare');
   const total = (pokemon: Pokemon) => pokemon.stats.reduce((sum, stat) => sum + stat.value, 0);
   const rows = first.stats.map((stat) => ({
     key: stat.name,
@@ -206,12 +218,12 @@ function StatsComparison({ first, second }: { first: Pokemon; second: Pokemon })
       {rows.map((row) => (
         <View key={row.key} style={styles.statBlock}>
           <StatHead label={row.label} a={row.a} b={row.b} first={first} second={second} />
-          <StatBar label={formatName(first.name)} value={row.a} color={colorA} />
-          <StatBar label={formatName(second.name)} value={row.b} color={secondColor} />
+          <StatBar label={nameOf(first)} value={row.a} color={colorA} />
+          <StatBar label={nameOf(second)} value={row.b} color={secondColor} />
         </View>
       ))}
       <View style={[styles.statBlock, styles.totalBlock]}>
-        <StatHead label="Totale" a={total(first)} b={total(second)} first={first} second={second} showValues />
+        <StatHead label={t('total')} a={total(first)} b={total(second)} first={first} second={second} showValues />
       </View>
     </View>
   );
@@ -233,6 +245,7 @@ function StatHead({
   second: Pokemon;
   showValues?: boolean;
 }) {
+  const { t } = useTranslation('compare');
   const diff = a - b;
   const leader = diff > 0 ? first : second;
   return (
@@ -242,10 +255,10 @@ function StatHead({
         {showValues && <Text style={styles.totalValues}>{`  ${a} – ${b}`}</Text>}
       </Text>
       {diff === 0 ? (
-        <Text style={[styles.diff, styles.diffEven]}>Pari</Text>
+        <Text style={[styles.diff, styles.diffEven]}>{t('even')}</Text>
       ) : (
         <Text style={styles.diff} numberOfLines={1}>
-          {formatName(leader.name)} <Text style={styles.diffValue}>+{Math.abs(diff)}</Text>
+          {nameOf(leader)} <Text style={styles.diffValue}>+{Math.abs(diff)}</Text>
         </Text>
       )}
     </View>
@@ -272,6 +285,7 @@ function DefenseComparison({
   firstGroups: DefenseGroup[];
   secondGroups: DefenseGroup[];
 }) {
+  const { t } = useTranslation('compare');
   const a = multipliersOf(firstGroups);
   const b = multipliersOf(secondGroups);
   const types = TYPE_NAMES.filter((type) => a[type] !== 1 || b[type] !== 1);
@@ -281,12 +295,12 @@ function DefenseComparison({
   return (
     <View style={styles.table}>
       <View style={[styles.tableRow, styles.tableHeader]}>
-        <Text style={[styles.tableType, styles.tableHeadText]}>Tipo</Text>
+        <Text style={[styles.tableType, styles.tableHeadText]}>{t('table.type')}</Text>
         <Text style={[styles.tableCell, styles.tableHeadText]} numberOfLines={1}>
-          {formatName(first.name)}
+          {nameOf(first)}
         </Text>
         <Text style={[styles.tableCell, styles.tableHeadText]} numberOfLines={1}>
-          {formatName(second.name)}
+          {nameOf(second)}
         </Text>
       </View>
       {types.map((type) => (
@@ -299,12 +313,12 @@ function DefenseComparison({
         </View>
       ))}
       <View style={[styles.tableRow, styles.tableFooter]}>
-        <Text style={[styles.tableType, styles.tableHeadText]}>Debolezze</Text>
+        <Text style={[styles.tableType, styles.tableHeadText]}>{t('table.weaknesses')}</Text>
         <Text style={[styles.tableCell, styles.summary]}>{count(a, (m) => m > 1)}</Text>
         <Text style={[styles.tableCell, styles.summary]}>{count(b, (m) => m > 1)}</Text>
       </View>
       <View style={styles.tableRow}>
-        <Text style={[styles.tableType, styles.tableHeadText]}>Resistenze</Text>
+        <Text style={[styles.tableType, styles.tableHeadText]}>{t('table.resistances')}</Text>
         <Text style={[styles.tableCell, styles.summary]}>{count(a, (m) => m < 1)}</Text>
         <Text style={[styles.tableCell, styles.summary]}>{count(b, (m) => m < 1)}</Text>
       </View>

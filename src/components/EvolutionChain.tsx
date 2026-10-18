@@ -1,12 +1,14 @@
 import { Image } from 'expo-image';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { useTranslation } from 'react-i18next';
 
 import { getArtworkUrl, parsePokemonId } from '@/api/pokemon';
+import { pokemonName } from '@/i18n/names';
 import { useArtworkStyle } from '@/hooks/useArtworkStyle';
 import { colors } from '@/theme/colors';
 import { fonts } from '@/theme/fonts';
 import type { EvolutionChain as Chain, EvolutionMethod, EvolutionStage } from '@/types/evolution';
-import { formatName, formatNumber } from '@/utils/format';
+import { formatNumber } from '@/utils/format';
 
 import { ErrorState } from './ErrorState';
 import { Icon } from './Icon';
@@ -31,6 +33,7 @@ type Handlers = Pick<Props, 'currentId' | 'onOpenPokemon' | 'onOpenItem' | 'onOp
 
 /** Tab Evoluzioni: la catena completa, con i rami (es. Eevee) e il metodo di ogni passaggio. */
 export function EvolutionChain({ chain, isLoading, errorMessage, onRetry, ...handlers }: Props) {
+  const { t } = useTranslation('evolution');
   if (isLoading) {
     return (
       <View style={styles.skeleton}>
@@ -48,9 +51,9 @@ export function EvolutionChain({ chain, isLoading, errorMessage, onRetry, ...han
   if (!chain) {
     return (
       <ErrorState
-        title="Evoluzioni non disponibili"
-        message={errorMessage ?? 'Non riesco a caricare la catena evolutiva. Controlla la rete e riprova.'}
-        actionLabel="Riprova"
+        title={t('chain.unavailableTitle')}
+        message={errorMessage ?? t('chain.unavailableMessage')}
+        actionLabel={t('chain.retry')}
         onAction={onRetry}
       />
     );
@@ -60,8 +63,8 @@ export function EvolutionChain({ chain, isLoading, errorMessage, onRetry, ...han
     <View style={styles.chain}>
       <Text style={styles.count}>
         {chain.size === 1
-          ? `${formatName(chain.root.name)} non si evolve.`
-          : `${chain.size} Pokémon nella catena`}
+          ? t('chain.doesNotEvolve', { name: pokemonName(chain.root.id, chain.root.name) })
+          : t('chain.count', { count: chain.size })}
       </Text>
       <StageNode stage={chain.root} {...handlers} />
     </View>
@@ -107,8 +110,9 @@ function StageCard({
   onOpenPokemon,
 }: Handlers & { stage: EvolutionStage; compact: boolean }) {
   const [artworkStyle] = useArtworkStyle();
+  const { t } = useTranslation('evolution');
   const size = compact ? BRANCH_ARTWORK_SIZE : ARTWORK_SIZE;
-  const name = formatName(stage.name);
+  const name = pokemonName(stage.id, stage.name);
   const isCurrent = stage.id === currentId;
   // Le specie oltre le generazioni del Pokédex si vedono ma non hanno una scheda.
   const canOpen = !isCurrent && parsePokemonId(stage.id) !== null;
@@ -117,7 +121,11 @@ function StageCard({
       onPress={canOpen ? () => onOpenPokemon(stage.id) : undefined}
       disabled={!canOpen}
       accessibilityRole="button"
-      accessibilityLabel={`${name}, ${formatNumber(stage.id)}${isCurrent ? ', questo Pokémon' : ''}`}
+      accessibilityLabel={
+        isCurrent
+          ? t('chain.currentLabel', { name, number: formatNumber(stage.id) })
+          : `${name}, ${formatNumber(stage.id)}`
+      }
       accessibilityState={{ disabled: !canOpen, selected: isCurrent }}
       style={({ pressed }) => [
         styles.card,
@@ -137,7 +145,7 @@ function StageCard({
       </Text>
       <Text style={styles.number}>
         {formatNumber(stage.id)}
-        {stage.isBaby ? ' · Baby' : ''}
+        {stage.isBaby ? ` · ${t('chain.baby')}` : ''}
       </Text>
     </Pressable>
   );
@@ -150,7 +158,9 @@ function Methods({
   onOpenItem,
   onOpenLocation,
 }: Handlers & { stage: EvolutionStage; arrow?: boolean }) {
-  const methods = stage.methods.length > 0 ? stage.methods : [[{ kind: 'text', text: 'Metodo sconosciuto' }] as EvolutionMethod];
+  const { t } = useTranslation('evolution');
+  const methods =
+    stage.methods.length > 0 ? stage.methods : [[{ kind: 'text', text: t('chain.unknownMethod') }] as EvolutionMethod];
   return (
     <View style={styles.methods}>
       {arrow && <Icon name="down" size={18} color={colors.textSubtle} />}
@@ -159,7 +169,7 @@ function Methods({
       ))}
       {stage.legacyMethods.length > 0 && (
         <Text style={styles.legacy}>
-          {'Giochi precedenti: '}
+          {t('chain.previousGames')}
           {stage.legacyMethods.map((method, i) => (
             <Text key={i}>
               {i > 0 && ' · '}

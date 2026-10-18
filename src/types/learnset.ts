@@ -15,7 +15,7 @@ export type LearnedMove = {
 export type LearnsetVersionGroup = {
   /** Slug di PokéAPI (es. `firered-leafgreen`). */
   slug: string;
-  /** Nome italiano (es. «Rosso Fuoco e Verde Foglia»). */
+  /** Nome nella lingua in uso (es. «Rosso Fuoco e Verde Foglia»). */
   label: string;
   /** Generazione del gruppo; 0 se è un gioco che l'app non conosce ancora. */
   generation: number;

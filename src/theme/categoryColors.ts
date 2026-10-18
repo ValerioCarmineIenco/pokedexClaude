@@ -27,7 +27,7 @@ export type CategoryColors = {
   tint: string;
   /** Sfondo tenue di carte e riquadri. */
   soft: string;
-  /** Nome italiano della categoria (`ITEM_CATEGORY_LABELS`). */
+  /** Nome della categoria nella lingua in uso (`ITEM_CATEGORY_LABELS`). */
   label: string;
 };
 

@@ -1,5 +1,6 @@
 import { FlashList } from '@shopify/flash-list';
 import { useMemo, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
@@ -7,7 +8,7 @@ import { getMovesOfType, getPokemonOfType, getStaticTypeMatchups } from '@/api/t
 import { colors } from '@/theme/colors';
 import { fonts } from '@/theme/fonts';
 import { TYPE_COLORS, typeTextColor, typeTint } from '@/theme/typeColors';
-import { TYPE_NAMES_IT } from '@/theme/typeNames';
+import { TYPE_LABELS } from '@/theme/typeNames';
 import type { MatchupType, MoveSummary } from '@/types/move';
 import type { PokemonSummary, TypeName } from '@/types/pokemon';
 
@@ -36,6 +37,7 @@ export type TypeDetailViewProps = {
  * mosse di quel tipo. Tutto dagli indici locali, quindi funziona anche offline.
  */
 export function TypeDetailView({ type, onOpenPokemon, onOpenMove, onOpenType, onBack }: TypeDetailViewProps) {
+  const { t } = useTranslation('types');
   const insets = useSafeAreaInsets();
   const [tab, setTab] = useState<Tab>('pokemon');
 
@@ -53,7 +55,7 @@ export function TypeDetailView({ type, onOpenPokemon, onOpenMove, onOpenType, on
       onPress={onBack}
       hitSlop={6}
       accessibilityRole="button"
-      accessibilityLabel="Torna ai tipi"
+      accessibilityLabel={t('detail.back')}
       style={({ pressed }) => [styles.backButton, pressed && styles.backPressed]}>
       <Icon name="back" size={18} color={colors.text} />
     </Pressable>
@@ -64,9 +66,9 @@ export function TypeDetailView({ type, onOpenPokemon, onOpenMove, onOpenType, on
       <View style={[styles.screen, { paddingTop: insets.top }]}>
         <View style={[styles.nav, styles.navPadding]}>{backButton}</View>
         <ErrorState
-          title="Tipo non trovato"
-          message="Questo tipo non esiste nel Pokédex."
-          actionLabel="Torna ai tipi"
+          title={t('detail.notFoundTitle')}
+          message={t('detail.notFoundMessage')}
+          actionLabel={t('detail.back')}
           actionStyle="ghost"
           onAction={onBack}
         />
@@ -88,15 +90,15 @@ export function TypeDetailView({ type, onOpenPokemon, onOpenMove, onOpenType, on
         <View style={styles.nav}>{backButton}</View>
         <PokeBallMark size={210} thickness={30} style={styles.heroMark} />
         <Text style={styles.name} accessibilityRole="header">
-          {TYPE_NAMES_IT[type]}
+          {TYPE_LABELS[type]}
         </Text>
         <View style={styles.badges}>
           <TypeBadge type={type} size="large" />
           <View style={styles.badge}>
-            <Text style={styles.badgeLabel}>{pokemon.length} Pokémon</Text>
+            <Text style={styles.badgeLabel}>{t('detail.pokemonCount', { count: pokemon.length })}</Text>
           </View>
           <View style={styles.badge}>
-            <Text style={styles.badgeLabel}>{moves.length} mosse</Text>
+            <Text style={styles.badgeLabel}>{t('detail.movesCount', { count: moves.length })}</Text>
           </View>
         </View>
       </View>
@@ -104,26 +106,26 @@ export function TypeDetailView({ type, onOpenPokemon, onOpenMove, onOpenType, on
       <View style={styles.sheet}>
         <View style={styles.section}>
           <Text style={styles.sectionTitle} accessibilityRole="header">
-            In attacco
+            {t('detail.attack')}
           </Text>
-          <Text style={styles.hint}>Danno delle mosse {TYPE_NAMES_IT[type]} contro ciascun tipo.</Text>
+          <Text style={styles.hint}>{t('detail.attackHint', { type: TYPE_LABELS[type] })}</Text>
           <View style={[styles.box, { backgroundColor: soft }]}>
             <Matchups
-              title="Superefficace contro"
+              title={t('matchups.superEffective')}
               multiplier="×2"
               types={matchups.attack.superEffective}
               accent={accent}
               onOpenType={onOpenType}
             />
             <Matchups
-              title="Poco efficace contro"
+              title={t('matchups.notVeryEffective')}
               multiplier="×½"
               types={matchups.attack.notVeryEffective}
               accent={accent}
               onOpenType={onOpenType}
             />
             <Matchups
-              title="Nessun effetto su"
+              title={t('matchups.noEffect')}
               multiplier="×0"
               types={matchups.attack.noEffect}
               accent={accent}
@@ -134,26 +136,26 @@ export function TypeDetailView({ type, onOpenPokemon, onOpenMove, onOpenType, on
 
         <View style={styles.section}>
           <Text style={styles.sectionTitle} accessibilityRole="header">
-            In difesa
+            {t('detail.defense')}
           </Text>
-          <Text style={styles.hint}>Danno subito da un Pokémon di solo tipo {TYPE_NAMES_IT[type]}.</Text>
+          <Text style={styles.hint}>{t('detail.defenseHint', { type: TYPE_LABELS[type] })}</Text>
           <View style={[styles.box, { backgroundColor: soft }]}>
             <Matchups
-              title="Debole a"
+              title={t('matchups.weakTo')}
               multiplier="×2"
               types={matchups.defense.weakTo}
               accent={accent}
               onOpenType={onOpenType}
             />
             <Matchups
-              title="Resistente a"
+              title={t('matchups.resists')}
               multiplier="×½"
               types={matchups.defense.resists}
               accent={accent}
               onOpenType={onOpenType}
             />
             <Matchups
-              title="Immune a"
+              title={t('matchups.immuneTo')}
               multiplier="×0"
               types={matchups.defense.immuneTo}
               accent={accent}
@@ -164,12 +166,12 @@ export function TypeDetailView({ type, onOpenPokemon, onOpenMove, onOpenType, on
 
         <View style={styles.tabs} accessibilityRole="tablist">
           <TabButton
-            label={`Pokémon  ${pokemon.length}`}
+            label={t('detail.tabPokemon', { count: pokemon.length })}
             selected={tab === 'pokemon'}
             onPress={() => setTab('pokemon')}
           />
           <TabButton
-            label={`Mosse  ${moves.length}`}
+            label={t('detail.tabMoves', { count: moves.length })}
             selected={tab === 'moves'}
             onPress={() => setTab('moves')}
           />
@@ -197,7 +199,7 @@ export function TypeDetailView({ type, onOpenPokemon, onOpenMove, onOpenType, on
         )}
         ListEmptyComponent={
           <Text style={styles.empty}>
-            {tab === 'pokemon' ? 'Nessun Pokémon di questo tipo.' : 'Nessuna mossa di questo tipo.'}
+            {tab === 'pokemon' ? t('detail.emptyPokemon') : t('detail.emptyMoves')}
           </Text>
         }
         contentContainerStyle={{ paddingBottom: insets.bottom + 24 }}
@@ -221,6 +223,7 @@ function Matchups({
   accent: { background: string; text: string };
   onOpenType: (type: TypeName) => void;
 }) {
+  const { t } = useTranslation('types');
   return (
     <View style={styles.matchupRow}>
       <View style={styles.matchupHead}>
@@ -236,14 +239,14 @@ function Matchups({
               key={matchup.type}
               onPress={() => onOpenType(matchup.type)}
               accessibilityRole="button"
-              accessibilityLabel={`Tipo ${matchup.label}`}
+              accessibilityLabel={t('typeA11y', { type: matchup.label })}
               style={({ pressed }) => pressed && styles.pressed}>
               <TypeBadge type={matchup.type} size="large" />
             </Pressable>
           ))}
         </View>
       ) : (
-        <Text style={styles.matchupEmpty}>Nessun tipo</Text>
+        <Text style={styles.matchupEmpty}>{t('matchups.noTypes')}</Text>
       )}
     </View>
   );

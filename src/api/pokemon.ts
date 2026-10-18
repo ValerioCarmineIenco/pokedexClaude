@@ -6,8 +6,9 @@ import {
   LAST_POKEMON_ID,
 } from '@/api/generations';
 import pokemonIndex from '@/data/pokemonIndex.json';
+import { getLocale, perLanguage, t } from '@/i18n';
+import { pokemonName } from '@/i18n/names';
 import type {
-  NamedAPIResource,
   PokemonListResponse,
   PokemonResponse,
   PokemonSpeciesResponse,
@@ -22,6 +23,7 @@ import {
   type StatName,
   type TypeName,
 } from '@/types/pokemon';
+import { latestLocalizedFlavor, localized } from '@/utils/pokeapiText';
 import { normalizeSearch } from '@/utils/search';
 
 export const PAGE_SIZE = 20;
@@ -45,52 +47,49 @@ const STAT_NAMES: readonly string[] = [
  * senza chiamate extra. Dream World e Showdown non coprono tutti i Pokémon: per quelli
  * senza immagine (`missingArtwork` nell'indice) si usa l'artwork ufficiale.
  */
-export const ARTWORK_STYLES = [
+const STYLES = [
   {
     id: 'official',
-    label: 'Artwork ufficiale',
-    description: 'Illustrazione ufficiale ad alta risoluzione',
     path: (id: number) => `other/official-artwork/${id}.png`,
   },
   {
     id: 'official-shiny',
-    label: 'Artwork ufficiale shiny',
-    description: "L'illustrazione ufficiale nei colori shiny",
     path: (id: number) => `other/official-artwork/shiny/${id}.png`,
   },
   {
     id: 'home',
-    label: 'Pokémon HOME',
-    description: 'Modelli 3D di Pokémon HOME',
     path: (id: number) => `other/home/${id}.png`,
   },
   {
     id: 'home-shiny',
-    label: 'Pokémon HOME shiny',
-    description: 'Modelli 3D di Pokémon HOME nei colori shiny',
     path: (id: number) => `other/home/shiny/${id}.png`,
   },
   {
     id: 'dream-world',
-    label: 'Dream World',
-    description: 'Disegni vettoriali di Dream World',
     path: (id: number) => `other/dream-world/${id}.svg`,
   },
   {
     id: 'showdown',
-    label: 'Showdown animato',
-    description: 'Sprite animati di Pokémon Showdown',
     path: (id: number) => `other/showdown/${id}.gif`,
   },
   {
     id: 'sprite',
-    label: 'Sprite pixel',
-    description: 'Lo sprite in pixel art dei giochi',
     path: (id: number) => `${id}.png`,
   },
 ] as const;
 
-export type ArtworkStyle = (typeof ARTWORK_STYLES)[number]['id'];
+export type ArtworkStyle = (typeof STYLES)[number]['id'];
+
+// Nome e descrizione si leggono nella lingua in uso a ogni accesso.
+export const ARTWORK_STYLES = STYLES.map((style) => ({
+  ...style,
+  get label() {
+    return t(`common:artworkStyles.${style.id}.label`);
+  },
+  get description() {
+    return t(`common:artworkStyles.${style.id}.description`);
+  },
+}));
 
 export const DEFAULT_ARTWORK_STYLE: ArtworkStyle = 'official';
 
@@ -119,8 +118,19 @@ const INDEX = (pokemonIndex as PokemonIndexEntry[]).filter((entry) => entry.id <
 const MISSING_ARTWORK = new Map(
   INDEX.flatMap((entry) => (entry.missingArtwork ? [[entry.id, entry.missingArtwork] as const] : [])),
 );
-/** Testo su cui cerca `searchPokemonIndex`: lo slug con spazi al posto dei trattini. */
-const SEARCH_TEXT = new Map(INDEX.map((entry) => [entry.id, normalizeSearch(entry.name.replace(/-/g, ' '))]));
+/**
+ * Testo su cui cerca `searchPokemonIndex`: il nome nella lingua in uso e lo slug inglese con
+ * spazi al posto dei trattini («フシギダネ bulbasaur»).
+ */
+const getSearchText = perLanguage(
+  () =>
+    new Map(
+      INDEX.map((entry) => [
+        entry.id,
+        normalizeSearch(`${pokemonName(entry.id, entry.name)} ${entry.name.replace(/-/g, ' ')}`),
+      ]),
+    ),
+);
 
 /** Artwork del Pokémon nello stile scelto (predefinito: artwork ufficiale). */
 export function getArtworkUrl(id: number, style: ArtworkStyle = DEFAULT_ARTWORK_STYLE): string {
@@ -155,7 +165,7 @@ export function searchPokemonIndex(search: string, generationId?: number | null)
   if (!needle) return [];
   const { firstId, lastId } = getPokemonRange(generationId);
   return INDEX.filter(
-    (entry) => entry.id >= firstId && entry.id <= lastId && SEARCH_TEXT.get(entry.id)!.includes(needle),
+    (entry) => entry.id >= firstId && entry.id <= lastId && getSearchText().get(entry.id)!.includes(needle),
   ).map(toSummary);
 }
 
@@ -202,14 +212,17 @@ export function queryPokemonIndex({
       entry.id >= firstId &&
       entry.id <= lastId &&
       (!ids || ids.has(entry.id)) &&
-      (!needle || SEARCH_TEXT.get(entry.id)!.includes(needle)) &&
+      (!needle || getSearchText().get(entry.id)!.includes(needle)) &&
       types.every((type) => entry.types.includes(type)) &&
       (!category || entry[category]),
   );
   // Numero e nome crescenti, statistiche dalla più alta; `reversed` capovolge.
   const direction = reversed ? -1 : 1;
   if (sort === 'name') {
-    entries.sort((a, b) => direction * a.name.localeCompare(b.name));
+    const locale = getLocale();
+    entries.sort(
+      (a, b) => direction * pokemonName(a.id, a.name).localeCompare(pokemonName(b.id, b.name), locale),
+    );
   } else if (sort !== 'number') {
     entries.sort((a, b) => direction * (getIndexStat(b.id, sort)! - getIndexStat(a.id, sort)!) || a.id - b.id);
   } else if (reversed) {
@@ -273,20 +286,15 @@ export function toPokemon(raw: PokemonResponse): Pokemon {
   };
 }
 
-const isItalian = (entry: { language: NamedAPIResource }) => entry.language.name === 'it';
-
-/** Le descrizioni arrivano con a capo e form feed dei giochi originali. */
-function cleanFlavorText(text: string): string {
-  return text.replace(/[\n\f\r­]+/g, ' ').replace(/\s+/g, ' ').trim();
-}
-
 export function toPokemonSpecies(raw: PokemonSpeciesResponse): PokemonSpecies {
-  // L'ultima voce italiana è quella del gioco più recente.
-  const flavor = raw.flavor_text_entries.filter(isItalian).at(-1);
-  const genus = raw.genera.find(isItalian);
+  // L'ultima voce nella lingua in uso è quella del gioco più recente; se non c'è, in inglese.
+  const description = latestLocalizedFlavor(
+    raw.flavor_text_entries.map((entry) => ({ text: entry.flavor_text, language: entry.language })),
+  );
+  const genus = localized(raw.genera);
   return {
     id: raw.id,
-    description: flavor ? cleanFlavorText(flavor.flavor_text) : null,
+    description,
     genus: genus?.genus ?? null,
     evolutionChainId: raw.evolution_chain ? getIdFromUrl(raw.evolution_chain.url) : null,
     varieties: raw.varieties.map((v) => ({

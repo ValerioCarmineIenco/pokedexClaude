@@ -1,4 +1,5 @@
 import { FlashList } from '@shopify/flash-list';
+import { useTranslation } from 'react-i18next';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
@@ -14,8 +15,6 @@ import { LocationCard } from './LocationCard';
 import { RegionChips } from './RegionChips';
 
 const SIDE = 12;
-
-const countLabel = (n: number) => `${n} località`;
 
 export type LocationListViewProps = {
   locations: LocationSummary[];
@@ -44,18 +43,21 @@ export function LocationListView({
   onOpenSettings,
   onLocationPress,
 }: LocationListViewProps) {
+  const { t } = useTranslation('locations');
   const insets = useSafeAreaInsets();
   const query = searchText.trim();
   const isSearching = query.length > 0;
   const count = locations.length;
-  const caption = isSearching
-    ? `${count} ${count === 1 ? 'risultato' : 'risultati'}`
-    : countLabel(count);
+  const caption = isSearching ? t('list.results', { count }) : t('list.count', { count });
   const regionLabel = regions.find((r) => r.name === region)?.label;
 
   const emptyMessage = isSearching
-    ? `Nessuna località${regionLabel ? ` di ${regionLabel}` : ''} si chiama "${query}".`
-    : `Nessuna località${regionLabel ? ` di ${regionLabel}` : ''} ha incontri registrati.`;
+    ? regionLabel
+      ? t('list.emptySearchInRegion', { region: regionLabel, query })
+      : t('list.emptySearch', { query })
+    : regionLabel
+      ? t('list.emptyInRegion', { region: regionLabel })
+      : t('list.empty');
 
   return (
     <View style={[styles.screen, { paddingTop: insets.top }]}>
@@ -66,7 +68,7 @@ export function LocationListView({
             onPress={onOpenSettings}
             hitSlop={4}
             accessibilityRole="button"
-            accessibilityLabel="Impostazioni"
+            accessibilityLabel={t('screens.settings', { ns: 'common' })}
             style={({ pressed }) => [styles.settingsButton, pressed && styles.pressed]}>
             <Icon name="settings" size={18} color={colors.textMuted} />
           </Pressable>
@@ -74,7 +76,7 @@ export function LocationListView({
         <SearchBar
           value={searchText}
           onChangeText={onSearchTextChange}
-          accessibilityLabel="Cerca una località per nome"
+          accessibilityLabel={t('list.searchLabel')}
         />
         <RegionChips regions={regions} value={region} onChange={onRegionChange} />
         <Text style={styles.caption} numberOfLines={1}>
@@ -96,9 +98,9 @@ export function LocationListView({
         }}
         ListEmptyComponent={
           <ErrorState
-            title="Nessun risultato"
+            title={t('list.noResults')}
             message={emptyMessage}
-            actionLabel={isSearching ? 'Cancella ricerca' : undefined}
+            actionLabel={isSearching ? t('list.clearSearch') : undefined}
             actionStyle="ghost"
             onAction={isSearching ? () => onSearchTextChange('') : undefined}
           />

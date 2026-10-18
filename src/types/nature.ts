@@ -7,7 +7,7 @@ export type NatureIndexEntry = {
   id: number;
   /** Slug di PokéAPI (es. `bold`). */
   name: string;
-  /** Nome mostrato (es. «Sicura»): italiano, altrimenti inglese. Serve per la ricerca. */
+  /** Nome italiano (es. «Sicura»), altrimenti inglese: ripiego di `localName('nature', id)`. */
   label: string;
 };
 
@@ -19,13 +19,13 @@ export type NatureStatName = Exclude<StatName, 'hp'>;
 
 export type NatureStat = {
   name: NatureStatName;
-  /** Nome italiano per esteso (es. «Attacco Speciale»). */
+  /** Nome per esteso nella lingua in uso (es. «Attacco Speciale»). */
   label: string;
 };
 
 export type NatureFlavor = {
   name: FlavorName;
-  /** Nome italiano (es. «Piccante»). */
+  /** Nome nella lingua in uso (es. «Piccante»). */
   label: string;
 };
 
@@ -35,7 +35,7 @@ export type NatureFlavor = {
  */
 export type Nature = {
   id: number;
-  /** Nome italiano (es. «Sicura»), altrimenti inglese. */
+  /** Nome nella lingua in uso (es. «Sicura»), altrimenti inglese. */
   name: string;
   /** Statistica aumentata del 10%. */
   increasedStat: NatureStat | null;

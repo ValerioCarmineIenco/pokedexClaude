@@ -1,0 +1,49 @@
+{
+  "title": "Einstellungen",
+  "back": "Zurück zur Liste",
+  "language": {
+    "title": "Sprache",
+    "hint": "Die Sprache der App und der Namen von Pokémon, Attacken, Fähigkeiten und Items.",
+    "system": "Gerätesprache",
+    "systemHint": "Aktuell {{language}}",
+    "names": {
+      "en": "Englisch",
+      "it": "Italienisch",
+      "fr": "Französisch",
+      "de": "Deutsch",
+      "es": "Spanisch",
+      "ja": "Japanisch"
+    }
+  },
+  "artwork": {
+    "title": "Haupt-Artwork",
+    "hint": "Der Bildstil in der Liste und oben auf der Seite jedes Pokémon."
+  },
+  "backup": {
+    "title": "Backup",
+    "hint": "Speichert Favoriten, gefangene Schillernde und Teams in einer JSON-Datei, um sie auf einem anderen Gerät oder nach einer Neuinstallation wiederherzustellen. Beim Import werden die aktuellen Daten ersetzt.",
+    "export": "Backup exportieren",
+    "import": "Backup importieren",
+    "exportFailed": "Export fehlgeschlagen.",
+    "readFailed": "Die Datei konnte nicht gelesen werden.",
+    "exported": "Backup exportiert.",
+    "restored": "Wiederhergestellt: {{favorites}}, {{shiny}} und {{teams}}.",
+    "favorites_one": "{{count}} Favorit",
+    "favorites_other": "{{count}} Favoriten",
+    "shiny_one": "{{count}} Schillerndes",
+    "shiny_other": "{{count}} Schillernde",
+    "teams_one": "{{count}} Team",
+    "teams_other": "{{count}} Teams",
+    "errors": {
+      "invalid": "Die Datei ist kein gültiges Backup.",
+      "otherApp": "Die Datei ist kein Backup dieser App.",
+      "newerVersion": "Das Backup wurde mit einer neueren Version der App erstellt."
+    }
+  },
+  "credits": {
+    "title": "Credits und Copyright",
+    "data": "Daten und Bilder von <link>PokéAPI</link>, einem freien und kostenlosen Projekt der Community.",
+    "unofficial": "Dies ist eine inoffizielle, nicht kommerzielle Fan-App, die weder mit Nintendo, Creatures Inc., GAME FREAK inc. oder The Pokémon Company verbunden noch von ihnen genehmigt ist.",
+    "trademarks": "Pokémon und die Namen der Charaktere sind Marken von Nintendo, Creatures Inc. und GAME FREAK inc. © 1995–{{year}} Nintendo / Creatures Inc. / GAME FREAK inc."
+  }
+}

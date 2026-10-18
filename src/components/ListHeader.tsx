@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 
 import type { ViewMode } from '@/hooks/useViewMode';
@@ -51,6 +52,7 @@ export function ListHeader({
   onOpenSettings,
   compact = false,
 }: Props) {
+  const { t } = useTranslation('pokedex');
   return (
     <View style={styles.container}>
       <View style={styles.titleRow}>
@@ -61,7 +63,7 @@ export function ListHeader({
               <GenerationPicker value={generationId} onChange={onGenerationChange} />
               <CollectionButton
                 icon={collection === 'favorites' ? 'heart' : 'heartOutline'}
-                label="Solo preferiti"
+                label={t('header.favoritesOnly')}
                 checked={collection === 'favorites'}
                 onPress={() => onCollectionChange(collection === 'favorites' ? null : 'favorites')}
               />
@@ -71,7 +73,7 @@ export function ListHeader({
             onPress={onOpenSettings}
             hitSlop={4}
             accessibilityRole="button"
-            accessibilityLabel="Impostazioni"
+            accessibilityLabel={t('common.settings')}
             style={({ pressed }) => [styles.iconButton, pressed && styles.pressed]}>
             <Icon name="settings" size={18} color={colors.textMuted} />
           </Pressable>
@@ -87,8 +89,12 @@ export function ListHeader({
               onPress={onOpenFilters}
               hitSlop={4}
               accessibilityRole="button"
-              accessibilityLabel={activeFilterCount > 0 ? `Filtri, ${activeFilterCount} attivi` : 'Filtri'}
-              accessibilityHint="Apre tipi, categoria e ordinamento"
+              accessibilityLabel={
+                activeFilterCount > 0
+                  ? t('header.filtersActive', { count: activeFilterCount })
+                  : t('header.filters')
+              }
+              accessibilityHint={t('header.filtersHint')}
               style={({ pressed }) => [
                 styles.iconButton,
                 styles.filterButton,
@@ -110,7 +116,7 @@ export function ListHeader({
               onPress={() => onCollectionChange(collection === 'shiny' ? null : 'shiny')}
               hitSlop={4}
               accessibilityRole="switch"
-              accessibilityLabel={`Solo shiny ottenuti, ${shinyCount} su ${shinyTotal}`}
+              accessibilityLabel={t('header.shinyOnly', { count: shinyCount, total: shinyTotal })}
               accessibilityState={{ checked: collection === 'shiny' }}
               style={({ pressed }) => [
                 styles.shinyChip,

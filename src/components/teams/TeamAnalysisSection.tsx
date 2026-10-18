@@ -1,24 +1,24 @@
+import { Trans, useTranslation } from 'react-i18next';
 import { StyleSheet, Text, View } from 'react-native';
 
 import { colors } from '@/theme/colors';
 import { fonts } from '@/theme/fonts';
-import { TYPE_NAMES_IT } from '@/theme/typeNames';
+import { TYPE_LABELS } from '@/theme/typeNames';
 import type { TypeName } from '@/types/pokemon';
 import type { TeamAnalysis } from '@/utils/teamAnalysis';
 
 import { TypeBadge } from '../TypeBadge';
 
-const pokemonCount = (count: number) => (count === 1 ? '1 Pokémon' : `${count} Pokémon`);
-
 /** «Copertura di tipo»: debolezze condivise, tipi senza resistenze e tipi scoperti in attacco. */
 export function TeamAnalysisSection({ analysis, size }: { analysis: TeamAnalysis; size: number }) {
+  const { t } = useTranslation('teams');
   if (size === 0) {
     return (
       <View style={styles.section}>
         <Text style={styles.sectionTitle} accessibilityRole="header">
-          Copertura di tipo
+          {t('analysis.title')}
         </Text>
-        <Text style={styles.hint}>Aggiungi dei Pokémon per vedere debolezze e tipi scoperti.</Text>
+        <Text style={styles.hint}>{t('analysis.emptyHint')}</Text>
       </View>
     );
   }
@@ -26,50 +26,53 @@ export function TeamAnalysisSection({ analysis, size }: { analysis: TeamAnalysis
   return (
     <View style={styles.section}>
       <Text style={styles.sectionTitle} accessibilityRole="header">
-        Copertura di tipo
+        {t('analysis.title')}
       </Text>
 
       <View style={styles.box}>
-        <Text style={styles.boxTitle}>Debolezze condivise</Text>
+        <Text style={styles.boxTitle}>{t('analysis.sharedTitle')}</Text>
         {analysis.sharedWeaknesses.length > 0 ? (
           analysis.sharedWeaknesses.map((row) => (
             <View
               key={row.type}
               style={styles.weakRow}
               accessible
-              accessibilityLabel={`${pokemonCount(row.weak)} deboli a ${TYPE_NAMES_IT[row.type]}`}>
+              accessibilityLabel={t('analysis.weakA11y', { count: row.weak, type: TYPE_LABELS[row.type] })}>
               <View style={styles.weakBadge}>
                 <TypeBadge type={row.type} size="large" />
               </View>
               <View style={styles.weakText}>
                 <Text style={styles.weakLine}>
-                  <Text style={styles.weakCount}>{pokemonCount(row.weak)}</Text> deboli a{' '}
-                  {TYPE_NAMES_IT[row.type]}
+                  <Trans
+                    t={t}
+                    i18nKey="analysis.weakLine"
+                    count={row.weak}
+                    values={{ type: TYPE_LABELS[row.type] }}
+                    components={{ bold: <Text style={styles.weakCount} /> }}
+                  />
                 </Text>
                 {row.resist > 0 && (
-                  <Text style={styles.resist}>
-                    {row.resist === 1 ? '1 resiste' : `${row.resist} resistono`}
-                  </Text>
+                  <Text style={styles.resist}>{t('analysis.resist', { count: row.resist })}</Text>
                 )}
               </View>
             </View>
           ))
         ) : (
-          <Text style={styles.empty}>Nessun tipo mette in difficoltà più di un Pokémon.</Text>
+          <Text style={styles.empty}>{t('analysis.sharedEmpty')}</Text>
         )}
       </View>
 
       <TypeList
-        title="Nessuno resiste a"
-        hint="Nessun membro subisce danni ridotti da questi tipi."
+        title={t('analysis.unresistedTitle')}
+        hint={t('analysis.unresistedHint')}
         types={analysis.unresisted}
-        empty="Per ogni tipo c'è almeno un Pokémon che resiste."
+        empty={t('analysis.unresistedEmpty')}
       />
       <TypeList
-        title="Tipi scoperti"
-        hint="Nessun membro li colpisce in modo superefficace con mosse del proprio tipo."
+        title={t('analysis.uncoveredTitle')}
+        hint={t('analysis.uncoveredHint')}
         types={analysis.uncovered}
-        empty="Le mosse dei tipi della squadra colpiscono ×2 ogni tipo."
+        empty={t('analysis.uncoveredEmpty')}
       />
     </View>
   );

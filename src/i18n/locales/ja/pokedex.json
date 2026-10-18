@@ -1,0 +1,115 @@
+{
+  "common": {
+    "retry": "再試行",
+    "close": "閉じる",
+    "all": "すべて",
+    "settings": "設定",
+    "loading": "ポケモン図鑑を読み込み中",
+    "loadingShort": "読み込み中…"
+  },
+  "search": {
+    "placeholder": "名前で検索",
+    "accessibilityLabel": "ポケモンを名前で検索",
+    "clear": "検索をクリア"
+  },
+  "generation": {
+    "short": "第{{number}}世代",
+    "allGenerations": "すべての世代",
+    "pickerLabel": "世代：{{name}}",
+    "pickerLabelAll": "世代：すべて",
+    "pickerHint": "世代の選択を開きます"
+  },
+  "sectionMenu": {
+    "heading": "何を見ますか？",
+    "titleLabel": "{{title}}、セクションを切り替え"
+  },
+  "viewToggle": {
+    "grid": "グリッド表示",
+    "row": "リスト表示"
+  },
+  "card": {
+    "accessibilityLabelOneType": "{{name}}、No.{{number}}、{{type}}タイプ",
+    "accessibilityLabelTwoTypes": "{{name}}、No.{{number}}、{{type1}}・{{type2}}タイプ"
+  },
+  "header": {
+    "favoritesOnly": "お気に入りのみ",
+    "filters": "絞り込み",
+    "filtersActive_one": "絞り込み、{{count}}件適用中",
+    "filtersActive_other": "絞り込み、{{count}}件適用中",
+    "filtersHint": "タイプ・分類・並び順を開きます",
+    "shinyOnly": "ゲットした色違いのみ、{{total}}匹中{{count}}匹"
+  },
+  "caption": {
+    "all": "{{total}}匹 · {{generations}}世代",
+    "generation": "{{count}}匹 · {{name}} · {{region}}",
+    "search_one": "{{total}}匹中{{count}}件",
+    "search_other": "{{total}}匹中{{count}}件",
+    "searchInRegion_one": "{{region}}の{{total}}匹中{{count}}件",
+    "searchInRegion_other": "{{region}}の{{total}}匹中{{count}}件",
+    "searchFavorites_one": "お気に入りから{{count}}件",
+    "searchFavorites_other": "お気に入りから{{count}}件",
+    "searchShiny_one": "ゲットした色違いから{{count}}件",
+    "searchShiny_other": "ゲットした色違いから{{count}}件",
+    "pokemon_one": "{{count}}匹",
+    "pokemon_other": "{{count}}匹",
+    "favorites_one": "お気に入り{{count}}匹",
+    "favorites_other": "お気に入り{{count}}匹",
+    "shiny_one": "ゲットした色違い{{count}}匹",
+    "shiny_other": "ゲットした色違い{{count}}匹",
+    "sortedBy": "{{sort}}順",
+    "sortedByReversed": "{{sort}}順（逆順）"
+  },
+  "empty": {
+    "noConnection": "接続できません",
+    "noResults": "見つかりません",
+    "searchPokemon": "「{{query}}」という名前のポケモンはいません。",
+    "searchPokemonInRegion": "{{region}}に「{{query}}」という名前のポケモンはいません。",
+    "searchFavorites": "お気に入りに「{{query}}」という名前のポケモンはいません。",
+    "searchFavoritesInRegion": "{{region}}のお気に入りに「{{query}}」という名前のポケモンはいません。",
+    "searchShiny": "ゲットした色違いに「{{query}}」という名前のポケモンはいません。",
+    "searchShinyInRegion": "{{region}}のゲットした色違いに「{{query}}」という名前のポケモンはいません。",
+    "clearSearch": "検索をクリア",
+    "noFilterMatches": "この条件のポケモンはいません",
+    "filtersHint": "タイプか分類を外してみてください。",
+    "filtersHintWithScope": "タイプか分類を外すか、世代や表示するポケモンを変えてみてください。",
+    "resetFilters": "絞り込みをリセット",
+    "noFavorites": "お気に入りはまだありません",
+    "noFavoritesInRegion": "{{region}}のお気に入りはまだありません",
+    "favoritesHint": "ポケモンのページを開き、上のハートをタップするとお気に入りに追加できます。",
+    "noShiny": "ゲットした色違いはまだありません",
+    "noShinyInRegion": "{{region}}のゲットした色違いはまだありません",
+    "shinyHint": "ポケモンのページを開き、イラストの下の「色違いをゲット済みにする」をタップしてください。",
+    "showAll": "すべてのポケモンを表示"
+  },
+  "filters": {
+    "title": "絞り込み",
+    "close": "絞り込みを閉じる",
+    "reset": "リセット",
+    "types": "タイプ",
+    "bothTypes": "両方のタイプ",
+    "upToTwoTypes": "2つまで選べます",
+    "generation": "世代",
+    "allGenerations": "すべて",
+    "category": "分類",
+    "allCategories": "すべて",
+    "sortBy": "並び順",
+    "reverseOrder": "逆順",
+    "descending": "降順",
+    "ascending": "昇順",
+    "nameAscending": "ア → ン",
+    "nameDescending": "ン → ア",
+    "noPokemon": "該当なし",
+    "show_one": "{{count}}匹を表示",
+    "show_other": "{{count}}匹を表示",
+    "categories": {
+      "legendary": "伝説",
+      "mythical": "幻",
+      "baby": "ベイビィ"
+    },
+    "sort": {
+      "number": "番号",
+      "name": "名前",
+      "total": "合計"
+    }
+  }
+}

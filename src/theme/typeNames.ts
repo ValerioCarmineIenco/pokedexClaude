@@ -1,23 +1,6 @@
-import type { TypeName } from '@/types/pokemon';
+import { labelMap } from '@/i18n';
+import { localName } from '@/i18n/names';
+import { TYPE_NAMES, type TypeName } from '@/types/pokemon';
 
-/** Nomi italiani dei 18 tipi. */
-export const TYPE_NAMES_IT: Record<TypeName, string> = {
-  normal: 'Normale',
-  fire: 'Fuoco',
-  water: 'Acqua',
-  electric: 'Elettro',
-  grass: 'Erba',
-  ice: 'Ghiaccio',
-  fighting: 'Lotta',
-  poison: 'Veleno',
-  ground: 'Terra',
-  flying: 'Volante',
-  psychic: 'Psico',
-  bug: 'Coleottero',
-  rock: 'Roccia',
-  ghost: 'Spettro',
-  dragon: 'Drago',
-  dark: 'Buio',
-  steel: 'Acciaio',
-  fairy: 'Folletto',
-};
+/** Nomi dei 18 tipi nella lingua in uso, da PokéAPI. */
+export const TYPE_LABELS: Record<TypeName, string> = labelMap(TYPE_NAMES, (type) => localName('type', type));

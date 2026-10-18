@@ -1,0 +1,33 @@
+{
+  "back": "Back",
+  "title": "Compare",
+  "offlineTitle": "No connection",
+  "offlineMessage": "Can't reach the Pokédex. Check your network and try again.",
+  "retry": "Try again",
+  "sections": {
+    "stats": "Base stats",
+    "abilities": "Abilities",
+    "typeEffectiveness": "Type effectiveness"
+  },
+  "hiddenAbility": "Hidden",
+  "typeEffectivenessHint": "Damage taken from moves of each type. Only types that don’t deal normal damage (×1) to both are listed; the Pokémon that takes less is in green.",
+  "defenseUnavailable": "Type effectiveness unavailable.",
+  "openA11y": "Open the page for {{name}}",
+  "artworkA11y": "Artwork of {{name}}",
+  "changeA11y": "Choose another Pokémon instead of {{name}}",
+  "change": "Change",
+  "total": "Total",
+  "even": "Tie",
+  "table": {
+    "type": "Type",
+    "weaknesses": "Weaknesses",
+    "resistances": "Resistances"
+  },
+  "picker": {
+    "emptyTitle": "No Pokémon found",
+    "emptyMessage": "No Pokémon is called \"{{query}}\".",
+    "clearSearch": "Clear search",
+    "compareWith": "Compare with {{name}}",
+    "choose": "Choose a Pokémon"
+  }
+}

@@ -1,0 +1,106 @@
+{
+  "detail": {
+    "back": "Back to the list",
+    "addFavorite": "Add to favorites",
+    "removeFavorite": "Remove from favorites",
+    "previous": "Previous Pokémon, {{number}}",
+    "noPrevious": "No previous Pokémon",
+    "next": "Next Pokémon, {{number}}",
+    "noNext": "No next Pokémon",
+    "notFoundTitle": "Pokémon not found",
+    "invalidId": "This Pokédex only contains the {{total}} Pokémon of {{regions}}.",
+    "regionList": "{{list}} and {{last}}",
+    "listSeparator": ", ",
+    "offlineTitle": "No connection",
+    "offlineMessage": "Can't reach the Pokédex. Check your network and try again.",
+    "retry": "Retry",
+    "artworkLabel": "Artwork of {{name}}",
+    "artworkShinyLabel": "Shiny artwork of {{name}}",
+    "noDescription": "No description available.",
+    "height": "Height",
+    "weight": "Weight",
+    "compareLabel": "Compare {{name}} with another Pokémon",
+    "compare": "Compare with another Pokémon",
+    "abilities": "Abilities",
+    "hiddenAbilityLabel": "{{name}}, hidden ability",
+    "openAbility": "Opens the ability",
+    "hidden": "Hidden",
+    "baseStats": "Base stats",
+    "total": "Total"
+  },
+  "tabs": {
+    "info": "Info",
+    "evolutions": "Evolutions",
+    "moves": "Moves",
+    "artwork": "Artwork"
+  },
+  "shiny": {
+    "show": "Show shiny",
+    "caught": "Shiny caught",
+    "markCaught": "Mark shiny as caught"
+  },
+  "typeDefense": {
+    "title": "Type effectiveness",
+    "hint": "Damage taken from moves of each type. All other types deal normal damage (×1).",
+    "rows": {
+      "quadruple": "Very weak to",
+      "double": "Weak to",
+      "half": "Resistant to",
+      "quarter": "Very resistant to",
+      "immune": "Immune to"
+    },
+    "noTypes": "No types"
+  },
+  "artwork": {
+    "unavailableTitle": "Artwork unavailable",
+    "unavailableMessage": "Can't load the images. Check your network and try again.",
+    "imageCount_one": "{{count}} image",
+    "imageCount_other": "{{count}} images",
+    "generationLabel_one": "{{title}}, {{count}} image",
+    "generationLabel_other": "{{title}}, {{count}} images",
+    "gameSprites": "Game sprites",
+    "close": "Close image",
+    "groups": {
+      "official": "Official artwork",
+      "base": "Base sprites",
+      "animated": "{{title}} · animated",
+      "icons": "{{title}} · icons"
+    },
+    "games": {
+      "pair": "{{first}} and {{second}}",
+      "icons": "Icons"
+    },
+    "variants": {
+      "normal": "Normal",
+      "female": "Female",
+      "front": "Front",
+      "back": "Back",
+      "sideWithModifiers": "{{side}} {{modifiers}}"
+    },
+    "modifiers": {
+      "shiny": "shiny",
+      "female": "♀",
+      "gray": "grayscale",
+      "gbc": "in color (GBC)"
+    }
+  },
+  "forms": {
+    "title": "Forms",
+    "kinds": {
+      "base": "Base form",
+      "mega": "Mega Evolution",
+      "regional": "Regional form",
+      "gmax": "Gigantamax",
+      "special": "Special form"
+    },
+    "mega": "Mega",
+    "megaVariant": "Mega {{variant}}",
+    "artworkLabel": "Artwork of {{name}}, {{form}}",
+    "difference": "{{value}} compared to the base form"
+  },
+  "encounters": {
+    "title": "Where to find it",
+    "empty": "{{name}} isn't found in the wild in any game: you get it by evolving another Pokémon, from an Egg or through a special event.",
+    "openLocation": "Opens the location"
+  }
+}

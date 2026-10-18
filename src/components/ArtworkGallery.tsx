@@ -1,5 +1,6 @@
 import { Image } from 'expo-image';
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Modal, Pressable, StyleSheet, Text, useWindowDimensions, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
@@ -30,6 +31,7 @@ export function ArtworkGallery({ artworks, isLoading, errorMessage, pokemonName,
   const { width } = useWindowDimensions();
   const tileSize = Math.floor((width - SHEET_PADDING * 2 - GAP * (COLUMNS - 1)) / COLUMNS);
   const [selected, setSelected] = useState<{ image: ArtworkImage; group: string } | null>(null);
+  const { t } = useTranslation('pokemon');
 
   if (isLoading) {
     return (
@@ -47,9 +49,9 @@ export function ArtworkGallery({ artworks, isLoading, errorMessage, pokemonName,
   if (!artworks) {
     return (
       <ErrorState
-        title="Artwork non disponibili"
-        message={errorMessage ?? 'Non riesco a caricare le immagini. Controlla la rete e riprova.'}
-        actionLabel="Riprova"
+        title={t('artwork.unavailableTitle')}
+        message={errorMessage ?? t('artwork.unavailableMessage')}
+        actionLabel={t('detail.retry')}
         onAction={onRetry}
       />
     );
@@ -77,14 +79,14 @@ export function ArtworkGallery({ artworks, isLoading, errorMessage, pokemonName,
   return (
     <View style={styles.gallery}>
       <Text style={styles.count}>
-        {artworks.imageCount === 1 ? '1 immagine' : `${artworks.imageCount} immagini`}
+        {t('artwork.imageCount', { count: artworks.imageCount })}
       </Text>
       {artworks.featured.map(renderGroup)}
 
       {artworks.generations.length > 0 && (
         <View style={styles.group}>
           <Text style={styles.sectionTitle} accessibilityRole="header">
-            Sprite dei giochi
+            {t('artwork.gameSprites')}
           </Text>
           {artworks.generations.map((generation) => (
             <GenerationSection key={generation.id} generation={generation} renderGroup={renderGroup} />
@@ -110,13 +112,14 @@ function GenerationSection({
   renderGroup: (group: ArtworkGroup) => React.ReactNode;
 }) {
   const [open, setOpen] = useState(false);
+  const { t } = useTranslation('pokemon');
   return (
     <View style={styles.generation}>
       <Pressable
         onPress={() => setOpen((value) => !value)}
         accessibilityRole="button"
         accessibilityState={{ expanded: open }}
-        accessibilityLabel={`${generation.title}, ${generation.imageCount} immagini`}
+        accessibilityLabel={t('artwork.generationLabel', { title: generation.title, count: generation.imageCount })}
         style={({ pressed }) => [styles.generationHeader, pressed && styles.pressed]}>
         <Text style={styles.generationTitle}>{generation.title}</Text>
         <Text style={styles.generationCount}>{generation.imageCount}</Text>
@@ -173,13 +176,14 @@ function ArtworkViewer({
   const { width, height } = useWindowDimensions();
   const insets = useSafeAreaInsets();
   const size = Math.min(width - 48, height * 0.6, 480);
+  const { t } = useTranslation('pokemon');
   return (
     <Modal visible={image !== null} transparent animationType="fade" onRequestClose={onClose}>
       <Pressable
         style={[styles.viewer, { paddingTop: insets.top, paddingBottom: insets.bottom }]}
         onPress={onClose}
         accessibilityRole="button"
-        accessibilityLabel="Chiudi immagine">
+        accessibilityLabel={t('artwork.close')}>
         {image && (
           <>
             <View style={[styles.viewerCard, { width: size, height: size }]}>

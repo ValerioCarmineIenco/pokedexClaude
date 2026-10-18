@@ -1,4 +1,4 @@
-import { TYPE_NAMES_IT } from '@/theme/typeNames';
+import { TYPE_LABELS } from '@/theme/typeNames';
 import type { MatchupType, TypeMatchups } from '@/types/move';
 import { TYPE_NAMES, type TypeName } from '@/types/pokemon';
 
@@ -33,7 +33,7 @@ export function getDefenseGroups(matchups: TypeMatchups[]): DefenseGroup[] {
     multiplier,
     types: TYPE_NAMES.filter((type) => multipliers[type] === multiplier).map((type) => ({
       type,
-      label: TYPE_NAMES_IT[type],
+      label: TYPE_LABELS[type],
     })),
   }));
 }

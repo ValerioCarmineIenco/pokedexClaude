@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import { Pressable, ScrollView, StyleSheet, Text } from 'react-native';
 
 import type { LocationRegion } from '@/types/location';
@@ -12,12 +13,13 @@ type Props = {
 };
 
 function Chip({ label, selected, onPress }: { label: string; selected: boolean; onPress: () => void }) {
+  const { t } = useTranslation('locations');
   return (
     <Pressable
       onPress={onPress}
       accessibilityRole="button"
       accessibilityState={{ selected }}
-      accessibilityLabel={`Regione: ${label}`}
+      accessibilityLabel={t('regions.a11y', { region: label })}
       style={({ pressed }) => [styles.chip, selected && styles.chipSelected, pressed && styles.pressed]}>
       <Text style={[styles.label, selected && styles.labelSelected]}>{label}</Text>
     </Pressable>
@@ -26,13 +28,14 @@ function Chip({ label, selected, onPress }: { label: string; selected: boolean; 
 
 /** Fila di regioni scorrevole in orizzontale, con «Tutte» in testa. */
 export function RegionChips({ regions, value, onChange }: Props) {
+  const { t } = useTranslation('locations');
   return (
     <ScrollView
       horizontal
       showsHorizontalScrollIndicator={false}
       contentContainerStyle={styles.row}
       style={styles.scroll}>
-      <Chip label="Tutte" selected={value === null} onPress={() => onChange(null)} />
+      <Chip label={t('regions.all')} selected={value === null} onPress={() => onChange(null)} />
       {regions.map((region) => (
         <Chip
           key={region.name}

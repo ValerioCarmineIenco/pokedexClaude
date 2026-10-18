@@ -1,0 +1,106 @@
+{
+  "detail": {
+    "back": "Torna all'elenco",
+    "addFavorite": "Aggiungi ai preferiti",
+    "removeFavorite": "Togli dai preferiti",
+    "previous": "Pokémon precedente, {{number}}",
+    "noPrevious": "Nessun precedente",
+    "next": "Pokémon successivo, {{number}}",
+    "noNext": "Nessun successivo",
+    "notFoundTitle": "Pokémon non trovato",
+    "invalidId": "Questo Pokédex contiene solo i {{total}} Pokémon di {{regions}}.",
+    "regionList": "{{list}} e {{last}}",
+    "listSeparator": ", ",
+    "offlineTitle": "Nessuna connessione",
+    "offlineMessage": "Non riesco a raggiungere il Pokédex. Controlla la rete e riprova.",
+    "retry": "Riprova",
+    "artworkLabel": "Artwork di {{name}}",
+    "artworkShinyLabel": "Artwork shiny di {{name}}",
+    "noDescription": "Nessuna descrizione in italiano disponibile.",
+    "height": "Altezza",
+    "weight": "Peso",
+    "compareLabel": "Confronta {{name}} con un altro Pokémon",
+    "compare": "Confronta con un altro Pokémon",
+    "abilities": "Abilità",
+    "hiddenAbilityLabel": "{{name}}, abilità nascosta",
+    "openAbility": "Apre l'abilità",
+    "hidden": "Nascosta",
+    "baseStats": "Statistiche base",
+    "total": "Totale"
+  },
+  "tabs": {
+    "info": "Info",
+    "evolutions": "Evoluzioni",
+    "moves": "Mosse",
+    "artwork": "Artwork"
+  },
+  "shiny": {
+    "show": "Mostra shiny",
+    "caught": "Shiny ottenuto",
+    "markCaught": "Segna shiny ottenuto"
+  },
+  "typeDefense": {
+    "title": "Efficacia dei tipi",
+    "hint": "Danno subito dalle mosse di ciascun tipo. Tutti gli altri tipi fanno danno normale (×1).",
+    "rows": {
+      "quadruple": "Molto debole a",
+      "double": "Debole a",
+      "half": "Resistente a",
+      "quarter": "Molto resistente a",
+      "immune": "Immune a"
+    },
+    "noTypes": "Nessun tipo"
+  },
+  "artwork": {
+    "unavailableTitle": "Artwork non disponibili",
+    "unavailableMessage": "Non riesco a caricare le immagini. Controlla la rete e riprova.",
+    "imageCount_one": "{{count}} immagine",
+    "imageCount_other": "{{count}} immagini",
+    "generationLabel_one": "{{title}}, {{count}} immagine",
+    "generationLabel_other": "{{title}}, {{count}} immagini",
+    "gameSprites": "Sprite dei giochi",
+    "close": "Chiudi immagine",
+    "groups": {
+      "official": "Artwork ufficiale",
+      "base": "Sprite base",
+      "animated": "{{title}} · animati",
+      "icons": "{{title}} · icone"
+    },
+    "games": {
+      "pair": "{{first}} e {{second}}",
+      "icons": "Icone"
+    },
+    "variants": {
+      "normal": "Normale",
+      "female": "Femmina",
+      "front": "Fronte",
+      "back": "Retro",
+      "sideWithModifiers": "{{side}} {{modifiers}}"
+    },
+    "modifiers": {
+      "shiny": "shiny",
+      "female": "♀",
+      "gray": "in grigio",
+      "gbc": "a colori (GBC)"
+    }
+  },
+  "forms": {
+    "title": "Forme",
+    "kinds": {
+      "base": "Forma base",
+      "mega": "Megaevoluzione",
+      "regional": "Forma regionale",
+      "gmax": "Gigamax",
+      "special": "Forma speciale"
+    },
+    "mega": "Mega",
+    "megaVariant": "Mega {{variant}}",
+    "artworkLabel": "Artwork di {{name}}, {{form}}",
+    "difference": "{{value}} rispetto alla forma base"
+  },
+  "encounters": {
+    "title": "Dove trovarlo",
+    "empty": "{{name}} non si incontra in natura in nessun gioco: si ottiene evolvendo un altro Pokémon, da un uovo o con un evento speciale.",
+    "openLocation": "Apre la località"
+  }
+}

@@ -1,0 +1,369 @@
+{
+  "list": {
+    "count_one": "{{count}} località",
+    "count_other": "{{count}} località",
+    "results_one": "{{count}} risultato",
+    "results_other": "{{count}} risultati",
+    "searchLabel": "Cerca una località per nome",
+    "noResults": "Nessun risultato",
+    "emptySearch": "Nessuna località si chiama \"{{query}}\".",
+    "emptySearchInRegion": "Nessuna località di {{region}} si chiama \"{{query}}\".",
+    "empty": "Nessuna località ha incontri registrati.",
+    "emptyInRegion": "Nessuna località di {{region}} ha incontri registrati.",
+    "clearSearch": "Cancella ricerca"
+  },
+  "card": {
+    "pokemon_one": "{{count}} Pokémon",
+    "pokemon_other": "{{count}} Pokémon",
+    "games_one": "{{count}} gioco",
+    "games_other": "{{count}} giochi",
+    "a11y": "{{name}}. {{pokemon}}, {{games}}.",
+    "a11yWithRegion": "{{name}}, {{region}}. {{pokemon}}, {{games}}."
+  },
+  "regions": {
+    "all": "Tutte",
+    "a11y": "Regione: {{region}}"
+  },
+  "detail": {
+    "back": "Torna alle località",
+    "invalidTitle": "Località non trovata",
+    "invalidMessage": "Questa località non esiste nel Pokédex.",
+    "offlineTitle": "Nessuna connessione",
+    "offlineMessage": "Non riesco a raggiungere il Pokédex. Controlla la rete e riprova.",
+    "retry": "Riprova",
+    "empty": "Nessun Pokémon selvatico in questa località.",
+    "areas": "Aree",
+    "mainArea": "Principale",
+    "encounterA11y": "{{name}}, livello {{level}}, probabilità {{chance}}",
+    "chanceUnknown": "non indicata",
+    "level": "Livello {{level}}",
+    "chance": "Prob. {{chance}}",
+    "percent": "{{value}}%"
+  },
+  "errors": {
+    "notFound": "Località non trovata."
+  },
+  "conditions": {
+    "fixed": {
+      "swarm-yes": "Durante uno sciame",
+      "swarm-no": "Senza sciame",
+      "radar-on": "Con il Poké Radar",
+      "radar-off": "Senza Poké Radar",
+      "radio-off": "Radio spenta",
+      "radio-hoenn": "Musica di Hoenn alla radio",
+      "radio-sinnoh": "Musica di Sinnoh alla radio",
+      "slot2-none": "Nessuna cartuccia GBA",
+      "headbutt-tree-common": "Albero comune",
+      "headbutt-tree-rare": "Albero raro",
+      "headbutt-tree-secret": "Albero segreto"
+    },
+    "time": {
+      "morning": "Mattino",
+      "day": "Giorno",
+      "night": "Notte"
+    },
+    "season": {
+      "spring": "Primavera",
+      "summer": "Estate",
+      "autumn": "Autunno",
+      "winter": "Inverno"
+    },
+    "weekday": {
+      "monday": "Lunedì",
+      "tuesday": "Martedì",
+      "wednesday": "Mercoledì",
+      "thursday": "Giovedì",
+      "friday": "Venerdì",
+      "saturday": "Sabato",
+      "sunday": "Domenica"
+    },
+    "weather": {
+      "normal": "Sereno",
+      "overcast": "Nuvoloso",
+      "raining": "Pioggia",
+      "thunderstorm": "Temporale",
+      "snowing": "Neve",
+      "snowstorm": "Bufera di neve",
+      "sandstorm": "Tempesta di sabbia",
+      "intense-sun": "Sole intenso",
+      "fog": "Nebbia"
+    },
+    "weatherLabel": "Meteo: {{weather}}",
+    "minutes": "Minuti {{from}}–{{to}}",
+    "hours": "Ore {{from}}–{{to}}",
+    "coins_one": "{{coins}} gettoni",
+    "coins_other": "{{coins}} gettoni",
+    "slot2": "Con {{game}} nello slot GBA",
+    "starter": "Starter scelto: {{pokemon}}",
+    "trade": "In cambio di {{pokemon}}",
+    "tradeAny": "In cambio di un Pokémon qualsiasi",
+    "either": "{{first}} o {{second}}",
+    "regionalForm": "{{name}} di {{region}}"
+  },
+  "methods": {
+    "walk": {
+      "label": "Erba alta e grotte",
+      "description": "Camminando nell’erba alta o in una grotta"
+    },
+    "old-rod": {
+      "label": "Amo Vecchio",
+      "description": "Pescando con l’Amo Vecchio"
+    },
+    "good-rod": {
+      "label": "Amo Buono",
+      "description": "Pescando con l’Amo Buono"
+    },
+    "super-rod": {
+      "label": "Super Amo",
+      "description": "Pescando con il Super Amo"
+    },
+    "surf": {
+      "label": "Surf",
+      "description": "Facendo Surf sull’acqua"
+    },
+    "rock-smash": {
+      "label": "Spaccaroccia",
+      "description": "Usando Spaccaroccia sulle rocce fragili"
+    },
+    "headbutt": {
+      "label": "Bottintesta",
+      "description": "Usando Bottintesta sugli alberi"
+    },
+    "headbutt-low": {
+      "label": "Bottintesta (raro)",
+      "description": "Usando Bottintesta sugli alberi, con poche probabilità"
+    },
+    "headbutt-normal": {
+      "label": "Bottintesta",
+      "description": "Usando Bottintesta sugli alberi"
+    },
+    "headbutt-high": {
+      "label": "Bottintesta (frequente)",
+      "description": "Usando Bottintesta sugli alberi, con molte probabilità"
+    },
+    "dark-grass": {
+      "label": "Erba scura",
+      "description": "Camminando nell’erba alta scura"
+    },
+    "grass-spots": {
+      "label": "Erba che si muove",
+      "description": "Camminando nell’erba che si agita"
+    },
+    "cave-spots": {
+      "label": "Polvere nelle grotte",
+      "description": "Camminando sulla polvere che si alza nelle grotte"
+    },
+    "bridge-spots": {
+      "label": "Ombre sui ponti",
+      "description": "Camminando sulle ombre dei ponti"
+    },
+    "super-rod-spots": {
+      "label": "Increspature (pesca)",
+      "description": "Pescando con il Super Amo nelle increspature"
+    },
+    "surf-spots": {
+      "label": "Increspature (Surf)",
+      "description": "Facendo Surf nelle increspature"
+    },
+    "yellow-flowers": {
+      "label": "Fiori gialli",
+      "description": "Camminando tra i fiori gialli"
+    },
+    "purple-flowers": {
+      "label": "Fiori viola",
+      "description": "Camminando tra i fiori viola"
+    },
+    "red-flowers": {
+      "label": "Fiori rossi",
+      "description": "Camminando tra i fiori rossi"
+    },
+    "rough-terrain": {
+      "label": "Terreno accidentato",
+      "description": "Camminando sul terreno accidentato"
+    },
+    "gift": {
+      "label": "Regalo",
+      "description": "Pokémon ricevuto in regalo"
+    },
+    "gift-egg": {
+      "label": "Uovo in regalo",
+      "description": "Uovo ricevuto in regalo"
+    },
+    "static": {
+      "label": "Incontro fisso",
+      "description": "Pokémon visibile in un punto preciso"
+    },
+    "pokeflute": {
+      "label": "Poké Flauto",
+      "description": "Svegliandolo con il Poké Flauto"
+    },
+    "squirt-bottle": {
+      "label": "Annaffiatoio",
+      "description": "Usando l’Annaffiatoio sull’albero che si muove"
+    },
+    "wailmer-pail": {
+      "label": "Wailmissaffiatoio",
+      "description": "Usando il Wailmissaffiatoio sull’albero che si muove"
+    },
+    "seaweed": {
+      "label": "Alghe",
+      "description": "Immergendosi tra le alghe"
+    },
+    "roaming-grass": {
+      "label": "Vagante (erba)",
+      "description": "Pokémon vagante, nell’erba alta"
+    },
+    "roaming-water": {
+      "label": "Vagante (acqua)",
+      "description": "Pokémon vagante, sull’acqua"
+    },
+    "devon-scope": {
+      "label": "Devonscopio",
+      "description": "Usando il Devonscopio sul Pokémon invisibile"
+    },
+    "feebas-tile-fishing": {
+      "label": "Pesca di Feebas",
+      "description": "Pescando nei punti speciali del fiume"
+    },
+    "island-scan": {
+      "label": "Scansione Isola",
+      "description": "Usando la Scansione Isola"
+    },
+    "sos": {
+      "label": "Chiamata SOS",
+      "description": "Chiamato in aiuto da un Pokémon selvatico"
+    },
+    "bubbling-spots": {
+      "label": "Bolle (pesca)",
+      "description": "Pescando dove l’acqua fa le bolle"
+    },
+    "berry-trees": {
+      "label": "Alberi di bacche",
+      "description": "Raccogliendo le bacche dagli alberi"
+    },
+    "npc-trade": {
+      "label": "Scambio",
+      "description": "Scambio con un personaggio del gioco"
+    },
+    "sos-from-bubbling-spot": {
+      "label": "SOS dalle bolle",
+      "description": "Chiamato in aiuto da un Pokémon pescato nelle bolle"
+    },
+    "overworld": {
+      "label": "Visibile",
+      "description": "Pokémon visibile nell’ambiente"
+    },
+    "overworld-water": {
+      "label": "Visibile in acqua",
+      "description": "Pokémon visibile sull’acqua"
+    },
+    "overworld-flying": {
+      "label": "Visibile in volo",
+      "description": "Pokémon visibile in volo"
+    },
+    "overworld-special": {
+      "label": "Visibile (speciale)",
+      "description": "Pokémon visibile in condizioni speciali"
+    },
+    "overworld-flying-special": {
+      "label": "Visibile in volo (speciale)",
+      "description": "Pokémon visibile in volo, in condizioni speciali"
+    },
+    "overworld-water-special": {
+      "label": "Visibile in acqua (speciale)",
+      "description": "Pokémon visibile sull’acqua, in condizioni speciali"
+    },
+    "overworld-dirt": {
+      "label": "Visibile sul terreno",
+      "description": "Pokémon visibile che spunta dal terreno"
+    },
+    "horde": {
+      "label": "Orda",
+      "description": "Incontro con un’orda di cinque Pokémon"
+    },
+    "colosseum-bonus-disc-us": {
+      "label": "Disco bonus Colosseum (USA)",
+      "description": "Dal disco bonus americano di Colosseum"
+    },
+    "colosseum-bonus-disc-jpn": {
+      "label": "Disco bonus Colosseum (JP)",
+      "description": "Dal disco bonus giapponese di Colosseum"
+    },
+    "pokemon-channel-pal": {
+      "label": "Pokémon Channel",
+      "description": "Da Pokémon Channel (versione europea)"
+    },
+    "pokemon-ranger": {
+      "label": "Pokémon Ranger",
+      "description": "Trasferito da Pokémon Ranger"
+    },
+    "pokemon-battle-revolution": {
+      "label": "Battle Revolution",
+      "description": "Da Pokémon Battle Revolution"
+    },
+    "new-york-pokecenter-wish-eggs": {
+      "label": "Uova del Pokémon Center NY",
+      "description": "Uova dell’evento del Pokémon Center di New York"
+    },
+    "snag": {
+      "label": "Cattura",
+      "description": "Catturato a un allenatore con la Snag Machine"
+    },
+    "snag-rematch": {
+      "label": "Cattura (rivincita)",
+      "description": "Catturato a un allenatore nella rivincita"
+    },
+    "pokespot": {
+      "label": "Poképosto",
+      "description": "Attirato al Poképosto con i Poképastelli"
+    },
+    "hidden-grotto": {
+      "label": "Meandro Nascosto",
+      "description": "Trovato in un Meandro Nascosto"
+    },
+    "honey-tree": {
+      "label": "Albero di miele",
+      "description": "Spalmando il Miele sull’albero"
+    },
+    "wanderer": {
+      "label": "Vagabondo",
+      "description": "Pokémon che si aggira nell’ambiente"
+    },
+    "wanderer-water": {
+      "label": "Vagabondo in acqua",
+      "description": "Pokémon che si aggira sull’acqua"
+    },
+    "chase-water": {
+      "label": "Inseguimento in acqua",
+      "description": "Pokémon che insegue in acqua"
+    },
+    "dynamax-adventure": {
+      "label": "Avventura Dynamax",
+      "description": "Incontrato in un’Avventura Dynamax"
+    },
+    "max-raid": {
+      "label": "Raid Dynamax",
+      "description": "Incontrato in un Raid Dynamax"
+    },
+    "trash-can-ambush": {
+      "label": "Agguato dal bidone",
+      "description": "Salta fuori da un bidone dei rifiuti"
+    },
+    "rustling-bush-ambush": {
+      "label": "Agguato dal cespuglio",
+      "description": "Salta fuori da un cespuglio che si muove"
+    },
+    "ceiling-ambush": {
+      "label": "Agguato dal soffitto",
+      "description": "Cade dal soffitto"
+    },
+    "ground-ambush": {
+      "label": "Agguato dal terreno",
+      "description": "Salta fuori dal terreno"
+    },
+    "sky-ambush": {
+      "label": "Agguato dal cielo",
+      "description": "Piomba dal cielo"
+    }
+  }
+}

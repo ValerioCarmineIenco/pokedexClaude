@@ -1,10 +1,11 @@
+import { useTranslation } from 'react-i18next';
 import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { getEffectiveness } from '@/api/types';
 import { colors } from '@/theme/colors';
 import { fonts } from '@/theme/fonts';
-import { TYPE_NAMES_IT } from '@/theme/typeNames';
+import { TYPE_LABELS } from '@/theme/typeNames';
 import { TYPE_NAMES, type TypeName } from '@/types/pokemon';
 
 import { SectionTitle } from '../SectionTitle';
@@ -16,11 +17,13 @@ import { TypeIcon } from './TypeIcon';
 const CELL = 30;
 const SIDE = 16;
 
-/** Aspetto delle caselle diverse da ×1. */
-const CELL_STYLES: Record<number, { label: string; background: string; text: string; spoken: string }> = {
-  2: { label: '2', background: colors.statUp, text: '#FFFFFF', spoken: 'superefficace, per 2' },
-  0.5: { label: '½', background: colors.statDown, text: '#FFFFFF', spoken: 'poco efficace, per un mezzo' },
-  0: { label: '0', background: colors.text, text: '#FFFFFF', spoken: 'nessun effetto' },
+type Effect = 'superEffective' | 'notVeryEffective' | 'noEffect';
+
+/** Aspetto delle caselle diverse da ×1; `effect` dà la legenda e il testo letto dallo screen reader. */
+const CELL_STYLES: Record<number, { label: string; background: string; text: string; effect: Effect }> = {
+  2: { label: '2', background: colors.statUp, text: '#FFFFFF', effect: 'superEffective' },
+  0.5: { label: '½', background: colors.statDown, text: '#FFFFFF', effect: 'notVeryEffective' },
+  0: { label: '0', background: colors.text, text: '#FFFFFF', effect: 'noEffect' },
 };
 
 export type TypeChartViewProps = {
@@ -32,6 +35,7 @@ export type TypeChartViewProps = {
  * La tabella scorre in orizzontale, con la colonna dei tipi attaccanti sempre visibile.
  */
 export function TypeChartView({ onPressType }: TypeChartViewProps) {
+  const { t } = useTranslation('types');
   const insets = useSafeAreaInsets();
 
   return (
@@ -47,16 +51,16 @@ export function TypeChartView({ onPressType }: TypeChartViewProps) {
 
       <View style={styles.section}>
         <Text style={styles.sectionTitle} accessibilityRole="header">
-          Tutti i tipi
+          {t('chart.allTypes')}
         </Text>
-        <Text style={styles.hint}>Tocca un tipo per vedere efficacia, Pokémon e mosse.</Text>
+        <Text style={styles.hint}>{t('chart.allTypesHint')}</Text>
         <View style={styles.typeGrid}>
           {TYPE_NAMES.map((type) => (
             <Pressable
               key={type}
               onPress={() => onPressType(type)}
               accessibilityRole="button"
-              accessibilityLabel={`Tipo ${TYPE_NAMES_IT[type]}`}
+              accessibilityLabel={t('typeA11y', { type: TYPE_LABELS[type] })}
               style={({ pressed }) => pressed && styles.pressed}>
               <TypeBadge type={type} size="large" />
             </Pressable>
@@ -66,12 +70,9 @@ export function TypeChartView({ onPressType }: TypeChartViewProps) {
 
       <View style={styles.section}>
         <Text style={styles.sectionTitle} accessibilityRole="header">
-          Tabella delle efficacie
+          {t('chart.title')}
         </Text>
-        <Text style={styles.hint}>
-          Righe: tipo della mossa. Colonne: tipo del Pokémon colpito. Tocca un’icona per il dettaglio del
-          tipo. Le caselle vuote sono danno normale (×1).
-        </Text>
+        <Text style={styles.hint}>{t('chart.hint')}</Text>
         <View style={styles.legend}>
           {[2, 0.5, 0].map((multiplier) => {
             const cell = CELL_STYLES[multiplier];
@@ -80,9 +81,7 @@ export function TypeChartView({ onPressType }: TypeChartViewProps) {
                 <View style={[styles.legendSwatch, { backgroundColor: cell.background }]}>
                   <Text style={[styles.cellLabel, { color: cell.text }]}>{cell.label}</Text>
                 </View>
-                <Text style={styles.legendLabel}>
-                  {multiplier === 2 ? 'Superefficace' : multiplier === 0 ? 'Nessun effetto' : 'Poco efficace'}
-                </Text>
+                <Text style={styles.legendLabel}>{t(`chart.legend.${cell.effect}`)}</Text>
               </View>
             );
           })}
@@ -97,7 +96,7 @@ export function TypeChartView({ onPressType }: TypeChartViewProps) {
               key={type}
               onPress={() => onPressType(type)}
               accessibilityRole="button"
-              accessibilityLabel={`Tipo ${TYPE_NAMES_IT[type]}`}
+              accessibilityLabel={t('typeA11y', { type: TYPE_LABELS[type] })}
               style={({ pressed }) => pressed && styles.pressed}>
               <TypeIcon type={type} size={CELL} />
             </Pressable>
@@ -111,7 +110,7 @@ export function TypeChartView({ onPressType }: TypeChartViewProps) {
                   key={type}
                   onPress={() => onPressType(type)}
                   accessibilityRole="button"
-                  accessibilityLabel={`Tipo ${TYPE_NAMES_IT[type]}`}
+                  accessibilityLabel={t('typeA11y', { type: TYPE_LABELS[type] })}
                   style={({ pressed }) => pressed && styles.pressed}>
                   <TypeIcon type={type} size={CELL} />
                 </Pressable>
@@ -125,9 +124,11 @@ export function TypeChartView({ onPressType }: TypeChartViewProps) {
                     <View
                       key={defender}
                       accessible
-                      accessibilityLabel={`${TYPE_NAMES_IT[attacker]} contro ${TYPE_NAMES_IT[defender]}: ${
-                        cell?.spoken ?? 'danno normale'
-                      }`}
+                      accessibilityLabel={t('chart.cellA11y', {
+                        attacker: TYPE_LABELS[attacker],
+                        defender: TYPE_LABELS[defender],
+                        effect: t(`chart.spoken.${cell?.effect ?? 'normal'}`),
+                      })}
                       style={[styles.cell, cell && { backgroundColor: cell.background }]}>
                       {cell && <Text style={[styles.cellLabel, { color: cell.text }]}>{cell.label}</Text>}
                     </View>

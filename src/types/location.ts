@@ -22,7 +22,7 @@ export type LocationRegion = {
   id: number;
   /** Slug (es. `unova`). */
   name: string;
-  /** Nome italiano (es. «Unima»). */
+  /** Nome nella lingua in uso (es. «Unima»). */
   label: string;
 };
 
@@ -31,7 +31,7 @@ export type GameVersion = {
   id: number;
   /** Slug (es. `firered`). */
   name: string;
-  /** Nome italiano (es. «Rosso Fuoco»). */
+  /** Nome nella lingua in uso (es. «Rosso Fuoco»). */
   label: string;
   /** Generazione del gioco. */
   generation: number;
@@ -42,9 +42,9 @@ export type LocationSummary = {
   id: number;
   /** Slug di PokéAPI. */
   slug: string;
-  /** Nome mostrato (italiano, altrimenti inglese). */
+  /** Nome mostrato, nella lingua in uso (altrimenti inglese). */
   name: string;
-  /** Nome inglese (uguale a `name` se PokéAPI non ha l'italiano). */
+  /** Nome inglese (per la ricerca). */
   englishName: string;
   region: LocationRegion | null;
   /** Pokémon diversi incontrabili (le forme regionali contano a parte). */
@@ -65,7 +65,7 @@ export type LocationSection = {
 export type EncounterMethod = {
   /** Slug (es. `rock-smash`). */
   name: string;
-  /** Nome breve italiano (es. «Spaccaroccia»). */
+  /** Nome breve nella lingua in uso (es. «Spaccaroccia»). */
   label: string;
   /** Spiegazione in una riga (es. «Usa Spaccaroccia sulle rocce fragili»). */
   description: string;
@@ -77,7 +77,7 @@ export type EncounterCondition = {
   name: string;
   /** Slug della condizione a cui appartiene (es. `time`). */
   condition: string;
-  /** Testo da mostrare: italiano per i casi comuni, altrimenti l'inglese di PokéAPI. */
+  /** Testo da mostrare nella lingua in uso (tradotto o di PokéAPI), altrimenti inglese. */
   label: string;
   /**
    * Il caso «normale» (nessuno sciame, radio spenta, nessun oggetto…): la UI può nasconderlo.
@@ -88,8 +88,10 @@ export type EncounterCondition = {
 export type EncounterPokemon = {
   /** Id di `/pokemon`: le forme regionali hanno id da 10001. */
   id: number;
-  /** Nome grezzo di PokéAPI (es. `sandshrew-alola`); l'iniziale maiuscola la mette la UI. */
+  /** Nome grezzo di PokéAPI (es. `sandshrew-alola`). */
   name: string;
+  /** Nome da mostrare: quello della specie nella lingua in uso, lo slug leggibile per le forme. */
+  label: string;
   /** Artwork ufficiale, costruito dall'id. */
   artworkUrl: string;
   /** Il Pokémon ha una scheda nel Pokédex dell'app (si può aprire `/pokemon/{id}`). */
@@ -123,7 +125,7 @@ export type LocationArea = {
   id: number;
   /** Slug di PokéAPI. */
   slug: string;
-  /** Nome breve, senza il nome della località; «Principale» per l'area senza nome proprio. */
+  /** Nome breve nella lingua in uso, senza il nome della località; «Principale» per l'area senza nome proprio. */
   name: string;
   /** Gruppi per metodo, nell'ordine di PokéAPI (erba alta prima, poi pesca, Surf…). */
   methods: EncounterMethodGroup[];
@@ -139,7 +141,7 @@ export type LocationDetail = LocationSummary & {
 export type PokemonEncounterLocation = {
   /** Id dell'indice: apre `/locations/{id}`. */
   id: number;
-  /** Nome mostrato (italiano, altrimenti inglese). */
+  /** Nome mostrato, nella lingua in uso (altrimenti inglese). */
   name: string;
   /** Metodi d'incontro in quella località, senza ripetizioni (es. «Erba alta e grotte»). */
   methods: EncounterMethod[];

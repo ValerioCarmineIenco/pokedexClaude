@@ -1,0 +1,50 @@
+{
+  "typeA11y": "Tipo {{type}}",
+  "chart": {
+    "allTypes": "Tutti i tipi",
+    "allTypesHint": "Tocca un tipo per vedere efficacia, Pokémon e mosse.",
+    "title": "Tabella delle efficacie",
+    "hint": "Righe: tipo della mossa. Colonne: tipo del Pokémon colpito. Tocca un’icona per il dettaglio del tipo. Le caselle vuote sono danno normale (×1).",
+    "legend": {
+      "superEffective": "Superefficace",
+      "notVeryEffective": "Poco efficace",
+      "noEffect": "Nessun effetto"
+    },
+    "cellA11y": "{{attacker}} contro {{defender}}: {{effect}}",
+    "spoken": {
+      "superEffective": "superefficace, per 2",
+      "notVeryEffective": "poco efficace, per un mezzo",
+      "noEffect": "nessun effetto",
+      "normal": "danno normale"
+    }
+  },
+  "matchups": {
+    "superEffective": "Superefficace contro",
+    "notVeryEffective": "Poco efficace contro",
+    "noEffect": "Nessun effetto su",
+    "weakTo": "Debole a",
+    "resists": "Resistente a",
+    "immuneTo": "Immune a",
+    "noTypes": "Nessun tipo"
+  },
+  "detail": {
+    "back": "Torna ai tipi",
+    "notFoundTitle": "Tipo non trovato",
+    "notFoundMessage": "Questo tipo non esiste nel Pokédex.",
+    "pokemonCount_one": "{{count}} Pokémon",
+    "pokemonCount_other": "{{count}} Pokémon",
+    "movesCount_one": "{{count}} mossa",
+    "movesCount_other": "{{count}} mosse",
+    "attack": "In attacco",
+    "attackHint": "Danno delle mosse {{type}} contro ciascun tipo.",
+    "defense": "In difesa",
+    "defenseHint": "Danno subito da un Pokémon di solo tipo {{type}}.",
+    "tabPokemon": "Pokémon  {{count}}",
+    "tabMoves": "Mosse  {{count}}",
+    "emptyPokemon": "Nessun Pokémon di questo tipo.",
+    "emptyMoves": "Nessuna mossa di questo tipo."
+  },
+  "errors": {
+    "notFound": "Tipo non trovato."
+  }
+}

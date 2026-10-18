@@ -4,8 +4,10 @@ import { getArtworkUrl, getIdFromUrl } from '@/api/pokemon';
 import abilityIndex from '@/data/abilityIndex.json';
 import type { Ability, AbilityIndexEntry, AbilityPage, AbilityPokemon } from '@/types/ability';
 import type { AbilityResponse } from '@/types/pokeapi';
+import { perLanguage, t } from '@/i18n';
+import { localName } from '@/i18n/names';
 import { formatName } from '@/utils/format';
-import { byLanguage, cleanText, latestFlavor } from '@/utils/pokeapiText';
+import { cleanText, latestLocalizedFlavor, localized } from '@/utils/pokeapiText';
 import { normalizeSearch } from '@/utils/search';
 
 export const ABILITY_PAGE_SIZE = 20;
@@ -20,9 +22,23 @@ const INDEX = (abilityIndex as AbilityIndexEntry[]).filter((entry) =>
 );
 const BY_ID = new Map(INDEX.map((entry) => [entry.id, entry]));
 
-/** Testo su cui cerca `search`: nome italiano e slug inglese («erbaiuto overgrow»). */
-const SEARCH_TEXT = new Map(
-  INDEX.map((entry) => [entry.id, normalizeSearch(`${entry.label} ${entry.name.replace(/-/g, ' ')}`)]),
+/** Nome dell'abilità nella lingua in uso, dall'indice (senza chiamate). */
+export function getAbilityLabel(entry: AbilityIndexEntry): string {
+  return localName('ability', entry.id, entry.label);
+}
+
+/**
+ * Testo su cui cerca `search`: nome nella lingua in uso e slug inglese («erbaiuto overgrow»).
+ * Ricalcolato al cambio di lingua.
+ */
+const searchText = perLanguage(
+  () =>
+    new Map(
+      INDEX.map((entry) => [
+        entry.id,
+        normalizeSearch(`${getAbilityLabel(entry)} ${entry.name.replace(/-/g, ' ')}`),
+      ]),
+    ),
 );
 
 /**
@@ -32,7 +48,8 @@ const SEARCH_TEXT = new Map(
 export function getAbilityIndex(search = ''): AbilityIndexEntry[] {
   const needle = normalizeSearch(search);
   if (!needle) return INDEX;
-  return INDEX.filter((entry) => SEARCH_TEXT.get(entry.id)!.includes(needle));
+  const texts = searchText();
+  return INDEX.filter((entry) => texts.get(entry.id)!.includes(needle));
 }
 
 const BY_NAME = new Map(INDEX.map((entry) => [entry.name, entry]));
@@ -79,13 +96,16 @@ const GENERATION_NUMBERS: Record<string, number> = {
 };
 
 export function toAbility(raw: AbilityResponse): Ability {
-  const name =
-    raw.names.find(byLanguage('it'))?.name ?? raw.names.find(byLanguage('en'))?.name ?? formatName(raw.name);
-  const flavors = raw.flavor_text_entries.map((entry) => ({ text: entry.flavor_text, language: entry.language }));
-  const english = raw.effect_entries.find(byLanguage('en'));
-  const description =
-    latestFlavor(flavors, 'it') ?? latestFlavor(flavors, 'en') ?? cleanText(english?.short_effect ?? '');
-  const effect = english ? cleanText(english.effect) || null : null;
+  const indexEntry = BY_ID.get(raw.id);
+  const name = localized(raw.names)?.name ?? (indexEntry ? getAbilityLabel(indexEntry) : formatName(raw.name));
+  const flavors = raw.flavor_text_entries.map((flavor) => ({
+    text: flavor.flavor_text,
+    language: flavor.language,
+  }));
+  // Effetto per esteso nella lingua in uso se PokéAPI lo ha (spesso solo inglese e tedesco).
+  const effectEntry = localized(raw.effect_entries);
+  const description = latestLocalizedFlavor(flavors) ?? cleanText(effectEntry?.short_effect ?? '');
+  const effect = effectEntry ? cleanText(effectEntry.effect) || null : null;
 
   // Solo i Pokémon del Pokédex: le forme alternative (id da 10001) e le generazioni non
   // coperte restano fuori. Uno stesso Pokémon compare una volta sola.
@@ -106,14 +126,15 @@ export function toAbility(raw: AbilityResponse): Ability {
     name,
     description,
     effect,
-    generation: GENERATION_NUMBERS[raw.generation.name] ?? BY_ID.get(raw.id)?.generation ?? 0,
+    effectLanguage: effect ? (effectEntry?.language.name ?? null) : null,
+    generation: GENERATION_NUMBERS[raw.generation.name] ?? indexEntry?.generation ?? 0,
     pokemon: [...pokemon.values()].sort((a, b) => a.id - b.id),
   };
 }
 
 /** Dettaglio di un'abilità. */
 export async function getAbility(id: number, signal?: AbortSignal): Promise<Ability> {
-  const raw = await fetchJson<AbilityResponse>(`/ability/${id}`, signal, 'Abilità non trovata.');
+  const raw = await fetchJson<AbilityResponse>(`/ability/${id}`, signal, t('abilities:errors.notFound'));
   return toAbility(raw);
 }
 

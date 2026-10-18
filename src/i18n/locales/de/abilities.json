@@ -1,0 +1,31 @@
+{
+  "list": {
+    "count_one": "{{count}} Fähigkeit",
+    "count_other": "{{count}} Fähigkeiten",
+    "results_one": "{{count}} Ergebnis",
+    "results_other": "{{count}} Ergebnisse",
+    "searchLabel": "Fähigkeit nach Namen suchen",
+    "noResultsTitle": "Keine Ergebnisse",
+    "noResults": "Keine Fähigkeit heißt „{{query}}“.",
+    "clearSearch": "Suche löschen"
+  },
+  "detail": {
+    "back": "Zurück zu den Fähigkeiten",
+    "notFoundTitle": "Fähigkeit nicht gefunden",
+    "notFoundMessage": "Diese Fähigkeit gibt es im Pokédex nicht.",
+    "generation": "Gen. {{numeral}}",
+    "noDescription": "Keine deutsche Beschreibung verfügbar.",
+    "effect": "Effekt",
+    "effectNote": "auf Englisch",
+    "pokemonWith": "Pokémon mit dieser Fähigkeit",
+    "pokemonLabel": "{{name}}, Nummer {{number}}",
+    "pokemonLabelHidden": "{{name}}, Nummer {{number}}, versteckte Fähigkeit",
+    "hidden": "Versteckt"
+  },
+  "errors": {
+    "notFound": "Fähigkeit nicht gefunden.",
+    "offlineTitle": "Keine Verbindung",
+    "offlineMessage": "Der Pokédex ist nicht erreichbar. Prüfe dein Netzwerk und versuche es erneut.",
+    "retry": "Erneut versuchen"
+  }
+}

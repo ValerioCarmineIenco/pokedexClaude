@@ -1,4 +1,5 @@
 import { StyleSheet, Text, View } from 'react-native';
+import { useTranslation } from 'react-i18next';
 
 import { colors } from '@/theme/colors';
 import { fonts } from '@/theme/fonts';
@@ -20,6 +21,7 @@ export function MatchupRow({
   accent: string;
   accentText: string;
 }) {
+  const { t } = useTranslation('pokemon');
   return (
     <View style={styles.matchupRow}>
       <View style={styles.matchupHead}>
@@ -35,7 +37,7 @@ export function MatchupRow({
           ))}
         </View>
       ) : (
-        <Text style={styles.matchupEmpty}>Nessun tipo</Text>
+        <Text style={styles.matchupEmpty}>{t('typeDefense.noTypes')}</Text>
       )}
     </View>
   );

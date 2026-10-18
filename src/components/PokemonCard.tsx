@@ -2,13 +2,15 @@ import { Image } from 'expo-image';
 import { Pressable, StyleSheet, Text, View, type StyleProp, type ViewStyle } from 'react-native';
 
 import { getArtworkUrl } from '@/api/pokemon';
+import { t } from '@/i18n';
+import { pokemonName } from '@/i18n/names';
 import { useArtworkStyle } from '@/hooks/useArtworkStyle';
 import { fonts } from '@/theme/fonts';
 import { primaryType, typeTint } from '@/theme/typeColors';
-import { TYPE_NAMES_IT } from '@/theme/typeNames';
+import { TYPE_LABELS } from '@/theme/typeNames';
 import type { ViewMode } from '@/hooks/useViewMode';
 import type { PokemonSummary } from '@/types/pokemon';
-import { formatName, formatNumber } from '@/utils/format';
+import { formatNumber } from '@/utils/format';
 
 import { PokeBallMark } from './PokeBallMark';
 import { TypeBadge } from './TypeBadge';
@@ -25,8 +27,11 @@ type Props = {
 };
 
 export function accessibilityLabelFor(pokemon: PokemonSummary): string {
-  const types = pokemon.types.map((t) => TYPE_NAMES_IT[t]).join(' e ');
-  return `${formatName(pokemon.name)}, numero ${pokemon.id}, tipo ${types}`;
+  const [type1, type2] = pokemon.types.map((type) => TYPE_LABELS[type]);
+  const name = pokemonName(pokemon.id, pokemon.name);
+  return type2
+    ? t('pokedex:card.accessibilityLabelTwoTypes', { name, number: pokemon.id, type1, type2 })
+    : t('pokedex:card.accessibilityLabelOneType', { name, number: pokemon.id, type: type1 });
 }
 
 export function PokemonCard({ pokemon, variant, onPress, stat }: Props) {
@@ -34,6 +39,7 @@ export function PokemonCard({ pokemon, variant, onPress, stat }: Props) {
   const isGrid = variant === 'grid';
   const [artworkStyle] = useArtworkStyle();
   const artworkUrl = getArtworkUrl(pokemon.id, artworkStyle);
+  const name = pokemonName(pokemon.id, pokemon.name);
 
   return (
     <Pressable
@@ -54,7 +60,7 @@ export function PokemonCard({ pokemon, variant, onPress, stat }: Props) {
           <View>
             <Text style={styles.number}>{formatNumber(pokemon.id)}</Text>
             <Text style={styles.name} numberOfLines={1}>
-              {formatName(pokemon.name)}
+              {name}
             </Text>
           </View>
           <View style={styles.gridTypes}>
@@ -83,7 +89,7 @@ export function PokemonCard({ pokemon, variant, onPress, stat }: Props) {
           <View style={styles.rowText}>
             <Text style={styles.number}>{formatNumber(pokemon.id)}</Text>
             <Text style={styles.name} numberOfLines={1}>
-              {formatName(pokemon.name)}
+              {name}
             </Text>
           </View>
           {stat && <StatPill stat={stat} />}

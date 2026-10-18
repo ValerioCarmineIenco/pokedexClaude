@@ -1,0 +1,49 @@
+{
+  "title": "Ajustes",
+  "back": "Volver a la lista",
+  "language": {
+    "title": "Idioma",
+    "hint": "El idioma de la app y de los nombres de Pokémon, movimientos, habilidades y objetos.",
+    "system": "Idioma del dispositivo",
+    "systemHint": "Ahora {{language}}",
+    "names": {
+      "en": "Inglés",
+      "it": "Italiano",
+      "fr": "Francés",
+      "de": "Alemán",
+      "es": "Español",
+      "ja": "Japonés"
+    }
+  },
+  "artwork": {
+    "title": "Ilustración principal",
+    "hint": "El estilo de las imágenes en la lista y en la parte superior de la ficha de cada Pokémon."
+  },
+  "backup": {
+    "title": "Copia de seguridad",
+    "hint": "Guarda favoritos, variocolores conseguidos y equipos en un archivo JSON, para restaurarlos en otro dispositivo o tras reinstalar. La importación sustituye los datos actuales.",
+    "export": "Exportar copia",
+    "import": "Importar copia",
+    "exportFailed": "No se pudo exportar.",
+    "readFailed": "No se pudo leer el archivo.",
+    "exported": "Copia exportada.",
+    "restored": "Restaurados {{favorites}}, {{shiny}} y {{teams}}.",
+    "favorites_one": "{{count}} favorito",
+    "favorites_other": "{{count}} favoritos",
+    "shiny_one": "{{count}} variocolor",
+    "shiny_other": "{{count}} variocolores",
+    "teams_one": "{{count}} equipo",
+    "teams_other": "{{count}} equipos",
+    "errors": {
+      "invalid": "El archivo no es una copia de seguridad válida.",
+      "otherApp": "El archivo no es una copia de seguridad de esta app.",
+      "newerVersion": "La copia se creó con una versión más reciente de la app."
+    }
+  },
+  "credits": {
+    "title": "Créditos y copyright",
+    "data": "Datos e imágenes de <link>PokéAPI</link>, un proyecto libre y gratuito mantenido por la comunidad.",
+    "unofficial": "Esta es una app no oficial creada por fans, sin ánimo de lucro, no afiliada ni aprobada por Nintendo, Creatures Inc., GAME FREAK inc. ni The Pokémon Company.",
+    "trademarks": "Pokémon y los nombres de los personajes son marcas registradas de Nintendo, Creatures Inc. y GAME FREAK inc. © 1995–{{year}} Nintendo / Creatures Inc. / GAME FREAK inc."
+  }
+}

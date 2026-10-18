@@ -1,4 +1,5 @@
 import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { useTranslation } from 'react-i18next';
 
 import { colors } from '@/theme/colors';
 import { fonts } from '@/theme/fonts';
@@ -16,18 +17,19 @@ type Props = {
 
 /** Sotto l'artwork della scheda: «Mostra shiny» e il segno «Shiny ottenuto». */
 export function ShinyControls({ showShiny, onShowShinyChange, isCaught, onToggleCaught }: Props) {
+  const { t } = useTranslation('pokemon');
   return (
     <View style={styles.row}>
       <Toggle
         icon="sparkles"
-        label="Mostra shiny"
+        label={t('shiny.show')}
         checked={showShiny}
         onPress={() => onShowShinyChange(!showShiny)}
       />
       <Toggle
         icon={isCaught ? 'check' : 'checkOutline'}
-        label={isCaught ? 'Shiny ottenuto' : 'Segna shiny ottenuto'}
-        accessibilityLabel="Shiny ottenuto"
+        label={isCaught ? t('shiny.caught') : t('shiny.markCaught')}
+        accessibilityLabel={t('shiny.caught')}
         checked={isCaught}
         onPress={onToggleCaught}
       />

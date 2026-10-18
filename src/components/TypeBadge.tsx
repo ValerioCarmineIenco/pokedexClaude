@@ -2,7 +2,7 @@ import { StyleSheet, Text, View } from 'react-native';
 
 import { fonts } from '@/theme/fonts';
 import { TYPE_COLORS, typeTextColor } from '@/theme/typeColors';
-import { TYPE_NAMES_IT } from '@/theme/typeNames';
+import { TYPE_LABELS } from '@/theme/typeNames';
 import type { TypeName } from '@/types/pokemon';
 
 type Props = {
@@ -20,7 +20,7 @@ export function TypeBadge({ type, size = 'small' }: Props) {
       ]}>
       <Text
         style={[styles.label, size === 'large' && styles.labelLarge, { color: typeTextColor(type) }]}>
-        {TYPE_NAMES_IT[type]}
+        {TYPE_LABELS[type]}
       </Text>
     </View>
   );

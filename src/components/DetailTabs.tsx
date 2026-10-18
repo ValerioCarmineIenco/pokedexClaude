@@ -1,19 +1,15 @@
 import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { useTranslation } from 'react-i18next';
 
 import { colors } from '@/theme/colors';
 import { fonts } from '@/theme/fonts';
 
 export type DetailTab = 'info' | 'evolutions' | 'moves' | 'artwork';
 
-const TABS: { tab: DetailTab; label: string }[] = [
-  { tab: 'info', label: 'Info' },
-  { tab: 'evolutions', label: 'Evoluzioni' },
-  { tab: 'moves', label: 'Mosse' },
-  { tab: 'artwork', label: 'Artwork' },
-];
+const TABS: readonly DetailTab[] = ['info', 'evolutions', 'moves', 'artwork'];
 
 export function isDetailTab(value: unknown): value is DetailTab {
-  return TABS.some(({ tab }) => tab === value);
+  return TABS.some((tab) => tab === value);
 }
 
 type Props = {
@@ -23,10 +19,12 @@ type Props = {
 
 /** Selettore delle tab della scheda, con lo stesso aspetto del selettore di vista dell'elenco. */
 export function DetailTabs({ value, onChange }: Props) {
+  const { t } = useTranslation('pokemon');
   return (
     <View style={styles.track} accessibilityRole="tablist">
-      {TABS.map(({ tab, label }) => {
+      {TABS.map((tab) => {
         const selected = value === tab;
+        const label = t(`tabs.${tab}`);
         return (
           <Pressable
             key={tab}

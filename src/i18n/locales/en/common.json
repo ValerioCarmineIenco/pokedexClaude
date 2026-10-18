@@ -1,0 +1,57 @@
+{
+  "screens": {
+    "pokedex": "Pokédex",
+    "pokemonDetail": "Details",
+    "compare": "Compare",
+    "settings": "Settings",
+    "items": "Items",
+    "itemDetail": "Item details",
+    "abilities": "Abilities",
+    "abilityDetail": "Ability details",
+    "moves": "Moves",
+    "moveDetail": "Move details",
+    "natures": "Natures",
+    "locations": "Locations",
+    "locationDetail": "Location details",
+    "types": "Types",
+    "typeDetail": "Type details",
+    "teams": "Teams",
+    "team": "Team",
+    "sections": "Sections"
+  },
+  "sections": {
+    "pokedex": { "title": "Pokédex", "description": "Every Pokémon, by generation" },
+    "items": { "title": "Items", "description": "Tools, medicine, TMs and Mega Stones" },
+    "abilities": { "title": "Abilities", "description": "Every Pokémon ability" },
+    "moves": { "title": "Moves", "description": "Type, power, accuracy and PP of every move" },
+    "natures": { "title": "Natures", "description": "Stats and flavors of every nature" },
+    "locations": { "title": "Locations", "description": "Where to find Pokémon, region by region" },
+    "types": { "title": "Types", "description": "Attack and defense matchups of every type" },
+    "teams": { "title": "Teams", "description": "Teams of 6 and their type coverage" }
+  },
+  "generation": "Generation {{number}}",
+  "stats": {
+    "hp": "HP",
+    "attack": "Attack",
+    "defense": "Defense",
+    "special-attack": "Sp. Atk",
+    "special-defense": "Sp. Def",
+    "speed": "Speed"
+  },
+  "artworkStyles": {
+    "official": { "label": "Official artwork", "description": "High-resolution official illustration" },
+    "official-shiny": { "label": "Shiny official artwork", "description": "The official illustration in shiny colors" },
+    "home": { "label": "Pokémon HOME", "description": "3D models from Pokémon HOME" },
+    "home-shiny": { "label": "Shiny Pokémon HOME", "description": "3D models from Pokémon HOME in shiny colors" },
+    "dream-world": { "label": "Dream World", "description": "Vector drawings from Dream World" },
+    "showdown": { "label": "Animated Showdown", "description": "Animated sprites from Pokémon Showdown" },
+    "sprite": { "label": "Pixel sprite", "description": "The in-game pixel art sprite" }
+  },
+  "errors": {
+    "pokemonNotFound": "Pokémon not found.",
+    "timeout": "The server isn't responding. Try again shortly.",
+    "offline": "No connection. Check your network and try again.",
+    "server": "Server error ({{status}}). Try again shortly.",
+    "generic": "Something went wrong. Try again."
+  }
+}

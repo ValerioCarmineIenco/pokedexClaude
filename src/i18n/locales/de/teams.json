@@ -1,0 +1,61 @@
+{
+  "defaultName": "Team {{number}}",
+  "list": {
+    "newA11y": "Neues Team",
+    "new": "Neu",
+    "emptyTitle": "Keine Teams",
+    "emptyMessage": "Erstelle ein Team aus {{size}} Pokémon, um seine Schwächen und die nicht abgedeckten Typen zu sehen.",
+    "emptyAction": "Erstes Team erstellen",
+    "cardA11y": "{{name}}, {{count}} von {{size}} Pokémon",
+    "cardEmpty": "Leeres Team: tippe, um Pokémon hinzuzufügen",
+    "cardWeak_one": "{{count}} Pokémon schwach gegen {{type}}",
+    "cardWeak_other": "{{count}} Pokémon schwach gegen {{type}}",
+    "cardNoWeakness": "Keine gemeinsamen Schwächen"
+  },
+  "editor": {
+    "back": "Zurück",
+    "share": "Team teilen",
+    "copied": "Team in die Zwischenablage kopiert",
+    "shareFailed": "Teilen fehlgeschlagen",
+    "nameLabel": "Teamname",
+    "caption": "{{count}} / {{size}} Pokémon",
+    "captionDrag": "{{count}} / {{size}} Pokémon · ≡ ziehen zum Sortieren",
+    "add": "Pokémon hinzufügen",
+    "addFree_one": "Pokémon hinzufügen (letzter Platz)",
+    "addFree_other": "Pokémon hinzufügen ({{count}} Plätze frei)",
+    "confirmDelete": "Zum Löschen erneut tippen",
+    "delete": "Team löschen",
+    "notFoundTitle": "Team nicht gefunden",
+    "notFoundMessage": "Dieses Team gibt es auf diesem Gerät nicht mehr.",
+    "backToTeams": "Zurück zu den Teams",
+    "addTo": "Zu {{name}} hinzufügen"
+  },
+  "slots": {
+    "moveA11y": "{{name}} verschieben",
+    "moveHint": "Ziehen, um die Reihenfolge zu ändern",
+    "moveDown": "Nach unten",
+    "moveUp": "Nach oben",
+    "removeA11y": "{{name}} aus dem Team entfernen"
+  },
+  "analysis": {
+    "title": "Typabdeckung",
+    "emptyHint": "Füge Pokémon hinzu, um Schwächen und nicht abgedeckte Typen zu sehen.",
+    "sharedTitle": "Gemeinsame Schwächen",
+    "weakA11y_one": "{{count}} Pokémon schwach gegen {{type}}",
+    "weakA11y_other": "{{count}} Pokémon schwach gegen {{type}}",
+    "weakLine_one": "<bold>{{count}} Pokémon</bold> schwach gegen {{type}}",
+    "weakLine_other": "<bold>{{count}} Pokémon</bold> schwach gegen {{type}}",
+    "resist_one": "{{count}} resistent",
+    "resist_other": "{{count}} resistent",
+    "sharedEmpty": "Kein Typ bringt mehr als ein Pokémon in Bedrängnis.",
+    "unresistedTitle": "Niemand resistiert",
+    "unresistedHint": "Kein Mitglied erleidet von diesen Typen weniger Schaden.",
+    "unresistedEmpty": "Gegen jeden Typ ist mindestens ein Pokémon resistent.",
+    "uncoveredTitle": "Nicht abgedeckte Typen",
+    "uncoveredHint": "Kein Mitglied trifft sie sehr effektiv mit Attacken des eigenen Typs.",
+    "uncoveredEmpty": "Die Attacken der Teamtypen treffen jeden Typ ×2."
+  },
+  "share": {
+    "line": "{{position}}. {{name}} ({{types}})"
+  }
+}

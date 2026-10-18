@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import { Pressable, StyleSheet, TextInput, View } from 'react-native';
 
 import { colors, radius } from '@/theme/colors';
@@ -12,24 +13,21 @@ type Props = {
   accessibilityLabel?: string;
 };
 
-export function SearchBar({
-  value,
-  onChangeText,
-  accessibilityLabel = 'Cerca un Pokémon per nome',
-}: Props) {
+export function SearchBar({ value, onChangeText, accessibilityLabel }: Props) {
+  const { t } = useTranslation('pokedex');
   return (
     <View style={styles.field}>
       <Icon name="search" size={16} color={colors.textSubtle} />
       <TextInput
         value={value}
         onChangeText={onChangeText}
-        placeholder="Cerca per nome"
+        placeholder={t('search.placeholder')}
         placeholderTextColor={colors.textSubtle}
         autoCapitalize="none"
         autoCorrect={false}
         returnKeyType="search"
         clearButtonMode="never"
-        accessibilityLabel={accessibilityLabel}
+        accessibilityLabel={accessibilityLabel ?? t('search.accessibilityLabel')}
         style={styles.input}
       />
       {value.length > 0 && (
@@ -37,7 +35,7 @@ export function SearchBar({
           onPress={() => onChangeText('')}
           hitSlop={12}
           accessibilityRole="button"
-          accessibilityLabel="Cancella la ricerca">
+          accessibilityLabel={t('search.clear')}>
           <Icon name="close" size={16} color={colors.textSubtle} />
         </Pressable>
       )}

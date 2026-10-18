@@ -1,10 +1,12 @@
 import { Image } from 'expo-image';
 import { openBrowserAsync } from 'expo-web-browser';
 import { useState } from 'react';
+import { Trans, useTranslation } from 'react-i18next';
 import { ActivityIndicator, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { ARTWORK_STYLES, getArtworkUrl, type ArtworkStyle } from '@/api/pokemon';
+import { getDeviceLanguage, LANGUAGES, useLanguagePreference, type LanguagePreference } from '@/i18n';
 import { colors, radius } from '@/theme/colors';
 import { backupFileName, BackupError, createBackup, restoreBackup } from '@/utils/backup';
 import { pickBackupFile, saveBackupFile } from '@/utils/backupFile';
@@ -23,6 +25,7 @@ type Props = {
 };
 
 export function SettingsView({ artworkStyle, onArtworkStyleChange, onBack }: Props) {
+  const { t } = useTranslation('settings');
   const insets = useSafeAreaInsets();
   return (
     <ScrollView
@@ -35,24 +38,24 @@ export function SettingsView({ artworkStyle, onArtworkStyleChange, onBack }: Pro
         onPress={onBack}
         hitSlop={6}
         accessibilityRole="button"
-        accessibilityLabel="Torna all'elenco"
+        accessibilityLabel={t('back')}
         style={({ pressed }) => [styles.backButton, pressed && styles.pressed]}>
         <Icon name="back" size={18} color={colors.text} />
       </Pressable>
       <View style={styles.titleRow}>
         <PokeBallLogo />
         <Text style={styles.title} accessibilityRole="header">
-          Impostazioni
+          {t('title')}
         </Text>
       </View>
 
+      <LanguageSection />
+
       <View style={styles.section}>
         <Text style={styles.sectionTitle} accessibilityRole="header">
-          Artwork principale
+          {t('artwork.title')}
         </Text>
-        <Text style={styles.sectionHint}>
-          Lo stile delle immagini nell&apos;elenco e in cima alla scheda di ogni Pokémon.
-        </Text>
+        <Text style={styles.sectionHint}>{t('artwork.hint')}</Text>
         <View style={styles.options} accessibilityRole="radiogroup">
           {ARTWORK_STYLES.map((style) => {
             const selected = style.id === artworkStyle;
@@ -97,12 +100,64 @@ export function SettingsView({ artworkStyle, onArtworkStyleChange, onBack }: Pro
   );
 }
 
-type BackupStatus = { tone: 'ok' | 'error'; text: string } | null;
+/** Lingua dell'interfaccia e dei dati di PokéAPI; «Dispositivo» segue le impostazioni del telefono. */
+function LanguageSection() {
+  const { t } = useTranslation('settings');
+  const [preference, setPreference] = useLanguagePreference();
+  const device = LANGUAGES.find((language) => language.code === getDeviceLanguage())!;
+  const options: { value: LanguagePreference; label: string; description?: string }[] = [
+    { value: 'system', label: t('language.system'), description: t('language.systemHint', { language: device.nativeName }) },
+    ...LANGUAGES.map((language) => ({
+      value: language.code,
+      label: language.nativeName,
+      // Il nome della lingua nella lingua in uso, se diverso da quello nativo.
+      description: t(`language.names.${language.code}`) === language.nativeName ? undefined : t(`language.names.${language.code}`),
+    })),
+  ];
+  return (
+    <View style={styles.section}>
+      <Text style={styles.sectionTitle} accessibilityRole="header">
+        {t('language.title')}
+      </Text>
+      <Text style={styles.sectionHint}>{t('language.hint')}</Text>
+      <View style={styles.options} accessibilityRole="radiogroup">
+        {options.map((option) => {
+          const selected = option.value === preference;
+          return (
+            <Pressable
+              key={option.value}
+              onPress={() => setPreference(option.value)}
+              accessibilityRole="radio"
+              accessibilityLabel={option.description ? `${option.label}. ${option.description}` : option.label}
+              accessibilityState={{ selected }}
+              style={({ pressed }) => [
+                styles.option,
+                styles.languageOption,
+                selected && styles.optionSelected,
+                pressed && styles.pressed,
+              ]}>
+              <View style={styles.optionText}>
+                <Text style={styles.optionLabel}>{option.label}</Text>
+                {option.description ? <Text style={styles.optionDescription}>{option.description}</Text> : null}
+              </View>
+              {selected ? (
+                <Icon name="check" size={22} color={colors.accent} />
+              ) : (
+                <View style={styles.radio} />
+              )}
+            </Pressable>
+          );
+        })}
+      </View>
+    </View>
+  );
+}
 
-const plural = (n: number, one: string, many: string) => `${n} ${n === 1 ? one : many}`;
+type BackupStatus = { tone: 'ok' | 'error'; text: string } | null;
 
 /** Esporta e importa preferiti, shiny e squadre in un file JSON. */
 function BackupSection() {
+  const { t } = useTranslation('settings');
   const [busy, setBusy] = useState<'export' | 'import' | null>(null);
   const [status, setStatus] = useState<BackupStatus>(null);
 
@@ -118,8 +173,8 @@ function BackupSection() {
           error instanceof BackupError
             ? error.message
             : kind === 'export'
-              ? 'Esportazione non riuscita.'
-              : 'Non è stato possibile leggere il file.',
+              ? t('backup.exportFailed')
+              : t('backup.readFailed'),
       });
     } finally {
       setBusy(null);
@@ -129,7 +184,7 @@ function BackupSection() {
   const exportBackup = () =>
     run('export', async () => {
       await saveBackupFile(backupFileName(), createBackup());
-      return { tone: 'ok', text: 'Backup esportato.' };
+      return { tone: 'ok', text: t('backup.exported') };
     });
 
   const importBackup = () =>
@@ -139,32 +194,29 @@ function BackupSection() {
       const restored = restoreBackup(text);
       return {
         tone: 'ok',
-        text: `Ripristinati ${plural(restored.favorites, 'preferito', 'preferiti')}, ${plural(
-          restored.shinyCaught,
-          'shiny',
-          'shiny',
-        )} e ${plural(restored.teams, 'squadra', 'squadre')}.`,
+        text: t('backup.restored', {
+          favorites: t('backup.favorites', { count: restored.favorites }),
+          shiny: t('backup.shiny', { count: restored.shinyCaught }),
+          teams: t('backup.teams', { count: restored.teams }),
+        }),
       };
     });
 
   return (
     <View style={styles.section}>
       <Text style={styles.sectionTitle} accessibilityRole="header">
-        Backup
+        {t('backup.title')}
       </Text>
-      <Text style={styles.sectionHint}>
-        Salva preferiti, shiny ottenuti e squadre in un file JSON, per ripristinarli su un altro
-        dispositivo o dopo una reinstallazione. L&apos;importazione sostituisce i dati attuali.
-      </Text>
+      <Text style={styles.sectionHint}>{t('backup.hint')}</Text>
       <View style={styles.buttons}>
         <BackupButton
-          label="Esporta backup"
+          label={t('backup.export')}
           busy={busy === 'export'}
           disabled={busy !== null}
           onPress={exportBackup}
         />
         <BackupButton
-          label="Importa backup"
+          label={t('backup.import')}
           busy={busy === 'import'}
           disabled={busy !== null}
           onPress={importBackup}
@@ -211,31 +263,30 @@ function BackupButton({
 
 /** Fonti dei dati e avviso di copyright. */
 function CreditsSection() {
+  const { t } = useTranslation('settings');
   return (
     <View style={styles.section}>
       <Text style={styles.sectionTitle} accessibilityRole="header">
-        Crediti e copyright
+        {t('credits.title')}
       </Text>
       <View style={styles.credits}>
         <Text style={styles.creditsText}>
-          Dati e immagini da{' '}
-          <Text
-            style={styles.link}
-            accessibilityRole="link"
-            onPress={() => openBrowserAsync('https://pokeapi.co')}>
-            PokéAPI
-          </Text>
-          , progetto libero e gratuito mantenuto dalla comunità.
+          <Trans
+            t={t}
+            i18nKey="credits.data"
+            components={{
+              link: (
+                <Text
+                  style={styles.link}
+                  accessibilityRole="link"
+                  onPress={() => openBrowserAsync('https://pokeapi.co')}
+                />
+              ),
+            }}
+          />
         </Text>
-        <Text style={styles.creditsText}>
-          Questa è un&apos;app non ufficiale creata da fan, senza scopo di lucro, non affiliata né
-          approvata da Nintendo, Creatures Inc., GAME FREAK inc. o The Pokémon Company.
-        </Text>
-        <Text style={styles.creditsText}>
-          Pokémon e i nomi dei personaggi sono marchi registrati di Nintendo, Creatures Inc. e
-          GAME FREAK inc. © 1995–{new Date().getFullYear()} Nintendo / Creatures Inc. / GAME
-          FREAK inc.
-        </Text>
+        <Text style={styles.creditsText}>{t('credits.unofficial')}</Text>
+        <Text style={styles.creditsText}>{t('credits.trademarks', { year: new Date().getFullYear() })}</Text>
       </View>
     </View>
   );
@@ -299,6 +350,10 @@ const styles = StyleSheet.create({
     backgroundColor: colors.surface,
     borderWidth: 1.5,
     borderColor: 'transparent',
+  },
+  languageOption: {
+    minHeight: 56,
+    paddingLeft: 14,
   },
   optionSelected: {
     borderColor: colors.accent,

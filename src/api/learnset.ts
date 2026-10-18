@@ -1,62 +1,57 @@
 import { fetchJson } from '@/api/client';
 import { getMoveSummary } from '@/api/moves';
 import { getIdFromUrl } from '@/api/pokemon';
+import { getLocale, labelMap, t } from '@/i18n';
+import type en from '@/i18n/locales/en/moves.json';
 import { getVersionColor } from '@/theme/versionColors';
 import type { LearnedMove, LearnMethod, LearnsetVersionGroup, PokemonLearnset } from '@/types/learnset';
 import type { PokemonResponse } from '@/types/pokeapi';
 import { formatName } from '@/utils/format';
 
+type VersionGroupSlug = keyof (typeof en)['learnset']['versionGroups'];
+
 /**
- * Gruppi di giochi di PokéAPI in ordine di uscita, con nome italiano, generazione e un gioco
- * del gruppo per il colore (vedi `versionColors`). Un gruppo non in elenco conta come il più
- * recente: sono i giochi usciti dopo.
+ * Gruppi di giochi di PokéAPI in ordine di uscita, con generazione e un gioco del gruppo per
+ * il colore (vedi `versionColors`). Il nome è in `moves:learnset.versionGroups` (PokéAPI non
+ * ha i nomi dei gruppi). Un gruppo non in elenco conta come il più recente: sono i giochi
+ * usciti dopo.
  */
-const VERSION_GROUPS: { slug: string; label: string; generation: number; version: string }[] = [
-  { slug: 'red-green-japan', label: 'Rosso e Verde (Giappone)', generation: 1, version: 'red-japan' },
-  { slug: 'blue-japan', label: 'Blu (Giappone)', generation: 1, version: 'blue-japan' },
-  { slug: 'red-blue', label: 'Rosso e Blu', generation: 1, version: 'red' },
-  { slug: 'yellow', label: 'Giallo', generation: 1, version: 'yellow' },
-  { slug: 'gold-silver', label: 'Oro e Argento', generation: 2, version: 'gold' },
-  { slug: 'crystal', label: 'Cristallo', generation: 2, version: 'crystal' },
-  { slug: 'ruby-sapphire', label: 'Rubino e Zaffiro', generation: 3, version: 'ruby' },
-  { slug: 'colosseum', label: 'Colosseum', generation: 3, version: 'colosseum' },
-  { slug: 'firered-leafgreen', label: 'Rosso Fuoco e Verde Foglia', generation: 3, version: 'firered' },
-  { slug: 'emerald', label: 'Smeraldo', generation: 3, version: 'emerald' },
-  { slug: 'xd', label: 'XD', generation: 3, version: 'xd' },
-  { slug: 'diamond-pearl', label: 'Diamante e Perla', generation: 4, version: 'diamond' },
-  { slug: 'platinum', label: 'Platino', generation: 4, version: 'platinum' },
-  { slug: 'heartgold-soulsilver', label: 'HeartGold e SoulSilver', generation: 4, version: 'heartgold' },
-  { slug: 'black-white', label: 'Nero e Bianco', generation: 5, version: 'black' },
-  { slug: 'black-2-white-2', label: 'Nero 2 e Bianco 2', generation: 5, version: 'black-2' },
-  { slug: 'x-y', label: 'X e Y', generation: 6, version: 'x' },
-  { slug: 'omega-ruby-alpha-sapphire', label: 'Rubino Omega e Zaffiro Alpha', generation: 6, version: 'omega-ruby' },
-  { slug: 'sun-moon', label: 'Sole e Luna', generation: 7, version: 'sun' },
-  { slug: 'ultra-sun-ultra-moon', label: 'Ultrasole e Ultraluna', generation: 7, version: 'ultra-sun' },
-  {
-    slug: 'lets-go-pikachu-lets-go-eevee',
-    label: "Let's Go, Pikachu! e Let's Go, Eevee!",
-    generation: 7,
-    version: 'lets-go-pikachu',
-  },
-  { slug: 'sword-shield', label: 'Spada e Scudo', generation: 8, version: 'sword' },
-  { slug: 'the-isle-of-armor', label: "L'isola solitaria dell'armatura", generation: 8, version: 'the-isle-of-armor-sword' },
-  { slug: 'the-crown-tundra', label: 'Le terre innevate della corona', generation: 8, version: 'the-crown-tundra-sword' },
-  {
-    slug: 'brilliant-diamond-shining-pearl',
-    label: 'Diamante Lucente e Perla Splendente',
-    generation: 8,
-    version: 'brilliant-diamond',
-  },
-  { slug: 'legends-arceus', label: 'Leggende Pokémon: Arceus', generation: 8, version: 'legends-arceus' },
-  { slug: 'scarlet-violet', label: 'Scarlatto e Violetto', generation: 9, version: 'scarlet' },
-  { slug: 'the-teal-mask', label: 'La maschera turchese', generation: 9, version: 'the-teal-mask-scarlet' },
-  { slug: 'the-indigo-disk', label: 'Il disco indaco', generation: 9, version: 'the-indigo-disk-scarlet' },
-  { slug: 'legends-za', label: 'Leggende Pokémon: Z-A', generation: 9, version: 'legends-za' },
-  { slug: 'mega-dimension', label: 'Megadimensione', generation: 9, version: 'mega-dimension' },
-  { slug: 'champions', label: 'Pokémon Champions', generation: 9, version: 'champions' },
+const VERSION_GROUPS: { slug: VersionGroupSlug; generation: number; version: string }[] = [
+  { slug: 'red-green-japan', generation: 1, version: 'red-japan' },
+  { slug: 'blue-japan', generation: 1, version: 'blue-japan' },
+  { slug: 'red-blue', generation: 1, version: 'red' },
+  { slug: 'yellow', generation: 1, version: 'yellow' },
+  { slug: 'gold-silver', generation: 2, version: 'gold' },
+  { slug: 'crystal', generation: 2, version: 'crystal' },
+  { slug: 'ruby-sapphire', generation: 3, version: 'ruby' },
+  { slug: 'colosseum', generation: 3, version: 'colosseum' },
+  { slug: 'firered-leafgreen', generation: 3, version: 'firered' },
+  { slug: 'emerald', generation: 3, version: 'emerald' },
+  { slug: 'xd', generation: 3, version: 'xd' },
+  { slug: 'diamond-pearl', generation: 4, version: 'diamond' },
+  { slug: 'platinum', generation: 4, version: 'platinum' },
+  { slug: 'heartgold-soulsilver', generation: 4, version: 'heartgold' },
+  { slug: 'black-white', generation: 5, version: 'black' },
+  { slug: 'black-2-white-2', generation: 5, version: 'black-2' },
+  { slug: 'x-y', generation: 6, version: 'x' },
+  { slug: 'omega-ruby-alpha-sapphire', generation: 6, version: 'omega-ruby' },
+  { slug: 'sun-moon', generation: 7, version: 'sun' },
+  { slug: 'ultra-sun-ultra-moon', generation: 7, version: 'ultra-sun' },
+  { slug: 'lets-go-pikachu-lets-go-eevee', generation: 7, version: 'lets-go-pikachu' },
+  { slug: 'sword-shield', generation: 8, version: 'sword' },
+  { slug: 'the-isle-of-armor', generation: 8, version: 'the-isle-of-armor-sword' },
+  { slug: 'the-crown-tundra', generation: 8, version: 'the-crown-tundra-sword' },
+  { slug: 'brilliant-diamond-shining-pearl', generation: 8, version: 'brilliant-diamond' },
+  { slug: 'legends-arceus', generation: 8, version: 'legends-arceus' },
+  { slug: 'scarlet-violet', generation: 9, version: 'scarlet' },
+  { slug: 'the-teal-mask', generation: 9, version: 'the-teal-mask-scarlet' },
+  { slug: 'the-indigo-disk', generation: 9, version: 'the-indigo-disk-scarlet' },
+  { slug: 'legends-za', generation: 9, version: 'legends-za' },
+  { slug: 'mega-dimension', generation: 9, version: 'mega-dimension' },
+  { slug: 'champions', generation: 9, version: 'champions' },
 ];
 
-const VERSION_GROUP_ORDER = new Map(VERSION_GROUPS.map((group, index) => [group.slug, index]));
+const VERSION_GROUP_ORDER = new Map<string, number>(VERSION_GROUPS.map((group, index) => [group.slug, index]));
 
 const METHODS: Record<string, LearnMethod> = {
   'level-up': 'level-up',
@@ -67,19 +62,16 @@ const METHODS: Record<string, LearnMethod> = {
   tutor: 'tutor',
 };
 
-export const LEARN_METHOD_LABELS: Record<LearnMethod, string> = {
-  'level-up': 'Livello',
-  machine: 'MT e MN',
-  egg: 'Uovo',
-  tutor: 'Insegnante',
-  other: 'Altri metodi',
-};
-
 /** Ordine delle sezioni nella tab. */
 export const LEARN_METHODS: LearnMethod[] = ['level-up', 'machine', 'egg', 'tutor', 'other'];
 
+/** Nome del metodo nella lingua in uso (Livello, MT e MN…). */
+export const LEARN_METHOD_LABELS: Record<LearnMethod, string> = labelMap(LEARN_METHODS, (method) =>
+  t(`moves:learnset.methods.${method}`),
+);
+
 const byName = (a: LearnedMove, b: LearnedMove) =>
-  getMoveSummary(a.moveId)!.name.localeCompare(getMoveSummary(b.moveId)!.name, 'it');
+  getMoveSummary(a.moveId)!.name.localeCompare(getMoveSummary(b.moveId)!.name, getLocale());
 
 export function toLearnset(raw: PokemonResponse): PokemonLearnset {
   // Per gruppo: mossa e metodo una volta sola, con l'ordine di PokéAPI tra pari livello.
@@ -113,7 +105,7 @@ export function toLearnset(raw: PokemonResponse): PokemonLearnset {
       );
       return {
         slug,
-        label: meta?.label ?? formatName(slug),
+        label: meta ? t(`moves:learnset.versionGroups.${meta.slug}`) : formatName(slug),
         generation: meta?.generation ?? 0,
         color: getVersionColor(meta?.version ?? slug).text,
         moves: sorted.map(({ moveId, method, level }) => ({ moveId, method, level })),

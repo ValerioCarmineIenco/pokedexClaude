@@ -1,6 +1,7 @@
 import { useIsRestoring } from '@tanstack/react-query';
 import { StatusBar } from 'expo-status-bar';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useSyncExternalStore } from 'react';
+import { useTranslation } from 'react-i18next';
 import { StyleSheet, Text, useWindowDimensions, View } from 'react-native';
 import Animated, {
   Easing,
@@ -58,7 +59,13 @@ export function StartupLoader() {
   return done ? null : <LoadingScreen phase={phase} reduceMotion={reduceMotion} />;
 }
 
+const subscribeNothing = () => () => {};
+
 function LoadingScreen({ phase, reduceMotion }: { phase: Phase; reduceMotion: boolean }) {
+  const { t } = useTranslation(['pokedex', 'common']);
+  // Il sito statico è generato in inglese: i testi compaiono solo nel browser, nella sua lingua,
+  // così l'idratazione non trova differenze.
+  const isClient = useSyncExternalStore(subscribeNothing, () => true, () => false);
   const { width, height } = useWindowDimensions();
   const drop = useSharedValue(reduceMotion ? 0 : -height * 0.6);
   const tilt = useSharedValue(0);
@@ -137,7 +144,7 @@ function LoadingScreen({ phase, reduceMotion }: { phase: Phase; reduceMotion: bo
     <Animated.View
       style={[styles.screen, screenStyle]}
       accessibilityRole="progressbar"
-      accessibilityLabel="Caricamento del Pokédex">
+      accessibilityLabel={isClient ? t('common.loading') : undefined}>
       <StatusBar style="light" />
       <View style={styles.stage}>
         <Animated.View style={[styles.ball, ballStyle]}>
@@ -169,8 +176,8 @@ function LoadingScreen({ phase, reduceMotion }: { phase: Phase; reduceMotion: bo
         <Animated.View style={[styles.shadow, shadowStyle]} />
       </View>
       <Animated.View style={[styles.titles, titleStyle]}>
-        <Text style={styles.title}>Pokédex</Text>
-        <Text style={styles.subtitle}>Caricamento…</Text>
+        <Text style={styles.title}>{isClient ? t('common:screens.pokedex') : ''}</Text>
+        <Text style={styles.subtitle}>{isClient ? t('common.loadingShort') : ''}</Text>
       </Animated.View>
     </Animated.View>
   );

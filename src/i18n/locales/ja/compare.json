@@ -1,0 +1,33 @@
+{
+  "back": "もどる",
+  "title": "くらべる",
+  "offlineTitle": "せつぞく できません",
+  "offlineMessage": "ずかんに せつぞく できません。ネットワークを かくにんして もういちど おためしください。",
+  "retry": "もういちど",
+  "sections": {
+    "stats": "しゅぞくち",
+    "abilities": "とくせい",
+    "typeEffectiveness": "タイプあいしょう"
+  },
+  "hiddenAbility": "かくれとくせい",
+  "typeEffectivenessHint": "それぞれの タイプの わざから うける ダメージ。2ひきとも ふつう（×1）では ない タイプだけを のせています。みどりは ダメージが すくない ほうです。",
+  "defenseUnavailable": "タイプあいしょうを ひょうじ できません。",
+  "openA11y": "{{name}}の ページを ひらく",
+  "artworkA11y": "{{name}}の イラスト",
+  "changeA11y": "{{name}}の かわりに べつの ポケモンを えらぶ",
+  "change": "かえる",
+  "total": "ごうけい",
+  "even": "おなじ",
+  "table": {
+    "type": "タイプ",
+    "weaknesses": "じゃくてん",
+    "resistances": "いまひとつ"
+  },
+  "picker": {
+    "emptyTitle": "ポケモンが みつかりません",
+    "emptyMessage": "「{{query}}」という ポケモンは いません。",
+    "clearSearch": "けんさくを クリア",
+    "compareWith": "{{name}}と くらべる",
+    "choose": "ポケモンを えらぶ"
+  }
+}

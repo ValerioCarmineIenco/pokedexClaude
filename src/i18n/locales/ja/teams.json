@@ -1,0 +1,61 @@
+{
+  "defaultName": "チーム{{number}}",
+  "list": {
+    "newA11y": "あたらしい チーム",
+    "new": "あたらしく",
+    "emptyTitle": "チームが ありません",
+    "emptyMessage": "{{size}}ひきの チームを つくると、じゃくてんや カバーできない タイプが わかります。",
+    "emptyAction": "さいしょの チームを つくる",
+    "cardA11y": "{{name}}、{{size}}ひき ちゅう {{count}}ひき",
+    "cardEmpty": "からっぽの チーム：タップして ポケモンを くわえる",
+    "cardWeak_one": "{{type}}タイプに よわい ポケモン {{count}}ひき",
+    "cardWeak_other": "{{type}}タイプに よわい ポケモン {{count}}ひき",
+    "cardNoWeakness": "きょうつうの じゃくてんは なし"
+  },
+  "editor": {
+    "back": "もどる",
+    "share": "チームを シェア",
+    "copied": "チームを クリップボードに コピーしました",
+    "shareFailed": "シェア できませんでした",
+    "nameLabel": "チームの なまえ",
+    "caption": "{{count}} / {{size}}ひき",
+    "captionDrag": "{{count}} / {{size}}ひき ・ ≡ を ドラッグして ならびかえ",
+    "add": "ポケモンを くわえる",
+    "addFree_one": "ポケモンを くわえる（のこり {{count}}わく）",
+    "addFree_other": "ポケモンを くわえる（のこり {{count}}わく）",
+    "confirmDelete": "もういちど タップで さくじょ",
+    "delete": "チームを さくじょ",
+    "notFoundTitle": "チームが みつかりません",
+    "notFoundMessage": "この チームは もう この そうちに ありません。",
+    "backToTeams": "チームの いちらんに もどる",
+    "addTo": "{{name}}に くわえる"
+  },
+  "slots": {
+    "moveA11y": "{{name}}を うごかす",
+    "moveHint": "ドラッグして じゅんばんを かえる",
+    "moveDown": "したへ",
+    "moveUp": "うえへ",
+    "removeA11y": "{{name}}を チームから はずす"
+  },
+  "analysis": {
+    "title": "タイプの カバー",
+    "emptyHint": "ポケモンを くわえると じゃくてんと カバーできない タイプが わかります。",
+    "sharedTitle": "きょうつうの じゃくてん",
+    "weakA11y_one": "{{type}}タイプに よわい ポケモン {{count}}ひき",
+    "weakA11y_other": "{{type}}タイプに よわい ポケモン {{count}}ひき",
+    "weakLine_one": "{{type}}タイプに よわい ポケモン <bold>{{count}}ひき</bold>",
+    "weakLine_other": "{{type}}タイプに よわい ポケモン <bold>{{count}}ひき</bold>",
+    "resist_one": "{{count}}ひきが いまひとつ",
+    "resist_other": "{{count}}ひきが いまひとつ",
+    "sharedEmpty": "2ひき いじょうが よわい タイプは ありません。",
+    "unresistedTitle": "だれも いまひとつに ならない",
+    "unresistedHint": "これらの タイプの わざで ダメージが へる メンバーは いません。",
+    "unresistedEmpty": "どの タイプにも いまひとつに なる ポケモンが います。",
+    "uncoveredTitle": "カバー できない タイプ",
+    "uncoveredHint": "じぶんの タイプの わざで こうかばつぐんを とれる メンバーが いません。",
+    "uncoveredEmpty": "チームの タイプの わざで すべての タイプに ×2 を とれます。"
+  },
+  "share": {
+    "line": "{{position}}. {{name}}（{{types}}）"
+  }
+}

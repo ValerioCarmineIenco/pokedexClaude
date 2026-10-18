@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { FlatList, Pressable, StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
@@ -30,6 +31,7 @@ type Props = {
 
 /** Scelta di un Pokémon da confrontare: ricerca per nome su tutto il Pokédex, senza rete. */
 export function PokemonPicker({ title, onPick, onClose, excludeIds }: Props) {
+  const { t } = useTranslation('compare');
   const insets = useSafeAreaInsets();
   const [searchText, setSearchText] = useState('');
   const results = usePokemonSearch(searchText);
@@ -43,7 +45,7 @@ export function PokemonPicker({ title, onPick, onClose, excludeIds }: Props) {
           onPress={onClose}
           hitSlop={6}
           accessibilityRole="button"
-          accessibilityLabel="Indietro"
+          accessibilityLabel={t('back')}
           style={({ pressed }) => [styles.close, pressed && styles.pressed]}>
           <Icon name="back" size={18} color={colors.text} />
         </Pressable>
@@ -69,9 +71,9 @@ export function PokemonPicker({ title, onPick, onClose, excludeIds }: Props) {
         contentContainerStyle={[styles.list, { paddingBottom: insets.bottom + 16 }]}
         ListEmptyComponent={
           <ErrorState
-            title="Nessun Pokémon trovato"
-            message={`Nessun Pokémon si chiama «${searchText.trim()}».`}
-            actionLabel="Cancella la ricerca"
+            title={t('picker.emptyTitle')}
+            message={t('picker.emptyMessage', { query: searchText.trim() })}
+            actionLabel={t('picker.clearSearch')}
             actionStyle="ghost"
             onAction={() => setSearchText('')}
           />
