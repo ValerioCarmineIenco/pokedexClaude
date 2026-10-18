@@ -1,0 +1,34 @@
+{
+  "flavors": {
+    "spicy": "Piccante",
+    "dry": "Secco",
+    "sweet": "Dolce",
+    "bitter": "Amaro",
+    "sour": "Aspro"
+  },
+  "list": {
+    "count_one": "{{count}} natura",
+    "count_other": "{{count}} nature",
+    "results_one": "{{count}} risultato",
+    "results_other": "{{count}} risultati",
+    "searchLabel": "Cerca una natura per nome",
+    "noResultsTitle": "Nessun risultato",
+    "noResults": "Nessuna natura si chiama \"{{query}}\".",
+    "clearSearch": "Cancella ricerca"
+  },
+  "card": {
+    "neutral": "Neutra",
+    "neutralText": "Non cambia le statistiche e non ha sapori preferiti.",
+    "neutralLabel": "{{name}}. Natura neutra: non cambia le statistiche e non ha sapori preferiti.",
+    "label": "{{name}}. Aumenta {{increased}}, diminuisce {{decreased}}. Piace il sapore {{liked}}, non piace il sapore {{disliked}}.",
+    "increases": "Aumenta",
+    "decreases": "Diminuisce",
+    "likedFlavor": "Sapore preferito",
+    "dislikedFlavor": "Sapore non gradito"
+  },
+  "errors": {
+    "notFound": "Natura non trovata.",
+    "offlineTitle": "Nessuna connessione",
+    "retry": "Riprova"
+  }
+}

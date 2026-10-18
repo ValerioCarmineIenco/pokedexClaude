@@ -1,0 +1,31 @@
+{
+  "list": {
+    "count_one": "{{count}} ability",
+    "count_other": "{{count}} abilities",
+    "results_one": "{{count}} result",
+    "results_other": "{{count}} results",
+    "searchLabel": "Search for an ability by name",
+    "noResultsTitle": "No results",
+    "noResults": "No ability is called \"{{query}}\".",
+    "clearSearch": "Clear search"
+  },
+  "detail": {
+    "back": "Back to abilities",
+    "notFoundTitle": "Ability not found",
+    "notFoundMessage": "This ability doesn't exist in the Pokédex.",
+    "generation": "Gen {{numeral}}",
+    "noDescription": "No description available.",
+    "effect": "Effect",
+    "effectNote": "in English",
+    "pokemonWith": "Pokémon with this ability",
+    "pokemonLabel": "{{name}}, number {{number}}",
+    "pokemonLabelHidden": "{{name}}, number {{number}}, hidden ability",
+    "hidden": "Hidden"
+  },
+  "errors": {
+    "notFound": "Ability not found.",
+    "offlineTitle": "No connection",
+    "offlineMessage": "Can't reach the Pokédex. Check your network and try again.",
+    "retry": "Try again"
+  }
+}

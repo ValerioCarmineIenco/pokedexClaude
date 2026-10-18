@@ -1,0 +1,33 @@
+{
+  "back": "Indietro",
+  "title": "Confronto",
+  "offlineTitle": "Nessuna connessione",
+  "offlineMessage": "Non riesco a raggiungere il Pokédex. Controlla la rete e riprova.",
+  "retry": "Riprova",
+  "sections": {
+    "stats": "Statistiche base",
+    "abilities": "Abilità",
+    "typeEffectiveness": "Efficacia dei tipi"
+  },
+  "hiddenAbility": "Nascosta",
+  "typeEffectivenessHint": "Danno subito dalle mosse di ciascun tipo. Sono elencati solo i tipi che non fanno danno normale (×1) a entrambi; in verde il Pokémon che subisce meno.",
+  "defenseUnavailable": "Efficacia non disponibile.",
+  "openA11y": "Apri la scheda di {{name}}",
+  "artworkA11y": "Artwork di {{name}}",
+  "changeA11y": "Scegli un altro Pokémon al posto di {{name}}",
+  "change": "Cambia",
+  "total": "Totale",
+  "even": "Pari",
+  "table": {
+    "type": "Tipo",
+    "weaknesses": "Debolezze",
+    "resistances": "Resistenze"
+  },
+  "picker": {
+    "emptyTitle": "Nessun Pokémon trovato",
+    "emptyMessage": "Nessun Pokémon si chiama «{{query}}».",
+    "clearSearch": "Cancella la ricerca",
+    "compareWith": "Confronta con {{name}}",
+    "choose": "Scegli un Pokémon"
+  }
+}

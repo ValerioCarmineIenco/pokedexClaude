@@ -1,0 +1,46 @@
+{
+  "categories": {
+    "remedies": "Medicine",
+    "tm": "TMs",
+    "megaStones": "Mega Stones",
+    "pokeballs": "Poké Balls",
+    "battle": "Battle items",
+    "berries": "Berries",
+    "evolution": "Evolution",
+    "other": "Other items"
+  },
+  "list": {
+    "count_one": "{{count}} item",
+    "count_other": "{{count}} items",
+    "results_one": "{{count}} result",
+    "results_other": "{{count}} results",
+    "categoryCount_one": "{{count}} category",
+    "categoryCount_other": "{{count}} categories",
+    "searchLabel": "Search for an item by name",
+    "noResultsTitle": "No results",
+    "noResults": "No item is called \"{{query}}\".",
+    "noResultsInCategory": "No item in “{{category}}” is called \"{{query}}\".",
+    "clearSearch": "Clear search"
+  },
+  "picker": {
+    "allCategories": "All categories",
+    "all": "All",
+    "label": "Category: {{category}}",
+    "labelAll": "Category: all",
+    "hint": "Opens the category picker"
+  },
+  "detail": {
+    "back": "Back to items",
+    "notFoundTitle": "Item not found",
+    "notFoundMessage": "This item doesn't exist in the Pokédex.",
+    "imageLabel": "Image of {{name}}",
+    "noDescription": "No description available.",
+    "related": "Related"
+  },
+  "errors": {
+    "notFound": "Item not found.",
+    "offlineTitle": "No connection",
+    "offlineMessage": "Can't reach the Pokédex. Check your network and try again.",
+    "retry": "Try again"
+  }
+}

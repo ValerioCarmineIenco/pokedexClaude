@@ -1,0 +1,369 @@
+{
+  "list": {
+    "count_one": "{{count}} location",
+    "count_other": "{{count}} locations",
+    "results_one": "{{count}} result",
+    "results_other": "{{count}} results",
+    "searchLabel": "Search for a location by name",
+    "noResults": "No results",
+    "emptySearch": "No location is called \"{{query}}\".",
+    "emptySearchInRegion": "No location in {{region}} is called \"{{query}}\".",
+    "empty": "No location has recorded encounters.",
+    "emptyInRegion": "No location in {{region}} has recorded encounters.",
+    "clearSearch": "Clear search"
+  },
+  "card": {
+    "pokemon_one": "{{count}} Pokémon",
+    "pokemon_other": "{{count}} Pokémon",
+    "games_one": "{{count}} game",
+    "games_other": "{{count}} games",
+    "a11y": "{{name}}. {{pokemon}}, {{games}}.",
+    "a11yWithRegion": "{{name}}, {{region}}. {{pokemon}}, {{games}}."
+  },
+  "regions": {
+    "all": "All",
+    "a11y": "Region: {{region}}"
+  },
+  "detail": {
+    "back": "Back to locations",
+    "invalidTitle": "Location not found",
+    "invalidMessage": "This location doesn't exist in the Pokédex.",
+    "offlineTitle": "No connection",
+    "offlineMessage": "Can't reach the Pokédex. Check your network and try again.",
+    "retry": "Try again",
+    "empty": "No wild Pokémon in this location.",
+    "areas": "Areas",
+    "mainArea": "Main",
+    "encounterA11y": "{{name}}, level {{level}}, encounter rate {{chance}}",
+    "chanceUnknown": "not given",
+    "level": "Level {{level}}",
+    "chance": "Rate {{chance}}",
+    "percent": "{{value}}%"
+  },
+  "errors": {
+    "notFound": "Location not found."
+  },
+  "conditions": {
+    "fixed": {
+      "swarm-yes": "During a swarm",
+      "swarm-no": "No swarm",
+      "radar-on": "With the Poké Radar",
+      "radar-off": "Without the Poké Radar",
+      "radio-off": "Radio off",
+      "radio-hoenn": "Hoenn Sound on the radio",
+      "radio-sinnoh": "Sinnoh Sound on the radio",
+      "slot2-none": "No GBA cartridge",
+      "headbutt-tree-common": "Common tree",
+      "headbutt-tree-rare": "Rare tree",
+      "headbutt-tree-secret": "Secret tree"
+    },
+    "time": {
+      "morning": "Morning",
+      "day": "Day",
+      "night": "Night"
+    },
+    "season": {
+      "spring": "Spring",
+      "summer": "Summer",
+      "autumn": "Autumn",
+      "winter": "Winter"
+    },
+    "weekday": {
+      "monday": "Monday",
+      "tuesday": "Tuesday",
+      "wednesday": "Wednesday",
+      "thursday": "Thursday",
+      "friday": "Friday",
+      "saturday": "Saturday",
+      "sunday": "Sunday"
+    },
+    "weather": {
+      "normal": "Clear",
+      "overcast": "Overcast",
+      "raining": "Rain",
+      "thunderstorm": "Thunderstorm",
+      "snowing": "Snow",
+      "snowstorm": "Snowstorm",
+      "sandstorm": "Sandstorm",
+      "intense-sun": "Intense sun",
+      "fog": "Fog"
+    },
+    "weatherLabel": "Weather: {{weather}}",
+    "minutes": "Minutes {{from}}–{{to}}",
+    "hours": "{{from}}–{{to}}",
+    "coins_one": "{{coins}} coin",
+    "coins_other": "{{coins}} coins",
+    "slot2": "With {{game}} in the GBA slot",
+    "starter": "Starter chosen: {{pokemon}}",
+    "trade": "In exchange for {{pokemon}}",
+    "tradeAny": "In exchange for any Pokémon",
+    "either": "{{first}} or {{second}}",
+    "regionalForm": "{{region}} {{name}}"
+  },
+  "methods": {
+    "walk": {
+      "label": "Tall grass and caves",
+      "description": "Walking in tall grass or a cave"
+    },
+    "old-rod": {
+      "label": "Old Rod",
+      "description": "Fishing with an Old Rod"
+    },
+    "good-rod": {
+      "label": "Good Rod",
+      "description": "Fishing with a Good Rod"
+    },
+    "super-rod": {
+      "label": "Super Rod",
+      "description": "Fishing with a Super Rod"
+    },
+    "surf": {
+      "label": "Surf",
+      "description": "Surfing on the water"
+    },
+    "rock-smash": {
+      "label": "Rock Smash",
+      "description": "Using Rock Smash on cracked rocks"
+    },
+    "headbutt": {
+      "label": "Headbutt",
+      "description": "Using Headbutt on trees"
+    },
+    "headbutt-low": {
+      "label": "Headbutt (rare)",
+      "description": "Using Headbutt on trees, with low odds"
+    },
+    "headbutt-normal": {
+      "label": "Headbutt",
+      "description": "Using Headbutt on trees"
+    },
+    "headbutt-high": {
+      "label": "Headbutt (frequent)",
+      "description": "Using Headbutt on trees, with high odds"
+    },
+    "dark-grass": {
+      "label": "Dark grass",
+      "description": "Walking in dark tall grass"
+    },
+    "grass-spots": {
+      "label": "Rustling grass",
+      "description": "Walking in rustling grass"
+    },
+    "cave-spots": {
+      "label": "Cave dust clouds",
+      "description": "Walking into dust clouds in caves"
+    },
+    "bridge-spots": {
+      "label": "Bridge shadows",
+      "description": "Walking on shadows on bridges"
+    },
+    "super-rod-spots": {
+      "label": "Ripples (fishing)",
+      "description": "Fishing with a Super Rod in rippling water"
+    },
+    "surf-spots": {
+      "label": "Ripples (Surf)",
+      "description": "Surfing into rippling water"
+    },
+    "yellow-flowers": {
+      "label": "Yellow flowers",
+      "description": "Walking through yellow flowers"
+    },
+    "purple-flowers": {
+      "label": "Purple flowers",
+      "description": "Walking through purple flowers"
+    },
+    "red-flowers": {
+      "label": "Red flowers",
+      "description": "Walking through red flowers"
+    },
+    "rough-terrain": {
+      "label": "Rough terrain",
+      "description": "Walking on rough terrain"
+    },
+    "gift": {
+      "label": "Gift",
+      "description": "Pokémon received as a gift"
+    },
+    "gift-egg": {
+      "label": "Gift Egg",
+      "description": "Egg received as a gift"
+    },
+    "static": {
+      "label": "Fixed encounter",
+      "description": "Pokémon visible in a fixed spot"
+    },
+    "pokeflute": {
+      "label": "Poké Flute",
+      "description": "Waking it up with the Poké Flute"
+    },
+    "squirt-bottle": {
+      "label": "Squirt Bottle",
+      "description": "Using the Squirt Bottle on the wiggling tree"
+    },
+    "wailmer-pail": {
+      "label": "Wailmer Pail",
+      "description": "Using the Wailmer Pail on the wiggling tree"
+    },
+    "seaweed": {
+      "label": "Seaweed",
+      "description": "Diving among the seaweed"
+    },
+    "roaming-grass": {
+      "label": "Roaming (grass)",
+      "description": "Roaming Pokémon, in tall grass"
+    },
+    "roaming-water": {
+      "label": "Roaming (water)",
+      "description": "Roaming Pokémon, on the water"
+    },
+    "devon-scope": {
+      "label": "Devon Scope",
+      "description": "Using the Devon Scope on the invisible Pokémon"
+    },
+    "feebas-tile-fishing": {
+      "label": "Feebas fishing",
+      "description": "Fishing in the special spots of the river"
+    },
+    "island-scan": {
+      "label": "Island Scan",
+      "description": "Using Island Scan"
+    },
+    "sos": {
+      "label": "SOS call",
+      "description": "Called for help by a wild Pokémon"
+    },
+    "bubbling-spots": {
+      "label": "Bubbles (fishing)",
+      "description": "Fishing where the water is bubbling"
+    },
+    "berry-trees": {
+      "label": "Berry trees",
+      "description": "Picking Berries from trees"
+    },
+    "npc-trade": {
+      "label": "Trade",
+      "description": "Trade with an in-game character"
+    },
+    "sos-from-bubbling-spot": {
+      "label": "SOS from bubbles",
+      "description": "Called for help by a Pokémon fished from bubbles"
+    },
+    "overworld": {
+      "label": "Visible",
+      "description": "Pokémon visible in the field"
+    },
+    "overworld-water": {
+      "label": "Visible on water",
+      "description": "Pokémon visible on the water"
+    },
+    "overworld-flying": {
+      "label": "Visible in flight",
+      "description": "Pokémon visible in flight"
+    },
+    "overworld-special": {
+      "label": "Visible (special)",
+      "description": "Pokémon visible under special conditions"
+    },
+    "overworld-flying-special": {
+      "label": "Visible in flight (special)",
+      "description": "Pokémon visible in flight, under special conditions"
+    },
+    "overworld-water-special": {
+      "label": "Visible on water (special)",
+      "description": "Pokémon visible on the water, under special conditions"
+    },
+    "overworld-dirt": {
+      "label": "Visible from the ground",
+      "description": "Visible Pokémon popping out of the ground"
+    },
+    "horde": {
+      "label": "Horde",
+      "description": "Encounter with a horde of five Pokémon"
+    },
+    "colosseum-bonus-disc-us": {
+      "label": "Colosseum bonus disc (US)",
+      "description": "From the US Colosseum bonus disc"
+    },
+    "colosseum-bonus-disc-jpn": {
+      "label": "Colosseum bonus disc (JP)",
+      "description": "From the Japanese Colosseum bonus disc"
+    },
+    "pokemon-channel-pal": {
+      "label": "Pokémon Channel",
+      "description": "From Pokémon Channel (European version)"
+    },
+    "pokemon-ranger": {
+      "label": "Pokémon Ranger",
+      "description": "Transferred from Pokémon Ranger"
+    },
+    "pokemon-battle-revolution": {
+      "label": "Battle Revolution",
+      "description": "From Pokémon Battle Revolution"
+    },
+    "new-york-pokecenter-wish-eggs": {
+      "label": "Pokémon Center NY Eggs",
+      "description": "Eggs from the Pokémon Center New York event"
+    },
+    "snag": {
+      "label": "Snag",
+      "description": "Snagged from a Trainer with the Snag Machine"
+    },
+    "snag-rematch": {
+      "label": "Snag (rematch)",
+      "description": "Snagged from a Trainer in a rematch"
+    },
+    "pokespot": {
+      "label": "Poké Spot",
+      "description": "Lured to a Poké Spot with Poké Snacks"
+    },
+    "hidden-grotto": {
+      "label": "Hidden Grotto",
+      "description": "Found in a Hidden Grotto"
+    },
+    "honey-tree": {
+      "label": "Honey tree",
+      "description": "Slathering Honey on the tree"
+    },
+    "wanderer": {
+      "label": "Wanderer",
+      "description": "Pokémon wandering around the area"
+    },
+    "wanderer-water": {
+      "label": "Wanderer on water",
+      "description": "Pokémon wandering on the water"
+    },
+    "chase-water": {
+      "label": "Water chase",
+      "description": "Pokémon that chases you in the water"
+    },
+    "dynamax-adventure": {
+      "label": "Dynamax Adventure",
+      "description": "Encountered in a Dynamax Adventure"
+    },
+    "max-raid": {
+      "label": "Max Raid",
+      "description": "Encountered in a Max Raid Battle"
+    },
+    "trash-can-ambush": {
+      "label": "Trash can ambush",
+      "description": "Jumps out of a trash can"
+    },
+    "rustling-bush-ambush": {
+      "label": "Bush ambush",
+      "description": "Jumps out of a rustling bush"
+    },
+    "ceiling-ambush": {
+      "label": "Ceiling ambush",
+      "description": "Drops from the ceiling"
+    },
+    "ground-ambush": {
+      "label": "Ground ambush",
+      "description": "Jumps out of the ground"
+    },
+    "sky-ambush": {
+      "label": "Sky ambush",
+      "description": "Swoops down from the sky"
+    }
+  }
+}

@@ -1,0 +1,33 @@
+{
+  "back": "Zurück",
+  "title": "Vergleich",
+  "offlineTitle": "Keine Verbindung",
+  "offlineMessage": "Der Pokédex ist nicht erreichbar. Prüfe deine Verbindung und versuche es erneut.",
+  "retry": "Erneut versuchen",
+  "sections": {
+    "stats": "Basiswerte",
+    "abilities": "Fähigkeiten",
+    "typeEffectiveness": "Typ-Effektivität"
+  },
+  "hiddenAbility": "Versteckt",
+  "typeEffectivenessHint": "Erlittener Schaden durch Attacken jedes Typs. Aufgeführt sind nur Typen, die nicht bei beiden normalen Schaden (×1) verursachen; grün ist das Pokémon, das weniger Schaden nimmt.",
+  "defenseUnavailable": "Effektivität nicht verfügbar.",
+  "openA11y": "Seite von {{name}} öffnen",
+  "artworkA11y": "Artwork von {{name}}",
+  "changeA11y": "Anderes Pokémon statt {{name}} wählen",
+  "change": "Ändern",
+  "total": "Gesamt",
+  "even": "Gleich",
+  "table": {
+    "type": "Typ",
+    "weaknesses": "Schwächen",
+    "resistances": "Resistenzen"
+  },
+  "picker": {
+    "emptyTitle": "Kein Pokémon gefunden",
+    "emptyMessage": "Kein Pokémon heißt „{{query}}“.",
+    "clearSearch": "Suche löschen",
+    "compareWith": "Mit {{name}} vergleichen",
+    "choose": "Pokémon wählen"
+  }
+}

@@ -2,6 +2,8 @@ import * as DocumentPicker from 'expo-document-picker';
 import { File, Paths } from 'expo-file-system';
 import * as Sharing from 'expo-sharing';
 
+import { t } from '@/i18n';
+
 /** Salva il backup nella cache e apre il foglio di condivisione per spostarlo dove si vuole. */
 export async function saveBackupFile(name: string, text: string) {
   const file = new File(Paths.cache, name);
@@ -10,7 +12,7 @@ export async function saveBackupFile(name: string, text: string) {
   await Sharing.shareAsync(file.uri, {
     mimeType: 'application/json',
     UTI: 'public.json',
-    dialogTitle: 'Esporta backup',
+    dialogTitle: t('settings:backup.export'),
   });
 }
 

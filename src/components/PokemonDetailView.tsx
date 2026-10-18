@@ -1,5 +1,6 @@
 import { Image } from 'expo-image';
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import Animated, {
   Extrapolation,
@@ -17,6 +18,8 @@ import { GENERATIONS, LAST_POKEMON_ID } from '@/api/generations';
 import { getAbilityIndexEntryByName } from '@/api/abilities';
 import { getArtworkUrl, getShinyArtworkUrl } from '@/api/pokemon';
 import { useArtworkStyle } from '@/hooks/useArtworkStyle';
+import { t as translate } from '@/i18n';
+import { localName, pokemonName } from '@/i18n/names';
 import { colors } from '@/theme/colors';
 import { fonts } from '@/theme/fonts';
 import { primaryType, TYPE_COLORS, typeTint } from '@/theme/typeColors';
@@ -56,10 +59,18 @@ const SHEET_CAP = 72;
 /** Altezza della barra dei pulsanti, uguale nell'intestazione grande e in quella compatta. */
 const NAV_HEIGHT = 52;
 
-const REGIONS = GENERATIONS.map((g) => g.region);
-const INVALID_ID_MESSAGE = `Questo Pokédex contiene solo i ${LAST_POKEMON_ID} Pokémon di ${
-  REGIONS.length > 1 ? `${REGIONS.slice(0, -1).join(', ')} e ${REGIONS.at(-1)}` : REGIONS[0]
-}.`;
+/** «Questo Pokédex contiene solo i 1025 Pokémon di Kanto, …, e Paldea», nella lingua in uso. */
+function invalidIdMessage(): string {
+  const regions = GENERATIONS.map((g) => g.region);
+  const list =
+    regions.length > 1
+      ? translate('pokemon:detail.regionList', {
+          list: regions.slice(0, -1).join(translate('pokemon:detail.listSeparator')),
+          last: regions.at(-1),
+        })
+      : regions[0];
+  return translate('pokemon:detail.invalidId', { total: LAST_POKEMON_ID, regions: list });
+}
 
 export type PokemonDetailViewProps = {
   pokemon: PokemonDetail | undefined;
@@ -172,6 +183,7 @@ export function PokemonDetailView({
   onEncountersRetry,
 }: PokemonDetailViewProps) {
   const insets = useSafeAreaInsets();
+  const { t } = useTranslation('pokemon');
   const [artworkStyle] = useArtworkStyle();
   // «Mostra shiny» cambia solo l'artwork in alto, non lo stile scelto nelle Impostazioni.
   const [showShiny, setShowShiny] = useState(false);
@@ -193,7 +205,9 @@ export function PokemonDetailView({
     };
   });
 
-  const backButton = <NavButton icon="back" label="Torna all'elenco" onPress={onBack} />;
+  // Nome della specie nella lingua in uso (la scheda è sempre di una specie, id ≤ 1025).
+  const name = pokemon ? pokemonName(pokemon.id, pokemon.name) : '';
+  const backButton = <NavButton icon="back" label={t('detail.back')} onPress={onBack} />;
   const nav = (
     <View style={styles.nav}>
       {backButton}
@@ -201,21 +215,21 @@ export function PokemonDetailView({
         {pokemon && (
           <NavButton
             icon={isFavorite ? 'heart' : 'heartOutline'}
-            label={isFavorite ? 'Togli dai preferiti' : 'Aggiungi ai preferiti'}
+            label={isFavorite ? t('detail.removeFavorite') : t('detail.addFavorite')}
             color={isFavorite ? colors.accent : undefined}
             onPress={onToggleFavorite}
           />
         )}
         <NavButton
           icon="previous"
-          label={previousId ? `Pokémon precedente, ${formatNumber(previousId)}` : 'Nessun precedente'}
+          label={previousId ? t('detail.previous', { number: formatNumber(previousId) }) : t('detail.noPrevious')}
           text={previousId ? formatNumber(previousId) : undefined}
           onPress={previousId ? () => onNavigate(previousId) : undefined}
         />
         <NavButton
           icon="next"
           iconAfter
-          label={nextId ? `Pokémon successivo, ${formatNumber(nextId)}` : 'Nessun successivo'}
+          label={nextId ? t('detail.next', { number: formatNumber(nextId) }) : t('detail.noNext')}
           text={nextId ? formatNumber(nextId) : undefined}
           onPress={nextId ? () => onNavigate(nextId) : undefined}
         />
@@ -229,17 +243,17 @@ export function PokemonDetailView({
         <View style={[styles.nav, styles.navPadding]}>{backButton}</View>
         {isInvalidId ? (
           <ErrorState
-            title="Pokémon non trovato"
-            message={INVALID_ID_MESSAGE}
-            actionLabel="Torna all'elenco"
+            title={t('detail.notFoundTitle')}
+            message={invalidIdMessage()}
+            actionLabel={t('detail.back')}
             actionStyle="ghost"
             onAction={onBack}
           />
         ) : (
           <ErrorState
-            title="Nessuna connessione"
-            message={errorMessage ?? 'Non riesco a raggiungere il Pokédex. Controlla la rete e riprova.'}
-            actionLabel="Riprova"
+            title={t('detail.offlineTitle')}
+            message={errorMessage ?? t('detail.offlineMessage')}
+            actionLabel={t('detail.retry')}
             onAction={onRetry}
           />
         )}
@@ -269,7 +283,7 @@ export function PokemonDetailView({
               <>
                 <View style={styles.titleRow}>
                   <Text style={styles.name} numberOfLines={1} adjustsFontSizeToFit accessibilityRole="header">
-                    {formatName(pokemon.name)}
+                    {name}
                   </Text>
                   <Text style={styles.number}>{formatNumber(pokemon.id)}</Text>
                 </View>
@@ -298,7 +312,7 @@ export function PokemonDetailView({
                 style={styles.artwork}
                 contentFit="contain"
                 transition={200}
-                accessibilityLabel={`Artwork ${showShiny ? 'shiny ' : ''}di ${formatName(pokemon.name)}`}
+                accessibilityLabel={t(showShiny ? 'detail.artworkShinyLabel' : 'detail.artworkLabel', { name })}
               />
             ) : (
               <SkeletonBlock width={140} height={140} radius={70} style={styles.artworkSkeleton} />
@@ -321,7 +335,7 @@ export function PokemonDetailView({
               artworks={artworks}
               isLoading={isArtworksLoading}
               errorMessage={artworksErrorMessage}
-              pokemonName={formatName(pokemon.name)}
+              pokemonName={name}
               onRetry={onArtworksRetry}
             />
           ) : pokemon && tab === 'evolutions' ? (
@@ -341,7 +355,7 @@ export function PokemonDetailView({
               learnset={learnset}
               isLoading={isLearnsetLoading}
               errorMessage={learnsetErrorMessage}
-              pokemonName={formatName(pokemon.name)}
+              pokemonName={name}
               onOpenMove={onOpenMove}
               onRetry={onLearnsetRetry}
             />
@@ -355,41 +369,41 @@ export function PokemonDetailView({
                 </View>
               ) : (
                 <Text style={styles.description}>
-                  {pokemon.description ?? 'Nessuna descrizione in italiano disponibile.'}
+                  {pokemon.description ?? t('detail.noDescription')}
                 </Text>
               )}
 
               <View style={styles.facts}>
-                <Fact label="Altezza" value={formatHeight(pokemon.height)} />
-                <Fact label="Peso" value={formatWeight(pokemon.weight)} />
+                <Fact label={t('detail.height')} value={formatHeight(pokemon.height)} />
+                <Fact label={t('detail.weight')} value={formatWeight(pokemon.weight)} />
               </View>
 
               <Pressable
                 onPress={onCompare}
                 accessibilityRole="button"
-                accessibilityLabel={`Confronta ${formatName(pokemon.name)} con un altro Pokémon`}
+                accessibilityLabel={t('detail.compareLabel', { name })}
                 style={({ pressed }) => [styles.compare, pressed && styles.comparePressed]}>
                 <Icon name="compare" size={16} color={colors.text} />
-                <Text style={styles.compareLabel}>Confronta con un altro Pokémon</Text>
+                <Text style={styles.compareLabel}>{t('detail.compare')}</Text>
               </Pressable>
 
-              <Section title="Abilità">
+              <Section title={t('detail.abilities')}>
                 <View style={styles.abilities}>
                   {pokemon.abilities.map((ability) => {
-                    // Nome italiano e id dall'indice locale; senza voce resta il nome di PokéAPI.
+                    // Id dall'indice locale e nome nella lingua in uso; senza voce resta il nome di PokéAPI.
                     const entry = getAbilityIndexEntryByName(ability.name);
-                    const label = entry?.label ?? formatName(ability.name);
+                    const label = entry ? localName('ability', entry.id, entry.label) : formatName(ability.name);
                     return (
                       <Pressable
                         key={ability.name}
                         onPress={entry ? () => onOpenAbility(entry.id) : undefined}
                         disabled={!entry}
                         accessibilityRole={entry ? 'link' : 'text'}
-                        accessibilityLabel={`${label}${ability.isHidden ? ', abilità nascosta' : ''}`}
-                        accessibilityHint={entry ? "Apre l'abilità" : undefined}
+                        accessibilityLabel={ability.isHidden ? t('detail.hiddenAbilityLabel', { name: label }) : label}
+                        accessibilityHint={entry ? t('detail.openAbility') : undefined}
                         style={({ pressed }) => [styles.ability, pressed && styles.abilityPressed]}>
                         <Text style={styles.abilityName}>{label}</Text>
-                        {ability.isHidden && <Text style={styles.abilityHidden}>Nascosta</Text>}
+                        {ability.isHidden && <Text style={styles.abilityHidden}>{t('detail.hidden')}</Text>}
                         {entry && <Icon name="next" size={14} color={colors.textSubtle} />}
                       </Pressable>
                     );
@@ -397,7 +411,7 @@ export function PokemonDetailView({
                 </View>
               </Section>
 
-              <Section title="Statistiche base">
+              <Section title={t('detail.baseStats')}>
                 <View style={styles.stats}>
                   {pokemon.stats.map((stat) => (
                     <StatBar
@@ -408,7 +422,7 @@ export function PokemonDetailView({
                     />
                   ))}
                   <View style={styles.totalRow}>
-                    <Text style={styles.totalLabel}>Totale</Text>
+                    <Text style={styles.totalLabel}>{t('detail.total')}</Text>
                     <Text style={styles.totalValue}>
                       {pokemon.stats.reduce((sum, stat) => sum + stat.value, 0)}
                     </Text>
@@ -429,7 +443,7 @@ export function PokemonDetailView({
                 forms={forms}
                 isLoading={isFormsLoading}
                 errorMessage={formsErrorMessage}
-                pokemonName={formatName(pokemon.name)}
+                pokemonName={name}
                 onRetry={onFormsRetry}
               />
 
@@ -437,7 +451,7 @@ export function PokemonDetailView({
                 groups={encounters}
                 isLoading={isEncountersLoading}
                 errorMessage={encountersErrorMessage}
-                pokemonName={formatName(pokemon.name)}
+                pokemonName={name}
                 onOpenLocation={onOpenLocation}
                 onRetry={onEncountersRetry}
               />
@@ -520,11 +534,12 @@ function CompactHeader({
     opacity: shown.value,
     transform: [{ translateY: (1 - shown.value) * 10 }],
   }));
-  const name = pokemon ? formatName(pokemon.name) : '';
+  const { t } = useTranslation('pokemon');
+  const name = pokemon ? pokemonName(pokemon.id, pokemon.name) : '';
 
   return (
     <Animated.View style={[styles.compact, { height, paddingTop: topInset, backgroundColor }, barStyle]}>
-      <NavButton icon="back" label="Torna all'elenco" onPress={onBack} />
+      <NavButton icon="back" label={t('detail.back')} onPress={onBack} />
       <Animated.View style={[styles.compactTitle, titleStyle]}>
         {pokemon?.types.map((t) => (
           <TypeIcon key={t} type={t} size={22} />
@@ -536,19 +551,19 @@ function CompactHeader({
       {pokemon && (
         <NavButton
           icon={isFavorite ? 'heart' : 'heartOutline'}
-          label={isFavorite ? 'Togli dai preferiti' : 'Aggiungi ai preferiti'}
+          label={isFavorite ? t('detail.removeFavorite') : t('detail.addFavorite')}
           color={isFavorite ? colors.accent : undefined}
           onPress={onToggleFavorite}
         />
       )}
       <NavButton
         icon="previous"
-        label={previousId ? `Pokémon precedente, ${formatNumber(previousId)}` : 'Nessun precedente'}
+        label={previousId ? t('detail.previous', { number: formatNumber(previousId) }) : t('detail.noPrevious')}
         onPress={previousId ? () => onNavigate(previousId) : undefined}
       />
       <NavButton
         icon="next"
-        label={nextId ? `Pokémon successivo, ${formatNumber(nextId)}` : 'Nessun successivo'}
+        label={nextId ? t('detail.next', { number: formatNumber(nextId) }) : t('detail.noNext')}
         onPress={nextId ? () => onNavigate(nextId) : undefined}
       />
     </Animated.View>

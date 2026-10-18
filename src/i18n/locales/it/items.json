@@ -1,0 +1,46 @@
+{
+  "categories": {
+    "remedies": "Rimedi",
+    "tm": "MT",
+    "megaStones": "Megapietre",
+    "pokeballs": "Poké Ball",
+    "battle": "Strumenti lotta",
+    "berries": "Bacche",
+    "evolution": "Evolutivi",
+    "other": "Altri strumenti"
+  },
+  "list": {
+    "count_one": "{{count}} oggetto",
+    "count_other": "{{count}} oggetti",
+    "results_one": "{{count}} risultato",
+    "results_other": "{{count}} risultati",
+    "categoryCount_one": "{{count}} categoria",
+    "categoryCount_other": "{{count}} categorie",
+    "searchLabel": "Cerca un oggetto per nome",
+    "noResultsTitle": "Nessun risultato",
+    "noResults": "Nessun oggetto si chiama \"{{query}}\".",
+    "noResultsInCategory": "Nessun oggetto tra «{{category}}» si chiama \"{{query}}\".",
+    "clearSearch": "Cancella ricerca"
+  },
+  "picker": {
+    "allCategories": "Tutte le categorie",
+    "all": "Tutte",
+    "label": "Categoria: {{category}}",
+    "labelAll": "Categoria: tutte",
+    "hint": "Apre la scelta della categoria"
+  },
+  "detail": {
+    "back": "Torna agli oggetti",
+    "notFoundTitle": "Oggetto non trovato",
+    "notFoundMessage": "Questo oggetto non esiste nel Pokédex.",
+    "imageLabel": "Immagine di {{name}}",
+    "noDescription": "Nessuna descrizione in italiano disponibile.",
+    "related": "Correlati"
+  },
+  "errors": {
+    "notFound": "Oggetto non trovato.",
+    "offlineTitle": "Nessuna connessione",
+    "offlineMessage": "Non riesco a raggiungere il Pokédex. Controlla la rete e riprova.",
+    "retry": "Riprova"
+  }
+}

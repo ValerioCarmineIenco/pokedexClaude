@@ -1,4 +1,6 @@
 import { fetchJson } from '@/api/client';
+import { getLocale, t } from '@/i18n';
+import { localName } from '@/i18n/names';
 import type { PokemonResponse, SpriteTree } from '@/types/pokeapi';
 import type {
   ArtworkGeneration,
@@ -8,48 +10,55 @@ import type {
 } from '@/types/pokemon';
 import { formatName } from '@/utils/format';
 
-// Nomi italiani dei giochi, come chiavi di `sprites.versions` e `official-artwork.versions`.
-const GAME_NAMES: Record<string, string> = {
-  'red-blue': 'Rosso e Blu',
-  'red-and-blue': 'Rosso e Blu',
-  'red-green-japan': 'Rosso e Verde',
-  'red-and-green': 'Rosso e Verde',
-  yellow: 'Giallo',
-  gold: 'Oro',
-  silver: 'Argento',
-  'gold-and-silver': 'Oro e Argento',
-  crystal: 'Cristallo',
-  'ruby-sapphire': 'Rubino e Zaffiro',
-  emerald: 'Smeraldo',
-  'firered-leafgreen': 'Rosso Fuoco e Verde Foglia',
-  'diamond-pearl': 'Diamante e Perla',
-  platinum: 'Platino',
-  'heartgold-soulsilver': 'HeartGold e SoulSilver',
-  'black-white': 'Nero e Bianco',
-  'x-y': 'X e Y',
-  'omega-ruby-alpha-sapphire': 'Rubino Omega e Zaffiro Alpha',
-  'ultra-sun-ultra-moon': 'Ultrasole e Ultraluna',
-  'lets-go-pikachu-lets-go-eevee': "Let's Go, Pikachu! e Let's Go, Eevee!",
-  'sword-shield': 'Spada e Scudo',
-  'brilliant-diamond-shining-pearl': 'Diamante Lucente e Perla Splendente',
-  'legends-arceus': 'Leggende Pokémon: Arceus',
-  'scarlet-violet': 'Scarlatto e Violetto',
-  champions: 'Champions',
-  icons: 'Icone',
+/**
+ * Giochi di ciascuna chiave di `sprites.versions` e `official-artwork.versions`, come id delle
+ * versioni di PokéAPI: il nome si legge nella lingua in uso con `localName('version', id)`.
+ */
+const GAME_VERSIONS: Record<string, number[]> = {
+  'red-blue': [1, 2],
+  'red-and-blue': [1, 2],
+  'red-green-japan': [44, 45],
+  'red-and-green': [44, 45],
+  yellow: [3],
+  gold: [4],
+  silver: [5],
+  'gold-and-silver': [4, 5],
+  crystal: [6],
+  'ruby-sapphire': [7, 8],
+  emerald: [9],
+  'firered-leafgreen': [10, 11],
+  'diamond-pearl': [12, 13],
+  platinum: [14],
+  'heartgold-soulsilver': [15, 16],
+  'black-white': [17, 18],
+  'x-y': [23, 24],
+  'omega-ruby-alpha-sapphire': [25, 26],
+  'sun-moon': [27, 28],
+  'ultra-sun-ultra-moon': [29, 30],
+  'lets-go-pikachu-lets-go-eevee': [31, 32],
+  'sword-shield': [33, 34],
+  'brilliant-diamond-shining-pearl': [37, 38],
+  'legends-arceus': [39],
+  'scarlet-violet': [40, 41],
+  'legends-za': [47],
+  champions: [49],
 };
 
 const ROMAN = ['i', 'ii', 'iii', 'iv', 'v', 'vi', 'vii', 'viii', 'ix', 'x'];
 
 const VARIANT_ORDER = ['default', 'shiny', 'female', 'shiny_female'];
 
-const MODIFIER_LABELS: Record<string, string> = {
-  shiny: 'shiny',
-  female: '♀',
-  gray: 'in grigio',
-  gbc: 'a colori (GBC)',
-};
+const MODIFIER_KEYS = ['shiny', 'female', 'gray', 'gbc'] as const;
+type Modifier = (typeof MODIFIER_KEYS)[number];
+const isModifier = (value: string): value is Modifier => (MODIFIER_KEYS as readonly string[]).includes(value);
 
-const gameName = (slug: string) => GAME_NAMES[slug] ?? formatName(slug);
+function gameName(slug: string): string {
+  if (slug === 'icons') return t('pokemon:artwork.games.icons');
+  const versions = GAME_VERSIONS[slug];
+  if (!versions) return formatName(slug);
+  const [first, second] = versions.map((id) => localName('version', id));
+  return second ? t('pokemon:artwork.games.pair', { first, second }) : first;
+}
 
 /** `generation-iv` → 4 (0 se non riconosciuta). */
 const generationNumber = (slug: string) => ROMAN.indexOf(slug.replace('generation-', '')) + 1;
@@ -58,26 +67,29 @@ const isTree = (value: SpriteTree[string]): value is SpriteTree =>
   typeof value === 'object' && value !== null;
 
 /**
- * `front_shiny_female` → «Fronte shiny ♀», o «Shiny ♀» se la fonte ha solo il fronte.
+ * `front_shiny_female` → «Fronte shiny ♀» (nella lingua in uso), o «Shiny ♀» se la fonte ha solo il fronte.
  * Restituisce anche il rango per ordinare: prima il fronte, poi il retro, nell'ordine di VARIANT_ORDER.
  */
 function describeVariant(key: string, frontOnly: boolean): { label: string; rank: number } {
   const [side, ...rest] = key.split('_');
   const mods = rest.filter((m) => m !== 'default');
-  const modsLabel = mods.map((m) => MODIFIER_LABELS[m] ?? m).join(' ');
+  const modsLabel = mods.map((m) => (isModifier(m) ? t(`pokemon:artwork.modifiers.${m}`) : m)).join(' ');
   const variantRank = VARIANT_ORDER.indexOf(mods.length ? mods.join('_') : 'default');
   const rank = (side === 'back' ? 100 : 0) + (variantRank === -1 ? 50 : variantRank);
 
   if (frontOnly && side === 'front') {
-    const label = !modsLabel
-      ? 'Normale'
-      : modsLabel === '♀'
-        ? 'Femmina'
-        : modsLabel.charAt(0).toUpperCase() + modsLabel.slice(1);
+    const label = !mods.length
+      ? t('pokemon:artwork.variants.normal')
+      : mods.length === 1 && mods[0] === 'female'
+        ? t('pokemon:artwork.variants.female')
+        : modsLabel.charAt(0).toLocaleUpperCase(getLocale()) + modsLabel.slice(1);
     return { label, rank };
   }
-  const sideLabel = side === 'back' ? 'Retro' : 'Fronte';
-  return { label: modsLabel ? `${sideLabel} ${modsLabel}` : sideLabel, rank };
+  const sideLabel = t(side === 'back' ? 'pokemon:artwork.variants.back' : 'pokemon:artwork.variants.front');
+  return {
+    label: modsLabel ? t('pokemon:artwork.variants.sideWithModifiers', { side: sideLabel, modifiers: modsLabel }) : sideLabel,
+    rank,
+  };
 }
 
 /**
@@ -104,8 +116,13 @@ function gameGroups(game: SpriteTree, path: string, title: string): ArtworkGroup
   const groups = group(path, title, imagesOf(game, path));
   for (const [key, value] of Object.entries(game)) {
     if (!isTree(value)) continue;
-    const suffix = key === 'animated' ? 'animati' : key === 'icons' ? 'icone' : formatName(key);
-    groups.push(...group(`${path}/${key}`, `${title} · ${suffix}`, imagesOf(value, `${path}/${key}`)));
+    const subtitle =
+      key === 'animated'
+        ? t('pokemon:artwork.groups.animated', { title })
+        : key === 'icons'
+          ? t('pokemon:artwork.groups.icons', { title })
+          : `${title} · ${formatName(key)}`;
+    groups.push(...group(`${path}/${key}`, subtitle, imagesOf(value, `${path}/${key}`)));
   }
   return groups;
 }
@@ -134,11 +151,11 @@ export function toPokemonArtworks(id: number, sprites: SpriteTree): PokemonArtwo
   }
 
   const featured = [
-    ...group('official-artwork', 'Artwork ufficiale', officialImages),
+    ...group('official-artwork', t('pokemon:artwork.groups.official'), officialImages),
     ...group('home', 'Pokémon HOME', imagesOf(branch('home'), 'other/home', true)),
     ...group('dream-world', 'Dream World', imagesOf(branch('dream_world'), 'other/dream_world', true)),
-    ...group('showdown', 'Showdown · animati', imagesOf(branch('showdown'), 'other/showdown')),
-    ...group('base', 'Sprite base', imagesOf(sprites, 'sprites')),
+    ...group('showdown', t('pokemon:artwork.groups.animated', { title: 'Showdown' }), imagesOf(branch('showdown'), 'other/showdown')),
+    ...group('base', t('pokemon:artwork.groups.base'), imagesOf(sprites, 'sprites')),
   ];
 
   const versions = isTree(sprites.versions) ? sprites.versions : {};
@@ -157,7 +174,9 @@ export function toPokemonArtworks(id: number, sprites: SpriteTree): PokemonArtwo
       return [
         {
           id: gen,
-          title: number ? `Generazione ${gen.replace('generation-', '').toUpperCase()}` : formatName(gen),
+          title: number
+            ? t('common:generation', { number: gen.replace('generation-', '').toUpperCase() })
+            : formatName(gen),
           games: groups,
           imageCount,
           number,

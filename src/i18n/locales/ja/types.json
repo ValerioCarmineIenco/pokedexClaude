@@ -1,0 +1,50 @@
+{
+  "typeA11y": "{{type}}タイプ",
+  "chart": {
+    "allTypes": "すべてのタイプ",
+    "allTypesHint": "タイプをタップすると、相性・ポケモン・わざを確認できます。",
+    "title": "タイプ相性表",
+    "hint": "行：わざのタイプ。列：攻撃を受けるポケモンのタイプ。アイコンをタップするとタイプの詳細を表示。空欄は等倍（×1）。",
+    "legend": {
+      "superEffective": "ばつぐん",
+      "notVeryEffective": "いまひとつ",
+      "noEffect": "こうかなし"
+    },
+    "cellA11y": "{{attacker}}→{{defender}}：{{effect}}",
+    "spoken": {
+      "superEffective": "ばつぐん、2倍",
+      "notVeryEffective": "いまひとつ、半分",
+      "noEffect": "こうかなし",
+      "normal": "等倍"
+    }
+  },
+  "matchups": {
+    "superEffective": "こうかはばつぐん",
+    "notVeryEffective": "こうかはいまひとつ",
+    "noEffect": "こうかなし",
+    "weakTo": "弱点",
+    "resists": "半減",
+    "immuneTo": "無効",
+    "noTypes": "なし"
+  },
+  "detail": {
+    "back": "タイプ一覧に戻る",
+    "notFoundTitle": "タイプが見つかりません",
+    "notFoundMessage": "このタイプはポケモン図鑑にありません。",
+    "pokemonCount_one": "{{count}}匹",
+    "pokemonCount_other": "{{count}}匹",
+    "movesCount_one": "{{count}}種類のわざ",
+    "movesCount_other": "{{count}}種類のわざ",
+    "attack": "攻撃するとき",
+    "attackHint": "{{type}}タイプのわざが各タイプに与えるダメージ。",
+    "defense": "攻撃を受けるとき",
+    "defenseHint": "{{type}}タイプだけのポケモンが受けるダメージ。",
+    "tabPokemon": "ポケモン  {{count}}",
+    "tabMoves": "わざ  {{count}}",
+    "emptyPokemon": "このタイプのポケモンはいません。",
+    "emptyMoves": "このタイプのわざはありません。"
+  },
+  "errors": {
+    "notFound": "タイプが見つかりません。"
+  }
+}

@@ -5,7 +5,7 @@ export type AbilityIndexEntry = {
   id: number;
   /** Slug di PokéAPI (es. `overgrow`). */
   name: string;
-  /** Nome mostrato (es. «Erbaiuto»): italiano, altrimenti inglese. Serve per la ricerca. */
+  /** Nome italiano (es. «Erbaiuto»), altrimenti inglese: ripiego di `localName('ability', id)`. */
   label: string;
   /** Generazione in cui è stata introdotta (3 = Rubino e Zaffiro). */
   generation: number;
@@ -27,15 +27,17 @@ export type AbilityPokemon = {
 /** Dati di `/ability/{id}`, pronti per lista e dettaglio. */
 export type Ability = {
   id: number;
-  /** Nome italiano (es. «Erbaiuto»), altrimenti inglese. */
+  /** Nome nella lingua in uso (es. «Erbaiuto»), altrimenti inglese. */
   name: string;
-  /** Ultima descrizione italiana dei giochi, altrimenti inglese; stringa vuota se assente. */
+  /** Ultima descrizione dei giochi nella lingua in uso, altrimenti inglese; stringa vuota se assente. */
   description: string;
   /**
-   * Effetto in lotta spiegato per esteso. PokéAPI lo ha solo in inglese (niente italiano);
-   * null se assente.
+   * Effetto in lotta spiegato per esteso, nella lingua in uso se PokéAPI lo ha (di solito solo
+   * inglese e tedesco), altrimenti in inglese; null se assente.
    */
   effect: string | null;
+  /** Lingua PokéAPI di `effect` (es. `en`), per avvisare quando non è quella in uso; null senza effetto. */
+  effectLanguage: string | null;
   /** Generazione in cui è stata introdotta. */
   generation: number;
   /** Pokémon del Pokédex che la possiedono, in ordine di id. Può essere vuota. */

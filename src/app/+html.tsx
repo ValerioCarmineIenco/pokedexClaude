@@ -9,7 +9,7 @@ const base = process.env.EXPO_BASE_URL ?? '';
 /** Pagina HTML del sito web: aggiunge icona e manifest per "Aggiungi a schermata Home". */
 export default function Root({ children }: PropsWithChildren) {
   return (
-    <html lang="it">
+    <html lang="en">
       <head>
         <meta charSet="utf-8" />
         <meta httpEquiv="X-UA-Compatible" content="IE=edge" />

@@ -1,0 +1,33 @@
+{
+  "back": "Retour",
+  "title": "Comparaison",
+  "offlineTitle": "Pas de connexion",
+  "offlineMessage": "Impossible de joindre le Pokédex. Vérifiez votre connexion et réessayez.",
+  "retry": "Réessayer",
+  "sections": {
+    "stats": "Stats de base",
+    "abilities": "Talents",
+    "typeEffectiveness": "Efficacité des types"
+  },
+  "hiddenAbility": "Caché",
+  "typeEffectivenessHint": "Dégâts subis par les capacités de chaque type. Seuls les types qui n’infligent pas des dégâts normaux (×1) aux deux sont listés ; en vert, le Pokémon qui en subit le moins.",
+  "defenseUnavailable": "Efficacité indisponible.",
+  "openA11y": "Ouvrir la fiche de {{name}}",
+  "artworkA11y": "Illustration de {{name}}",
+  "changeA11y": "Choisir un autre Pokémon à la place de {{name}}",
+  "change": "Changer",
+  "total": "Total",
+  "even": "Égalité",
+  "table": {
+    "type": "Type",
+    "weaknesses": "Faiblesses",
+    "resistances": "Résistances"
+  },
+  "picker": {
+    "emptyTitle": "Aucun Pokémon trouvé",
+    "emptyMessage": "Aucun Pokémon ne s’appelle « {{query}} ».",
+    "clearSearch": "Effacer la recherche",
+    "compareWith": "Comparer avec {{name}}",
+    "choose": "Choisir un Pokémon"
+  }
+}

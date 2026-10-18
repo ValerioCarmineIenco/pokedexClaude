@@ -1,0 +1,34 @@
+{
+  "flavors": {
+    "spicy": "Scharf",
+    "dry": "Trocken",
+    "sweet": "Süß",
+    "bitter": "Bitter",
+    "sour": "Sauer"
+  },
+  "list": {
+    "count_one": "{{count}} Wesen",
+    "count_other": "{{count}} Wesen",
+    "results_one": "{{count}} Ergebnis",
+    "results_other": "{{count}} Ergebnisse",
+    "searchLabel": "Wesen nach Namen suchen",
+    "noResultsTitle": "Keine Ergebnisse",
+    "noResults": "Kein Wesen heißt „{{query}}“.",
+    "clearSearch": "Suche löschen"
+  },
+  "card": {
+    "neutral": "Neutral",
+    "neutralText": "Ändert keine Statuswerte und hat keinen Lieblingsgeschmack.",
+    "neutralLabel": "{{name}}. Neutrales Wesen: ändert keine Statuswerte und hat keinen Lieblingsgeschmack.",
+    "label": "{{name}}. Erhöht {{increased}}, senkt {{decreased}}. Mag den Geschmack {{liked}}, mag den Geschmack {{disliked}} nicht.",
+    "increases": "Erhöht",
+    "decreases": "Senkt",
+    "likedFlavor": "Lieblingsgeschmack",
+    "dislikedFlavor": "Mag nicht"
+  },
+  "errors": {
+    "notFound": "Wesen nicht gefunden.",
+    "offlineTitle": "Keine Verbindung",
+    "retry": "Erneut versuchen"
+  }
+}

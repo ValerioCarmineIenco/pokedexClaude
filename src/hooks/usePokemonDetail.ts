@@ -5,7 +5,7 @@ import { usePokemonSpecies } from '@/hooks/usePokemonSpecies';
 import type { PokemonDetail } from '@/types/pokemon';
 
 /**
- * Scheda completa per la schermata di dettaglio: dati del Pokémon più descrizione italiana.
+ * Scheda completa per la schermata di dettaglio: dati del Pokémon più descrizione nella lingua in uso.
  * Se la descrizione non arriva, la scheda si mostra comunque con `description: null`.
  * Uso: `const { pokemon, isLoading, errorMessage, refetch } = usePokemonDetail(useLocalSearchParams().id);`
  */

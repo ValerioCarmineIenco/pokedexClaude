@@ -1,0 +1,31 @@
+{
+  "list": {
+    "count_one": "{{count}} habilidad",
+    "count_other": "{{count}} habilidades",
+    "results_one": "{{count}} resultado",
+    "results_other": "{{count}} resultados",
+    "searchLabel": "Buscar una habilidad por nombre",
+    "noResultsTitle": "Sin resultados",
+    "noResults": "Ninguna habilidad se llama \"{{query}}\".",
+    "clearSearch": "Borrar búsqueda"
+  },
+  "detail": {
+    "back": "Volver a las habilidades",
+    "notFoundTitle": "Habilidad no encontrada",
+    "notFoundMessage": "Esta habilidad no existe en la Pokédex.",
+    "generation": "Gen. {{numeral}}",
+    "noDescription": "No hay descripción en español disponible.",
+    "effect": "Efecto",
+    "effectNote": "en inglés",
+    "pokemonWith": "Pokémon con esta habilidad",
+    "pokemonLabel": "{{name}}, número {{number}}",
+    "pokemonLabelHidden": "{{name}}, número {{number}}, habilidad oculta",
+    "hidden": "Oculta"
+  },
+  "errors": {
+    "notFound": "Habilidad no encontrada.",
+    "offlineTitle": "Sin conexión",
+    "offlineMessage": "No se puede acceder a la Pokédex. Comprueba la red y vuelve a intentarlo.",
+    "retry": "Reintentar"
+  }
+}

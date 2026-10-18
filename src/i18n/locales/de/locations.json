@@ -1,0 +1,369 @@
+{
+  "list": {
+    "count_one": "{{count}} Ort",
+    "count_other": "{{count}} Orte",
+    "results_one": "{{count}} Ergebnis",
+    "results_other": "{{count}} Ergebnisse",
+    "searchLabel": "Ort nach Namen suchen",
+    "noResults": "Keine Ergebnisse",
+    "emptySearch": "Kein Ort heißt „{{query}}“.",
+    "emptySearchInRegion": "Kein Ort in {{region}} heißt „{{query}}“.",
+    "empty": "Kein Ort hat erfasste Begegnungen.",
+    "emptyInRegion": "Kein Ort in {{region}} hat erfasste Begegnungen.",
+    "clearSearch": "Suche löschen"
+  },
+  "card": {
+    "pokemon_one": "{{count}} Pokémon",
+    "pokemon_other": "{{count}} Pokémon",
+    "games_one": "{{count}} Spiel",
+    "games_other": "{{count}} Spiele",
+    "a11y": "{{name}}. {{pokemon}}, {{games}}.",
+    "a11yWithRegion": "{{name}}, {{region}}. {{pokemon}}, {{games}}."
+  },
+  "regions": {
+    "all": "Alle",
+    "a11y": "Region: {{region}}"
+  },
+  "detail": {
+    "back": "Zurück zu den Orten",
+    "invalidTitle": "Ort nicht gefunden",
+    "invalidMessage": "Diesen Ort gibt es im Pokédex nicht.",
+    "offlineTitle": "Keine Verbindung",
+    "offlineMessage": "Der Pokédex ist nicht erreichbar. Prüfe deine Verbindung und versuche es erneut.",
+    "retry": "Erneut versuchen",
+    "empty": "An diesem Ort gibt es keine wilden Pokémon.",
+    "areas": "Gebiete",
+    "mainArea": "Hauptgebiet",
+    "encounterA11y": "{{name}}, Level {{level}}, Wahrscheinlichkeit {{chance}}",
+    "chanceUnknown": "nicht angegeben",
+    "level": "Lv. {{level}}",
+    "chance": "Chance {{chance}}",
+    "percent": "{{value}} %"
+  },
+  "errors": {
+    "notFound": "Ort nicht gefunden."
+  },
+  "conditions": {
+    "fixed": {
+      "swarm-yes": "Während eines Massenauftretens",
+      "swarm-no": "Ohne Massenauftreten",
+      "radar-on": "Mit dem Pokéradar",
+      "radar-off": "Ohne Pokéradar",
+      "radio-off": "Radio aus",
+      "radio-hoenn": "Hoenn-Klänge im Radio",
+      "radio-sinnoh": "Sinnoh-Klänge im Radio",
+      "slot2-none": "Kein GBA-Modul",
+      "headbutt-tree-common": "Gewöhnlicher Baum",
+      "headbutt-tree-rare": "Seltener Baum",
+      "headbutt-tree-secret": "Geheimer Baum"
+    },
+    "time": {
+      "morning": "Morgen",
+      "day": "Tag",
+      "night": "Nacht"
+    },
+    "season": {
+      "spring": "Frühling",
+      "summer": "Sommer",
+      "autumn": "Herbst",
+      "winter": "Winter"
+    },
+    "weekday": {
+      "monday": "Montag",
+      "tuesday": "Dienstag",
+      "wednesday": "Mittwoch",
+      "thursday": "Donnerstag",
+      "friday": "Freitag",
+      "saturday": "Samstag",
+      "sunday": "Sonntag"
+    },
+    "weather": {
+      "normal": "Klar",
+      "overcast": "Bewölkt",
+      "raining": "Regen",
+      "thunderstorm": "Gewitter",
+      "snowing": "Schnee",
+      "snowstorm": "Schneesturm",
+      "sandstorm": "Sandsturm",
+      "intense-sun": "Starke Sonne",
+      "fog": "Nebel"
+    },
+    "weatherLabel": "Wetter: {{weather}}",
+    "minutes": "Minute {{from}}–{{to}}",
+    "hours": "{{from}}–{{to}} Uhr",
+    "coins_one": "{{coins}} Münze",
+    "coins_other": "{{coins}} Münzen",
+    "slot2": "Mit {{game}} im GBA-Slot",
+    "starter": "Gewählter Starter: {{pokemon}}",
+    "trade": "Im Tausch gegen {{pokemon}}",
+    "tradeAny": "Im Tausch gegen ein beliebiges Pokémon",
+    "either": "{{first}} oder {{second}}",
+    "regionalForm": "{{name}} ({{region}})"
+  },
+  "methods": {
+    "walk": {
+      "label": "Hohes Gras und Höhlen",
+      "description": "Im hohen Gras oder in einer Höhle laufen"
+    },
+    "old-rod": {
+      "label": "Angel",
+      "description": "Mit einer Angel angeln"
+    },
+    "good-rod": {
+      "label": "Profiangel",
+      "description": "Mit einer Profiangel angeln"
+    },
+    "super-rod": {
+      "label": "Superangel",
+      "description": "Mit einer Superangel angeln"
+    },
+    "surf": {
+      "label": "Surfer",
+      "description": "Auf dem Wasser surfen"
+    },
+    "rock-smash": {
+      "label": "Zertrümmerer",
+      "description": "Zertrümmerer auf rissigen Felsen einsetzen"
+    },
+    "headbutt": {
+      "label": "Kopfnuss",
+      "description": "Kopfnuss an Bäumen einsetzen"
+    },
+    "headbutt-low": {
+      "label": "Kopfnuss (selten)",
+      "description": "Kopfnuss an Bäumen einsetzen, mit geringer Chance"
+    },
+    "headbutt-normal": {
+      "label": "Kopfnuss",
+      "description": "Kopfnuss an Bäumen einsetzen"
+    },
+    "headbutt-high": {
+      "label": "Kopfnuss (häufig)",
+      "description": "Kopfnuss an Bäumen einsetzen, mit hoher Chance"
+    },
+    "dark-grass": {
+      "label": "Dunkles Gras",
+      "description": "Im dunklen hohen Gras laufen"
+    },
+    "grass-spots": {
+      "label": "Raschelndes Gras",
+      "description": "Im raschelnden Gras laufen"
+    },
+    "cave-spots": {
+      "label": "Staubwolken in Höhlen",
+      "description": "In Höhlen in aufwirbelnden Staub laufen"
+    },
+    "bridge-spots": {
+      "label": "Schatten auf Brücken",
+      "description": "Über Schatten auf Brücken laufen"
+    },
+    "super-rod-spots": {
+      "label": "Wellen (Angeln)",
+      "description": "Mit der Superangel in kräuselndem Wasser angeln"
+    },
+    "surf-spots": {
+      "label": "Wellen (Surfer)",
+      "description": "In kräuselndes Wasser surfen"
+    },
+    "yellow-flowers": {
+      "label": "Gelbe Blumen",
+      "description": "Durch gelbe Blumen laufen"
+    },
+    "purple-flowers": {
+      "label": "Violette Blumen",
+      "description": "Durch violette Blumen laufen"
+    },
+    "red-flowers": {
+      "label": "Rote Blumen",
+      "description": "Durch rote Blumen laufen"
+    },
+    "rough-terrain": {
+      "label": "Unwegsames Gelände",
+      "description": "Über unwegsames Gelände laufen"
+    },
+    "gift": {
+      "label": "Geschenk",
+      "description": "Pokémon als Geschenk erhalten"
+    },
+    "gift-egg": {
+      "label": "Geschenktes Ei",
+      "description": "Ei als Geschenk erhalten"
+    },
+    "static": {
+      "label": "Feste Begegnung",
+      "description": "Pokémon an einer festen Stelle sichtbar"
+    },
+    "pokeflute": {
+      "label": "Pokéflöte",
+      "description": "Mit der Pokéflöte aufwecken"
+    },
+    "squirt-bottle": {
+      "label": "Schiggykanne",
+      "description": "Die Schiggykanne beim wackelnden Baum benutzen"
+    },
+    "wailmer-pail": {
+      "label": "Wailmerkanne",
+      "description": "Die Wailmerkanne beim wackelnden Baum benutzen"
+    },
+    "seaweed": {
+      "label": "Seetang",
+      "description": "Zwischen Seetang tauchen"
+    },
+    "roaming-grass": {
+      "label": "Umherstreifend (Gras)",
+      "description": "Umherstreifendes Pokémon, im hohen Gras"
+    },
+    "roaming-water": {
+      "label": "Umherstreifend (Wasser)",
+      "description": "Umherstreifendes Pokémon, auf dem Wasser"
+    },
+    "devon-scope": {
+      "label": "Devon-Scope",
+      "description": "Den Devon-Scope beim unsichtbaren Pokémon benutzen"
+    },
+    "feebas-tile-fishing": {
+      "label": "Barschwa-Angeln",
+      "description": "An den besonderen Stellen des Flusses angeln"
+    },
+    "island-scan": {
+      "label": "Inselscan",
+      "description": "Den Inselscan verwenden"
+    },
+    "sos": {
+      "label": "Notruf",
+      "description": "Von einem wilden Pokémon zu Hilfe gerufen"
+    },
+    "bubbling-spots": {
+      "label": "Blubbern (Angeln)",
+      "description": "Dort angeln, wo das Wasser blubbert"
+    },
+    "berry-trees": {
+      "label": "Beerenbäume",
+      "description": "Beeren von Bäumen pflücken"
+    },
+    "npc-trade": {
+      "label": "Tausch",
+      "description": "Tausch mit einer Spielfigur"
+    },
+    "sos-from-bubbling-spot": {
+      "label": "Notruf aus Blubbern",
+      "description": "Von einem im Blubbern geangelten Pokémon zu Hilfe gerufen"
+    },
+    "overworld": {
+      "label": "Sichtbar",
+      "description": "Pokémon in der Umgebung sichtbar"
+    },
+    "overworld-water": {
+      "label": "Sichtbar im Wasser",
+      "description": "Pokémon auf dem Wasser sichtbar"
+    },
+    "overworld-flying": {
+      "label": "Sichtbar im Flug",
+      "description": "Pokémon im Flug sichtbar"
+    },
+    "overworld-special": {
+      "label": "Sichtbar (speziell)",
+      "description": "Pokémon unter besonderen Bedingungen sichtbar"
+    },
+    "overworld-flying-special": {
+      "label": "Sichtbar im Flug (speziell)",
+      "description": "Pokémon im Flug sichtbar, unter besonderen Bedingungen"
+    },
+    "overworld-water-special": {
+      "label": "Sichtbar im Wasser (speziell)",
+      "description": "Pokémon auf dem Wasser sichtbar, unter besonderen Bedingungen"
+    },
+    "overworld-dirt": {
+      "label": "Sichtbar aus dem Boden",
+      "description": "Sichtbares Pokémon, das aus dem Boden auftaucht"
+    },
+    "horde": {
+      "label": "Horde",
+      "description": "Begegnung mit einer Horde aus fünf Pokémon"
+    },
+    "colosseum-bonus-disc-us": {
+      "label": "Colosseum-Bonus-Disc (US)",
+      "description": "Von der US-Bonus-Disc von Colosseum"
+    },
+    "colosseum-bonus-disc-jpn": {
+      "label": "Colosseum-Bonus-Disc (JP)",
+      "description": "Von der japanischen Bonus-Disc von Colosseum"
+    },
+    "pokemon-channel-pal": {
+      "label": "Pokémon Channel",
+      "description": "Aus Pokémon Channel (europäische Version)"
+    },
+    "pokemon-ranger": {
+      "label": "Pokémon Ranger",
+      "description": "Aus Pokémon Ranger übertragen"
+    },
+    "pokemon-battle-revolution": {
+      "label": "Battle Revolution",
+      "description": "Aus Pokémon Battle Revolution"
+    },
+    "new-york-pokecenter-wish-eggs": {
+      "label": "Eier vom Pokémon Center NY",
+      "description": "Eier vom Event des Pokémon Centers in New York"
+    },
+    "snag": {
+      "label": "Erhaschen",
+      "description": "Mit der Fangmaschine einem Trainer erhascht"
+    },
+    "snag-rematch": {
+      "label": "Erhaschen (Revanche)",
+      "description": "In einer Revanche einem Trainer erhascht"
+    },
+    "pokespot": {
+      "label": "Poké-Stelle",
+      "description": "Mit Poké-Snacks zu einer Poké-Stelle gelockt"
+    },
+    "hidden-grotto": {
+      "label": "Versteckte Lichtung",
+      "description": "In einer Versteckten Lichtung gefunden"
+    },
+    "honey-tree": {
+      "label": "Honigbaum",
+      "description": "Honig auf den Baum streichen"
+    },
+    "wanderer": {
+      "label": "Wanderer",
+      "description": "Pokémon, das in der Gegend umherstreift"
+    },
+    "wanderer-water": {
+      "label": "Wanderer im Wasser",
+      "description": "Pokémon, das auf dem Wasser umherstreift"
+    },
+    "chase-water": {
+      "label": "Verfolgung im Wasser",
+      "description": "Pokémon, das einen im Wasser verfolgt"
+    },
+    "dynamax-adventure": {
+      "label": "Dyna-Tour",
+      "description": "Bei einer Dyna-Tour angetroffen"
+    },
+    "max-raid": {
+      "label": "Dyna-Raid",
+      "description": "In einem Dyna-Raid angetroffen"
+    },
+    "trash-can-ambush": {
+      "label": "Hinterhalt aus der Mülltonne",
+      "description": "Springt aus einer Mülltonne"
+    },
+    "rustling-bush-ambush": {
+      "label": "Hinterhalt aus dem Busch",
+      "description": "Springt aus einem raschelnden Busch"
+    },
+    "ceiling-ambush": {
+      "label": "Hinterhalt von der Decke",
+      "description": "Fällt von der Decke"
+    },
+    "ground-ambush": {
+      "label": "Hinterhalt aus dem Boden",
+      "description": "Springt aus dem Boden"
+    },
+    "sky-ambush": {
+      "label": "Hinterhalt aus der Luft",
+      "description": "Stürzt vom Himmel herab"
+    }
+  }
+}

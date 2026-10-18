@@ -13,6 +13,7 @@ export const MOCK_ABILITIES: Ability[] = [
     description: 'Quando il Pokémon ha pochi PS, la potenza delle sue mosse di tipo Erba aumenta.',
     effect:
       'When this Pokémon has 1/3 or less of its HP remaining, its Grass-type moves inflict 1.5× as much regular damage.',
+    effectLanguage: 'en',
     generation: 3,
     pokemon: [
       { id: 1, name: 'bulbasaur', isHidden: false, artworkUrl: artwork(1) },
@@ -27,6 +28,7 @@ export const MOCK_ABILITIES: Ability[] = [
     description: 'Il Pokémon è carico di elettricità statica e può paralizzare chi lo tocca.',
     effect:
       "Whenever a move makes contact with this Pokémon, the move's user has a 30% chance of being paralyzed.",
+    effectLanguage: 'en',
     generation: 3,
     pokemon: [
       { id: 25, name: 'pikachu', isHidden: false, artworkUrl: artwork(25) },
@@ -39,6 +41,7 @@ export const MOCK_ABILITIES: Ability[] = [
     name: 'Adattabilità',
     description: 'Potenzia le mosse dello stesso tipo del Pokémon.',
     effect: null,
+    effectLanguage: null,
     generation: 4,
     pokemon: [{ id: 133, name: 'eevee', isHidden: false, artworkUrl: artwork(133) }],
   },

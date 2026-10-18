@@ -1,0 +1,49 @@
+{
+  "title": "Impostazioni",
+  "back": "Torna all'elenco",
+  "language": {
+    "title": "Lingua",
+    "hint": "La lingua dell'app e dei nomi di Pokémon, mosse, abilità e oggetti.",
+    "system": "Lingua del dispositivo",
+    "systemHint": "Ora {{language}}",
+    "names": {
+      "en": "Inglese",
+      "it": "Italiano",
+      "fr": "Francese",
+      "de": "Tedesco",
+      "es": "Spagnolo",
+      "ja": "Giapponese"
+    }
+  },
+  "artwork": {
+    "title": "Artwork principale",
+    "hint": "Lo stile delle immagini nell'elenco e in cima alla scheda di ogni Pokémon."
+  },
+  "backup": {
+    "title": "Backup",
+    "hint": "Salva preferiti, shiny ottenuti e squadre in un file JSON, per ripristinarli su un altro dispositivo o dopo una reinstallazione. L'importazione sostituisce i dati attuali.",
+    "export": "Esporta backup",
+    "import": "Importa backup",
+    "exportFailed": "Esportazione non riuscita.",
+    "readFailed": "Non è stato possibile leggere il file.",
+    "exported": "Backup esportato.",
+    "restored": "Ripristinati {{favorites}}, {{shiny}} e {{teams}}.",
+    "favorites_one": "{{count}} preferito",
+    "favorites_other": "{{count}} preferiti",
+    "shiny_one": "{{count}} shiny",
+    "shiny_other": "{{count}} shiny",
+    "teams_one": "{{count}} squadra",
+    "teams_other": "{{count}} squadre",
+    "errors": {
+      "invalid": "Il file non è un backup valido.",
+      "otherApp": "Il file non è un backup di questa app.",
+      "newerVersion": "Il backup è stato creato da una versione più recente dell'app."
+    }
+  },
+  "credits": {
+    "title": "Crediti e copyright",
+    "data": "Dati e immagini da <link>PokéAPI</link>, progetto libero e gratuito mantenuto dalla comunità.",
+    "unofficial": "Questa è un'app non ufficiale creata da fan, senza scopo di lucro, non affiliata né approvata da Nintendo, Creatures Inc., GAME FREAK inc. o The Pokémon Company.",
+    "trademarks": "Pokémon e i nomi dei personaggi sono marchi registrati di Nintendo, Creatures Inc. e GAME FREAK inc. © 1995–{{year}} Nintendo / Creatures Inc. / GAME FREAK inc."
+  }
+}

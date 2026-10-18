@@ -2,7 +2,7 @@ import { getGenerationOfPokemon, LAST_POKEMON_ID } from '@/api/generations';
 import { getMoves } from '@/api/moves';
 import { getArtworkUrl } from '@/api/pokemon';
 import typeIndex from '@/data/typeIndex.json';
-import { TYPE_NAMES_IT } from '@/theme/typeNames';
+import { TYPE_LABELS } from '@/theme/typeNames';
 import type { MatchupType, MoveSummary, TypeMatchups } from '@/types/move';
 import { TYPE_NAMES, type PokemonSummary, type TypeName } from '@/types/pokemon';
 
@@ -34,7 +34,7 @@ export function parseTypeName(value: string | string[] | undefined): TypeName | 
 }
 
 const toMatchupTypes = (types: TypeName[]): MatchupType[] =>
-  types.map((type) => ({ type, label: TYPE_NAMES_IT[type] }));
+  types.map((type) => ({ type, label: TYPE_LABELS[type] }));
 
 /**
  * Efficacia di un tipo nella stessa forma di `getTypeMatchups`, ma dall'indice locale: così

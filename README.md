@@ -22,10 +22,20 @@ src/
 ├── api/              # chiamate a PokéAPI
 ├── hooks/            # hook dei dati
 ├── components/       # componenti UI
-├── theme/            # colori e nomi italiani dei tipi
+├── i18n/             # lingue, traduzioni dell'interfaccia e nomi localizzati
+├── theme/            # colori e nomi dei tipi
 ├── types/            # tipi TypeScript delle risposte API
 └── utils/            # formattazione
 ```
+
+## Lingue
+
+L'app è in inglese, italiano, francese, tedesco, spagnolo e giapponese. All'avvio usa la lingua del dispositivo (inglese se non è tra queste); nelle Impostazioni si può sceglierne un'altra, che resta salvata.
+
+- `src/i18n/index.ts` configura i18next; `t`, `getLanguage()`, `getLocale()` e `perLanguage()` servono al codice fuori dai componenti, `useTranslation('<namespace>')` ai componenti.
+- I testi dell'interfaccia sono in `src/i18n/locales/<lingua>/<namespace>.json`, un file per area dell'app. L'inglese è il riferimento dei tipi: una chiave che manca in `en` non compila.
+- I nomi di Pokémon, mosse, abilità, oggetti, nature, località, regioni, tipi e giochi sono quelli ufficiali di PokéAPI, in `src/data/names/<lingua>.json` (rigenerabili con `node scripts/generate-names.mjs`) e letti con `localName()` di `src/i18n/names.ts`. Descrizioni ed effetti arrivano da PokéAPI nella lingua scelta; quando mancano si usa l'inglese.
+- Al cambio di lingua `LanguageGate` rimonta le schermate (la navigazione resta dov'è) e le chiavi di React Query includono la lingua.
 
 ## Livello dati
 

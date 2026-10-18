@@ -3,6 +3,9 @@ import { LAST_POKEMON_ID } from '@/api/generations';
 import { getArtworkUrl, getIdFromUrl } from '@/api/pokemon';
 import encounterMeta from '@/data/encounterMeta.json';
 import locationIndex from '@/data/locationIndex.json';
+import pokemonIndex from '@/data/pokemonIndex.json';
+import { getLocale, perLanguage, t } from '@/i18n';
+import { localName, pokemonName } from '@/i18n/names';
 import type {
   EncounterCondition,
   EncounterMethod,
@@ -23,8 +26,8 @@ import type {
   LocationResponse,
   PokemonEncounterResponse,
 } from '@/types/pokeapi';
-import { formatName } from '@/utils/format';
-import { byLanguage } from '@/utils/pokeapiText';
+import { formatInteger, formatName } from '@/utils/format';
+import { byLanguage, localized } from '@/utils/pokeapiText';
 import { normalizeSearch } from '@/utils/search';
 
 type MetaEntry = { id: number; name: string; label: string };
@@ -43,54 +46,74 @@ const INDEX = locationIndex as LocationIndexEntry[];
 const META = encounterMeta as Meta;
 const BY_ID = new Map(INDEX.map((entry) => [entry.id, entry]));
 
-const REGIONS = new Map<string, LocationRegion>(
-  META.regions.map((r) => [r.name, { id: r.id, name: r.name, label: r.label }]),
-);
-const VERSIONS = new Map<number, GameVersion>(
-  META.versions.map((v) => [v.id, { id: v.id, name: v.name, label: v.label, generation: v.generation }]),
-);
-const VERSIONS_BY_NAME = new Map([...VERSIONS.values()].map((v) => [v.name, v]));
 const METHODS = new Map(META.methods.map((m) => [m.name, m]));
 const CONDITIONS = new Map(META.conditions.map((c) => [c.name, c]));
 
-/** Testo su cui cerca `search`: nome mostrato, nome inglese e slug («petroglifari ambrette»). */
-const SEARCH_TEXT = new Map(
-  INDEX.map((entry) => [
-    entry.id,
-    normalizeSearch(`${entry.label} ${entry.englishLabel ?? ''} ${entry.name.replace(/-/g, ' ')}`),
-  ]),
+/** Nome della località nella lingua in uso; l'etichetta dell'indice se PokéAPI non lo ha. */
+const locationLabel = (entry: LocationIndexEntry) => localName('location', entry.id, entry.label);
+
+// Regioni e giochi con il nome nella lingua in uso: ricostruiti al cambio di lingua.
+const regions = perLanguage(
+  () =>
+    new Map<string, LocationRegion>(
+      META.regions.map((r) => [r.name, { id: r.id, name: r.name, label: localName('region', r.id, r.label) }]),
+    ),
 );
+const versions = perLanguage(
+  () =>
+    new Map<number, GameVersion>(
+      META.versions.map((v) => [
+        v.id,
+        { id: v.id, name: v.name, label: localName('version', v.id, v.label), generation: v.generation },
+      ]),
+    ),
+);
+const VERSION_IDS_BY_NAME = new Map(META.versions.map((v) => [v.name, v.id]));
 
 const byGameOrder = (a: GameVersion, b: GameVersion) => a.generation - b.generation || a.id - b.id;
-const byName = (a: LocationSummary, b: LocationSummary) => a.name.localeCompare(b.name, 'it');
+const byName = (a: { name: string }, b: { name: string }) => a.name.localeCompare(b.name, getLocale());
 
 function toSummary(entry: LocationIndexEntry): LocationSummary {
-  const versions = entry.versionIds
-    .map((id) => VERSIONS.get(id))
+  const versionsById = versions();
+  const regionsByName = regions();
+  const games = entry.versionIds
+    .map((id) => versionsById.get(id))
     .filter((v): v is GameVersion => !!v)
     .sort(byGameOrder);
   return {
     id: entry.id,
     slug: entry.name,
-    name: entry.label,
+    name: locationLabel(entry),
     englishName: entry.englishLabel ?? entry.label,
-    region: entry.region ? (REGIONS.get(entry.region) ?? null) : null,
+    region: entry.region ? (regionsByName.get(entry.region) ?? null) : null,
     pokemonCount: entry.pokemonIds.length,
-    gameCount: versions.length,
-    versions,
+    gameCount: games.length,
+    versions: games,
   };
 }
 
-const SUMMARIES = new Map(INDEX.map((entry) => [entry.id, toSummary(entry)]));
-const ALL_SORTED = [...SUMMARIES.values()].sort(byName);
+/** Riepiloghi, elenco alfabetico e testo di ricerca nella lingua in uso. */
+const tables = perLanguage(() => {
+  const summaries = new Map(INDEX.map((entry) => [entry.id, toSummary(entry)]));
+  // Testo su cui cerca `search`: nome mostrato, nome inglese e slug («petroglifari ambrette»).
+  const searchText = new Map(
+    [...summaries.values()].map((summary) => [
+      summary.id,
+      normalizeSearch(`${summary.name} ${summary.englishName} ${summary.slug.replace(/-/g, ' ')}`),
+    ]),
+  );
+  return { summaries, sorted: [...summaries.values()].sort(byName), searchText };
+});
 
 /**
  * Regioni con almeno una località, in ordine di uscita (Kanto, Johto, Hoenn…).
  * Hisui e Paldea non ci sono: PokéAPI non ha gli incontri di quei giochi.
  */
-export const LOCATION_REGIONS: LocationRegion[] = [...REGIONS.values()]
-  .filter((region) => INDEX.some((entry) => entry.region === region.name))
-  .sort((a, b) => a.id - b.id);
+export const getLocationRegions = perLanguage((): LocationRegion[] =>
+  [...regions().values()]
+    .filter((region) => INDEX.some((entry) => entry.region === region.name))
+    .sort((a, b) => a.id - b.id),
+);
 
 /**
  * Località in ordine alfabetico, filtrate per regione (slug, es. `kanto`; null = tutte) e
@@ -102,17 +125,18 @@ export function getLocations({
   search = '',
 }: { region?: string | null; search?: string } = {}): LocationSummary[] {
   const needle = normalizeSearch(search);
-  return ALL_SORTED.filter(
+  const { sorted, searchText } = tables();
+  return sorted.filter(
     (location) =>
       (!region || location.region?.name === region) &&
-      (!needle || SEARCH_TEXT.get(location.id)!.includes(needle)),
+      (!needle || searchText.get(location.id)!.includes(needle)),
   );
 }
 
 /** Le località raggruppate per regione (sezioni vuote escluse), per un elenco con intestazioni. */
 export function getLocationSections(search = ''): LocationSection[] {
   const matches = getLocations({ search });
-  const sections: LocationSection[] = LOCATION_REGIONS.map((region) => ({
+  const sections: LocationSection[] = getLocationRegions().map((region) => ({
     region,
     locations: matches.filter((location) => location.region?.name === region.name),
   }));
@@ -122,7 +146,7 @@ export function getLocationSections(search = ''): LocationSection[] {
 }
 
 export function getLocationSummary(id: number): LocationSummary | undefined {
-  return SUMMARIES.get(id);
+  return tables().summaries.get(id);
 }
 
 /** Converte il parametro di rotta (`"614"`) in un id dell'indice, altrimenti null. */
@@ -134,126 +158,54 @@ export function parseLocationId(value: string | string[] | number | undefined): 
 
 // --- Metodi e condizioni ------------------------------------------------------
 
-/** PokéAPI ha i metodi solo in inglese: nome breve e spiegazione come nei giochi. */
-const METHOD_LABELS: Record<string, [label: string, description: string]> = {
-  walk: ['Erba alta e grotte', 'Camminando nell’erba alta o in una grotta'],
-  'old-rod': ['Amo Vecchio', 'Pescando con l’Amo Vecchio'],
-  'good-rod': ['Amo Buono', 'Pescando con l’Amo Buono'],
-  'super-rod': ['Super Amo', 'Pescando con il Super Amo'],
-  surf: ['Surf', 'Facendo Surf sull’acqua'],
-  'rock-smash': ['Spaccaroccia', 'Usando Spaccaroccia sulle rocce fragili'],
-  headbutt: ['Bottintesta', 'Usando Bottintesta sugli alberi'],
-  'headbutt-low': ['Bottintesta (raro)', 'Usando Bottintesta sugli alberi, con poche probabilità'],
-  'headbutt-normal': ['Bottintesta', 'Usando Bottintesta sugli alberi'],
-  'headbutt-high': ['Bottintesta (frequente)', 'Usando Bottintesta sugli alberi, con molte probabilità'],
-  'dark-grass': ['Erba scura', 'Camminando nell’erba alta scura'],
-  'grass-spots': ['Erba che si muove', 'Camminando nell’erba che si agita'],
-  'cave-spots': ['Polvere nelle grotte', 'Camminando sulla polvere che si alza nelle grotte'],
-  'bridge-spots': ['Ombre sui ponti', 'Camminando sulle ombre dei ponti'],
-  'super-rod-spots': ['Increspature (pesca)', 'Pescando con il Super Amo nelle increspature'],
-  'surf-spots': ['Increspature (Surf)', 'Facendo Surf nelle increspature'],
-  'yellow-flowers': ['Fiori gialli', 'Camminando tra i fiori gialli'],
-  'purple-flowers': ['Fiori viola', 'Camminando tra i fiori viola'],
-  'red-flowers': ['Fiori rossi', 'Camminando tra i fiori rossi'],
-  'rough-terrain': ['Terreno accidentato', 'Camminando sul terreno accidentato'],
-  gift: ['Regalo', 'Pokémon ricevuto in regalo'],
-  'gift-egg': ['Uovo in regalo', 'Uovo ricevuto in regalo'],
-  static: ['Incontro fisso', 'Pokémon visibile in un punto preciso'],
-  pokeflute: ['Poké Flauto', 'Svegliandolo con il Poké Flauto'],
-  'squirt-bottle': ['Annaffiatoio', 'Usando l’Annaffiatoio sull’albero che si muove'],
-  'wailmer-pail': ['Wailmissaffiatoio', 'Usando il Wailmissaffiatoio sull’albero che si muove'],
-  seaweed: ['Alghe', 'Immergendosi tra le alghe'],
-  'roaming-grass': ['Vagante (erba)', 'Pokémon vagante, nell’erba alta'],
-  'roaming-water': ['Vagante (acqua)', 'Pokémon vagante, sull’acqua'],
-  'devon-scope': ['Devonscopio', 'Usando il Devonscopio sul Pokémon invisibile'],
-  'feebas-tile-fishing': ['Pesca di Feebas', 'Pescando nei punti speciali del fiume'],
-  'island-scan': ['Scansione Isola', 'Usando la Scansione Isola'],
-  sos: ['Chiamata SOS', 'Chiamato in aiuto da un Pokémon selvatico'],
-  'bubbling-spots': ['Bolle (pesca)', 'Pescando dove l’acqua fa le bolle'],
-  'berry-trees': ['Alberi di bacche', 'Raccogliendo le bacche dagli alberi'],
-  'npc-trade': ['Scambio', 'Scambio con un personaggio del gioco'],
-  'sos-from-bubbling-spot': ['SOS dalle bolle', 'Chiamato in aiuto da un Pokémon pescato nelle bolle'],
-  overworld: ['Visibile', 'Pokémon visibile nell’ambiente'],
-  'overworld-water': ['Visibile in acqua', 'Pokémon visibile sull’acqua'],
-  'overworld-flying': ['Visibile in volo', 'Pokémon visibile in volo'],
-  'overworld-special': ['Visibile (speciale)', 'Pokémon visibile in condizioni speciali'],
-  'overworld-flying-special': ['Visibile in volo (speciale)', 'Pokémon visibile in volo, in condizioni speciali'],
-  'overworld-water-special': ['Visibile in acqua (speciale)', 'Pokémon visibile sull’acqua, in condizioni speciali'],
-  'overworld-dirt': ['Visibile sul terreno', 'Pokémon visibile che spunta dal terreno'],
-  horde: ['Orda', 'Incontro con un’orda di cinque Pokémon'],
-  'colosseum-bonus-disc-us': ['Disco bonus Colosseum (USA)', 'Dal disco bonus americano di Colosseum'],
-  'colosseum-bonus-disc-jpn': ['Disco bonus Colosseum (JP)', 'Dal disco bonus giapponese di Colosseum'],
-  'pokemon-channel-pal': ['Pokémon Channel', 'Da Pokémon Channel (versione europea)'],
-  'pokemon-ranger': ['Pokémon Ranger', 'Trasferito da Pokémon Ranger'],
-  'pokemon-battle-revolution': ['Battle Revolution', 'Da Pokémon Battle Revolution'],
-  'new-york-pokecenter-wish-eggs': ['Uova del Pokémon Center NY', 'Uova dell’evento del Pokémon Center di New York'],
-  snag: ['Cattura', 'Catturato a un allenatore con la Snag Machine'],
-  'snag-rematch': ['Cattura (rivincita)', 'Catturato a un allenatore nella rivincita'],
-  pokespot: ['Poképosto', 'Attirato al Poképosto con i Poképastelli'],
-  'hidden-grotto': ['Meandro Nascosto', 'Trovato in un Meandro Nascosto'],
-  'honey-tree': ['Albero di miele', 'Spalmando il Miele sull’albero'],
-  wanderer: ['Vagabondo', 'Pokémon che si aggira nell’ambiente'],
-  'wanderer-water': ['Vagabondo in acqua', 'Pokémon che si aggira sull’acqua'],
-  'chase-water': ['Inseguimento in acqua', 'Pokémon che insegue in acqua'],
-  'dynamax-adventure': ['Avventura Dynamax', 'Incontrato in un’Avventura Dynamax'],
-  'max-raid': ['Raid Dynamax', 'Incontrato in un Raid Dynamax'],
-  'trash-can-ambush': ['Agguato dal bidone', 'Salta fuori da un bidone dei rifiuti'],
-  'rustling-bush-ambush': ['Agguato dal cespuglio', 'Salta fuori da un cespuglio che si muove'],
-  'ceiling-ambush': ['Agguato dal soffitto', 'Cade dal soffitto'],
-  'ground-ambush': ['Agguato dal terreno', 'Salta fuori dal terreno'],
-  'sky-ambush': ['Agguato dal cielo', 'Piomba dal cielo'],
-};
+/**
+ * Metodi con nome breve e spiegazione tradotti (`locations:methods.*`); PokéAPI ha solo una
+ * descrizione, e non in tutte le lingue.
+ */
+const TRANSLATED_METHODS = new Set([
+  'walk', 'old-rod', 'good-rod', 'super-rod', 'surf', 'rock-smash', 'headbutt', 'headbutt-low',
+  'headbutt-normal', 'headbutt-high', 'dark-grass', 'grass-spots', 'cave-spots', 'bridge-spots',
+  'super-rod-spots', 'surf-spots', 'yellow-flowers', 'purple-flowers', 'red-flowers', 'rough-terrain',
+  'gift', 'gift-egg', 'static', 'pokeflute', 'squirt-bottle', 'wailmer-pail', 'seaweed', 'roaming-grass',
+  'roaming-water', 'devon-scope', 'feebas-tile-fishing', 'island-scan', 'sos', 'bubbling-spots',
+  'berry-trees', 'npc-trade', 'sos-from-bubbling-spot', 'overworld', 'overworld-water', 'overworld-flying',
+  'overworld-special', 'overworld-flying-special', 'overworld-water-special', 'overworld-dirt', 'horde',
+  'colosseum-bonus-disc-us', 'colosseum-bonus-disc-jpn', 'pokemon-channel-pal', 'pokemon-ranger',
+  'pokemon-battle-revolution', 'new-york-pokecenter-wish-eggs', 'snag', 'snag-rematch', 'pokespot',
+  'hidden-grotto', 'honey-tree', 'wanderer', 'wanderer-water', 'chase-water', 'dynamax-adventure',
+  'max-raid', 'trash-can-ambush', 'rustling-bush-ambush', 'ceiling-ambush', 'ground-ambush', 'sky-ambush',
+] as const);
+type TranslatedMethod = typeof TRANSLATED_METHODS extends Set<infer T> ? T : never;
+const isTranslatedMethod = (name: string): name is TranslatedMethod =>
+  (TRANSLATED_METHODS as Set<string>).has(name);
 
 export function getEncounterMethod(name: string): EncounterMethod {
-  const [label, description] = METHOD_LABELS[name] ?? [];
-  const english = METHODS.get(name)?.label;
-  return {
-    name,
-    label: label ?? english ?? formatName(name),
-    description: description ?? english ?? '',
-  };
+  if (isTranslatedMethod(name)) {
+    return {
+      name,
+      label: t(`locations:methods.${name}.label`),
+      description: t(`locations:methods.${name}.description`),
+    };
+  }
+  // Metodo nuovo di PokéAPI: la sua descrizione nella lingua in uso, se c'è.
+  const meta = METHODS.get(name);
+  const description = meta ? localName('encounterMethod', meta.id, meta.label) : '';
+  return { name, label: description || formatName(name), description };
 }
 
-const TIME_OF_DAY: Record<string, string> = { morning: 'Mattino', day: 'Giorno', night: 'Notte' };
-const SEASONS: Record<string, string> = {
-  spring: 'Primavera',
-  summer: 'Estate',
-  autumn: 'Autunno',
-  winter: 'Inverno',
-};
-const WEEKDAYS: Record<string, string> = {
-  monday: 'Lunedì',
-  tuesday: 'Martedì',
-  wednesday: 'Mercoledì',
-  thursday: 'Giovedì',
-  friday: 'Venerdì',
-  saturday: 'Sabato',
-  sunday: 'Domenica',
-};
-const WEATHER: Record<string, string> = {
-  normal: 'Sereno',
-  overcast: 'Nuvoloso',
-  raining: 'Pioggia',
-  thunderstorm: 'Temporale',
-  snowing: 'Neve',
-  snowstorm: 'Bufera di neve',
-  sandstorm: 'Tempesta di sabbia',
-  'intense-sun': 'Sole intenso',
-  fog: 'Nebbia',
-};
-const FIXED_CONDITIONS: Record<string, string> = {
-  'swarm-yes': 'Durante uno sciame',
-  'swarm-no': 'Senza sciame',
-  'radar-on': 'Con il Poké Radar',
-  'radar-off': 'Senza Poké Radar',
-  'radio-off': 'Radio spenta',
-  'radio-hoenn': 'Musica di Hoenn alla radio',
-  'radio-sinnoh': 'Musica di Sinnoh alla radio',
-  'slot2-none': 'Nessuna cartuccia GBA',
-  'headbutt-tree-common': 'Albero comune',
-  'headbutt-tree-rare': 'Albero raro',
-  'headbutt-tree-secret': 'Albero segreto',
-};
+const TIME_OF_DAY = ['morning', 'day', 'night'] as const;
+const SEASONS = ['spring', 'summer', 'autumn', 'winter'] as const;
+const WEEKDAYS = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'] as const;
+const WEATHER = [
+  'normal', 'overcast', 'raining', 'thunderstorm', 'snowing', 'snowstorm', 'sandstorm', 'intense-sun', 'fog',
+] as const;
+const FIXED_CONDITIONS = [
+  'swarm-yes', 'swarm-no', 'radar-on', 'radar-off', 'radio-off', 'radio-hoenn', 'radio-sinnoh',
+  'slot2-none', 'headbutt-tree-common', 'headbutt-tree-rare', 'headbutt-tree-secret',
+] as const;
+
+const oneOf = <T extends string>(list: readonly T[], value: string | undefined): value is T =>
+  value !== undefined && (list as readonly string[]).includes(value);
 
 /** Valori che descrivono il caso normale: nessun evento, oggetto o cartuccia particolare. */
 const DEFAULT_CONDITIONS = new Set([
@@ -270,35 +222,70 @@ const DEFAULT_CONDITIONS = new Set([
   'backlot-not-mentioned',
 ]);
 
-/** Testo italiano dei valori più comuni, null se resta l'inglese di PokéAPI. */
-function italianCondition(name: string): string | null {
-  if (FIXED_CONDITIONS[name]) return FIXED_CONDITIONS[name];
+/** Id nazionale dallo slug della specie (`bulbasaur` → 1), per gli starter e gli scambi. */
+const POKEMON_IDS = new Map((pokemonIndex as { id: number; name: string }[]).map((p) => [p.name, p.id]));
+const REGIONAL_SUFFIXES: Record<string, number> = { alola: 7, galar: 8, hisui: 9, paldea: 10 };
+
+/** Nome di un Pokémon da uno slug delle condizioni: `meowth-galar`, `togepi-or-togetic`. */
+function conditionPokemon(slug: string): string {
+  const alternatives = slug.split('-or-');
+  if (alternatives.length === 2) {
+    return t('locations:conditions.either', {
+      first: conditionPokemon(alternatives[0]),
+      second: conditionPokemon(alternatives[1]),
+    });
+  }
+  const id = POKEMON_IDS.get(slug);
+  if (id) return pokemonName(id, slug);
+  const [, base, suffix] = slug.match(/^(.+)-([a-z]+)$/) ?? [];
+  const baseId = base ? POKEMON_IDS.get(base) : undefined;
+  if (baseId && REGIONAL_SUFFIXES[suffix]) {
+    return t('locations:conditions.regionalForm', {
+      name: pokemonName(baseId, base),
+      region: localName('region', REGIONAL_SUFFIXES[suffix], formatName(suffix)),
+    });
+  }
+  return formatName(slug);
+}
+
+/** Testo tradotto dei valori più comuni, null se resta il nome di PokéAPI. */
+function translatedCondition(name: string): string | null {
+  if (oneOf(FIXED_CONDITIONS, name)) return t(`locations:conditions.fixed.${name}`);
   const [, prefix, rest] = name.match(/^([a-z0-9]+)-(.+)$/) ?? [];
   switch (prefix) {
     case 'time': {
-      if (TIME_OF_DAY[rest]) return TIME_OF_DAY[rest];
+      if (oneOf(TIME_OF_DAY, rest)) return t(`locations:conditions.time.${rest}`);
       const minutes = rest.match(/^minute-(\d+)-to-(\d+)$/);
-      if (minutes) return `Minuti ${minutes[1]}–${minutes[2]}`;
+      if (minutes) return t('locations:conditions.minutes', { from: minutes[1], to: minutes[2] });
       const hours = rest.match(/^(\d+)-(\d+)-to-(\d+)-(\d+)$/);
-      if (hours) return `Ore ${hours[1]}:${hours[2]}–${hours[3]}:${hours[4]}`;
+      if (hours) {
+        return t('locations:conditions.hours', {
+          from: `${hours[1]}:${hours[2]}`,
+          to: `${hours[3]}:${hours[4]}`,
+        });
+      }
       return null;
     }
     case 'season':
-      return SEASONS[rest] ?? null;
+      return oneOf(SEASONS, rest) ? t(`locations:conditions.season.${rest}`) : null;
     case 'weekday':
-      return WEEKDAYS[rest] ?? null;
+      return oneOf(WEEKDAYS, rest) ? t(`locations:conditions.weekday.${rest}`) : null;
     case 'weather':
-      return WEATHER[rest] ? `Meteo: ${WEATHER[rest]}` : null;
+      return oneOf(WEATHER, rest)
+        ? t('locations:conditions.weatherLabel', { weather: t(`locations:conditions.weather.${rest}`) })
+        : null;
     case 'coins':
-      return `${Number(rest).toLocaleString('it-IT')} gettoni`;
+      return t('locations:conditions.coins', { count: Number(rest), coins: formatInteger(Number(rest)) });
     case 'slot2': {
-      const version = VERSIONS_BY_NAME.get(rest);
-      return version ? `Con ${version.label} nello slot GBA` : null;
+      const id = VERSION_IDS_BY_NAME.get(rest);
+      return id ? t('locations:conditions.slot2', { game: versions().get(id)!.label }) : null;
     }
     case 'starter':
-      return `Starter scelto: ${formatName(rest)}`;
+      return t('locations:conditions.starter', { pokemon: conditionPokemon(rest) });
     case 'trade':
-      return rest === 'any-pokemon' ? 'In cambio di un Pokémon qualsiasi' : `In cambio di ${formatName(rest)}`;
+      return rest === 'any-pokemon'
+        ? t('locations:conditions.tradeAny')
+        : t('locations:conditions.trade', { pokemon: conditionPokemon(rest) });
     default:
       return null;
   }
@@ -309,30 +296,35 @@ export function getEncounterCondition(name: string): EncounterCondition {
   return {
     name,
     condition: meta?.condition ?? name.split('-')[0],
-    label: italianCondition(name) ?? meta?.label ?? formatName(name),
+    label:
+      translatedCondition(name) ??
+      (meta ? localName('encounterCondition', meta.id, meta.label) : formatName(name)),
     isDefault: DEFAULT_CONDITIONS.has(name),
   };
 }
 
 // --- Dettaglio ----------------------------------------------------------------
 
-/** Nome inglese, poi italiano, poi slug: aree e località hanno quasi sempre solo l'inglese. */
+/** Nome inglese, altrimenti lo slug leggibile. */
 const englishOf = (raw: { name: string; names: LocationResponse['names'] }) =>
   raw.names.find(byLanguage('en'))?.name ?? formatName(raw.name);
+
+/** Nome nella lingua in uso, altrimenti inglese, altrimenti lo slug leggibile. */
+const localOf = (raw: { name: string; names: LocationResponse['names'] }) =>
+  localized(raw.names)?.name ?? formatName(raw.name);
 
 /**
  * Nome breve dell'area: «Dark Cave (Violet City entrance)» → «Violet City entrance»,
  * «Celadon City Prize Corner» → «Prize Corner», «Celadon City» → «Principale».
  */
-function areaName(area: LocationAreaResponse, location: LocationResponse): string {
+function areaName(area: LocationAreaResponse, location: LocationResponse, displayName: string): string {
+  const main = t('locations:detail.mainArea');
   // L'area principale ha lo slug `{località}-area` (o `-main`), anche quando il nome inglese
   // non ripete quello della località («Road 16» per «Route 16»).
   const suffix = area.name.startsWith(`${location.name}-`) ? area.name.slice(location.name.length + 1) : null;
-  if (suffix === 'area' || suffix === 'main') return 'Principale';
-  const own = area.names.find(byLanguage('it'))?.name ?? englishOf(area);
-  const prefixes = [location.names.find(byLanguage('it'))?.name, englishOf(location)].filter(
-    (prefix): prefix is string => !!prefix,
-  );
+  if (suffix === 'area' || suffix === 'main') return main;
+  const own = localOf(area);
+  const prefixes = [displayName, localOf(location), englishOf(location)];
   for (const prefix of prefixes) {
     if (!own.toLowerCase().startsWith(prefix.toLowerCase())) continue;
     const rest = own
@@ -341,7 +333,7 @@ function areaName(area: LocationAreaResponse, location: LocationResponse): strin
       .replace(/^[-–:,]\s*/, '')
       .replace(/^\((.*)\)$/, '$1')
       .trim();
-    return rest ? rest.charAt(0).toUpperCase() + rest.slice(1) : 'Principale';
+    return rest ? rest.charAt(0).toUpperCase() + rest.slice(1) : main;
   }
   return own;
 }
@@ -350,13 +342,14 @@ const methodOrder = (name: string) => METHODS.get(name)?.order ?? Number.MAX_SAF
 
 /** Raggruppa gli incontri di un'area per metodo, unendo i giochi con gli stessi dati. */
 function toMethodGroups(area: LocationAreaResponse): EncounterMethodGroup[] {
+  const versionsById = versions();
   // metodo → chiave (Pokémon, condizioni, livelli, probabilità) → voce
   const groups = new Map<string, Map<string, LocationEncounter>>();
 
   for (const { pokemon, version_details } of area.pokemon_encounters) {
     const pokemonId = getIdFromUrl(pokemon.url);
     for (const detail of version_details) {
-      const version = VERSIONS.get(getIdFromUrl(detail.version.url));
+      const version = versionsById.get(getIdFromUrl(detail.version.url));
       if (!version) continue;
 
       // Ogni voce di PokéAPI è uno «slot»: si sommano le probabilità degli slot con lo stesso
@@ -395,6 +388,7 @@ function toMethodGroups(area: LocationAreaResponse): EncounterMethodGroup[] {
           pokemon: {
             id: pokemonId,
             name: pokemon.name,
+            label: pokemonName(pokemonId, pokemon.name),
             artworkUrl: getArtworkUrl(pokemonId),
             inPokedex: pokemonId <= LAST_POKEMON_ID,
           },
@@ -416,7 +410,7 @@ function toMethodGroups(area: LocationAreaResponse): EncounterMethodGroup[] {
         .map((encounter) => ({ ...encounter, versions: encounter.versions.sort(byGameOrder) }))
         .sort(
           (a, b) =>
-            a.pokemon.name.localeCompare(b.pokemon.name) ||
+            a.pokemon.label.localeCompare(b.pokemon.label, getLocale()) ||
             a.versions[0].generation - b.versions[0].generation ||
             a.versions[0].id - b.versions[0].id ||
             a.minLevel - b.minLevel,
@@ -426,9 +420,10 @@ function toMethodGroups(area: LocationAreaResponse): EncounterMethodGroup[] {
 
 export function toLocationDetail(raw: LocationResponse, areas: LocationAreaResponse[]): LocationDetail {
   const summary = getLocationSummary(raw.id);
+  const versionsById = versions();
   const english = englishOf(raw);
-  const name = raw.names.find(byLanguage('it'))?.name ?? english;
-  const region = raw.region ? (REGIONS.get(raw.region.name) ?? null) : null;
+  const name = summary?.name ?? localOf(raw);
+  const region = raw.region ? (regions().get(raw.region.name) ?? null) : null;
 
   const pokemonIds = new Set<number>();
   const versionIds = new Set<number>();
@@ -438,27 +433,27 @@ export function toLocationDetail(raw: LocationResponse, areas: LocationAreaRespo
       for (const detail of encounter.version_details) versionIds.add(getIdFromUrl(detail.version.url));
     }
   }
-  const versions = [...versionIds]
-    .map((id) => VERSIONS.get(id))
+  const games = [...versionIds]
+    .map((id) => versionsById.get(id))
     .filter((v): v is GameVersion => !!v)
     .sort(byGameOrder);
 
   return {
     id: raw.id,
     slug: raw.name,
-    name: summary?.name ?? name,
+    name,
     englishName: summary?.englishName ?? english,
     region,
     pokemonCount: pokemonIds.size,
-    gameCount: versions.length,
-    versions,
+    gameCount: games.length,
+    versions: games,
     areas: areas
       .filter((area) => area.pokemon_encounters.length > 0)
       .map(
         (area): LocationArea => ({
           id: area.id,
           slug: area.name,
-          name: areaName(area, raw),
+          name: areaName(area, raw, name),
           methods: toMethodGroups(area),
         }),
       ),
@@ -467,7 +462,7 @@ export function toLocationDetail(raw: LocationResponse, areas: LocationAreaRespo
 
 /** Dettaglio di una località: la località e tutte le sue aree, scaricate in parallelo. */
 export async function getLocation(id: number, signal?: AbortSignal): Promise<LocationDetail> {
-  const notFound = 'Località non trovata.';
+  const notFound = t('locations:errors.notFound');
   const raw = await fetchJson<LocationResponse>(`/location/${id}`, signal, notFound);
   const areas = await Promise.all(
     raw.areas.map((area) =>
@@ -498,6 +493,8 @@ export function toPokemonEncounterGroups(
   /** Località delle aree che lo slug non basta a trovare, per id dell'area. */
   extraAreas: Map<number, number> = new Map(),
 ): PokemonEncounterGroup[] {
+  const versionsById = versions();
+  const summaries = tables().summaries;
   // gioco → località → metodi
   const byVersion = new Map<number, Map<number, Set<string>>>();
   for (const entry of raw) {
@@ -506,7 +503,7 @@ export function toPokemonEncounterGroups(
     if (locationId === undefined || locationId === null || !BY_ID.has(locationId)) continue;
     for (const detail of entry.version_details) {
       const versionId = getIdFromUrl(detail.version.url);
-      if (!VERSIONS.has(versionId)) continue;
+      if (!versionsById.has(versionId)) continue;
       let locations = byVersion.get(versionId);
       if (!locations) byVersion.set(versionId, (locations = new Map()));
       let methods = locations.get(locationId);
@@ -517,15 +514,15 @@ export function toPokemonEncounterGroups(
 
   // I giochi con le stesse località e gli stessi metodi finiscono nello stesso gruppo.
   const groups = new Map<string, PokemonEncounterGroup>();
-  const versions = [...byVersion.keys()].map((id) => VERSIONS.get(id)!).sort(byGameOrder);
-  for (const version of versions) {
+  const games = [...byVersion.keys()].map((id) => versionsById.get(id)!).sort(byGameOrder);
+  for (const version of games) {
     const locations: PokemonEncounterLocation[] = [...byVersion.get(version.id)!.entries()]
       .map(([id, methods]) => ({
         id,
-        name: SUMMARIES.get(id)!.name,
+        name: summaries.get(id)!.name,
         methods: [...methods].sort((a, b) => methodOrder(a) - methodOrder(b)).map(getEncounterMethod),
       }))
-      .sort((a, b) => a.name.localeCompare(b.name, 'it'));
+      .sort(byName);
     const key = locations.map((l) => `${l.id}:${l.methods.map((m) => m.name).join(',')}`).join('|');
     const existing = groups.get(key);
     if (existing) existing.versions.push(version);

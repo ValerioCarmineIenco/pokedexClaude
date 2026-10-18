@@ -1,8 +1,9 @@
 import { getPokemonSummaries } from '@/api/pokemon';
 import { getEffectiveness, getStaticTypeMatchups } from '@/api/types';
-import { TYPE_NAMES_IT } from '@/theme/typeNames';
+import { TYPE_LABELS } from '@/theme/typeNames';
 import { TYPE_NAMES, type PokemonSummary, type TypeName } from '@/types/pokemon';
-import { formatName } from '@/utils/format';
+import { t } from '@/i18n';
+import { pokemonName } from '@/i18n/names';
 
 import { getDefenseMultipliers } from './typeEffectiveness';
 
@@ -63,9 +64,12 @@ export function analyzeTeam(members: PokemonSummary[]): TeamAnalysis {
 
 /** Testo da condividere: il nome della squadra e poi un Pokémon per riga, con i tipi. */
 export function formatTeamText(name: string, members: PokemonSummary[]): string {
-  const lines = members.map(
-    (member, index) =>
-      `${index + 1}. ${formatName(member.name)} (${member.types.map((type) => TYPE_NAMES_IT[type]).join('/')})`,
+  const lines = members.map((member, index) =>
+    t('teams:share.line', {
+      position: index + 1,
+      name: pokemonName(member.id, member.name),
+      types: member.types.map((type) => TYPE_LABELS[type]).join('/'),
+    }),
   );
   return [name, ...lines].join('\n');
 }

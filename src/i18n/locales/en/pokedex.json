@@ -1,0 +1,115 @@
+{
+  "common": {
+    "retry": "Retry",
+    "close": "Close",
+    "all": "All",
+    "settings": "Settings",
+    "loading": "Loading the Pokédex",
+    "loadingShort": "Loading…"
+  },
+  "search": {
+    "placeholder": "Search by name",
+    "accessibilityLabel": "Search for a Pokémon by name",
+    "clear": "Clear search"
+  },
+  "generation": {
+    "short": "Gen {{numeral}}",
+    "allGenerations": "All generations",
+    "pickerLabel": "Generation: {{name}}",
+    "pickerLabelAll": "Generation: all",
+    "pickerHint": "Opens the generation picker"
+  },
+  "sectionMenu": {
+    "heading": "What do you want to see?",
+    "titleLabel": "{{title}}, change section"
+  },
+  "viewToggle": {
+    "grid": "Grid view",
+    "row": "Single-row view"
+  },
+  "card": {
+    "accessibilityLabelOneType": "{{name}}, number {{number}}, {{type}} type",
+    "accessibilityLabelTwoTypes": "{{name}}, number {{number}}, {{type1}} and {{type2}} type"
+  },
+  "header": {
+    "favoritesOnly": "Favorites only",
+    "filters": "Filters",
+    "filtersActive_one": "Filters, {{count}} active",
+    "filtersActive_other": "Filters, {{count}} active",
+    "filtersHint": "Opens types, category and sorting",
+    "shinyOnly": "Caught shinies only, {{count}} of {{total}}"
+  },
+  "caption": {
+    "all": "{{total}} Pokémon · {{generations}} generations",
+    "generation": "{{count}} Pokémon · {{name}} · {{region}}",
+    "search_one": "{{count}} result among {{total}} Pokémon",
+    "search_other": "{{count}} results among {{total}} Pokémon",
+    "searchInRegion_one": "{{count}} result among {{total}} Pokémon from {{region}}",
+    "searchInRegion_other": "{{count}} results among {{total}} Pokémon from {{region}}",
+    "searchFavorites_one": "{{count}} result among your favorites",
+    "searchFavorites_other": "{{count}} results among your favorites",
+    "searchShiny_one": "{{count}} result among caught shinies",
+    "searchShiny_other": "{{count}} results among caught shinies",
+    "pokemon_one": "{{count}} Pokémon",
+    "pokemon_other": "{{count}} Pokémon",
+    "favorites_one": "{{count}} favorite",
+    "favorites_other": "{{count}} favorites",
+    "shiny_one": "{{count}} caught shiny",
+    "shiny_other": "{{count}} caught shinies",
+    "sortedBy": "by {{sort}}",
+    "sortedByReversed": "by {{sort}} (reversed)"
+  },
+  "empty": {
+    "noConnection": "No connection",
+    "noResults": "No results",
+    "searchPokemon": "No Pokémon is called \"{{query}}\".",
+    "searchPokemonInRegion": "No Pokémon from {{region}} is called \"{{query}}\".",
+    "searchFavorites": "No favorite is called \"{{query}}\".",
+    "searchFavoritesInRegion": "No favorite from {{region}} is called \"{{query}}\".",
+    "searchShiny": "No caught shiny is called \"{{query}}\".",
+    "searchShinyInRegion": "No caught shiny from {{region}} is called \"{{query}}\".",
+    "clearSearch": "Clear search",
+    "noFilterMatches": "No Pokémon match these filters",
+    "filtersHint": "Try removing a type or the category.",
+    "filtersHintWithScope": "Try removing a type or the category, or changing generation and collection.",
+    "resetFilters": "Reset filters",
+    "noFavorites": "No favorites",
+    "noFavoritesInRegion": "No favorites from {{region}}",
+    "favoritesHint": "Open a Pokémon's page and tap the heart at the top to add it to your favorites.",
+    "noShiny": "No caught shinies",
+    "noShinyInRegion": "No caught shinies from {{region}}",
+    "shinyHint": "Open a Pokémon's page and tap “Mark shiny as caught” below the artwork.",
+    "showAll": "Show all Pokémon"
+  },
+  "filters": {
+    "title": "Filters",
+    "close": "Close filters",
+    "reset": "Reset",
+    "types": "Types",
+    "bothTypes": "Both types",
+    "upToTwoTypes": "Up to two types",
+    "generation": "Generation",
+    "allGenerations": "All",
+    "category": "Category",
+    "allCategories": "All",
+    "sortBy": "Sort by",
+    "reverseOrder": "Reverse order",
+    "descending": "Descending",
+    "ascending": "Ascending",
+    "nameAscending": "A → Z",
+    "nameDescending": "Z → A",
+    "noPokemon": "No Pokémon",
+    "show_one": "Show {{count}} Pokémon",
+    "show_other": "Show {{count}} Pokémon",
+    "categories": {
+      "legendary": "Legendary",
+      "mythical": "Mythical",
+      "baby": "Baby"
+    },
+    "sort": {
+      "number": "Number",
+      "name": "Name",
+      "total": "Total"
+    }
+  }
+}

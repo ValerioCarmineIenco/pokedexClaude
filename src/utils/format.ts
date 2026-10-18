@@ -1,3 +1,4 @@
+import { getLocale, labelMap, t } from '@/i18n';
 import type { StatName } from '@/types/pokemon';
 
 /** 25 → "#025" */
@@ -23,7 +24,10 @@ export function formatName(slug: string): string {
 }
 
 const decimal = (value: number) =>
-  value.toLocaleString('it-IT', { minimumFractionDigits: 1, maximumFractionDigits: 1 });
+  value.toLocaleString(getLocale(), { minimumFractionDigits: 1, maximumFractionDigits: 1 });
+
+/** Numero intero con i separatori della lingua in uso: 1500 → "1.500" / "1,500". */
+export const formatInteger = (value: number) => value.toLocaleString(getLocale());
 
 /** Decimetri → "1,7 m" */
 export function formatHeight(decimetres: number): string {
@@ -35,14 +39,11 @@ export function formatWeight(hectograms: number): string {
   return `${decimal(hectograms / 10)} kg`;
 }
 
-export const STAT_LABELS: Record<StatName, string> = {
-  hp: 'PS',
-  attack: 'Attacco',
-  defense: 'Difesa',
-  'special-attack': 'Att. Sp.',
-  'special-defense': 'Dif. Sp.',
-  speed: 'Velocità',
-};
+/** Nomi brevi delle statistiche (PS, Att. Sp.…) nella lingua in uso. */
+export const STAT_LABELS: Record<StatName, string> = labelMap(
+  ['hp', 'attack', 'defense', 'special-attack', 'special-defense', 'speed'],
+  (stat) => t(`common:stats.${stat}`),
+);
 
 /** Le statistiche base non superano mai 255. */
 export const MAX_STAT = 255;

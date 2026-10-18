@@ -1,5 +1,6 @@
 import { FlashList } from '@shopify/flash-list';
 import { useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 import { RefreshControl, StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
@@ -41,8 +42,6 @@ function buildItems(items: Item[], withHeaders: boolean): ListItem[] {
   }
   return list;
 }
-
-const countLabel = (n: number) => `${n} ${n === 1 ? 'oggetto' : 'oggetti'}`;
 
 export type ItemListViewProps = {
   items: Item[];
@@ -87,17 +86,19 @@ export function ItemListView({
   onRetry,
   onPressItem,
 }: ItemListViewProps) {
+  const { t } = useTranslation('items');
   const insets = useSafeAreaInsets();
+  const countLabel = (n: number) => t('list.count', { count: n });
   const isGrid = viewMode === 'grid';
   const count = totalCount ?? items.length;
   const isSearching = searchText.trim().length > 0;
 
   const listItems = useMemo(() => buildItems(items, category == null), [items, category]);
   const caption = isSearching
-    ? [`${count} ${count === 1 ? 'risultato' : 'risultati'}`, category && ITEM_CATEGORY_LABELS[category]]
-        .filter(Boolean)
-        .join(' · ')
-    : `${countLabel(count)} · ${category ? ITEM_CATEGORY_LABELS[category] : `${ITEM_CATEGORIES.length} categorie`}`;
+    ? [t('list.results', { count }), category && ITEM_CATEGORY_LABELS[category]].filter(Boolean).join(' · ')
+    : `${countLabel(count)} · ${
+        category ? ITEM_CATEGORY_LABELS[category] : t('list.categoryCount', { count: ITEM_CATEGORIES.length })
+      }`;
 
   const header = (compact = false) => (
     <View style={styles.header}>
@@ -114,7 +115,7 @@ export function ItemListView({
           <SearchBar
             value={searchText}
             onChangeText={onSearchTextChange}
-            accessibilityLabel="Cerca un oggetto per nome"
+            accessibilityLabel={t('list.searchLabel')}
           />
           <View style={styles.captionRow}>
             <Text style={styles.caption} numberOfLines={1}>
@@ -132,9 +133,9 @@ export function ItemListView({
       <View style={[styles.screen, { paddingTop: insets.top }]}>
         {header(true)}
         <ErrorState
-          title="Nessuna connessione"
+          title={t('errors.offlineTitle')}
           message={errorMessage}
-          actionLabel="Riprova"
+          actionLabel={t('errors.retry')}
           onAction={onRetry}
         />
       </View>
@@ -207,13 +208,16 @@ export function ItemListView({
           ListEmptyComponent={
             isSearching ? (
               <ErrorState
-                title="Nessun risultato"
+                title={t('list.noResultsTitle')}
                 message={
                   category
-                    ? `Nessun oggetto tra «${ITEM_CATEGORY_LABELS[category]}» si chiama "${searchText.trim()}".`
-                    : `Nessun oggetto si chiama "${searchText.trim()}".`
+                    ? t('list.noResultsInCategory', {
+                        category: ITEM_CATEGORY_LABELS[category],
+                        query: searchText.trim(),
+                      })
+                    : t('list.noResults', { query: searchText.trim() })
                 }
-                actionLabel="Cancella ricerca"
+                actionLabel={t('list.clearSearch')}
                 actionStyle="ghost"
                 onAction={() => onSearchTextChange('')}
               />
@@ -234,7 +238,7 @@ export function ItemListView({
       {errorMessage && items.length > 0 && (
         <ErrorToast
           message={errorMessage}
-          actionLabel="Riprova"
+          actionLabel={t('errors.retry')}
           onAction={onRetry}
           bottomInset={insets.bottom}
         />

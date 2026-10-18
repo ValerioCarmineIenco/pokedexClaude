@@ -1,0 +1,102 @@
+{
+  "screens": {
+    "pokedex": "Pokédex",
+    "pokemonDetail": "Ficha",
+    "compare": "Comparar",
+    "settings": "Ajustes",
+    "items": "Objetos",
+    "itemDetail": "Ficha del objeto",
+    "abilities": "Habilidades",
+    "abilityDetail": "Ficha de la habilidad",
+    "moves": "Movimientos",
+    "moveDetail": "Ficha del movimiento",
+    "natures": "Naturalezas",
+    "locations": "Lugares",
+    "locationDetail": "Ficha del lugar",
+    "types": "Tipos",
+    "typeDetail": "Ficha del tipo",
+    "teams": "Equipos",
+    "team": "Equipo",
+    "sections": "Secciones"
+  },
+  "sections": {
+    "pokedex": {
+      "title": "Pokédex",
+      "description": "Todos los Pokémon, por generación"
+    },
+    "items": {
+      "title": "Objetos",
+      "description": "Objetos, medicinas, MT y megapiedras"
+    },
+    "abilities": {
+      "title": "Habilidades",
+      "description": "Todas las habilidades de los Pokémon"
+    },
+    "moves": {
+      "title": "Movimientos",
+      "description": "Tipo, potencia, precisión y PP de cada movimiento"
+    },
+    "natures": {
+      "title": "Naturalezas",
+      "description": "Características y sabores de cada naturaleza"
+    },
+    "locations": {
+      "title": "Lugares",
+      "description": "Dónde encontrar a los Pokémon, región por región"
+    },
+    "types": {
+      "title": "Tipos",
+      "description": "Eficacia en ataque y en defensa de cada tipo"
+    },
+    "teams": {
+      "title": "Equipos",
+      "description": "Equipos de 6 y su cobertura de tipos"
+    }
+  },
+  "generation": "Generación {{number}}",
+  "stats": {
+    "hp": "PS",
+    "attack": "Ataque",
+    "defense": "Defensa",
+    "special-attack": "At. Esp.",
+    "special-defense": "Def. Esp.",
+    "speed": "Velocidad"
+  },
+  "artworkStyles": {
+    "official": {
+      "label": "Ilustración oficial",
+      "description": "Ilustración oficial en alta resolución"
+    },
+    "official-shiny": {
+      "label": "Ilustración oficial variocolor",
+      "description": "La ilustración oficial con colores variocolor"
+    },
+    "home": {
+      "label": "Pokémon HOME",
+      "description": "Modelos 3D de Pokémon HOME"
+    },
+    "home-shiny": {
+      "label": "Pokémon HOME variocolor",
+      "description": "Modelos 3D de Pokémon HOME con colores variocolor"
+    },
+    "dream-world": {
+      "label": "Dream World",
+      "description": "Dibujos vectoriales de Dream World"
+    },
+    "showdown": {
+      "label": "Showdown animado",
+      "description": "Sprites animados de Pokémon Showdown"
+    },
+    "sprite": {
+      "label": "Sprite pixelado",
+      "description": "El sprite en pixel art de los juegos"
+    }
+  },
+  "errors": {
+    "pokemonNotFound": "Pokémon no encontrado.",
+    "timeout": "El servidor no responde. Inténtalo de nuevo en un momento.",
+    "offline": "Sin conexión. Comprueba la red e inténtalo de nuevo.",
+    "server": "Error del servidor ({{status}}). Inténtalo de nuevo en un momento.",
+    "generic": "Algo ha salido mal. Inténtalo de nuevo."
+  }
+}

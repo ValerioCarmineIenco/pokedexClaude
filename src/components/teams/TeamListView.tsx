@@ -1,5 +1,6 @@
 import { Image } from 'expo-image';
 import { useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 import { FlatList, Pressable, StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
@@ -7,7 +8,7 @@ import { getArtworkUrl } from '@/api/pokemon';
 import { useArtworkStyle } from '@/hooks/useArtworkStyle';
 import { colors } from '@/theme/colors';
 import { fonts } from '@/theme/fonts';
-import { TYPE_NAMES_IT } from '@/theme/typeNames';
+import { TYPE_LABELS } from '@/theme/typeNames';
 import { TEAM_SIZE, type Team } from '@/types/team';
 import { analyzeTeam, getTeamMembers } from '@/utils/teamAnalysis';
 
@@ -23,6 +24,7 @@ export type TeamListViewProps = {
 
 /** Sezione Squadre: le squadre salvate e il pulsante per crearne una nuova. */
 export function TeamListView({ teams, onCreate, onOpen }: TeamListViewProps) {
+  const { t } = useTranslation('teams');
   const insets = useSafeAreaInsets();
 
   return (
@@ -33,10 +35,10 @@ export function TeamListView({ teams, onCreate, onOpen }: TeamListViewProps) {
           onPress={onCreate}
           hitSlop={4}
           accessibilityRole="button"
-          accessibilityLabel="Nuova squadra"
+          accessibilityLabel={t('list.newA11y')}
           style={({ pressed }) => [styles.newButton, pressed && styles.pressed]}>
           <Icon name="plus" size={16} color={colors.surface} />
-          <Text style={styles.newLabel}>Nuova</Text>
+          <Text style={styles.newLabel}>{t('list.new')}</Text>
         </Pressable>
       </View>
       <FlatList
@@ -46,10 +48,10 @@ export function TeamListView({ teams, onCreate, onOpen }: TeamListViewProps) {
         contentContainerStyle={[styles.list, { paddingBottom: insets.bottom + 24 }]}
         ListEmptyComponent={
           <ErrorState
-            title="Nessuna squadra"
-            message="Crea una squadra da 6 Pokémon per vedere le sue debolezze e i tipi che non copre."
+            title={t('list.emptyTitle')}
+            message={t('list.emptyMessage', { size: TEAM_SIZE })}
             glyph="+"
-            actionLabel="Crea la prima squadra"
+            actionLabel={t('list.emptyAction')}
             onAction={onCreate}
           />
         }
@@ -59,6 +61,7 @@ export function TeamListView({ teams, onCreate, onOpen }: TeamListViewProps) {
 }
 
 function TeamCard({ team, onPress }: { team: Team; onPress: () => void }) {
+  const { t } = useTranslation('teams');
   const [artworkStyle] = useArtworkStyle();
   const members = useMemo(() => getTeamMembers(team.members), [team.members]);
   const worst = useMemo(() => analyzeTeam(members).sharedWeaknesses[0], [members]);
@@ -67,7 +70,7 @@ function TeamCard({ team, onPress }: { team: Team; onPress: () => void }) {
     <Pressable
       onPress={onPress}
       accessibilityRole="button"
-      accessibilityLabel={`${team.name}, ${members.length} Pokémon su ${TEAM_SIZE}`}
+      accessibilityLabel={t('list.cardA11y', { name: team.name, count: members.length, size: TEAM_SIZE })}
       style={({ pressed }) => [styles.card, pressed && styles.cardPressed]}>
       <View style={styles.cardHead}>
         <Text style={styles.cardName} numberOfLines={1}>
@@ -96,10 +99,10 @@ function TeamCard({ team, onPress }: { team: Team; onPress: () => void }) {
       </View>
       <Text style={styles.cardHint} numberOfLines={1}>
         {members.length === 0
-          ? 'Squadra vuota: toccala per aggiungere Pokémon'
+          ? t('list.cardEmpty')
           : worst
-            ? `${worst.weak} Pokémon deboli a ${TYPE_NAMES_IT[worst.type]}`
-            : 'Nessuna debolezza condivisa'}
+            ? t('list.cardWeak', { count: worst.weak, type: TYPE_LABELS[worst.type] })
+            : t('list.cardNoWeakness')}
       </Text>
     </Pressable>
   );

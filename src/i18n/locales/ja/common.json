@@ -1,0 +1,102 @@
+{
+  "screens": {
+    "pokedex": "ポケモン図鑑",
+    "pokemonDetail": "くわしく",
+    "compare": "くらべる",
+    "settings": "設定",
+    "items": "どうぐ",
+    "itemDetail": "どうぐのくわしい情報",
+    "abilities": "とくせい",
+    "abilityDetail": "とくせいのくわしい情報",
+    "moves": "わざ",
+    "moveDetail": "わざのくわしい情報",
+    "natures": "せいかく",
+    "locations": "場所",
+    "locationDetail": "場所のくわしい情報",
+    "types": "タイプ",
+    "typeDetail": "タイプのくわしい情報",
+    "teams": "チーム",
+    "team": "チーム",
+    "sections": "メニュー"
+  },
+  "sections": {
+    "pokedex": {
+      "title": "図鑑",
+      "description": "すべてのポケモンを世代別に"
+    },
+    "items": {
+      "title": "どうぐ",
+      "description": "どうぐ、かいふく、わざマシン、メガストーン"
+    },
+    "abilities": {
+      "title": "とくせい",
+      "description": "ポケモンのすべてのとくせい"
+    },
+    "moves": {
+      "title": "わざ",
+      "description": "すべてのわざのタイプ・いりょく・めいちゅう・PP"
+    },
+    "natures": {
+      "title": "せいかく",
+      "description": "せいかくごとのステータスと味の好み"
+    },
+    "locations": {
+      "title": "場所",
+      "description": "地方ごとのポケモンの出現場所"
+    },
+    "types": {
+      "title": "タイプ",
+      "description": "タイプごとの攻撃と防御の相性"
+    },
+    "teams": {
+      "title": "チーム",
+      "description": "6匹のチームとタイプの相性"
+    }
+  },
+  "generation": "第{{index}}世代",
+  "stats": {
+    "hp": "HP",
+    "attack": "こうげき",
+    "defense": "ぼうぎょ",
+    "special-attack": "とくこう",
+    "special-defense": "とくぼう",
+    "speed": "すばやさ"
+  },
+  "artworkStyles": {
+    "official": {
+      "label": "公式イラスト",
+      "description": "高解像度の公式イラスト"
+    },
+    "official-shiny": {
+      "label": "公式イラスト（色違い）",
+      "description": "色違いの公式イラスト"
+    },
+    "home": {
+      "label": "Pokémon HOME",
+      "description": "Pokémon HOMEの3Dモデル"
+    },
+    "home-shiny": {
+      "label": "Pokémon HOME（色違い）",
+      "description": "色違いのPokémon HOMEの3Dモデル"
+    },
+    "dream-world": {
+      "label": "ドリームワールド",
+      "description": "ドリームワールドのベクターイラスト"
+    },
+    "showdown": {
+      "label": "Showdown（アニメ）",
+      "description": "Pokémon Showdownのアニメーションスプライト"
+    },
+    "sprite": {
+      "label": "ドット絵",
+      "description": "ゲームのドット絵スプライト"
+    }
+  },
+  "errors": {
+    "pokemonNotFound": "ポケモンが見つかりません。",
+    "timeout": "サーバーが応答しません。しばらくしてからもう一度お試しください。",
+    "offline": "インターネットに接続されていません。ネットワークを確認してもう一度お試しください。",
+    "server": "サーバーエラー（{{status}}）。しばらくしてからもう一度お試しください。",
+    "generic": "問題が発生しました。もう一度お試しください。"
+  }
+}

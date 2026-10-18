@@ -2,6 +2,8 @@ import { fetchJson } from '@/api/client';
 import { LAST_POKEMON_ID } from '@/api/generations';
 import { getArtworkUrl, getIdFromUrl } from '@/api/pokemon';
 import moveIndex from '@/data/moveIndex.json';
+import { labelMap, perLanguage, t } from '@/i18n';
+import { localName } from '@/i18n/names';
 import type {
   MatchupType,
   Move,
@@ -14,9 +16,9 @@ import type {
 } from '@/types/move';
 import type { MoveResponse, NamedAPIResource, TypeResponse } from '@/types/pokeapi';
 import { TYPE_NAMES, type TypeName } from '@/types/pokemon';
-import { TYPE_NAMES_IT } from '@/theme/typeNames';
+import { TYPE_LABELS } from '@/theme/typeNames';
 import { formatName } from '@/utils/format';
-import { byLanguage, cleanText, latestFlavor } from '@/utils/pokeapiText';
+import { cleanText, latestLocalizedFlavor, localized } from '@/utils/pokeapiText';
 import { normalizeSearch } from '@/utils/search';
 
 /**
@@ -27,75 +29,87 @@ import { normalizeSearch } from '@/utils/search';
 const INDEX = (moveIndex as MoveIndexEntry[]).filter((entry) => entry.firstPokemonId <= LAST_POKEMON_ID);
 const BY_ID = new Map(INDEX.map((entry) => [entry.id, entry]));
 
-/** Testo su cui cerca `search`: nome italiano e slug inglese («fulmine thunderbolt»). */
-const SEARCH_TEXT = new Map(
-  INDEX.map((entry) => [entry.id, normalizeSearch(`${entry.label} ${entry.name.replace(/-/g, ' ')}`)]),
+/** Nome della mossa nella lingua in uso, da PokéAPI; l'etichetta dell'indice se manca. */
+const moveName = (entry: MoveIndexEntry) => localName('move', entry.id, entry.label);
+
+/**
+ * Testo su cui cerca `search`: nome nella lingua in uso e slug inglese («fulmine thunderbolt»).
+ * Ricalcolato al cambio di lingua.
+ */
+const searchText = perLanguage(
+  () => new Map(INDEX.map((entry) => [entry.id, normalizeSearch(`${moveName(entry)} ${entry.name.replace(/-/g, ' ')}`)])),
 );
 
-export const DAMAGE_CLASS_LABELS: Record<MoveDamageClass, string> = {
-  physical: 'Fisico',
-  special: 'Speciale',
-  status: 'Stato',
-};
+export const MOVE_DAMAGE_CLASSES: readonly MoveDamageClass[] = ['physical', 'special', 'status'];
 
-/** PokéAPI non ha i nomi italiani dei bersagli: sono scritti come nei giochi. */
-const TARGET_LABELS: Record<string, string> = {
-  'specific-move': 'Una mossa specifica',
-  'selected-pokemon-me-first': 'Un avversario a scelta',
-  ally: 'Un alleato',
-  'users-field': 'Il proprio lato del campo',
-  'user-or-ally': 'Chi la usa o un alleato',
-  'opponents-field': 'Il lato avversario del campo',
-  user: 'Chi la usa',
-  'random-opponent': 'Un avversario a caso',
-  'all-other-pokemon': 'Tutti gli altri Pokémon',
-  'selected-pokemon': 'Un Pokémon a scelta',
-  'all-opponents': 'Tutti gli avversari',
-  'entire-field': "L'intero campo",
-  'user-and-allies': 'Chi la usa e gli alleati',
-  'all-pokemon': 'Tutti i Pokémon',
-  'all-allies': 'Tutti gli alleati',
-  'fainting-pokemon': 'Un Pokémon esausto',
-};
+/** Nome della classe di danno nella lingua in uso (Fisico, Speciale, Stato). */
+export const DAMAGE_CLASS_LABELS: Record<MoveDamageClass, string> = labelMap(MOVE_DAMAGE_CLASSES, (damageClass) =>
+  t(`moves:damageClass.${damageClass}`),
+);
+
+/** Bersagli di PokéAPI con un nome tradotto (PokéAPI non ha l'italiano): scritti come nei giochi. */
+const TARGETS = [
+  'specific-move',
+  'selected-pokemon-me-first',
+  'ally',
+  'users-field',
+  'user-or-ally',
+  'opponents-field',
+  'user',
+  'random-opponent',
+  'all-other-pokemon',
+  'selected-pokemon',
+  'all-opponents',
+  'entire-field',
+  'user-and-allies',
+  'all-pokemon',
+  'all-allies',
+  'fainting-pokemon',
+] as const;
+type MoveTarget = (typeof TARGETS)[number];
 
 /** Stati alterati e simili (`/move-ailment`): PokéAPI non ha l'italiano. */
-const AILMENT_LABELS: Record<string, string> = {
-  paralysis: 'Paralisi',
-  sleep: 'Sonno',
-  freeze: 'Congelamento',
-  burn: 'Scottatura',
-  poison: 'Avvelenamento',
-  confusion: 'Confusione',
-  infatuation: 'Infatuazione',
-  trap: 'Intrappolamento',
-  nightmare: 'Incubo',
-  torment: 'Attaccalite',
-  disable: 'Inibitore',
-  yawn: 'Sbadiglio',
-  'heal-block': 'Anticura',
-  'no-type-immunity': 'Annulla immunità',
-  'leech-seed': 'Parassiseme',
-  embargo: 'Divieto',
-  'perish-song': 'Ultimocanto',
-  ingrain: 'Radicamento',
-  silence: 'Silenzio',
-  'tar-shot': 'Catramata',
-};
+const AILMENTS = [
+  'paralysis',
+  'sleep',
+  'freeze',
+  'burn',
+  'poison',
+  'confusion',
+  'infatuation',
+  'trap',
+  'nightmare',
+  'torment',
+  'disable',
+  'yawn',
+  'heal-block',
+  'no-type-immunity',
+  'leech-seed',
+  'embargo',
+  'perish-song',
+  'ingrain',
+  'silence',
+  'tar-shot',
+] as const;
+type MoveAilment = (typeof AILMENTS)[number];
 
-const STAT_CHANGE_LABELS: Record<MoveStatChange['stat'], string> = {
-  attack: 'Attacco',
-  defense: 'Difesa',
-  'special-attack': 'Attacco Speciale',
-  'special-defense': 'Difesa Speciale',
-  speed: 'Velocità',
-  accuracy: 'Precisione',
-  evasion: 'Elusione',
-};
+const STAT_CHANGES: readonly MoveStatChange['stat'][] = [
+  'attack',
+  'defense',
+  'special-attack',
+  'special-defense',
+  'speed',
+  'accuracy',
+  'evasion',
+];
+
+const isOneOf = <T extends string>(list: readonly T[], value: string): value is T =>
+  (list as readonly string[]).includes(value);
 
 function toSummary(entry: MoveIndexEntry): MoveSummary {
   return {
     id: entry.id,
-    name: entry.label,
+    name: moveName(entry),
     type: entry.type,
     damageClass: entry.damageClass,
     damageClassLabel: DAMAGE_CLASS_LABELS[entry.damageClass],
@@ -106,8 +120,11 @@ function toSummary(entry: MoveIndexEntry): MoveSummary {
   };
 }
 
-const SUMMARIES = INDEX.map(toSummary);
-const SUMMARY_BY_ID = new Map(SUMMARIES.map((move) => [move.id, move]));
+/** Voci dell'elenco con nomi ed etichette nella lingua in uso. */
+const summaries = perLanguage(() => {
+  const list = INDEX.map(toSummary);
+  return { list, byId: new Map(list.map((move) => [move.id, move])) };
+});
 
 /**
  * Mosse il cui nome contiene `search` (anche parziale, senza distinzione di maiuscole e
@@ -115,13 +132,15 @@ const SUMMARY_BY_ID = new Map(SUMMARIES.map((move) => [move.id, move]));
  */
 export function getMoves(search = ''): MoveSummary[] {
   const needle = normalizeSearch(search);
-  if (!needle) return SUMMARIES;
-  return SUMMARIES.filter((move) => SEARCH_TEXT.get(move.id)!.includes(needle));
+  const { list } = summaries();
+  if (!needle) return list;
+  const text = searchText();
+  return list.filter((move) => text.get(move.id)!.includes(needle));
 }
 
 /** Voce dell'elenco di una mossa, undefined se non è tra quelle dell'app. */
 export function getMoveSummary(id: number): MoveSummary | undefined {
-  return SUMMARY_BY_ID.get(id);
+  return summaries().byId.get(id);
 }
 
 /** Converte il parametro di rotta (`"85"`) in un id dell'indice, altrimenti null. */
@@ -152,42 +171,58 @@ function fillEffect(text: string, chance: number | null): string {
 
 /**
  * Spada e Scudo sostituiscono la descrizione delle mosse tolte dal gioco con un avviso
- * («Questa mossa non può essere usata…»): si salta e resta quella dei giochi precedenti.
+ * («Questa mossa non può essere usata…», in ogni lingua): si salta e resta quella dei giochi
+ * precedenti. Testi presi da PokéAPI (`sword-shield`); `ja-Hrkt` è in kana.
  */
-const UNUSABLE_FLAVOR = /^(Questa mossa non può essere usata|This move can.t be used)/;
+const UNUSABLE_FLAVOR = new RegExp(
+  '^(' +
+    [
+      'This move can.t be used',
+      'Questa mossa non può essere usata',
+      'Cette capacité ne peut pas être utilisée',
+      'Diese Attacke kann nicht eingesetzt werden',
+      'Este movimiento no se puede usar',
+      'この技は\\s*使えません',
+      'このわざは\\s*つかえません',
+    ].join('|') +
+    ')',
+);
 
 const range = (min: number | null, max: number | null) =>
   min == null && max == null ? null : { min: min ?? max!, max: max ?? min! };
 
 export function toMove(raw: MoveResponse): Move {
   const entry = BY_ID.get(raw.id);
-  const name =
-    raw.names.find(byLanguage('it'))?.name ?? raw.names.find(byLanguage('en'))?.name ?? formatName(raw.name);
+  const name = localized(raw.names)?.name ?? localName('move', raw.id, entry?.label ?? formatName(raw.name));
   const type = isTypeName(raw.type.name) ? raw.type.name : (entry?.type ?? 'normal');
   const damageClass = (
-    raw.damage_class.name in DAMAGE_CLASS_LABELS ? raw.damage_class.name : (entry?.damageClass ?? 'status')
+    isOneOf(MOVE_DAMAGE_CLASSES, raw.damage_class.name) ? raw.damage_class.name : (entry?.damageClass ?? 'status')
   ) as MoveDamageClass;
 
   const flavors = raw.flavor_text_entries
     .filter((flavor) => !UNUSABLE_FLAVOR.test(flavor.flavor_text))
     .map((flavor) => ({ text: flavor.flavor_text, language: flavor.language }));
-  const english = raw.effect_entries.find(byLanguage('en'));
-  const effect = english ? fillEffect(english.effect, raw.effect_chance) || null : null;
-  const shortEffect = english ? fillEffect(english.short_effect, raw.effect_chance) || null : null;
-  const description = latestFlavor(flavors, 'it') ?? latestFlavor(flavors, 'en') ?? shortEffect ?? '';
+  // Effetto per esteso: PokéAPI lo ha in inglese e a volte in francese o tedesco.
+  const effectEntry = localized(raw.effect_entries);
+  const effect = effectEntry ? fillEffect(effectEntry.effect, raw.effect_chance) || null : null;
+  const shortEffect = effectEntry ? fillEffect(effectEntry.short_effect, raw.effect_chance) || null : null;
+  const effectLanguage = effectEntry?.language.name ?? null;
+  const description = latestLocalizedFlavor(flavors) ?? shortEffect ?? '';
 
   const meta = raw.meta;
   const ailmentName = meta?.ailment.name;
   const ailment =
     !ailmentName || ailmentName === 'none' || ailmentName === 'unknown'
       ? null
-      : (AILMENT_LABELS[ailmentName] ?? formatName(ailmentName));
+      : isOneOf<MoveAilment>(AILMENTS, ailmentName)
+        ? t(`moves:ailment.${ailmentName}`)
+        : formatName(ailmentName);
 
   const statChanges: MoveStatChange[] = raw.stat_changes
-    .filter((change) => change.stat.name in STAT_CHANGE_LABELS)
+    .filter((change) => isOneOf(STAT_CHANGES, change.stat.name))
     .map((change) => {
       const stat = change.stat.name as MoveStatChange['stat'];
-      return { stat, label: STAT_CHANGE_LABELS[stat], change: change.change };
+      return { stat, label: t(`moves:statChange.${stat}`), change: change.change };
     });
 
   // Solo i Pokémon del Pokédex: forme alternative (id da 10001) e generazioni non coperte
@@ -212,10 +247,13 @@ export function toMove(raw: MoveResponse): Move {
     description,
     effect,
     shortEffect,
+    effectLanguage,
     effectChance: raw.effect_chance,
     priority: raw.priority,
     target: raw.target.name,
-    targetLabel: TARGET_LABELS[raw.target.name] ?? formatName(raw.target.name),
+    targetLabel: isOneOf<MoveTarget>(TARGETS, raw.target.name)
+      ? t(`moves:target.${raw.target.name}`)
+      : formatName(raw.target.name),
     ailment,
     ailmentChance: meta?.ailment_chance ?? 0,
     flinchChance: meta?.flinch_chance ?? 0,
@@ -232,14 +270,14 @@ export function toMove(raw: MoveResponse): Move {
 
 /** Dettaglio di una mossa. */
 export async function getMove(id: number, signal?: AbortSignal): Promise<Move> {
-  const raw = await fetchJson<MoveResponse>(`/move/${id}`, signal, 'Mossa non trovata.');
+  const raw = await fetchJson<MoveResponse>(`/move/${id}`, signal, t('moves:detail.notFoundError'));
   return toMove(raw);
 }
 
 /** Tipi di PokéAPI → tipi dell'app, senza quelli speciali (Astrale, Ombra…) e in ordine. */
 function toMatchupTypes(resources: NamedAPIResource[]): MatchupType[] {
   const names = new Set(resources.map((resource) => resource.name));
-  return TYPE_NAMES.filter((type) => names.has(type)).map((type) => ({ type, label: TYPE_NAMES_IT[type] }));
+  return TYPE_NAMES.filter((type) => names.has(type)).map((type) => ({ type, label: TYPE_LABELS[type] }));
 }
 
 export function toTypeMatchups(raw: TypeResponse): TypeMatchups {
@@ -254,7 +292,7 @@ export function toTypeMatchups(raw: TypeResponse): TypeMatchups {
       superEffective,
       notVeryEffective,
       noEffect,
-      normal: TYPE_NAMES.filter((type) => !listed.has(type)).map((type) => ({ type, label: TYPE_NAMES_IT[type] })),
+      normal: TYPE_NAMES.filter((type) => !listed.has(type)).map((type) => ({ type, label: TYPE_LABELS[type] })),
     },
     defense: {
       weakTo: toMatchupTypes(relations.double_damage_from),
@@ -266,6 +304,6 @@ export function toTypeMatchups(raw: TypeResponse): TypeMatchups {
 
 /** Efficacia di un tipo in attacco e in difesa. */
 export async function getTypeMatchups(type: TypeName, signal?: AbortSignal): Promise<TypeMatchups> {
-  const raw = await fetchJson<TypeResponse>(`/type/${type}`, signal, 'Tipo non trovato.');
+  const raw = await fetchJson<TypeResponse>(`/type/${type}`, signal, t('types:errors.notFound'));
   return toTypeMatchups(raw);
 }

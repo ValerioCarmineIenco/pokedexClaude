@@ -1,11 +1,12 @@
 import { router, useLocalSearchParams } from 'expo-router';
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { CompareView } from '@/components/compare/CompareView';
 import { PokemonPicker } from '@/components/compare/PokemonPicker';
 import { usePokemon } from '@/hooks/usePokemon';
 import { usePokemonTypeDefense } from '@/hooks/usePokemonTypeDefense';
-import { formatName } from '@/utils/format';
+import { pokemonName } from '@/i18n/names';
 
 const SLOTS = ['a', 'b'] as const;
 
@@ -14,6 +15,7 @@ const SLOTS = ['a', 'b'] as const;
  * riapre lo stesso confronto. Senza uno dei due id si parte dalla scelta del Pokémon.
  */
 export default function CompareScreen() {
+  const { t } = useTranslation('compare');
   const params = useLocalSearchParams<{ a?: string; b?: string }>();
   const first = usePokemon(params.a);
   const second = usePokemon(params.b);
@@ -30,7 +32,7 @@ export default function CompareScreen() {
     const other = slot === 0 ? second.pokemon : first.pokemon;
     return (
       <PokemonPicker
-        title={other ? `Confronta con ${formatName(other.name)}` : 'Scegli un Pokémon'}
+        title={other ? t('picker.compareWith', { name: pokemonName(other.id, other.name) }) : t('picker.choose')}
         onPick={(pokemon) => {
           router.setParams({ [SLOTS[slot]]: String(pokemon.id) });
           setPicking(null);

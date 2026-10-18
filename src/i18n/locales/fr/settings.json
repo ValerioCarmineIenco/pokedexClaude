@@ -1,0 +1,49 @@
+{
+  "title": "Réglages",
+  "back": "Retour à la liste",
+  "language": {
+    "title": "Langue",
+    "hint": "La langue de l'app et des noms des Pokémon, capacités, talents et objets.",
+    "system": "Langue de l'appareil",
+    "systemHint": "Actuellement {{language}}",
+    "names": {
+      "en": "Anglais",
+      "it": "Italien",
+      "fr": "Français",
+      "de": "Allemand",
+      "es": "Espagnol",
+      "ja": "Japonais"
+    }
+  },
+  "artwork": {
+    "title": "Illustration principale",
+    "hint": "Le style des images dans la liste et en haut de la fiche de chaque Pokémon."
+  },
+  "backup": {
+    "title": "Sauvegarde",
+    "hint": "Enregistre favoris, chromatiques obtenus et équipes dans un fichier JSON, pour les restaurer sur un autre appareil ou après une réinstallation. L'importation remplace les données actuelles.",
+    "export": "Exporter la sauvegarde",
+    "import": "Importer une sauvegarde",
+    "exportFailed": "L'exportation a échoué.",
+    "readFailed": "Impossible de lire le fichier.",
+    "exported": "Sauvegarde exportée.",
+    "restored": "Restaurés : {{favorites}}, {{shiny}} et {{teams}}.",
+    "favorites_one": "{{count}} favori",
+    "favorites_other": "{{count}} favoris",
+    "shiny_one": "{{count}} chromatique",
+    "shiny_other": "{{count}} chromatiques",
+    "teams_one": "{{count}} équipe",
+    "teams_other": "{{count}} équipes",
+    "errors": {
+      "invalid": "Le fichier n'est pas une sauvegarde valide.",
+      "otherApp": "Le fichier n'est pas une sauvegarde de cette app.",
+      "newerVersion": "La sauvegarde a été créée par une version plus récente de l'app."
+    }
+  },
+  "credits": {
+    "title": "Crédits et copyright",
+    "data": "Données et images issues de <link>PokéAPI</link>, projet libre et gratuit maintenu par la communauté.",
+    "unofficial": "Ceci est une app non officielle créée par des fans, à but non lucratif, ni affiliée ni approuvée par Nintendo, Creatures Inc., GAME FREAK inc. ou The Pokémon Company.",
+    "trademarks": "Pokémon et les noms des personnages sont des marques déposées de Nintendo, Creatures Inc. et GAME FREAK inc. © 1995–{{year}} Nintendo / Creatures Inc. / GAME FREAK inc."
+  }
+}

@@ -1,0 +1,34 @@
+{
+  "flavors": {
+    "spicy": "Spicy",
+    "dry": "Dry",
+    "sweet": "Sweet",
+    "bitter": "Bitter",
+    "sour": "Sour"
+  },
+  "list": {
+    "count_one": "{{count}} nature",
+    "count_other": "{{count}} natures",
+    "results_one": "{{count}} result",
+    "results_other": "{{count}} results",
+    "searchLabel": "Search for a nature by name",
+    "noResultsTitle": "No results",
+    "noResults": "No nature is called \"{{query}}\".",
+    "clearSearch": "Clear search"
+  },
+  "card": {
+    "neutral": "Neutral",
+    "neutralText": "Doesn't change stats and has no favorite flavors.",
+    "neutralLabel": "{{name}}. Neutral nature: doesn't change stats and has no favorite flavors.",
+    "label": "{{name}}. Raises {{increased}}, lowers {{decreased}}. Likes {{liked}} flavors, dislikes {{disliked}} flavors.",
+    "increases": "Raises",
+    "decreases": "Lowers",
+    "likedFlavor": "Likes",
+    "dislikedFlavor": "Dislikes"
+  },
+  "errors": {
+    "notFound": "Nature not found.",
+    "offlineTitle": "No connection",
+    "retry": "Try again"
+  }
+}

@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import { Pressable, StyleSheet, View } from 'react-native';
 
 import type { ViewMode } from '@/hooks/useViewMode';
@@ -10,15 +11,16 @@ type Props = {
   onChange: (mode: ViewMode) => void;
 };
 
-const OPTIONS: { mode: ViewMode; icon: IconName; label: string }[] = [
-  { mode: 'grid', icon: 'grid', label: 'Vista a griglia' },
-  { mode: 'row', icon: 'rows', label: 'Vista a riga singola' },
+const OPTIONS: { mode: ViewMode; icon: IconName }[] = [
+  { mode: 'grid', icon: 'grid' },
+  { mode: 'row', icon: 'rows' },
 ];
 
 export function ViewToggle({ value, onChange }: Props) {
+  const { t } = useTranslation('pokedex');
   return (
     <View style={styles.track} accessibilityRole="radiogroup">
-      {OPTIONS.map(({ mode, icon, label }) => {
+      {OPTIONS.map(({ mode, icon }) => {
         const selected = value === mode;
         return (
           <Pressable
@@ -26,7 +28,7 @@ export function ViewToggle({ value, onChange }: Props) {
             onPress={() => onChange(mode)}
             hitSlop={4}
             accessibilityRole="radio"
-            accessibilityLabel={label}
+            accessibilityLabel={t(`viewToggle.${mode}`)}
             accessibilityState={{ selected }}
             style={[styles.option, selected && styles.optionSelected]}>
             <Icon name={icon} size={16} color={selected ? colors.text : colors.textSubtle} />

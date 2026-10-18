@@ -4,7 +4,7 @@ import { getErrorMessage } from '@/api/client';
 import { fetchPokemonSpecies, parsePokemonId } from '@/api/pokemon';
 import { queryKeys } from '@/api/queryKeys';
 
-/** Descrizione italiana e categoria di un Pokémon, per il dettaglio. */
+/** Descrizione e categoria (nella lingua in uso) di un Pokémon, per il dettaglio. */
 export function usePokemonSpecies(idParam: string | string[] | number | undefined) {
   const id = parsePokemonId(idParam);
 

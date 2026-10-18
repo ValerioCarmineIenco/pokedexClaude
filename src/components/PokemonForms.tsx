@@ -1,24 +1,17 @@
 import { Image } from 'expo-image';
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 
 import { colors } from '@/theme/colors';
 import { fonts } from '@/theme/fonts';
 import { primaryType, TYPE_COLORS, typeTextColor, typeTint } from '@/theme/typeColors';
-import type { PokemonForm, PokemonFormKind } from '@/types/pokemon';
+import type { PokemonForm } from '@/types/pokemon';
 import { STAT_LABELS } from '@/utils/format';
 
 import { SkeletonBlock } from './Skeleton';
 import { StatBar } from './StatBar';
 import { TypeBadge } from './TypeBadge';
-
-const KIND_LABELS: Record<PokemonFormKind, string> = {
-  base: 'Forma base',
-  mega: 'Megaevoluzione',
-  regional: 'Forma regionale',
-  gmax: 'Gigamax',
-  special: 'Forma speciale',
-};
 
 const total = (form: PokemonForm) => form.stats.reduce((sum, stat) => sum + stat.value, 0);
 
@@ -35,6 +28,7 @@ export type PokemonFormsProps = {
 export function PokemonForms({ forms, isLoading, errorMessage, pokemonName, onRetry }: PokemonFormsProps) {
   // Si parte dalla prima forma alternativa: la base è già la scheda stessa.
   const [selectedId, setSelectedId] = useState<number | null>(null);
+  const { t } = useTranslation('pokemon');
 
   if (!forms && !isLoading && !errorMessage) return null;
 
@@ -45,7 +39,7 @@ export function PokemonForms({ forms, isLoading, errorMessage, pokemonName, onRe
   return (
     <View style={styles.section}>
       <Text style={styles.sectionTitle} accessibilityRole="header">
-        Forme
+        {t('forms.title')}
       </Text>
       {forms && selected ? (
         <>
@@ -86,7 +80,7 @@ export function PokemonForms({ forms, isLoading, errorMessage, pokemonName, onRe
             hitSlop={6}
             accessibilityRole="button"
             style={({ pressed }) => [styles.retry, pressed && styles.pressedRetry]}>
-            <Text style={styles.retryLabel}>Riprova</Text>
+            <Text style={styles.retryLabel}>{t('detail.retry')}</Text>
           </Pressable>
         </View>
       ) : (
@@ -111,7 +105,8 @@ function FormCard({
   const type = primaryType(form.types);
   const formTotal = total(form);
   const difference = base && !form.isDefault ? formTotal - total(base) : 0;
-  const kindLabel = KIND_LABELS[form.kind];
+  const { t } = useTranslation('pokemon');
+  const kindLabel = t(`forms.kinds.${form.kind}`);
 
   return (
     <View style={[styles.card, { backgroundColor: typeTint(type, 0.14) }]}>
@@ -121,7 +116,7 @@ function FormCard({
           style={styles.artwork}
           contentFit="contain"
           transition={200}
-          accessibilityLabel={`Artwork di ${pokemonName}, ${form.label}`}
+          accessibilityLabel={t('forms.artworkLabel', { name: pokemonName, form: form.label })}
         />
         <View style={styles.headerText}>
           <Text style={styles.formName} numberOfLines={2}>
@@ -137,19 +132,19 @@ function FormCard({
       </View>
 
       <View style={styles.block}>
-        <Text style={styles.blockTitle}>Abilità</Text>
+        <Text style={styles.blockTitle}>{t('detail.abilities')}</Text>
         <View style={styles.abilities}>
           {form.abilities.map((ability) => (
             <View key={ability.name} style={styles.ability}>
               <Text style={styles.abilityName}>{ability.label}</Text>
-              {ability.isHidden && <Text style={styles.abilityHidden}>Nascosta</Text>}
+              {ability.isHidden && <Text style={styles.abilityHidden}>{t('detail.hidden')}</Text>}
             </View>
           ))}
         </View>
       </View>
 
       <View style={styles.block}>
-        <Text style={styles.blockTitle}>Statistiche base</Text>
+        <Text style={styles.blockTitle}>{t('detail.baseStats')}</Text>
         <View style={styles.stats}>
           {form.stats.map((stat) => (
             <StatBar
@@ -160,11 +155,11 @@ function FormCard({
             />
           ))}
           <View style={styles.totalRow}>
-            <Text style={styles.totalLabel}>Totale</Text>
+            <Text style={styles.totalLabel}>{t('detail.total')}</Text>
             <Text style={styles.totalValue}>{formTotal}</Text>
             {difference !== 0 && (
               <Text style={[styles.difference, { color: difference > 0 ? colors.statUp : colors.statDown }]}>
-                {difference > 0 ? `+${difference}` : `−${-difference}`} rispetto alla forma base
+                {t('forms.difference', { value: difference > 0 ? `+${difference}` : `−${-difference}` })}
               </Text>
             )}
           </View>

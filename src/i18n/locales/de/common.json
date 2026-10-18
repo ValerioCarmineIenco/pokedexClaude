@@ -1,0 +1,102 @@
+{
+  "screens": {
+    "pokedex": "Pokédex",
+    "pokemonDetail": "Details",
+    "compare": "Vergleich",
+    "settings": "Einstellungen",
+    "items": "Items",
+    "itemDetail": "Item-Details",
+    "abilities": "Fähigkeiten",
+    "abilityDetail": "Fähigkeit-Details",
+    "moves": "Attacken",
+    "moveDetail": "Attacken-Details",
+    "natures": "Wesen",
+    "locations": "Orte",
+    "locationDetail": "Ort-Details",
+    "types": "Typen",
+    "typeDetail": "Typ-Details",
+    "teams": "Teams",
+    "team": "Team",
+    "sections": "Bereiche"
+  },
+  "sections": {
+    "pokedex": {
+      "title": "Pokédex",
+      "description": "Alle Pokémon, nach Generation"
+    },
+    "items": {
+      "title": "Items",
+      "description": "Basis-Items, Medizin, TMs und Mega-Steine"
+    },
+    "abilities": {
+      "title": "Fähigkeiten",
+      "description": "Alle Fähigkeiten der Pokémon"
+    },
+    "moves": {
+      "title": "Attacken",
+      "description": "Typ, Stärke, Genauigkeit und AP jeder Attacke"
+    },
+    "natures": {
+      "title": "Wesen",
+      "description": "Statuswerte und Geschmäcker jedes Wesens"
+    },
+    "locations": {
+      "title": "Orte",
+      "description": "Wo man Pokémon findet, Region für Region"
+    },
+    "types": {
+      "title": "Typen",
+      "description": "Effektivität jedes Typs im Angriff und in der Verteidigung"
+    },
+    "teams": {
+      "title": "Teams",
+      "description": "Teams aus 6 Pokémon und ihre Typabdeckung"
+    }
+  },
+  "generation": "Generation {{number}}",
+  "stats": {
+    "hp": "KP",
+    "attack": "Angriff",
+    "defense": "Verteidigung",
+    "special-attack": "Sp.-Ang.",
+    "special-defense": "Sp.-Vert.",
+    "speed": "Initiative"
+  },
+  "artworkStyles": {
+    "official": {
+      "label": "Offizielles Artwork",
+      "description": "Offizielle Illustration in hoher Auflösung"
+    },
+    "official-shiny": {
+      "label": "Offizielles Artwork (schillernd)",
+      "description": "Die offizielle Illustration in schillernden Farben"
+    },
+    "home": {
+      "label": "Pokémon HOME",
+      "description": "3D-Modelle aus Pokémon HOME"
+    },
+    "home-shiny": {
+      "label": "Pokémon HOME (schillernd)",
+      "description": "3D-Modelle aus Pokémon HOME in schillernden Farben"
+    },
+    "dream-world": {
+      "label": "Dream World",
+      "description": "Vektorzeichnungen aus der Dream World"
+    },
+    "showdown": {
+      "label": "Showdown animiert",
+      "description": "Animierte Sprites aus Pokémon Showdown"
+    },
+    "sprite": {
+      "label": "Pixel-Sprite",
+      "description": "Das Pixel-Art-Sprite aus den Spielen"
+    }
+  },
+  "errors": {
+    "pokemonNotFound": "Pokémon nicht gefunden.",
+    "timeout": "Der Server antwortet nicht. Versuch es gleich noch einmal.",
+    "offline": "Keine Verbindung. Prüfe das Netzwerk und versuch es erneut.",
+    "server": "Serverfehler ({{status}}). Versuch es gleich noch einmal.",
+    "generic": "Etwas ist schiefgelaufen. Versuch es erneut."
+  }
+}

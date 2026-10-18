@@ -1,5 +1,7 @@
 // Oggetti della borsa (v2). Contratto condiviso con le schermate «Oggetti».
 
+import { labelMap, t } from '@/i18n';
+
 export const ITEM_CATEGORIES = [
   'remedies',
   'tm',
@@ -26,23 +28,17 @@ export const ITEM_CATEGORIES = [
  */
 export type ItemCategory = (typeof ITEM_CATEGORIES)[number];
 
-export const ITEM_CATEGORY_LABELS: Record<ItemCategory, string> = {
-  remedies: 'Rimedi',
-  tm: 'MT',
-  megaStones: 'Megapietre',
-  pokeballs: 'Poké Ball',
-  battle: 'Strumenti lotta',
-  berries: 'Bacche',
-  evolution: 'Evolutivi',
-  other: 'Altri strumenti',
-};
+/** Nome di ogni categoria nella lingua in uso (letto a ogni accesso). */
+export const ITEM_CATEGORY_LABELS: Record<ItemCategory, string> = labelMap(ITEM_CATEGORIES, (category) =>
+  t(`items:categories.${category}`),
+);
 
 /** Voce dell'indice incluso nell'app (`src/data/itemIndex.json`). */
 export type ItemIndexEntry = {
   id: number;
   /** Slug di PokéAPI (es. `potion`). */
   name: string;
-  /** Nome mostrato (es. «Pozione»): italiano, altrimenti inglese. Serve per la ricerca. */
+  /** Nome italiano (es. «Pozione»), altrimenti inglese: ripiego di `localName('item', id)`. */
   label: string;
   /** Categoria PokéAPI (es. `healing`). */
   group: string;
@@ -54,9 +50,9 @@ export type ItemIndexEntry = {
 /** Dati di `/item/{id}`, pronti per lista, griglia e dettaglio. */
 export type Item = {
   id: number;
-  /** Nome italiano (es. «Pozione»), altrimenti inglese. */
+  /** Nome nella lingua in uso (es. «Pozione»), altrimenti inglese. */
   name: string;
-  /** Ultima descrizione italiana dei giochi, altrimenti inglese; stringa vuota se assente. */
+  /** Ultima descrizione dei giochi nella lingua in uso, altrimenti inglese; stringa vuota se assente. */
   description: string;
   /** Sprite PokéAPI: pixel art piccola, da ingrandire nel riquadro quadrato. */
   imageUrl: string;

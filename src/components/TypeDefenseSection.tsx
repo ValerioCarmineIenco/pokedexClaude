@@ -1,4 +1,5 @@
 import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { useTranslation } from 'react-i18next';
 
 import { colors } from '@/theme/colors';
 import { fonts } from '@/theme/fonts';
@@ -9,13 +10,14 @@ import { type DefenseGroup, type DefenseMultiplier, formatMultiplier } from '@/u
 import { MatchupRow } from './MatchupRow';
 import { SkeletonBlock } from './Skeleton';
 
-const TITLES: Record<DefenseMultiplier, string> = {
-  4: 'Molto debole a',
-  2: 'Debole a',
-  0.5: 'Resistente a',
-  0.25: 'Molto resistente a',
-  0: 'Immune a',
-};
+/** Chiave del titolo di ciascuna riga (`typeDefense.rows.*`). */
+const TITLES = {
+  4: 'quadruple',
+  2: 'double',
+  0.5: 'half',
+  0.25: 'quarter',
+  0: 'immune',
+} as const satisfies Record<DefenseMultiplier, string>;
 
 /** ×4 e ×¼ esistono solo con due tipi: le righe compaiono solo se contengono qualcosa. */
 const OPTIONAL = new Set<DefenseMultiplier>([4, 0.25]);
@@ -31,14 +33,13 @@ export type TypeDefenseSectionProps = {
 
 /** «Efficacia dei tipi» nella scheda: quanto danno subisce il Pokémon da ciascun tipo. */
 export function TypeDefenseSection({ type, groups, isLoading, errorMessage, onRetry }: TypeDefenseSectionProps) {
+  const { t } = useTranslation('pokemon');
   return (
     <View style={styles.section}>
       <Text style={styles.sectionTitle} accessibilityRole="header">
-        Efficacia dei tipi
+        {t('typeDefense.title')}
       </Text>
-      <Text style={styles.hint}>
-        Danno subito dalle mosse di ciascun tipo. Tutti gli altri tipi fanno danno normale (×1).
-      </Text>
+      <Text style={styles.hint}>{t('typeDefense.hint')}</Text>
       {groups ? (
         <View style={[styles.box, { backgroundColor: typeTint(type, 0.14) }]}>
           {groups
@@ -46,7 +47,7 @@ export function TypeDefenseSection({ type, groups, isLoading, errorMessage, onRe
             .map((group) => (
               <MatchupRow
                 key={group.multiplier}
-                title={TITLES[group.multiplier]}
+                title={t(`typeDefense.rows.${TITLES[group.multiplier]}`)}
                 multiplier={formatMultiplier(group.multiplier)}
                 types={group.types}
                 accent={TYPE_COLORS[type]}
@@ -64,7 +65,7 @@ export function TypeDefenseSection({ type, groups, isLoading, errorMessage, onRe
             hitSlop={6}
             accessibilityRole="button"
             style={({ pressed }) => [styles.retry, pressed && styles.pressed]}>
-            <Text style={styles.retryLabel}>Riprova</Text>
+            <Text style={styles.retryLabel}>{t('detail.retry')}</Text>
           </Pressable>
         </View>
       ) : null}

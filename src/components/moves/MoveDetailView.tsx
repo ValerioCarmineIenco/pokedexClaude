@@ -1,15 +1,19 @@
 import { Image } from 'expo-image';
+import type { TFunction } from 'i18next';
+import { useTranslation } from 'react-i18next';
 import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { getArtworkUrl } from '@/api/pokemon';
 import { useArtworkStyle } from '@/hooks/useArtworkStyle';
+import { getLanguage } from '@/i18n';
+import { pokemonName } from '@/i18n/names';
 import type { Move, MovePokemon, MoveSummary, TypeMatchups } from '@/types/move';
 import type { TypeName } from '@/types/pokemon';
 import { colors } from '@/theme/colors';
 import { fonts } from '@/theme/fonts';
 import { TYPE_COLORS, typeTextColor, typeTint } from '@/theme/typeColors';
-import { formatName, formatNumber } from '@/utils/format';
+import { formatNumber } from '@/utils/format';
 import { romanNumeral } from '@/utils/generation';
 
 import { ErrorState } from '../ErrorState';
@@ -53,6 +57,7 @@ export function MoveDetailView({
   onBack,
   onRetry,
 }: MoveDetailViewProps) {
+  const { t } = useTranslation('moves');
   const insets = useSafeAreaInsets();
   // L'intestazione usa i dati completi se ci sono, altrimenti quelli dell'indice.
   const head = move ?? summary;
@@ -62,7 +67,7 @@ export function MoveDetailView({
       onPress={onBack}
       hitSlop={6}
       accessibilityRole="button"
-      accessibilityLabel="Torna alle mosse"
+      accessibilityLabel={t('detail.back')}
       style={({ pressed }) => [styles.backButton, pressed && styles.pressed]}>
       <Icon name="back" size={18} color={colors.text} />
     </Pressable>
@@ -73,9 +78,9 @@ export function MoveDetailView({
       <View style={[styles.screen, { paddingTop: insets.top }]}>
         <View style={[styles.nav, styles.navPadding]}>{backButton}</View>
         <ErrorState
-          title="Mossa non trovata"
-          message="Questa mossa non esiste nel Pokédex."
-          actionLabel="Torna alle mosse"
+          title={t('detail.notFoundTitle')}
+          message={t('detail.notFoundMessage')}
+          actionLabel={t('detail.back')}
           actionStyle="ghost"
           onAction={onBack}
         />
@@ -86,6 +91,8 @@ export function MoveDetailView({
   const type = head.type;
   const soft = typeTint(type, 0.14);
   const failed = !move && !isLoading;
+  // «in inglese» solo se l'effetto è il ripiego inglese: PokéAPI ha poche altre lingue.
+  const effectIsFallback = move?.effectLanguage === 'en' && getLanguage() !== 'en';
 
   return (
     <ScrollView
@@ -106,7 +113,7 @@ export function MoveDetailView({
           {head.generation > 0 && (
             <View style={[styles.badge, { backgroundColor: 'rgba(255, 255, 255, 0.65)' }]}>
               <Text style={[styles.badgeLabel, { color: colors.text }]}>
-                Gen {romanNumeral(head.generation)}
+                {t('generation', { numeral: romanNumeral(head.generation), number: head.generation })}
               </Text>
             </View>
           )}
@@ -114,11 +121,11 @@ export function MoveDetailView({
         <View style={styles.sheetCap} />
         <View style={styles.statsWrap}>
           <View style={[styles.stats, { borderColor: soft }]}>
-            <StatCell label="Potenza" value={head.power} />
-            <StatCell label="Precisione" value={head.accuracy} suffix="%" />
-            <StatCell label="PP" value={head.pp} />
+            <StatCell label={t('detail.power')} value={head.power} />
+            <StatCell label={t('detail.accuracy')} value={head.accuracy} suffix="%" />
+            <StatCell label={t('detail.pp')} value={head.pp} />
             <StatCell
-              label="Priorità"
+              label={t('detail.priority')}
               value={move ? move.priority : undefined}
               format={(value) => (value > 0 ? `+${value}` : String(value))}
             />
@@ -129,7 +136,7 @@ export function MoveDetailView({
       <View style={styles.sheet}>
         {move ? (
           <Text style={styles.description}>
-            {move.description || 'Nessuna descrizione in italiano disponibile.'}
+            {move.description || t('detail.noDescription')}
           </Text>
         ) : isLoading ? (
           <View style={styles.descriptionSkeleton}>
@@ -141,9 +148,9 @@ export function MoveDetailView({
 
         {failed && (
           <ErrorState
-            title="Nessuna connessione"
-            message={errorMessage ?? 'Non riesco a raggiungere il Pokédex. Controlla la rete e riprova.'}
-            actionLabel="Riprova"
+            title={t('detail.offlineTitle')}
+            message={errorMessage ?? t('detail.offlineMessage')}
+            actionLabel={t('detail.retry')}
             onAction={onRetry}
           />
         )}
@@ -151,7 +158,8 @@ export function MoveDetailView({
         {move?.effect && (
           <View style={styles.section}>
             <Text style={styles.sectionTitle} accessibilityRole="header">
-              Effetto <Text style={styles.sectionNote}>in inglese</Text>
+              {t('detail.effect')}
+              {effectIsFallback ? <Text style={styles.sectionNote}> {t('detail.effectInEnglish')}</Text> : null}
             </Text>
             <View style={[styles.box, { backgroundColor: soft }]}>
               <Text style={styles.effect}>{move.effect}</Text>
@@ -162,10 +170,10 @@ export function MoveDetailView({
         {move && (
           <View style={styles.section}>
             <Text style={styles.sectionTitle} accessibilityRole="header">
-              Dettagli
+              {t('detail.details')}
             </Text>
             <View style={styles.facts}>
-              {getFacts(move).map((fact, index) => (
+              {getFacts(move, t).map((fact, index) => (
                 <View key={fact.label} style={[styles.factRow, index > 0 && styles.factDivider]}>
                   <Text style={styles.factLabel}>{fact.label}</Text>
                   <Text style={styles.factValue}>{fact.value}</Text>
@@ -192,7 +200,7 @@ export function MoveDetailView({
         {(isLoading || (move && move.pokemon.length > 0)) && (
           <View style={styles.section}>
             <Text style={styles.sectionTitle} accessibilityRole="header">
-              Pokémon che la imparano
+              {t('detail.learnedBy')}
               {move ? <Text style={styles.sectionCount}>  {move.pokemon.length}</Text> : null}
             </Text>
             <ScrollView
@@ -248,36 +256,36 @@ function StatCell({
 }
 
 /** Righe «Dettagli»: solo quelle che dicono qualcosa per questa mossa. */
-function getFacts(move: Move): { label: string; value: string }[] {
-  const facts = [{ label: 'Bersaglio', value: move.targetLabel }];
+function getFacts(move: Move, t: TFunction<'moves'>): { label: string; value: string }[] {
+  const withChance = (value: string, chance: number) =>
+    chance > 0 ? t('facts.withChance', { value, chance }) : value;
+  const rangeText = ({ min, max }: { min: number; max: number }) =>
+    min === max ? String(min) : t('facts.range', { min, max });
+
+  const facts = [{ label: t('facts.target'), value: move.targetLabel }];
   if (move.ailment) {
-    facts.push({
-      label: 'Stato alterato',
-      value: move.ailmentChance > 0 ? `${move.ailment} (${move.ailmentChance}%)` : move.ailment,
-    });
+    facts.push({ label: t('facts.ailment'), value: withChance(move.ailment, move.ailmentChance) });
   }
   if (move.statChanges.length > 0) {
     const changes = move.statChanges
       .map((change) => `${change.label} ${change.change > 0 ? '+' : ''}${change.change}`)
       .join(', ');
-    facts.push({
-      label: 'Statistiche',
-      value: move.statChance > 0 ? `${changes} (${move.statChance}%)` : changes,
-    });
+    facts.push({ label: t('facts.stats'), value: withChance(changes, move.statChance) });
   }
-  if (move.flinchChance > 0) facts.push({ label: 'Tentennamento', value: `${move.flinchChance}%` });
-  if (move.critRate > 0) facts.push({ label: 'Brutto colpo', value: `Probabilità alta (+${move.critRate})` });
-  if (move.hits) facts.push({ label: 'Colpi', value: rangeText(move.hits) });
-  if (move.turns) facts.push({ label: 'Turni', value: rangeText(move.turns) });
-  if (move.drain > 0) facts.push({ label: 'Assorbe', value: `${move.drain}% del danno` });
-  if (move.drain < 0) facts.push({ label: 'Contraccolpo', value: `${-move.drain}% del danno` });
-  if (move.healing > 0) facts.push({ label: 'Cura', value: `${move.healing}% dei PS` });
-  if (move.healing < 0) facts.push({ label: 'Perde', value: `${-move.healing}% dei PS` });
+  if (move.flinchChance > 0) facts.push({ label: t('facts.flinch'), value: `${move.flinchChance}%` });
+  if (move.critRate > 0) facts.push({ label: t('facts.crit'), value: t('facts.critValue', { rate: move.critRate }) });
+  if (move.hits) facts.push({ label: t('facts.hits'), value: rangeText(move.hits) });
+  if (move.turns) facts.push({ label: t('facts.turns'), value: rangeText(move.turns) });
+  if (move.drain > 0) facts.push({ label: t('facts.drain'), value: t('facts.drainValue', { percent: move.drain }) });
+  if (move.drain < 0) facts.push({ label: t('facts.recoil'), value: t('facts.drainValue', { percent: -move.drain }) });
+  if (move.healing > 0) {
+    facts.push({ label: t('facts.healing'), value: t('facts.healingValue', { percent: move.healing }) });
+  }
+  if (move.healing < 0) {
+    facts.push({ label: t('facts.loses'), value: t('facts.healingValue', { percent: -move.healing }) });
+  }
   return facts;
 }
-
-const rangeText = ({ min, max }: { min: number; max: number }) =>
-  min === max ? String(min) : `Da ${min} a ${max}`;
 
 /**
  * Efficacia del tipo della mossa: contro quali tipi fa ×2, ×½ o ×0. Le mosse di stato non
@@ -295,25 +303,23 @@ function DamageSection({
   matchups: TypeMatchups;
   soft: string;
 }) {
+  const { t } = useTranslation(['moves', 'types']);
   const { attack } = matchups;
+  const none = { key: 'none', title: t('types:matchups.noEffect'), multiplier: '×0', types: attack.noEffect };
   const groups = isStatus
-    ? [{ key: 'none', title: 'Nessun effetto su', multiplier: '×0', types: attack.noEffect }]
+    ? [none]
     : [
-        { key: 'super', title: 'Superefficace contro', multiplier: '×2', types: attack.superEffective },
-        { key: 'weak', title: 'Poco efficace contro', multiplier: '×½', types: attack.notVeryEffective },
-        { key: 'none', title: 'Nessun effetto su', multiplier: '×0', types: attack.noEffect },
+        { key: 'super', title: t('types:matchups.superEffective'), multiplier: '×2', types: attack.superEffective },
+        { key: 'weak', title: t('types:matchups.notVeryEffective'), multiplier: '×½', types: attack.notVeryEffective },
+        none,
       ];
 
   return (
     <View style={styles.section}>
       <Text style={styles.sectionTitle} accessibilityRole="header">
-        Efficacia
+        {t('damage.title')}
       </Text>
-      <Text style={styles.sectionHint}>
-        {isStatus
-          ? 'È una mossa di stato: non infligge danni, ma i tipi immuni la bloccano.'
-          : 'Danno della mossa contro un Pokémon di ciascun tipo. Tutti gli altri tipi subiscono danno normale (×1).'}
-      </Text>
+      <Text style={styles.sectionHint}>{isStatus ? t('damage.statusHint') : t('damage.hint')}</Text>
       <View style={[styles.box, styles.damageBox, { backgroundColor: soft }]}>
         {groups.map((group) => (
           <MatchupRow
@@ -339,13 +345,14 @@ function PokemonTile({
   background: string;
   onPress: () => void;
 }) {
+  const { t } = useTranslation('moves');
   const [artworkStyle] = useArtworkStyle();
-  const name = formatName(pokemon.name);
+  const name = pokemonName(pokemon.id, pokemon.name);
   return (
     <Pressable
       onPress={onPress}
       accessibilityRole="button"
-      accessibilityLabel={`${name}, numero ${pokemon.id}`}
+      accessibilityLabel={t('detail.pokemonA11y', { name, number: pokemon.id })}
       style={({ pressed }) => [
         styles.relatedTile,
         { backgroundColor: background },

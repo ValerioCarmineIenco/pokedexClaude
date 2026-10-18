@@ -1,8 +1,10 @@
 import { useMemo, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Platform, Pressable, ScrollView, Share, StyleSheet, Text, TextInput, View } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
+import { t as translate } from '@/i18n';
 import { colors } from '@/theme/colors';
 import { fonts } from '@/theme/fonts';
 import { TEAM_SIZE, type Team } from '@/types/team';
@@ -29,7 +31,7 @@ export type TeamEditorViewProps = {
 async function shareText(message: string): Promise<string | null> {
   if (Platform.OS === 'web' && typeof navigator !== 'undefined' && !navigator.share) {
     await navigator.clipboard.writeText(message);
-    return 'Squadra copiata negli appunti';
+    return translate('teams:editor.copied');
   }
   await Share.share({ message });
   return null;
@@ -49,6 +51,7 @@ export function TeamEditorView({
   onOpenPokemon,
   onDelete,
 }: TeamEditorViewProps) {
+  const { t } = useTranslation('teams');
   const insets = useSafeAreaInsets();
   const [name, setName] = useState(team.name);
   const [dragging, setDragging] = useState(false);
@@ -62,7 +65,7 @@ export function TeamEditorView({
   const share = () => {
     shareText(formatTeamText(team.name, members))
       .then(setNotice)
-      .catch(() => setNotice('Condivisione non riuscita'));
+      .catch(() => setNotice(t('editor.shareFailed')));
   };
 
   return (
@@ -72,7 +75,7 @@ export function TeamEditorView({
           onPress={onBack}
           hitSlop={6}
           accessibilityRole="button"
-          accessibilityLabel="Indietro"
+          accessibilityLabel={t('editor.back')}
           style={({ pressed }) => [styles.navButton, pressed && styles.pressed]}>
           <Icon name="back" size={18} color={colors.text} />
         </Pressable>
@@ -84,7 +87,7 @@ export function TeamEditorView({
           disabled={members.length === 0}
           hitSlop={6}
           accessibilityRole="button"
-          accessibilityLabel="Condividi la squadra"
+          accessibilityLabel={t('editor.share')}
           accessibilityState={{ disabled: members.length === 0 }}
           style={({ pressed }) => [
             styles.navButton,
@@ -109,14 +112,15 @@ export function TeamEditorView({
           onSubmitEditing={() => onRename(name)}
           returnKeyType="done"
           maxLength={40}
-          accessibilityLabel="Nome della squadra"
-          placeholder="Nome della squadra"
+          accessibilityLabel={t('editor.nameLabel')}
+          placeholder={t('editor.nameLabel')}
           placeholderTextColor={colors.textSubtle}
           style={styles.name}
         />
         <Text style={styles.caption}>
-          {members.length} / {TEAM_SIZE} Pokémon
-          {members.length > 1 ? ' · trascina ≡ per riordinare' : ''}
+          {members.length > 1
+            ? t('editor.captionDrag', { count: members.length, size: TEAM_SIZE })
+            : t('editor.caption', { count: members.length, size: TEAM_SIZE })}
         </Text>
 
         <TeamSlots
@@ -134,8 +138,7 @@ export function TeamEditorView({
             style={({ pressed }) => [styles.add, pressed && styles.addPressed]}>
             <Icon name="plus" size={18} color={colors.accent} />
             <Text style={styles.addLabel}>
-              Aggiungi un Pokémon
-              {free < TEAM_SIZE ? ` (${free === 1 ? 'ultimo posto' : `${free} posti liberi`})` : ''}
+              {free < TEAM_SIZE ? t('editor.addFree', { count: free }) : t('editor.add')}
             </Text>
           </Pressable>
         )}
@@ -152,7 +155,7 @@ export function TeamEditorView({
           ]}>
           <Icon name="trash" size={16} color={confirmDelete ? colors.surface : colors.statDown} />
           <Text style={[styles.deleteLabel, confirmDelete && styles.deleteLabelConfirm]}>
-            {confirmDelete ? 'Tocca di nuovo per eliminare' : 'Elimina squadra'}
+            {confirmDelete ? t('editor.confirmDelete') : t('editor.delete')}
           </Text>
         </Pressable>
       </ScrollView>

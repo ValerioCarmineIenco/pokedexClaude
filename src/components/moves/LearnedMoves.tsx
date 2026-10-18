@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { StyleSheet, Text, View } from 'react-native';
 
 import { LEARN_METHOD_LABELS, LEARN_METHODS } from '@/api/learnset';
@@ -7,13 +8,12 @@ import { colors } from '@/theme/colors';
 import { fonts } from '@/theme/fonts';
 import type { LearnedMove, PokemonLearnset } from '@/types/learnset';
 import type { MoveSummary } from '@/types/move';
+import { romanNumeral } from '@/utils/generation';
 
 import { ErrorState } from '../ErrorState';
 import { OptionPicker, type PickerOption } from '../OptionPicker';
 import { SkeletonBlock } from '../Skeleton';
 import { MoveCard, ROW_MOVE_HEIGHT } from './MoveCard';
-
-const ROMAN = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X'];
 
 type Props = {
   learnset: PokemonLearnset | undefined;
@@ -24,13 +24,12 @@ type Props = {
   onRetry: () => void;
 };
 
-const countLabel = (count: number) => (count === 1 ? '1 mossa' : `${count} mosse`);
-
 /**
  * Tab Mosse: le mosse del Pokémon nel gioco scelto, divise per metodo (livello, MT/MN, uovo,
  * insegnante). Nome, tipo, classe e potenza vengono dall'indice locale delle mosse.
  */
 export function LearnedMoves({ learnset, isLoading, errorMessage, pokemonName, onOpenMove, onRetry }: Props) {
+  const { t } = useTranslation('moves');
   const [selected, setSelected] = useState<string | null>(null);
 
   if (isLoading) {
@@ -47,9 +46,9 @@ export function LearnedMoves({ learnset, isLoading, errorMessage, pokemonName, o
   if (!learnset) {
     return (
       <ErrorState
-        title="Mosse non disponibili"
-        message={errorMessage ?? 'Non riesco a caricare le mosse. Controlla la rete e riprova.'}
-        actionLabel="Riprova"
+        title={t('learnset.unavailableTitle')}
+        message={errorMessage ?? t('learnset.unavailableMessage')}
+        actionLabel={t('learnset.retry')}
         onAction={onRetry}
       />
     );
@@ -61,29 +60,38 @@ export function LearnedMoves({ learnset, isLoading, errorMessage, pokemonName, o
 
   if (!group) {
     return (
-      <ErrorState title="Nessuna mossa" message={`PokéAPI non ha mosse per ${pokemonName}.`} glyph="–" />
+      <ErrorState
+        title={t('learnset.noneTitle')}
+        message={t('learnset.noneMessage', { name: pokemonName })}
+        glyph="–"
+      />
     );
   }
 
   const options: PickerOption<string>[] = learnset.versionGroups.map((g) => ({
     id: g.slug,
     title: g.label,
-    subtitle: `${g.generation ? `Gen ${ROMAN[g.generation - 1]} · ` : ''}${countLabel(g.moves.length)}`,
+    subtitle: g.generation
+      ? t('learnset.subtitle', {
+          generation: t('generation', { numeral: romanNumeral(g.generation), number: g.generation }),
+          moves: t('count', { count: g.moves.length }),
+        })
+      : t('count', { count: g.moves.length }),
     swatch: g.color,
   }));
 
   return (
     <View style={styles.list}>
       <View style={styles.gameRow}>
-        <Text style={styles.gameCaption}>Gioco</Text>
+        <Text style={styles.gameCaption}>{t('learnset.game')}</Text>
         <View style={styles.picker}>
           <OptionPicker
             options={options}
             value={group.slug}
             onChange={(slug) => slug && setSelected(slug)}
             label={group.label}
-            accessibilityLabel={`Gioco: ${group.label}`}
-            accessibilityHint="Scegli il gioco di cui vedere le mosse"
+            accessibilityLabel={t('learnset.gameA11y', { name: group.label })}
+            accessibilityHint={t('learnset.gameHint')}
           />
         </View>
       </View>
@@ -97,7 +105,7 @@ export function LearnedMoves({ learnset, isLoading, errorMessage, pokemonName, o
               <Text style={styles.sectionTitle} accessibilityRole="header">
                 {LEARN_METHOD_LABELS[method]}
               </Text>
-              <Text style={styles.sectionCount}>{countLabel(moves.length)}</Text>
+              <Text style={styles.sectionCount}>{t('count', { count: moves.length })}</Text>
             </View>
             {moves.map((move) => (
               <LearnedMoveRow
@@ -123,6 +131,7 @@ function LearnedMoveRow({
   showLevel: boolean;
   onPress: (move: MoveSummary) => void;
 }) {
+  const { t } = useTranslation('moves');
   const move = getMoveSummary(learned.moveId);
   if (!move) return null;
   // Livello 0 tra le mosse per livello: si impara evolvendosi (dalla Gen VII).
@@ -133,8 +142,12 @@ function LearnedMoveRow({
         <View
           style={styles.level}
           accessible
-          accessibilityLabel={isEvolution ? 'Si impara evolvendosi' : `Livello ${learned.level}`}>
-          <Text style={styles.levelCaption}>{isEvolution ? 'Evo' : 'Liv.'}</Text>
+          accessibilityLabel={
+            isEvolution ? t('learnset.evolutionA11y') : t('learnset.levelA11y', { level: learned.level })
+          }>
+          <Text style={styles.levelCaption}>
+            {isEvolution ? t('learnset.evolutionCaption') : t('learnset.levelCaption')}
+          </Text>
           <Text style={styles.levelValue}>{isEvolution ? '↑' : learned.level}</Text>
         </View>
       )}

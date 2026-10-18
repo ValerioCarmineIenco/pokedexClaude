@@ -1,0 +1,57 @@
+{
+  "screens": {
+    "pokedex": "Pokédex",
+    "pokemonDetail": "Dettaglio",
+    "compare": "Confronto",
+    "settings": "Impostazioni",
+    "items": "Oggetti",
+    "itemDetail": "Dettaglio oggetto",
+    "abilities": "Abilità",
+    "abilityDetail": "Dettaglio abilità",
+    "moves": "Mosse",
+    "moveDetail": "Dettaglio mossa",
+    "natures": "Nature",
+    "locations": "Località",
+    "locationDetail": "Dettaglio località",
+    "types": "Tipi",
+    "typeDetail": "Dettaglio tipo",
+    "teams": "Squadre",
+    "team": "Squadra",
+    "sections": "Sezioni"
+  },
+  "sections": {
+    "pokedex": { "title": "Pokédex", "description": "Tutti i Pokémon, per generazione" },
+    "items": { "title": "Oggetti", "description": "Strumenti, rimedi, MT e megapietre" },
+    "abilities": { "title": "Abilità", "description": "Tutte le abilità dei Pokémon" },
+    "moves": { "title": "Mosse", "description": "Tipo, potenza, precisione e PP di ogni mossa" },
+    "natures": { "title": "Nature", "description": "Statistiche e sapori di ogni natura" },
+    "locations": { "title": "Località", "description": "Dove trovare i Pokémon, regione per regione" },
+    "types": { "title": "Tipi", "description": "Efficacie in attacco e in difesa di ogni tipo" },
+    "teams": { "title": "Squadre", "description": "Squadre da 6 e la loro copertura di tipo" }
+  },
+  "generation": "Generazione {{number}}",
+  "stats": {
+    "hp": "PS",
+    "attack": "Attacco",
+    "defense": "Difesa",
+    "special-attack": "Att. Sp.",
+    "special-defense": "Dif. Sp.",
+    "speed": "Velocità"
+  },
+  "artworkStyles": {
+    "official": { "label": "Artwork ufficiale", "description": "Illustrazione ufficiale ad alta risoluzione" },
+    "official-shiny": { "label": "Artwork ufficiale shiny", "description": "L'illustrazione ufficiale nei colori shiny" },
+    "home": { "label": "Pokémon HOME", "description": "Modelli 3D di Pokémon HOME" },
+    "home-shiny": { "label": "Pokémon HOME shiny", "description": "Modelli 3D di Pokémon HOME nei colori shiny" },
+    "dream-world": { "label": "Dream World", "description": "Disegni vettoriali di Dream World" },
+    "showdown": { "label": "Showdown animato", "description": "Sprite animati di Pokémon Showdown" },
+    "sprite": { "label": "Sprite pixel", "description": "Lo sprite in pixel art dei giochi" }
+  },
+  "errors": {
+    "pokemonNotFound": "Pokémon non trovato.",
+    "timeout": "Il server non risponde. Riprova tra poco.",
+    "offline": "Connessione assente. Controlla la rete e riprova.",
+    "server": "Errore del server ({{status}}). Riprova tra poco.",
+    "generic": "Qualcosa è andato storto. Riprova."
+  }
+}

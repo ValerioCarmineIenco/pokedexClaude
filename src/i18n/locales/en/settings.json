@@ -1,0 +1,49 @@
+{
+  "title": "Settings",
+  "back": "Back to the list",
+  "language": {
+    "title": "Language",
+    "hint": "Language of the app and of Pokémon, move, ability and item names.",
+    "system": "Device language",
+    "systemHint": "Currently {{language}}",
+    "names": {
+      "en": "English",
+      "it": "Italian",
+      "fr": "French",
+      "de": "German",
+      "es": "Spanish",
+      "ja": "Japanese"
+    }
+  },
+  "artwork": {
+    "title": "Main artwork",
+    "hint": "The image style in the list and at the top of each Pokémon's page."
+  },
+  "backup": {
+    "title": "Backup",
+    "hint": "Save favorites, caught shinies and teams to a JSON file, to restore them on another device or after reinstalling. Importing replaces the current data.",
+    "export": "Export backup",
+    "import": "Import backup",
+    "exportFailed": "Export failed.",
+    "readFailed": "The file couldn't be read.",
+    "exported": "Backup exported.",
+    "restored": "Restored {{favorites}}, {{shiny}} and {{teams}}.",
+    "favorites_one": "{{count}} favorite",
+    "favorites_other": "{{count}} favorites",
+    "shiny_one": "{{count}} shiny",
+    "shiny_other": "{{count}} shinies",
+    "teams_one": "{{count}} team",
+    "teams_other": "{{count}} teams",
+    "errors": {
+      "invalid": "The file isn't a valid backup.",
+      "otherApp": "The file isn't a backup of this app.",
+      "newerVersion": "The backup was created by a newer version of the app."
+    }
+  },
+  "credits": {
+    "title": "Credits and copyright",
+    "data": "Data and images from <link>PokéAPI</link>, a free and open project maintained by the community.",
+    "unofficial": "This is an unofficial, non-profit fan-made app, not affiliated with or endorsed by Nintendo, Creatures Inc., GAME FREAK inc. or The Pokémon Company.",
+    "trademarks": "Pokémon and character names are trademarks of Nintendo, Creatures Inc. and GAME FREAK inc. © 1995–{{year}} Nintendo / Creatures Inc. / GAME FREAK inc."
+  }
+}

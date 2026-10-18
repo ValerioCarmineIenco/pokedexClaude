@@ -1,0 +1,34 @@
+{
+  "flavors": {
+    "spicy": "Épicé",
+    "dry": "Sec",
+    "sweet": "Sucré",
+    "bitter": "Amer",
+    "sour": "Acide"
+  },
+  "list": {
+    "count_one": "{{count}} nature",
+    "count_other": "{{count}} natures",
+    "results_one": "{{count}} résultat",
+    "results_other": "{{count}} résultats",
+    "searchLabel": "Rechercher une nature par nom",
+    "noResultsTitle": "Aucun résultat",
+    "noResults": "Aucune nature ne s’appelle « {{query}} ».",
+    "clearSearch": "Effacer la recherche"
+  },
+  "card": {
+    "neutral": "Neutre",
+    "neutralText": "Ne modifie aucune statistique et n’a pas de goût préféré.",
+    "neutralLabel": "{{name}}. Nature neutre : ne modifie aucune statistique et n’a pas de goût préféré.",
+    "label": "{{name}}. Augmente {{increased}}, diminue {{decreased}}. Aime le goût {{liked}}, n’aime pas le goût {{disliked}}.",
+    "increases": "Augmente",
+    "decreases": "Diminue",
+    "likedFlavor": "Goût préféré",
+    "dislikedFlavor": "Goût détesté"
+  },
+  "errors": {
+    "notFound": "Nature introuvable.",
+    "offlineTitle": "Pas de connexion",
+    "retry": "Réessayer"
+  }
+}
