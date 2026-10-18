@@ -1,6 +1,16 @@
 import { Image } from 'expo-image';
 import { useState } from 'react';
-import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { Pressable, StyleSheet, Text, View } from 'react-native';
+import Animated, {
+  Extrapolation,
+  interpolate,
+  useAnimatedReaction,
+  useAnimatedScrollHandler,
+  useAnimatedStyle,
+  useSharedValue,
+  withTiming,
+  type SharedValue,
+} from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { GENERATIONS, LAST_POKEMON_ID } from '@/api/generations';
@@ -38,10 +48,13 @@ import { SkeletonBlock } from './Skeleton';
 import { StatBar } from './StatBar';
 import { TypeBadge } from './TypeBadge';
 import { TypeDefenseSection } from './TypeDefenseSection';
+import { TypeIcon } from './types/TypeIcon';
 
 const ARTWORK_SIZE = 180;
 /** Parte bianca arrotondata in fondo all'intestazione, su cui poggia l'artwork. */
 const SHEET_CAP = 72;
+/** Altezza della barra dei pulsanti, uguale nell'intestazione grande e in quella compatta. */
+const NAV_HEIGHT = 52;
 
 const REGIONS = GENERATIONS.map((g) => g.region);
 const INVALID_ID_MESSAGE = `Questo Pokédex contiene solo i ${LAST_POKEMON_ID} Pokémon di ${
@@ -163,6 +176,22 @@ export function PokemonDetailView({
   // «Mostra shiny» cambia solo l'artwork in alto, non lo stile scelto nelle Impostazioni.
   const [showShiny, setShowShiny] = useState(false);
   const type = pokemon ? primaryType(pokemon.types) : null;
+  const heroColor = type ? typeTint(type, 0.42) : colors.skeleton;
+
+  // Scorrimento della scheda: sopra `collapseAt` (nome e tipi finiti sotto la barra)
+  // l'intestazione grande è sparita e compare quella compatta, fissa in alto.
+  const scrollY = useSharedValue(0);
+  const collapseAt = useSharedValue(100);
+  const onScroll = useAnimatedScrollHandler((event) => {
+    scrollY.value = event.contentOffset.y;
+  });
+  const heroFade = useAnimatedStyle(() => {
+    const progress = interpolate(scrollY.value, [0, collapseAt.value], [0, 1], Extrapolation.CLAMP);
+    return {
+      opacity: 1 - progress,
+      transform: [{ translateY: progress * 12 }, { scale: 1 - progress * 0.04 }],
+    };
+  });
 
   const backButton = <NavButton icon="back" label="Torna all'elenco" onPress={onBack} />;
   const nav = (
@@ -219,206 +248,310 @@ export function PokemonDetailView({
   }
 
   return (
-    <ScrollView
-      style={styles.screen}
-      contentContainerStyle={{ flexGrow: 1, paddingBottom: insets.bottom }}
-      showsVerticalScrollIndicator={false}>
-      <View
-        style={[
-          styles.hero,
-          { paddingTop: insets.top, backgroundColor: type ? typeTint(type, 0.42) : colors.skeleton },
-        ]}>
-        {nav}
-        <PokeBallMark size={210} thickness={30} style={styles.heroMark} />
-        {pokemon ? (
-          <>
-            <View style={styles.titleRow}>
-              <Text style={styles.name} numberOfLines={1} adjustsFontSizeToFit accessibilityRole="header">
-                {formatName(pokemon.name)}
-              </Text>
-              <Text style={styles.number}>{formatNumber(pokemon.id)}</Text>
-            </View>
-            <View style={styles.types}>
-              {pokemon.types.map((t) => (
-                <TypeBadge key={t} type={t} size="large" />
+    <View style={styles.screen}>
+      <Animated.ScrollView
+        style={styles.screen}
+        contentContainerStyle={{ flexGrow: 1, paddingBottom: insets.bottom }}
+        onScroll={onScroll}
+        scrollEventThrottle={16}
+        showsVerticalScrollIndicator={false}>
+        <View style={[styles.hero, { paddingTop: insets.top, backgroundColor: heroColor }]}>
+          <PokeBallMark size={210} thickness={30} style={styles.heroMark} />
+          <Animated.View
+            style={heroFade}
+            onLayout={(e) => {
+              // Si compatta quando il fondo dei tipi passa sotto la barra fissa.
+              const { y, height } = e.nativeEvent.layout;
+              collapseAt.set(Math.max(1, y + height - insets.top - NAV_HEIGHT));
+            }}>
+            {nav}
+            {pokemon ? (
+              <>
+                <View style={styles.titleRow}>
+                  <Text style={styles.name} numberOfLines={1} adjustsFontSizeToFit accessibilityRole="header">
+                    {formatName(pokemon.name)}
+                  </Text>
+                  <Text style={styles.number}>{formatNumber(pokemon.id)}</Text>
+                </View>
+                <View style={styles.types}>
+                  {pokemon.types.map((t) => (
+                    <TypeBadge key={t} type={t} size="large" />
+                  ))}
+                </View>
+              </>
+            ) : (
+              <View style={styles.heroSkeleton}>
+                <SkeletonBlock width="55%" height={28} />
+                <SkeletonBlock width={90} height={22} radius={999} />
+              </View>
+            )}
+          </Animated.View>
+          <View style={styles.sheetCap} />
+          <View style={styles.artworkWrap}>
+            {pokemon ? (
+              <Image
+                source={
+                  showShiny
+                    ? getShinyArtworkUrl(pokemon.id, artworkStyle)
+                    : getArtworkUrl(pokemon.id, artworkStyle)
+                }
+                style={styles.artwork}
+                contentFit="contain"
+                transition={200}
+                accessibilityLabel={`Artwork ${showShiny ? 'shiny ' : ''}di ${formatName(pokemon.name)}`}
+              />
+            ) : (
+              <SkeletonBlock width={140} height={140} radius={70} style={styles.artworkSkeleton} />
+            )}
+          </View>
+        </View>
+
+        <View style={styles.sheet}>
+          {pokemon && (
+            <ShinyControls
+              showShiny={showShiny}
+              onShowShinyChange={setShowShiny}
+              isCaught={isShinyCaught}
+              onToggleCaught={onToggleShinyCaught}
+            />
+          )}
+          {pokemon && <DetailTabs value={tab} onChange={onTabChange} />}
+          {pokemon && tab === 'artwork' ? (
+            <ArtworkGallery
+              artworks={artworks}
+              isLoading={isArtworksLoading}
+              errorMessage={artworksErrorMessage}
+              pokemonName={formatName(pokemon.name)}
+              onRetry={onArtworksRetry}
+            />
+          ) : pokemon && tab === 'evolutions' ? (
+            <EvolutionChain
+              chain={evolutionChain}
+              isLoading={isEvolutionsLoading}
+              errorMessage={evolutionsErrorMessage}
+              currentId={pokemon.id}
+              onOpenPokemon={onOpenEvolution}
+              onOpenItem={onOpenItem}
+              onOpenLocation={onOpenLocation}
+              onRetry={onEvolutionsRetry}
+            />
+          ) : pokemon && tab === 'moves' ? (
+            <LearnedMoves
+              key={pokemon.id}
+              learnset={learnset}
+              isLoading={isLearnsetLoading}
+              errorMessage={learnsetErrorMessage}
+              pokemonName={formatName(pokemon.name)}
+              onOpenMove={onOpenMove}
+              onRetry={onLearnsetRetry}
+            />
+          ) : pokemon ? (
+            <>
+              {isDescriptionLoading ? (
+                <View style={styles.descriptionSkeleton}>
+                  <SkeletonBlock width="100%" height={12} />
+                  <SkeletonBlock width="92%" height={12} />
+                  <SkeletonBlock width="60%" height={12} />
+                </View>
+              ) : (
+                <Text style={styles.description}>
+                  {pokemon.description ?? 'Nessuna descrizione in italiano disponibile.'}
+                </Text>
+              )}
+
+              <View style={styles.facts}>
+                <Fact label="Altezza" value={formatHeight(pokemon.height)} />
+                <Fact label="Peso" value={formatWeight(pokemon.weight)} />
+              </View>
+
+              <Pressable
+                onPress={onCompare}
+                accessibilityRole="button"
+                accessibilityLabel={`Confronta ${formatName(pokemon.name)} con un altro Pokémon`}
+                style={({ pressed }) => [styles.compare, pressed && styles.comparePressed]}>
+                <Icon name="compare" size={16} color={colors.text} />
+                <Text style={styles.compareLabel}>Confronta con un altro Pokémon</Text>
+              </Pressable>
+
+              <Section title="Abilità">
+                <View style={styles.abilities}>
+                  {pokemon.abilities.map((ability) => {
+                    // Nome italiano e id dall'indice locale; senza voce resta il nome di PokéAPI.
+                    const entry = getAbilityIndexEntryByName(ability.name);
+                    const label = entry?.label ?? formatName(ability.name);
+                    return (
+                      <Pressable
+                        key={ability.name}
+                        onPress={entry ? () => onOpenAbility(entry.id) : undefined}
+                        disabled={!entry}
+                        accessibilityRole={entry ? 'link' : 'text'}
+                        accessibilityLabel={`${label}${ability.isHidden ? ', abilità nascosta' : ''}`}
+                        accessibilityHint={entry ? "Apre l'abilità" : undefined}
+                        style={({ pressed }) => [styles.ability, pressed && styles.abilityPressed]}>
+                        <Text style={styles.abilityName}>{label}</Text>
+                        {ability.isHidden && <Text style={styles.abilityHidden}>Nascosta</Text>}
+                        {entry && <Icon name="next" size={14} color={colors.textSubtle} />}
+                      </Pressable>
+                    );
+                  })}
+                </View>
+              </Section>
+
+              <Section title="Statistiche base">
+                <View style={styles.stats}>
+                  {pokemon.stats.map((stat) => (
+                    <StatBar
+                      key={stat.name}
+                      label={STAT_LABELS[stat.name]}
+                      value={stat.value}
+                      color={TYPE_COLORS[type ?? 'normal']}
+                    />
+                  ))}
+                  <View style={styles.totalRow}>
+                    <Text style={styles.totalLabel}>Totale</Text>
+                    <Text style={styles.totalValue}>
+                      {pokemon.stats.reduce((sum, stat) => sum + stat.value, 0)}
+                    </Text>
+                  </View>
+                </View>
+              </Section>
+
+              <TypeDefenseSection
+                type={type ?? 'normal'}
+                groups={typeDefense}
+                isLoading={isTypeDefenseLoading}
+                errorMessage={typeDefenseErrorMessage}
+                onRetry={onTypeDefenseRetry}
+              />
+
+              <PokemonForms
+                key={pokemon.id}
+                forms={forms}
+                isLoading={isFormsLoading}
+                errorMessage={formsErrorMessage}
+                pokemonName={formatName(pokemon.name)}
+                onRetry={onFormsRetry}
+              />
+
+              <PokemonEncounters
+                groups={encounters}
+                isLoading={isEncountersLoading}
+                errorMessage={encountersErrorMessage}
+                pokemonName={formatName(pokemon.name)}
+                onOpenLocation={onOpenLocation}
+                onRetry={onEncountersRetry}
+              />
+            </>
+          ) : (
+            <View style={styles.descriptionSkeleton}>
+              <SkeletonBlock width="100%" height={12} />
+              <SkeletonBlock width="80%" height={12} />
+              <View style={styles.facts}>
+                <SkeletonBlock width="48%" height={48} radius={12} />
+                <SkeletonBlock width="48%" height={48} radius={12} />
+              </View>
+              {Array.from({ length: 6 }, (_, i) => (
+                <SkeletonBlock key={i} width="100%" height={10} />
               ))}
             </View>
-          </>
-        ) : (
-          <View style={styles.heroSkeleton}>
-            <SkeletonBlock width="55%" height={28} />
-            <SkeletonBlock width={90} height={22} radius={999} />
-          </View>
-        )}
-        <View style={styles.sheetCap} />
-        <View style={styles.artworkWrap}>
-          {pokemon ? (
-            <Image
-              source={
-                showShiny ? getShinyArtworkUrl(pokemon.id, artworkStyle) : getArtworkUrl(pokemon.id, artworkStyle)
-              }
-              style={styles.artwork}
-              contentFit="contain"
-              transition={200}
-              accessibilityLabel={`Artwork ${showShiny ? 'shiny ' : ''}di ${formatName(pokemon.name)}`}
-            />
-          ) : (
-            <SkeletonBlock width={140} height={140} radius={70} style={styles.artworkSkeleton} />
           )}
         </View>
-      </View>
+      </Animated.ScrollView>
+      <CompactHeader
+        scrollY={scrollY}
+        collapseAt={collapseAt}
+        topInset={insets.top}
+        backgroundColor={heroColor}
+        pokemon={pokemon}
+        onBack={onBack}
+        isFavorite={isFavorite}
+        onToggleFavorite={onToggleFavorite}
+        previousId={previousId}
+        nextId={nextId}
+        onNavigate={onNavigate}
+      />
+    </View>
+  );
+}
 
-      <View style={styles.sheet}>
-        {pokemon && (
-          <ShinyControls
-            showShiny={showShiny}
-            onShowShinyChange={setShowShiny}
-            isCaught={isShinyCaught}
-            onToggleCaught={onToggleShinyCaught}
-          />
-        )}
-        {pokemon && <DetailTabs value={tab} onChange={onTabChange} />}
-        {pokemon && tab === 'artwork' ? (
-          <ArtworkGallery
-            artworks={artworks}
-            isLoading={isArtworksLoading}
-            errorMessage={artworksErrorMessage}
-            pokemonName={formatName(pokemon.name)}
-            onRetry={onArtworksRetry}
-          />
-        ) : pokemon && tab === 'evolutions' ? (
-          <EvolutionChain
-            chain={evolutionChain}
-            isLoading={isEvolutionsLoading}
-            errorMessage={evolutionsErrorMessage}
-            currentId={pokemon.id}
-            onOpenPokemon={onOpenEvolution}
-            onOpenItem={onOpenItem}
-            onOpenLocation={onOpenLocation}
-            onRetry={onEvolutionsRetry}
-          />
-        ) : pokemon && tab === 'moves' ? (
-          <LearnedMoves
-            key={pokemon.id}
-            learnset={learnset}
-            isLoading={isLearnsetLoading}
-            errorMessage={learnsetErrorMessage}
-            pokemonName={formatName(pokemon.name)}
-            onOpenMove={onOpenMove}
-            onRetry={onLearnsetRetry}
-          />
-        ) : pokemon ? (
-          <>
-            {isDescriptionLoading ? (
-              <View style={styles.descriptionSkeleton}>
-                <SkeletonBlock width="100%" height={12} />
-                <SkeletonBlock width="92%" height={12} />
-                <SkeletonBlock width="60%" height={12} />
-              </View>
-            ) : (
-              <Text style={styles.description}>
-                {pokemon.description ?? 'Nessuna descrizione in italiano disponibile.'}
-              </Text>
-            )}
+/**
+ * Intestazione fissa che scende dall'alto quando si scorre la scheda:
+ * indietro, icone dei tipi, nome, preferito e frecce precedente/successivo.
+ */
+function CompactHeader({
+  scrollY,
+  collapseAt,
+  topInset,
+  backgroundColor,
+  pokemon,
+  onBack,
+  isFavorite,
+  onToggleFavorite,
+  previousId,
+  nextId,
+  onNavigate,
+}: {
+  scrollY: SharedValue<number>;
+  collapseAt: SharedValue<number>;
+  topInset: number;
+  backgroundColor: string;
+  pokemon: PokemonDetail | undefined;
+  onBack: () => void;
+  isFavorite: boolean;
+  onToggleFavorite: () => void;
+  previousId: number | null;
+  nextId: number | null;
+  onNavigate: (id: number) => void;
+}) {
+  const height = topInset + NAV_HEIGHT;
+  const shown = useSharedValue(0);
+  useAnimatedReaction(
+    () => scrollY.value >= collapseAt.value,
+    (collapsed, previous) => {
+      if (collapsed !== previous) shown.value = withTiming(collapsed ? 1 : 0, { duration: 220 });
+    },
+  );
+  // Nascosta resta sopra lo schermo, così non copre i pulsanti dell'intestazione grande.
+  const barStyle = useAnimatedStyle(() => ({
+    opacity: shown.value,
+    transform: [{ translateY: (shown.value - 1) * height }],
+  }));
+  const titleStyle = useAnimatedStyle(() => ({
+    opacity: shown.value,
+    transform: [{ translateY: (1 - shown.value) * 10 }],
+  }));
+  const name = pokemon ? formatName(pokemon.name) : '';
 
-            <View style={styles.facts}>
-              <Fact label="Altezza" value={formatHeight(pokemon.height)} />
-              <Fact label="Peso" value={formatWeight(pokemon.weight)} />
-            </View>
-
-            <Pressable
-              onPress={onCompare}
-              accessibilityRole="button"
-              accessibilityLabel={`Confronta ${formatName(pokemon.name)} con un altro Pokémon`}
-              style={({ pressed }) => [styles.compare, pressed && styles.comparePressed]}>
-              <Icon name="compare" size={16} color={colors.text} />
-              <Text style={styles.compareLabel}>Confronta con un altro Pokémon</Text>
-            </Pressable>
-
-            <Section title="Abilità">
-              <View style={styles.abilities}>
-                {pokemon.abilities.map((ability) => {
-                  // Nome italiano e id dall'indice locale; senza voce resta il nome di PokéAPI.
-                  const entry = getAbilityIndexEntryByName(ability.name);
-                  const label = entry?.label ?? formatName(ability.name);
-                  return (
-                    <Pressable
-                      key={ability.name}
-                      onPress={entry ? () => onOpenAbility(entry.id) : undefined}
-                      disabled={!entry}
-                      accessibilityRole={entry ? 'link' : 'text'}
-                      accessibilityLabel={`${label}${ability.isHidden ? ', abilità nascosta' : ''}`}
-                      accessibilityHint={entry ? "Apre l'abilità" : undefined}
-                      style={({ pressed }) => [styles.ability, pressed && styles.abilityPressed]}>
-                      <Text style={styles.abilityName}>{label}</Text>
-                      {ability.isHidden && <Text style={styles.abilityHidden}>Nascosta</Text>}
-                      {entry && <Icon name="next" size={14} color={colors.textSubtle} />}
-                    </Pressable>
-                  );
-                })}
-              </View>
-            </Section>
-
-            <Section title="Statistiche base">
-              <View style={styles.stats}>
-                {pokemon.stats.map((stat) => (
-                  <StatBar
-                    key={stat.name}
-                    label={STAT_LABELS[stat.name]}
-                    value={stat.value}
-                    color={TYPE_COLORS[type ?? 'normal']}
-                  />
-                ))}
-                <View style={styles.totalRow}>
-                  <Text style={styles.totalLabel}>Totale</Text>
-                  <Text style={styles.totalValue}>
-                    {pokemon.stats.reduce((sum, stat) => sum + stat.value, 0)}
-                  </Text>
-                </View>
-              </View>
-            </Section>
-
-            <TypeDefenseSection
-              type={type ?? 'normal'}
-              groups={typeDefense}
-              isLoading={isTypeDefenseLoading}
-              errorMessage={typeDefenseErrorMessage}
-              onRetry={onTypeDefenseRetry}
-            />
-
-            <PokemonForms
-              key={pokemon.id}
-              forms={forms}
-              isLoading={isFormsLoading}
-              errorMessage={formsErrorMessage}
-              pokemonName={formatName(pokemon.name)}
-              onRetry={onFormsRetry}
-            />
-
-            <PokemonEncounters
-              groups={encounters}
-              isLoading={isEncountersLoading}
-              errorMessage={encountersErrorMessage}
-              pokemonName={formatName(pokemon.name)}
-              onOpenLocation={onOpenLocation}
-              onRetry={onEncountersRetry}
-            />
-          </>
-        ) : (
-          <View style={styles.descriptionSkeleton}>
-            <SkeletonBlock width="100%" height={12} />
-            <SkeletonBlock width="80%" height={12} />
-            <View style={styles.facts}>
-              <SkeletonBlock width="48%" height={48} radius={12} />
-              <SkeletonBlock width="48%" height={48} radius={12} />
-            </View>
-            {Array.from({ length: 6 }, (_, i) => (
-              <SkeletonBlock key={i} width="100%" height={10} />
-            ))}
-          </View>
-        )}
-      </View>
-    </ScrollView>
+  return (
+    <Animated.View style={[styles.compact, { height, paddingTop: topInset, backgroundColor }, barStyle]}>
+      <NavButton icon="back" label="Torna all'elenco" onPress={onBack} />
+      <Animated.View style={[styles.compactTitle, titleStyle]}>
+        {pokemon?.types.map((t) => (
+          <TypeIcon key={t} type={t} size={22} />
+        ))}
+        <Text style={styles.compactName} numberOfLines={1} accessibilityRole="header">
+          {name}
+        </Text>
+      </Animated.View>
+      {pokemon && (
+        <NavButton
+          icon={isFavorite ? 'heart' : 'heartOutline'}
+          label={isFavorite ? 'Togli dai preferiti' : 'Aggiungi ai preferiti'}
+          color={isFavorite ? colors.accent : undefined}
+          onPress={onToggleFavorite}
+        />
+      )}
+      <NavButton
+        icon="previous"
+        label={previousId ? `Pokémon precedente, ${formatNumber(previousId)}` : 'Nessun precedente'}
+        onPress={previousId ? () => onNavigate(previousId) : undefined}
+      />
+      <NavButton
+        icon="next"
+        label={nextId ? `Pokémon successivo, ${formatNumber(nextId)}` : 'Nessun successivo'}
+        onPress={nextId ? () => onNavigate(nextId) : undefined}
+      />
+    </Animated.View>
   );
 }
 
@@ -509,7 +642,33 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    height: 52,
+    height: NAV_HEIGHT,
+  },
+  compact: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 8,
+    borderBottomWidth: StyleSheet.hairlineWidth,
+    borderBottomColor: 'rgba(29, 28, 34, 0.12)',
+  },
+  compactTitle: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
+    marginHorizontal: 4,
+  },
+  compactName: {
+    flexShrink: 1,
+    fontFamily: fonts.displayBold,
+    fontSize: 19,
+    letterSpacing: -0.4,
+    color: colors.text,
+    marginLeft: 2,
   },
   navSide: {
     flexDirection: 'row',
