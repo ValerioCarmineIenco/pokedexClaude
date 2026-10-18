@@ -51,6 +51,9 @@ export type PokemonDetailViewProps = {
   previousId: number | null;
   nextId: number | null;
   onNavigate: (id: number) => void;
+  /** Il Pokémon è tra i preferiti. */
+  isFavorite: boolean;
+  onToggleFavorite: () => void;
   onBack: () => void;
   onRetry: () => void;
   tab: DetailTab;
@@ -85,6 +88,8 @@ export function PokemonDetailView({
   previousId,
   nextId,
   onNavigate,
+  isFavorite,
+  onToggleFavorite,
   onBack,
   onRetry,
   tab,
@@ -114,6 +119,14 @@ export function PokemonDetailView({
     <View style={styles.nav}>
       {backButton}
       <View style={styles.navSide}>
+        {pokemon && (
+          <NavButton
+            icon={isFavorite ? 'heart' : 'heartOutline'}
+            label={isFavorite ? 'Togli dai preferiti' : 'Aggiungi ai preferiti'}
+            color={isFavorite ? colors.accent : undefined}
+            onPress={onToggleFavorite}
+          />
+        )}
         <NavButton
           icon="previous"
           label={previousId ? `Pokémon precedente, ${formatNumber(previousId)}` : 'Nessun precedente'}
@@ -304,16 +317,18 @@ function NavButton({
   label,
   text,
   iconAfter = false,
+  color = colors.text,
   onPress,
 }: {
   icon: IconName;
   label: string;
   text?: string;
   iconAfter?: boolean;
+  color?: string;
   onPress?: () => void;
 }) {
   const disabled = !onPress;
-  const tint = disabled ? 'rgba(29, 28, 34, 0.25)' : colors.text;
+  const tint = disabled ? 'rgba(29, 28, 34, 0.25)' : color;
   return (
     <Pressable
       onPress={onPress}

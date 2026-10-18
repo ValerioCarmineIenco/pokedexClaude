@@ -5,6 +5,7 @@ import { getAdjacentIds } from '@/api/pokemon';
 import { isDetailTab, type DetailTab } from '@/components/DetailTabs';
 import { PokemonDetailView } from '@/components/PokemonDetailView';
 import { useEvolutionChain } from '@/hooks/useEvolutionChain';
+import { useFavorites } from '@/hooks/useFavorites';
 import { usePokemonArtworks } from '@/hooks/usePokemonArtworks';
 import { usePokemonDetail } from '@/hooks/usePokemonDetail';
 import { usePokemonTypeDefense } from '@/hooks/usePokemonTypeDefense';
@@ -16,6 +17,7 @@ export default function PokemonDetailScreen() {
   // La galleria e la catena si scaricano solo quando si apre la loro tab.
   const gallery = usePokemonArtworks(idParam, { enabled: tab === 'artwork' });
   const evolutions = useEvolutionChain(idParam, { enabled: tab === 'evolutions' });
+  const [favorites, toggleFavorite] = useFavorites();
   const typeDefense = usePokemonTypeDefense(detail.pokemon?.types);
   const { previous, next } =
     detail.id === null ? { previous: null, next: null } : getAdjacentIds(detail.id);
@@ -31,6 +33,8 @@ export default function PokemonDetailScreen() {
       nextId={next}
       // Sostituisce la scheda invece di impilarla: "Indietro" torna sempre all'elenco.
       onNavigate={(id) => router.replace({ pathname: '/pokemon/[id]', params: { id: String(id) } })}
+      isFavorite={detail.id !== null && favorites.has(detail.id)}
+      onToggleFavorite={() => detail.id !== null && toggleFavorite(detail.id)}
       onBack={() => (router.canGoBack() ? router.back() : router.replace('/'))}
       onRetry={() => detail.refetch()}
       tab={tab}

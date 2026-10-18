@@ -127,13 +127,26 @@ export function searchPokemonIndex(search: string, generationId?: number | null)
   const { firstId, lastId } = getPokemonRange(generationId);
   return INDEX.filter(
     (entry) => entry.id >= firstId && entry.id <= lastId && SEARCH_TEXT.get(entry.id)!.includes(needle),
-  ).map((entry) => ({
+  ).map(toSummary);
+}
+
+/** I Pokémon con questi id (in ordine di id), di una generazione o di tutte, letti dall'indice. */
+export function getPokemonSummaries(ids: Iterable<number>, generationId?: number | null): PokemonSummary[] {
+  const wanted = new Set(ids);
+  const { firstId, lastId } = getPokemonRange(generationId);
+  return INDEX.filter((entry) => wanted.has(entry.id) && entry.id >= firstId && entry.id <= lastId).map(
+    toSummary,
+  );
+}
+
+function toSummary(entry: PokemonIndexEntry): PokemonSummary {
+  return {
     id: entry.id,
     name: entry.name,
     generation: getGenerationOfPokemon(entry.id),
     types: entry.types.filter(isTypeName),
     artworkUrl: getArtworkUrl(entry.id),
-  }));
+  };
 }
 
 /** Id del Pokémon precedente e successivo tra tutte le generazioni coperte (null ai bordi). */
