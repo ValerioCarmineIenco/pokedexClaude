@@ -37,6 +37,9 @@ export default function PokemonDetailScreen() {
       onNavigate={(id) => router.replace({ pathname: '/pokemon/[id]', params: { id: String(id) } })}
       isFavorite={detail.id !== null && favorites.has(detail.id)}
       onToggleFavorite={() => detail.id !== null && toggleFavorite(detail.id)}
+      onCompare={() =>
+        detail.id !== null && router.push({ pathname: '/compare', params: { a: String(detail.id) } })
+      }
       onBack={() => (router.canGoBack() ? router.back() : router.replace('/'))}
       onRetry={() => detail.refetch()}
       tab={tab}

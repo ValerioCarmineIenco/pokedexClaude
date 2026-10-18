@@ -57,6 +57,8 @@ export type PokemonDetailViewProps = {
   /** Il Pokémon è tra i preferiti. */
   isFavorite: boolean;
   onToggleFavorite: () => void;
+  /** Apre il confronto con un altro Pokémon. */
+  onCompare: () => void;
   onBack: () => void;
   onRetry: () => void;
   tab: DetailTab;
@@ -99,6 +101,7 @@ export function PokemonDetailView({
   onNavigate,
   isFavorite,
   onToggleFavorite,
+  onCompare,
   onBack,
   onRetry,
   tab,
@@ -279,6 +282,15 @@ export function PokemonDetailView({
               <Fact label="Altezza" value={formatHeight(pokemon.height)} />
               <Fact label="Peso" value={formatWeight(pokemon.weight)} />
             </View>
+
+            <Pressable
+              onPress={onCompare}
+              accessibilityRole="button"
+              accessibilityLabel={`Confronta ${formatName(pokemon.name)} con un altro Pokémon`}
+              style={({ pressed }) => [styles.compare, pressed && styles.comparePressed]}>
+              <Icon name="compare" size={16} color={colors.text} />
+              <Text style={styles.compareLabel}>Confronta con un altro Pokémon</Text>
+            </Pressable>
 
             <Section title="Abilità">
               <View style={styles.abilities}>
@@ -531,6 +543,24 @@ const styles = StyleSheet.create({
   factValue: {
     fontFamily: fonts.bodyBold,
     fontSize: 16,
+    color: colors.text,
+  },
+  compare: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 8,
+    minHeight: 44,
+    borderRadius: 999,
+    borderWidth: 1,
+    borderColor: colors.line,
+  },
+  comparePressed: {
+    backgroundColor: colors.factBackground,
+  },
+  compareLabel: {
+    fontFamily: fonts.bodyBold,
+    fontSize: 14,
     color: colors.text,
   },
   section: {

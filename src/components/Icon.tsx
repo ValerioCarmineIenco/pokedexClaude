@@ -27,6 +27,7 @@ const ICONS = {
   types: { ios: 'circle.hexagongrid.fill', android: 'category', web: 'category' },
   heart: { ios: 'heart.fill', android: 'favorite', web: 'favorite' },
   heartOutline: { ios: 'heart', android: 'favorite_border', web: 'favorite_border' },
+  compare: { ios: 'arrow.left.arrow.right', android: 'compare_arrows', web: 'compare_arrows' },
 } satisfies Record<string, SymbolName>;
 
 export type IconName = keyof typeof ICONS;

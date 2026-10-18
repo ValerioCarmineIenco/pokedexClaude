@@ -15,7 +15,9 @@ export function StatBar({ label, value, color }: Props) {
   const width = `${Math.min(100, (value / MAX_STAT) * 100)}%` as const;
   return (
     <View style={styles.row} accessible accessibilityLabel={`${label} ${value}`}>
-      <Text style={styles.label}>{label}</Text>
+      <Text style={styles.label} numberOfLines={1}>
+        {label}
+      </Text>
       <Text style={styles.value}>{value}</Text>
       <View style={styles.track}>
         <View style={[styles.fill, { width, backgroundColor: color }]} />
