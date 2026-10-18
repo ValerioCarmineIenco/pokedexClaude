@@ -44,6 +44,7 @@ export type PokemonSpeciesResponse = {
     version: NamedAPIResource;
   }[];
   genera: { genus: string; language: NamedAPIResource }[];
+  evolution_chain: { url: string } | null;
 };
 
 export type ItemResponse = {
@@ -170,4 +171,55 @@ export type LocationAreaResponse = {
       encounter_details: EncounterDetailResponse[];
     }[];
   }[];
+};
+
+/** Un passaggio della catena: la specie, come ci si arriva e in cosa si evolve. */
+export type ChainLinkResponse = {
+  is_baby: boolean;
+  species: NamedAPIResource;
+  /** Una voce per gioco o per variante del metodo; vuoto per il primo stadio. */
+  evolution_details: EvolutionDetailResponse[];
+  evolves_to: ChainLinkResponse[];
+};
+
+export type EvolutionDetailResponse = {
+  trigger: NamedAPIResource;
+  /** Il metodo attuale (più voci per le forme regionali); assente nei dati vecchi. */
+  is_default?: boolean;
+  version_group?: NamedAPIResource | null;
+  region?: NamedAPIResource | null;
+  evolved_pokemon_form?: NamedAPIResource | null;
+  item: NamedAPIResource | null;
+  held_item: NamedAPIResource | null;
+  known_move: NamedAPIResource | null;
+  known_move_type: NamedAPIResource | null;
+  location: NamedAPIResource | null;
+  /** 1 femmina, 2 maschio. */
+  gender: number | null;
+  min_level: number | null;
+  min_happiness: number | null;
+  min_beauty: number | null;
+  min_affection: number | null;
+  near_special_rock?: boolean;
+  needs_multiplayer?: boolean;
+  needs_overworld_rain: boolean;
+  party_species: NamedAPIResource | null;
+  party_type: NamedAPIResource | null;
+  /** 1 Attacco > Difesa, -1 Attacco < Difesa, 0 uguali. */
+  relative_physical_stats: number | null;
+  /** `day`, `night`, `dusk`, `full-moon` o stringa vuota. */
+  time_of_day: string;
+  trade_species: NamedAPIResource | null;
+  turn_upside_down: boolean;
+  used_move?: NamedAPIResource | null;
+  min_move_count?: number | null;
+  min_steps?: number | null;
+  min_damage_taken?: number | null;
+  allowed_natures?: NamedAPIResource[] | null;
+  condition_expression?: { percentage_chance?: number | null } | null;
+};
+
+export type EvolutionChainResponse = {
+  id: number;
+  chain: ChainLinkResponse;
 };

@@ -82,6 +82,8 @@ export type PokemonSpecies = {
   description: string | null;
   /** Categoria in italiano (es. «Pokémon Seme»), null se assente. */
   genus: string | null;
+  /** Id di `/evolution-chain/{id}`; assente nelle schede salvate in cache prima delle evoluzioni. */
+  evolutionChainId?: number | null;
 };
 
 /** Un'immagine della galleria artwork. */
