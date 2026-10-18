@@ -33,17 +33,26 @@ export function createIdSetStore(storageKey: string) {
 
   const getSnapshot = () => current;
 
+  function save(next: ReadonlySet<number>) {
+    emit(next);
+    AsyncStorage.setItem(storageKey, JSON.stringify([...next].sort((a, b) => a - b))).catch(() => {});
+  }
+
   /** Aggiunge l'id, o lo toglie se c'è già. */
   function toggle(id: number) {
     const next = new Set(current);
     if (!next.delete(id)) next.add(id);
-    emit(next);
-    AsyncStorage.setItem(storageKey, JSON.stringify([...next].sort((a, b) => a - b))).catch(() => {});
+    save(next);
+  }
+
+  /** Sostituisce tutti gli id (ripristino di un backup). */
+  function replace(ids: Iterable<number>) {
+    save(new Set(ids));
   }
 
   function useIds() {
     return useSyncExternalStore(subscribe, getSnapshot, getSnapshot);
   }
 
-  return { toggle, useIds };
+  return { toggle, replace, getIds: getSnapshot, useIds };
 }

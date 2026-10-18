@@ -29,8 +29,11 @@ const isPokemonId = (id: unknown): id is number =>
 
 /** Scarta le voci salvate malformate invece di far cadere l'app. */
 function parseTeams(saved: string | null): Team[] {
-  if (!saved) return [];
-  const raw = JSON.parse(saved);
+  return saved ? sanitizeTeams(JSON.parse(saved)) : [];
+}
+
+/** Tiene solo le squadre ben formate, con membri validi e senza doppioni. */
+export function sanitizeTeams(raw: unknown): Team[] {
   if (!Array.isArray(raw)) return [];
   return raw.flatMap((entry): Team[] => {
     if (!entry || typeof entry.id !== 'string' || typeof entry.name !== 'string') return [];
@@ -60,6 +63,15 @@ function subscribe(listener: () => void) {
 }
 
 const getSnapshot = () => teams;
+
+/** Squadre in questo momento, per il backup. */
+export const getTeams = getSnapshot;
+
+/** Sostituisce tutte le squadre (ripristino di un backup). */
+export function replaceTeams(next: Team[]) {
+  save(next);
+}
+
 const getLoaded = () => loaded;
 
 function updateTeam(id: string, change: (team: Team) => Team) {
