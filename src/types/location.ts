@@ -134,3 +134,23 @@ export type LocationDetail = LocationSummary & {
   /** Solo le aree con almeno un incontro. */
   areas: LocationArea[];
 };
+
+/** Località in cui si incontra un Pokémon, con i metodi d'incontro (scheda Pokémon). */
+export type PokemonEncounterLocation = {
+  /** Id dell'indice: apre `/locations/{id}`. */
+  id: number;
+  /** Nome mostrato (italiano, altrimenti inglese). */
+  name: string;
+  /** Metodi d'incontro in quella località, senza ripetizioni (es. «Erba alta e grotte»). */
+  methods: EncounterMethod[];
+};
+
+/**
+ * «Dove trovarlo»: i giochi con le stesse località sono raccolti in un solo gruppo
+ * (es. Rossa e Blu), in ordine di uscita.
+ */
+export type PokemonEncounterGroup = {
+  versions: GameVersion[];
+  /** In ordine alfabetico. */
+  locations: PokemonEncounterLocation[];
+};

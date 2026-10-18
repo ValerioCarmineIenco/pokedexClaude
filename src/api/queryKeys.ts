@@ -12,6 +12,7 @@ export const queryKeys = {
   /** Forme alternative della specie (Mega, regionali, Gigamax…). */
   pokemonForms: (speciesId: number) => ['pokemon', 'forms', speciesId] as const,
   pokemonLearnset: (id: number) => ['pokemon', 'learnset', id] as const,
+  pokemonEncounters: (id: number) => ['pokemon', 'encounters', id] as const,
   /**
    * `search` già normalizzata (vedi `normalizeSearch`); stringa vuota = nessuna ricerca.
    * `listByCategory`: l'elenco completo ora è ordinato per categoria, le pagine salvate prima no.
