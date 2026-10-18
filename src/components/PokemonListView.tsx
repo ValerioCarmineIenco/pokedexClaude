@@ -40,9 +40,9 @@ function buildItems(pokemon: PokemonSummary[], withHeaders: boolean): ListItem[]
 }
 
 export type PokemonListViewProps = {
-  /** Pokémon da mostrare, già filtrati dalla ricerca. */
+  /** Pokémon da mostrare: l'elenco caricato, o i risultati della ricerca. */
   pokemon: PokemonSummary[];
-  /** Quanti Pokémon sono stati caricati in tutto (prima del filtro). */
+  /** Quanti Pokémon dell'elenco sono stati caricati (senza contare la ricerca). */
   loadedCount: number;
   searchText: string;
   onSearchTextChange: (text: string) => void;
@@ -115,7 +115,9 @@ export function PokemonListView({
   };
 
   const caption = isSearching
-    ? `${pokemon.length} ${pokemon.length === 1 ? 'risultato' : 'risultati'} tra ${loadedCount} Pokémon caricati`
+    ? `${pokemon.length} ${pokemon.length === 1 ? 'risultato' : 'risultati'} tra ${
+        generation ? `${generationSize(generation)} Pokémon di ${generation.region}` : `${LAST_POKEMON_ID} Pokémon`
+      }`
     : generation
       ? `${generationSize(generation)} Pokémon · ${generation.name} · ${generation.region}`
       : `${LAST_POKEMON_ID} Pokémon · ${GENERATIONS.length} generazioni`;
@@ -135,7 +137,7 @@ export function PokemonListView({
   );
 
   // Errore senza nulla da mostrare: schermo intero con Riprova.
-  if (errorMessage && loadedCount === 0) {
+  if (errorMessage && loadedCount === 0 && !isSearching) {
     return (
       <View style={[styles.screen, { paddingTop: insets.top }]}>
         {header(true)}
@@ -162,7 +164,7 @@ export function PokemonListView({
   return (
     <View style={[styles.screen, { paddingTop: insets.top }]}>
       {header()}
-      {isLoading ? (
+      {isLoading && !isSearching ? (
         skeletons(isGrid ? 8 : 9)
       ) : (
         <FlashList
@@ -204,7 +206,7 @@ export function PokemonListView({
             isSearching ? (
               <ErrorState
                 title="Nessun risultato"
-                message={`Nessun Pokémon caricato si chiama "${searchText.trim()}".`}
+                message={`Nessun Pokémon ${generation ? `di ${generation.region} ` : ''}si chiama "${searchText.trim()}".`}
                 actionLabel="Cancella ricerca"
                 actionStyle="ghost"
                 onAction={() => onSearchTextChange('')}

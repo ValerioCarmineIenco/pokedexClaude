@@ -1,6 +1,6 @@
 # Pokédex
 
-App Expo (React Native) per consultare i Pokémon delle prime tre generazioni (Kanto, Johto e Hoenn), con i dati di [PokéAPI](https://pokeapi.co/).
+App Expo (React Native) per consultare i Pokémon di tutte le generazioni (Kanto, Johto, Hoenn, Sinnoh, Unima, Kalos, Alola, Galar e Paldea, #1–1025), con i dati di [PokéAPI](https://pokeapi.co/).
 
 ## Avvio
 
@@ -37,7 +37,7 @@ Gli schermi usano solo gli hook di `src/hooks` (React Query); i tipi restituiti 
 | `usePokemonDetail(id)` | `pokemon: PokemonDetail` (dati + descrizione italiana), `isLoading`, `errorMessage`, `refetch` |
 | `usePokemon(id)` / `usePokemonSpecies(id)` | le due metà del dettaglio, separate |
 | `usePokemonArtworks(id, { enabled })` | `artworks: PokemonArtworks` (tutte le immagini di `sprites`, per fonte e per generazione), `isLoading`, `errorMessage`, `refetch` |
-| `usePokemonSearch(pokemon, testo)` | i Pokémon già caricati filtrati per nome |
+| `usePokemonSearch(testo, generazione)` | i Pokémon della generazione (o di tutte) il cui nome contiene il testo, dall'indice statico `src/data/pokemonIndex.json` |
 
 Ogni `Pokemon` ha `generation` (1, 2 o 3). `GENERATIONS` in `src/api/generations.ts` elenca le generazioni (`id`, `name`, `region`, `firstId`, `lastId`); `fetchGenerationPokemon(id)` in `src/api/pokemon.ts` scarica tutti i Pokémon di una generazione.
 

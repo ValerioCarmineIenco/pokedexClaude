@@ -10,6 +10,7 @@ import { fonts } from '@/theme/fonts';
 import { primaryType, TYPE_COLORS, typeTint } from '@/theme/typeColors';
 import type { EvolutionChain as Chain } from '@/types/evolution';
 import type { PokemonArtworks, PokemonDetail } from '@/types/pokemon';
+import type { DefenseGroup } from '@/utils/typeEffectiveness';
 import {
   formatHeight,
   formatName,
@@ -27,6 +28,7 @@ import { PokeBallMark } from './PokeBallMark';
 import { SkeletonBlock } from './Skeleton';
 import { StatBar } from './StatBar';
 import { TypeBadge } from './TypeBadge';
+import { TypeDefenseSection } from './TypeDefenseSection';
 
 const ARTWORK_SIZE = 180;
 /** Parte bianca arrotondata in fondo all'intestazione, su cui poggia l'artwork. */
@@ -67,6 +69,11 @@ export type PokemonDetailViewProps = {
   onOpenEvolution: (id: number) => void;
   onOpenItem: (id: number) => void;
   onOpenLocation: (id: number) => void;
+  /** Debolezze e resistenze, calcolate sui tipi del Pokémon. */
+  typeDefense: DefenseGroup[] | undefined;
+  isTypeDefenseLoading: boolean;
+  typeDefenseErrorMessage: string | null;
+  onTypeDefenseRetry: () => void;
 };
 
 export function PokemonDetailView({
@@ -93,6 +100,10 @@ export function PokemonDetailView({
   onOpenEvolution,
   onOpenItem,
   onOpenLocation,
+  typeDefense,
+  isTypeDefenseLoading,
+  typeDefenseErrorMessage,
+  onTypeDefenseRetry,
 }: PokemonDetailViewProps) {
   const insets = useSafeAreaInsets();
   const [artworkStyle] = useArtworkStyle();
@@ -261,6 +272,14 @@ export function PokemonDetailView({
                 </View>
               </View>
             </Section>
+
+            <TypeDefenseSection
+              type={type ?? 'normal'}
+              groups={typeDefense}
+              isLoading={isTypeDefenseLoading}
+              errorMessage={typeDefenseErrorMessage}
+              onRetry={onTypeDefenseRetry}
+            />
           </>
         ) : (
           <View style={styles.descriptionSkeleton}>

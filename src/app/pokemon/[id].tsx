@@ -7,6 +7,7 @@ import { PokemonDetailView } from '@/components/PokemonDetailView';
 import { useEvolutionChain } from '@/hooks/useEvolutionChain';
 import { usePokemonArtworks } from '@/hooks/usePokemonArtworks';
 import { usePokemonDetail } from '@/hooks/usePokemonDetail';
+import { usePokemonTypeDefense } from '@/hooks/usePokemonTypeDefense';
 
 export default function PokemonDetailScreen() {
   const { id: idParam, tab: tabParam } = useLocalSearchParams<{ id: string; tab?: string }>();
@@ -15,6 +16,7 @@ export default function PokemonDetailScreen() {
   // La galleria e la catena si scaricano solo quando si apre la loro tab.
   const gallery = usePokemonArtworks(idParam, { enabled: tab === 'artwork' });
   const evolutions = useEvolutionChain(idParam, { enabled: tab === 'evolutions' });
+  const typeDefense = usePokemonTypeDefense(detail.pokemon?.types);
   const { previous, next } =
     detail.id === null ? { previous: null, next: null } : getAdjacentIds(detail.id);
 
@@ -49,6 +51,10 @@ export default function PokemonDetailScreen() {
       onOpenLocation={(id) =>
         router.push({ pathname: '/locations/[locationId]', params: { locationId: String(id) } })
       }
+      typeDefense={typeDefense.groups}
+      isTypeDefenseLoading={typeDefense.isLoading}
+      typeDefenseErrorMessage={typeDefense.errorMessage}
+      onTypeDefenseRetry={() => void typeDefense.refetch()}
     />
   );
 }
