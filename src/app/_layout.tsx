@@ -38,6 +38,9 @@ export default function RootLayout() {
           {/* Sezione Tipi: tabella delle efficacie e dettaglio (param typeId, es. «dragon»). */}
           <Stack.Screen name="types/index" options={{ title: 'Tipi' }} />
           <Stack.Screen name="types/[typeId]" options={{ title: 'Dettaglio tipo' }} />
+          {/* Sezione Squadre: elenco e squadra da modificare (param teamId). */}
+          <Stack.Screen name="teams/index" options={{ title: 'Squadre' }} />
+          <Stack.Screen name="teams/[teamId]" options={{ title: 'Squadra' }} />
           {/* Menu delle sezioni, aperto toccando il titolo in alto a sinistra. */}
           <Stack.Screen
             name="menu"
