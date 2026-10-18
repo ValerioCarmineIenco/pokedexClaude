@@ -17,6 +17,7 @@ export { useNatureSearch } from './useNatureSearch';
 export { usePokemon } from './usePokemon';
 export { usePokemonArtworks } from './usePokemonArtworks';
 export { usePokemonDetail } from './usePokemonDetail';
+export { usePokemonEncounters } from './usePokemonEncounters';
 export { usePokemonForms } from './usePokemonForms';
 export { usePokemonLearnset } from './usePokemonLearnset';
 export { filterPokemonByName, usePokemonSearch } from './usePokemonSearch';
@@ -25,6 +26,7 @@ export { usePokemonSpecies } from './usePokemonSpecies';
 export { usePokemonTypeDefense } from './usePokemonTypeDefense';
 export { useRelatedItems } from './useRelatedItems';
 export { toggleShinyCaught, useShinyCaught } from './useShinyCaught';
+export { useTeam, useTeams } from './useTeams';
 export { useTypeMatchups } from './useTypeMatchups';
 export {
   GENERATIONS,

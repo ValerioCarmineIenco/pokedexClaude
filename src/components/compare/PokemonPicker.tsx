@@ -24,14 +24,17 @@ type Props = {
   title: string;
   onPick: (pokemon: PokemonSummary) => void;
   onClose: () => void;
+  /** Pokémon da non proporre, ad esempio quelli già in squadra. */
+  excludeIds?: ReadonlySet<number>;
 };
 
 /** Scelta di un Pokémon da confrontare: ricerca per nome su tutto il Pokédex, senza rete. */
-export function PokemonPicker({ title, onPick, onClose }: Props) {
+export function PokemonPicker({ title, onPick, onClose, excludeIds }: Props) {
   const insets = useSafeAreaInsets();
   const [searchText, setSearchText] = useState('');
   const results = usePokemonSearch(searchText);
-  const pokemon = searchText.trim() ? results : ALL_POKEMON;
+  const found = searchText.trim() ? results : ALL_POKEMON;
+  const pokemon = excludeIds?.size ? found.filter((entry) => !excludeIds.has(entry.id)) : found;
 
   return (
     <View style={[styles.screen, { paddingTop: insets.top }]}>

@@ -15,8 +15,14 @@ import type {
   LocationRegion,
   LocationSection,
   LocationSummary,
+  PokemonEncounterGroup,
+  PokemonEncounterLocation,
 } from '@/types/location';
-import type { LocationAreaResponse, LocationResponse } from '@/types/pokeapi';
+import type {
+  LocationAreaResponse,
+  LocationResponse,
+  PokemonEncounterResponse,
+} from '@/types/pokeapi';
 import { formatName } from '@/utils/format';
 import { byLanguage } from '@/utils/pokeapiText';
 import { normalizeSearch } from '@/utils/search';
@@ -469,4 +475,88 @@ export async function getLocation(id: number, signal?: AbortSignal): Promise<Loc
     ),
   );
   return toLocationDetail(raw, areas);
+}
+
+// --- Dove trovare un Pokémon --------------------------------------------------
+
+/** Slug delle località, dal più lungo: «kanto-route-22» va provato prima di «kanto-route-2». */
+const SLUGS_BY_LENGTH = [...INDEX].sort((a, b) => b.name.length - a.name.length);
+
+/**
+ * Località di un'area dal suo slug: le aree si chiamano `{località}-{zona}`
+ * (`viridian-forest-area`, `mt-moon-1f`). Null se nessuna località dell'indice combacia.
+ */
+export function getLocationIdForArea(areaSlug: string): number | null {
+  const match = SLUGS_BY_LENGTH.find(
+    (entry) => areaSlug === entry.name || areaSlug.startsWith(`${entry.name}-`),
+  );
+  return match?.id ?? null;
+}
+
+export function toPokemonEncounterGroups(
+  raw: PokemonEncounterResponse[],
+  /** Località delle aree che lo slug non basta a trovare, per id dell'area. */
+  extraAreas: Map<number, number> = new Map(),
+): PokemonEncounterGroup[] {
+  // gioco → località → metodi
+  const byVersion = new Map<number, Map<number, Set<string>>>();
+  for (const entry of raw) {
+    const areaId = getIdFromUrl(entry.location_area.url);
+    const locationId = getLocationIdForArea(entry.location_area.name) ?? extraAreas.get(areaId);
+    if (locationId === undefined || locationId === null || !BY_ID.has(locationId)) continue;
+    for (const detail of entry.version_details) {
+      const versionId = getIdFromUrl(detail.version.url);
+      if (!VERSIONS.has(versionId)) continue;
+      let locations = byVersion.get(versionId);
+      if (!locations) byVersion.set(versionId, (locations = new Map()));
+      let methods = locations.get(locationId);
+      if (!methods) locations.set(locationId, (methods = new Set()));
+      for (const slot of detail.encounter_details) methods.add(slot.method.name);
+    }
+  }
+
+  // I giochi con le stesse località e gli stessi metodi finiscono nello stesso gruppo.
+  const groups = new Map<string, PokemonEncounterGroup>();
+  const versions = [...byVersion.keys()].map((id) => VERSIONS.get(id)!).sort(byGameOrder);
+  for (const version of versions) {
+    const locations: PokemonEncounterLocation[] = [...byVersion.get(version.id)!.entries()]
+      .map(([id, methods]) => ({
+        id,
+        name: SUMMARIES.get(id)!.name,
+        methods: [...methods].sort((a, b) => methodOrder(a) - methodOrder(b)).map(getEncounterMethod),
+      }))
+      .sort((a, b) => a.name.localeCompare(b.name, 'it'));
+    const key = locations.map((l) => `${l.id}:${l.methods.map((m) => m.name).join(',')}`).join('|');
+    const existing = groups.get(key);
+    if (existing) existing.versions.push(version);
+    else groups.set(key, { versions: [version], locations });
+  }
+  return [...groups.values()];
+}
+
+/**
+ * Luoghi in cui si incontra un Pokémon, per gioco. Vuoto se non si trova in natura
+ * (si ottiene solo evolvendo, da un uovo o con un evento) o se PokéAPI non ha i dati del gioco.
+ */
+export async function getPokemonEncounters(
+  pokemonId: number,
+  signal?: AbortSignal,
+): Promise<PokemonEncounterGroup[]> {
+  const raw = await fetchJson<PokemonEncounterResponse[]>(`/pokemon/${pokemonId}/encounters`, signal);
+  // Raro: un'area il cui slug non comincia con quello della località. Si chiede a PokéAPI.
+  const unknown = [
+    ...new Set(
+      raw
+        .filter((entry) => getLocationIdForArea(entry.location_area.name) === null)
+        .map((entry) => getIdFromUrl(entry.location_area.url)),
+    ),
+  ];
+  const extraAreas = new Map<number, number>();
+  await Promise.all(
+    unknown.map(async (areaId) => {
+      const area = await fetchJson<LocationAreaResponse>(`/location-area/${areaId}`, signal);
+      extraAreas.set(areaId, getIdFromUrl(area.location.url));
+    }),
+  );
+  return toPokemonEncounterGroups(raw, extraAreas);
 }

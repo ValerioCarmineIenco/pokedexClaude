@@ -4,6 +4,7 @@ import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { GENERATIONS, LAST_POKEMON_ID } from '@/api/generations';
+import { getAbilityIndexEntryByName } from '@/api/abilities';
 import { getArtworkUrl, getShinyArtworkUrl } from '@/api/pokemon';
 import { useArtworkStyle } from '@/hooks/useArtworkStyle';
 import { colors } from '@/theme/colors';
@@ -11,6 +12,7 @@ import { fonts } from '@/theme/fonts';
 import { primaryType, TYPE_COLORS, typeTint } from '@/theme/typeColors';
 import type { EvolutionChain as Chain } from '@/types/evolution';
 import type { PokemonLearnset } from '@/types/learnset';
+import type { PokemonEncounterGroup } from '@/types/location';
 import type { MoveSummary } from '@/types/move';
 import type { PokemonArtworks, PokemonDetail, PokemonForm } from '@/types/pokemon';
 import type { DefenseGroup } from '@/utils/typeEffectiveness';
@@ -29,6 +31,7 @@ import { EvolutionChain } from './EvolutionChain';
 import { Icon, type IconName } from './Icon';
 import { LearnedMoves } from './moves/LearnedMoves';
 import { PokeBallMark } from './PokeBallMark';
+import { PokemonEncounters } from './PokemonEncounters';
 import { PokemonForms } from './PokemonForms';
 import { ShinyControls } from './ShinyControls';
 import { SkeletonBlock } from './Skeleton';
@@ -83,6 +86,7 @@ export type PokemonDetailViewProps = {
   onOpenEvolution: (id: number) => void;
   onOpenItem: (id: number) => void;
   onOpenLocation: (id: number) => void;
+  onOpenAbility: (id: number) => void;
   learnset: PokemonLearnset | undefined;
   /** Le mosse della tab Mosse stanno arrivando. */
   isLearnsetLoading: boolean;
@@ -99,6 +103,11 @@ export type PokemonDetailViewProps = {
   isFormsLoading: boolean;
   formsErrorMessage: string | null;
   onFormsRetry: () => void;
+  /** «Dove trovarlo»: località per gioco; vuoto se non si incontra in natura. */
+  encounters: PokemonEncounterGroup[] | undefined;
+  isEncountersLoading: boolean;
+  encountersErrorMessage: string | null;
+  onEncountersRetry: () => void;
 };
 
 export function PokemonDetailView({
@@ -130,6 +139,7 @@ export function PokemonDetailView({
   onOpenEvolution,
   onOpenItem,
   onOpenLocation,
+  onOpenAbility,
   learnset,
   isLearnsetLoading,
   learnsetErrorMessage,
@@ -143,6 +153,10 @@ export function PokemonDetailView({
   isFormsLoading,
   formsErrorMessage,
   onFormsRetry,
+  encounters,
+  isEncountersLoading,
+  encountersErrorMessage,
+  onEncountersRetry,
 }: PokemonDetailViewProps) {
   const insets = useSafeAreaInsets();
   const [artworkStyle] = useArtworkStyle();
@@ -323,12 +337,25 @@ export function PokemonDetailView({
 
             <Section title="Abilità">
               <View style={styles.abilities}>
-                {pokemon.abilities.map((ability) => (
-                  <View key={ability.name} style={styles.ability}>
-                    <Text style={styles.abilityName}>{formatName(ability.name)}</Text>
-                    {ability.isHidden && <Text style={styles.abilityHidden}>Nascosta</Text>}
-                  </View>
-                ))}
+                {pokemon.abilities.map((ability) => {
+                  // Nome italiano e id dall'indice locale; senza voce resta il nome di PokéAPI.
+                  const entry = getAbilityIndexEntryByName(ability.name);
+                  const label = entry?.label ?? formatName(ability.name);
+                  return (
+                    <Pressable
+                      key={ability.name}
+                      onPress={entry ? () => onOpenAbility(entry.id) : undefined}
+                      disabled={!entry}
+                      accessibilityRole={entry ? 'link' : 'text'}
+                      accessibilityLabel={`${label}${ability.isHidden ? ', abilità nascosta' : ''}`}
+                      accessibilityHint={entry ? "Apre l'abilità" : undefined}
+                      style={({ pressed }) => [styles.ability, pressed && styles.abilityPressed]}>
+                      <Text style={styles.abilityName}>{label}</Text>
+                      {ability.isHidden && <Text style={styles.abilityHidden}>Nascosta</Text>}
+                      {entry && <Icon name="next" size={14} color={colors.textSubtle} />}
+                    </Pressable>
+                  );
+                })}
               </View>
             </Section>
 
@@ -366,6 +393,15 @@ export function PokemonDetailView({
               errorMessage={formsErrorMessage}
               pokemonName={formatName(pokemon.name)}
               onRetry={onFormsRetry}
+            />
+
+            <PokemonEncounters
+              groups={encounters}
+              isLoading={isEncountersLoading}
+              errorMessage={encountersErrorMessage}
+              pokemonName={formatName(pokemon.name)}
+              onOpenLocation={onOpenLocation}
+              onRetry={onEncountersRetry}
             />
           </>
         ) : (
@@ -622,6 +658,9 @@ const styles = StyleSheet.create({
     borderRadius: 999,
     paddingHorizontal: 12,
     paddingVertical: 7,
+  },
+  abilityPressed: {
+    opacity: 0.7,
   },
   abilityName: {
     fontFamily: fonts.bodyMedium,
