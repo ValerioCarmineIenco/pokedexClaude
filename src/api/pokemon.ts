@@ -5,6 +5,7 @@ import {
   getPokemonRange,
   LAST_POKEMON_ID,
 } from '@/api/generations';
+import pokemonIndex from '@/data/pokemonIndex.json';
 import type {
   NamedAPIResource,
   PokemonListResponse,
@@ -15,9 +16,11 @@ import {
   TYPE_NAMES,
   type Pokemon,
   type PokemonSpecies,
+  type PokemonSummary,
   type StatName,
   type TypeName,
 } from '@/types/pokemon';
+import { normalizeSearch } from '@/utils/search';
 
 export const PAGE_SIZE = 20;
 
@@ -37,7 +40,8 @@ const STAT_NAMES: readonly string[] = [
 
 /**
  * Stili di artwork principale scelti nelle Impostazioni. Ogni URL si costruisce dall'id,
- * senza chiamate extra; tutti esistono per i Pokémon della Gen 1, 2 e 3.
+ * senza chiamate extra. Dream World e Showdown non coprono tutti i Pokémon: per quelli
+ * senza immagine (`missingArtwork` nell'indice) si usa l'artwork ufficiale.
  */
 export const ARTWORK_STYLES = [
   {
@@ -92,10 +96,44 @@ export function isArtworkStyle(value: unknown): value is ArtworkStyle {
   return ARTWORK_STYLES.some((style) => style.id === value);
 }
 
+type PokemonIndexEntry = { id: number; name: string; types: string[]; missingArtwork?: string[] };
+
+/**
+ * Tutti i Pokémon del Pokédex (id, nome, tipi), in ordine di id, per cercare senza chiamate.
+ * Generato da `scripts/generate-pokemon-index.mjs`.
+ */
+const INDEX = (pokemonIndex as PokemonIndexEntry[]).filter((entry) => entry.id <= LAST_POKEMON_ID);
+const MISSING_ARTWORK = new Map(
+  INDEX.flatMap((entry) => (entry.missingArtwork ? [[entry.id, entry.missingArtwork] as const] : [])),
+);
+/** Testo su cui cerca `searchPokemonIndex`: lo slug con spazi al posto dei trattini. */
+const SEARCH_TEXT = new Map(INDEX.map((entry) => [entry.id, normalizeSearch(entry.name.replace(/-/g, ' '))]));
+
 /** Artwork del Pokémon nello stile scelto (predefinito: artwork ufficiale). */
 export function getArtworkUrl(id: number, style: ArtworkStyle = DEFAULT_ARTWORK_STYLE): string {
-  const entry = ARTWORK_STYLES.find((s) => s.id === style) ?? ARTWORK_STYLES[0];
+  const available = !MISSING_ARTWORK.get(id)?.includes(style);
+  const entry = (available && ARTWORK_STYLES.find((s) => s.id === style)) || ARTWORK_STYLES[0];
   return `${SPRITES_BASE_URL}/${entry.path(id)}`;
+}
+
+/**
+ * Pokémon il cui nome contiene `search` (anche parziale, senza maiuscole e accenti), tra
+ * tutti quelli di una generazione o di tutte se `generationId` è null. Nessuna chiamata di
+ * rete: trova anche i Pokémon non ancora caricati nell'elenco.
+ */
+export function searchPokemonIndex(search: string, generationId?: number | null): PokemonSummary[] {
+  const needle = normalizeSearch(search).replace(/-/g, ' ');
+  if (!needle) return [];
+  const { firstId, lastId } = getPokemonRange(generationId);
+  return INDEX.filter(
+    (entry) => entry.id >= firstId && entry.id <= lastId && SEARCH_TEXT.get(entry.id)!.includes(needle),
+  ).map((entry) => ({
+    id: entry.id,
+    name: entry.name,
+    generation: getGenerationOfPokemon(entry.id),
+    types: entry.types.filter(isTypeName),
+    artworkUrl: getArtworkUrl(entry.id),
+  }));
 }
 
 /** Id del Pokémon precedente e successivo tra tutte le generazioni coperte (null ai bordi). */
@@ -202,7 +240,7 @@ export async function fetchPokemonSpecies(id: number, signal?: AbortSignal): Pro
   return toPokemonSpecies(raw);
 }
 
-/** Converte il parametro di rotta (`"25"`) in un id coperto dal Pokédex (Gen 1-3), altrimenti null. */
+/** Converte il parametro di rotta (`"25"`) in un id coperto dal Pokédex (Gen I–IX), altrimenti null. */
 export function parsePokemonId(value: string | string[] | number | undefined): number | null {
   const raw = Array.isArray(value) ? value[0] : value;
   const id = Number(raw);

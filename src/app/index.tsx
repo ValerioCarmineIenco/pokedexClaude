@@ -12,11 +12,12 @@ export default function PokemonListScreen() {
   const list = usePokemonList(generationId);
   const [searchText, setSearchText] = useState('');
   const [viewMode, setViewMode] = useViewMode();
-  const results = usePokemonSearch(list.pokemon, searchText);
+  const results = usePokemonSearch(searchText, generationId);
+  const isSearching = searchText.trim().length > 0;
 
   return (
     <PokemonListView
-      pokemon={results}
+      pokemon={isSearching ? results : list.pokemon}
       loadedCount={list.pokemon.length}
       searchText={searchText}
       onSearchTextChange={setSearchText}

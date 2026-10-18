@@ -5,6 +5,12 @@ export const GENERATIONS: readonly Generation[] = [
   { id: 1, name: 'Generazione I', region: 'Kanto', firstId: 1, lastId: 151 },
   { id: 2, name: 'Generazione II', region: 'Johto', firstId: 152, lastId: 251 },
   { id: 3, name: 'Generazione III', region: 'Hoenn', firstId: 252, lastId: 386 },
+  { id: 4, name: 'Generazione IV', region: 'Sinnoh', firstId: 387, lastId: 493 },
+  { id: 5, name: 'Generazione V', region: 'Unima', firstId: 494, lastId: 649 },
+  { id: 6, name: 'Generazione VI', region: 'Kalos', firstId: 650, lastId: 721 },
+  { id: 7, name: 'Generazione VII', region: 'Alola', firstId: 722, lastId: 809 },
+  { id: 8, name: 'Generazione VIII', region: 'Galar', firstId: 810, lastId: 905 },
+  { id: 9, name: 'Generazione IX', region: 'Paldea', firstId: 906, lastId: 1025 },
 ];
 
 export const FIRST_POKEMON_ID = GENERATIONS[0].firstId;
