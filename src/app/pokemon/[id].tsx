@@ -11,6 +11,7 @@ import { usePokemonDetail } from '@/hooks/usePokemonDetail';
 import { usePokemonForms } from '@/hooks/usePokemonForms';
 import { usePokemonLearnset } from '@/hooks/usePokemonLearnset';
 import { usePokemonTypeDefense } from '@/hooks/usePokemonTypeDefense';
+import { useShinyCaught } from '@/hooks/useShinyCaught';
 
 export default function PokemonDetailScreen() {
   const { id: idParam, tab: tabParam } = useLocalSearchParams<{ id: string; tab?: string }>();
@@ -21,6 +22,7 @@ export default function PokemonDetailScreen() {
   const evolutions = useEvolutionChain(idParam, { enabled: tab === 'evolutions' });
   const learnset = usePokemonLearnset(idParam, { enabled: tab === 'moves' });
   const [favorites, toggleFavorite] = useFavorites();
+  const [shinyCaught, toggleShinyCaught] = useShinyCaught();
   const typeDefense = usePokemonTypeDefense(detail.pokemon?.types);
   const forms = usePokemonForms(idParam, { enabled: tab === 'info' });
   const { previous, next } =
@@ -39,6 +41,8 @@ export default function PokemonDetailScreen() {
       onNavigate={(id) => router.replace({ pathname: '/pokemon/[id]', params: { id: String(id) } })}
       isFavorite={detail.id !== null && favorites.has(detail.id)}
       onToggleFavorite={() => detail.id !== null && toggleFavorite(detail.id)}
+      isShinyCaught={detail.id !== null && shinyCaught.has(detail.id)}
+      onToggleShinyCaught={() => detail.id !== null && toggleShinyCaught(detail.id)}
       onCompare={() =>
         detail.id !== null && router.push({ pathname: '/compare', params: { a: String(detail.id) } })
       }

@@ -6,7 +6,9 @@ import { PokemonListView } from '@/components/PokemonListView';
 import { useFavorites } from '@/hooks/useFavorites';
 import { usePokemonList } from '@/hooks/usePokemonList';
 import { filterPokemonByName, usePokemonSearch } from '@/hooks/usePokemonSearch';
+import { useShinyCaught } from '@/hooks/useShinyCaught';
 import { useViewMode } from '@/hooks/useViewMode';
+import type { PokemonCollection } from '@/types/pokemon';
 
 export default function PokemonListScreen() {
   // Si parte con tutte le generazioni in sequenza.
@@ -17,15 +19,21 @@ export default function PokemonListScreen() {
   const results = usePokemonSearch(searchText, generationId);
   const isSearching = searchText.trim().length > 0;
   const [favorites] = useFavorites();
-  const [favoritesOnly, setFavoritesOnly] = useState(false);
-  const favoritePokemon = useMemo(
-    () => filterPokemonByName(getPokemonSummaries(favorites, generationId), searchText),
-    [favorites, generationId, searchText],
+  const [shinyCaught] = useShinyCaught();
+  const [collection, setCollection] = useState<PokemonCollection | null>(null);
+  const shinyInScope = useMemo(
+    () => getPokemonSummaries(shinyCaught, generationId).length,
+    [shinyCaught, generationId],
+  );
+  const collectionIds = collection === 'shiny' ? shinyCaught : favorites;
+  const collectionPokemon = useMemo(
+    () => filterPokemonByName(getPokemonSummaries(collectionIds, generationId), searchText),
+    [collectionIds, generationId, searchText],
   );
 
   return (
     <PokemonListView
-      pokemon={favoritesOnly ? favoritePokemon : isSearching ? results : list.pokemon}
+      pokemon={collection ? collectionPokemon : isSearching ? results : list.pokemon}
       loadedCount={list.pokemon.length}
       searchText={searchText}
       onSearchTextChange={setSearchText}
@@ -33,9 +41,10 @@ export default function PokemonListScreen() {
       onViewModeChange={setViewMode}
       generationId={generationId}
       onGenerationChange={setGenerationId}
-      favoritesOnly={favoritesOnly}
-      onFavoritesOnlyChange={setFavoritesOnly}
-      favoritesCount={favorites.size}
+      collection={collection}
+      onCollectionChange={setCollection}
+      collectionCount={collectionIds.size}
+      shinyCount={shinyInScope}
       isLoading={list.isLoading}
       errorMessage={list.errorMessage}
       hasNextPage={list.hasNextPage}
