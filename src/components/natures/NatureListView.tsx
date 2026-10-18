@@ -6,6 +6,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import type { Nature } from '@/types/nature';
 import { colors } from '@/theme/colors';
 import { fonts } from '@/theme/fonts';
+import { useScrollRestoration } from '@/hooks/useScrollRestoration';
 
 import { ErrorState } from '../ErrorState';
 import { ErrorToast } from '../ErrorToast';
@@ -48,6 +49,7 @@ export function NatureListView({
 }: NatureListViewProps) {
   const { t } = useTranslation('natures');
   const insets = useSafeAreaInsets();
+  const { ref: scrollRef, onScroll } = useScrollRestoration();
   const count = totalCount ?? natures.length;
   const isSearching = searchText.trim().length > 0;
   const caption = isSearching ? t('list.results', { count }) : t('list.count', { count });
@@ -114,6 +116,8 @@ export function NatureListView({
         skeletons
       ) : (
         <FlashList
+          ref={scrollRef}
+          onScroll={onScroll}
           data={natures}
           keyExtractor={(nature) => String(nature.id)}
           renderItem={({ item: nature }) => (

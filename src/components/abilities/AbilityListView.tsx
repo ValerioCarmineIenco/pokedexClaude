@@ -6,6 +6,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import type { ViewMode } from '@/hooks/useViewMode';
 import { colors } from '@/theme/colors';
 import { fonts } from '@/theme/fonts';
+import { useScrollRestoration } from '@/hooks/useScrollRestoration';
 
 import { ErrorState } from '../ErrorState';
 import { ErrorToast } from '../ErrorToast';
@@ -65,6 +66,7 @@ export function AbilityListView({
 }: AbilityListViewProps) {
   const { t } = useTranslation('abilities');
   const insets = useSafeAreaInsets();
+  const { ref: scrollRef, onScroll } = useScrollRestoration();
   const isGrid = viewMode === 'grid';
   const count = totalCount ?? abilities.length;
   const isSearching = searchText.trim().length > 0;
@@ -139,6 +141,8 @@ export function AbilityListView({
         skeletons(8)
       ) : (
         <FlashList
+          ref={scrollRef}
+          onScroll={onScroll}
           key={viewMode}
           data={abilities}
           numColumns={isGrid ? COLUMNS : 1}

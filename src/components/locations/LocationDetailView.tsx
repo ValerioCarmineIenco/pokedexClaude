@@ -16,6 +16,7 @@ import type {
 import { colors } from '@/theme/colors';
 import { fonts } from '@/theme/fonts';
 import { getVersionColor } from '@/theme/versionColors';
+import { useScrollRestoration } from '@/hooks/useScrollRestoration';
 
 import { ErrorState } from '../ErrorState';
 import { Icon } from '../Icon';
@@ -60,6 +61,7 @@ export function LocationDetailView({
 }: LocationDetailViewProps) {
   const { t } = useTranslation('locations');
   const insets = useSafeAreaInsets();
+  const { ref: scrollRef, onScroll } = useScrollRestoration();
   const [areaIndex, setAreaIndex] = useState(0);
 
   const header = location ?? summary;
@@ -120,6 +122,8 @@ export function LocationDetailView({
       {nav}
       {location ? (
         <FlatList
+          ref={scrollRef}
+          onScroll={onScroll}
           data={area?.methods ?? []}
           keyExtractor={(group) => group.method.name}
           renderItem={({ item }) => <MethodCard group={item} onOpenPokemon={onOpenPokemon} />}
