@@ -8,6 +8,7 @@ import { useEvolutionChain } from '@/hooks/useEvolutionChain';
 import { useFavorites } from '@/hooks/useFavorites';
 import { usePokemonArtworks } from '@/hooks/usePokemonArtworks';
 import { usePokemonDetail } from '@/hooks/usePokemonDetail';
+import { usePokemonForms } from '@/hooks/usePokemonForms';
 import { usePokemonLearnset } from '@/hooks/usePokemonLearnset';
 import { usePokemonTypeDefense } from '@/hooks/usePokemonTypeDefense';
 
@@ -21,6 +22,7 @@ export default function PokemonDetailScreen() {
   const learnset = usePokemonLearnset(idParam, { enabled: tab === 'moves' });
   const [favorites, toggleFavorite] = useFavorites();
   const typeDefense = usePokemonTypeDefense(detail.pokemon?.types);
+  const forms = usePokemonForms(idParam, { enabled: tab === 'info' });
   const { previous, next } =
     detail.id === null ? { previous: null, next: null } : getAdjacentIds(detail.id);
 
@@ -68,6 +70,10 @@ export default function PokemonDetailScreen() {
       isTypeDefenseLoading={typeDefense.isLoading}
       typeDefenseErrorMessage={typeDefense.errorMessage}
       onTypeDefenseRetry={() => void typeDefense.refetch()}
+      forms={forms.forms}
+      isFormsLoading={forms.isLoading}
+      formsErrorMessage={forms.errorMessage}
+      onFormsRetry={() => void forms.refetch()}
     />
   );
 }

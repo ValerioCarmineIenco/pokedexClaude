@@ -25,6 +25,8 @@ export type PokemonResponse = {
   stats: { base_stat: number; effort: number; stat: NamedAPIResource }[];
   sprites: SpriteTree;
   moves: PokemonMoveResponse[];
+  /** Le forme della varietà: la prima dà nome e tipo di forma (`/pokemon-form/{id}`). */
+  forms: NamedAPIResource[];
 };
 
 /** Una mossa di `pokemon.moves`, con come e dove si impara in ogni gruppo di giochi. */
@@ -59,6 +61,17 @@ export type PokemonSpeciesResponse = {
   }[];
   genera: { genus: string; language: NamedAPIResource }[];
   evolution_chain: { url: string } | null;
+  /** Tutte le forme della specie (Mega, Alola, Gigamax…); quella predefinita ha `is_default`. */
+  varieties: { is_default: boolean; pokemon: NamedAPIResource }[];
+};
+
+export type PokemonFormResponse = {
+  id: number;
+  name: string;
+  /** Parte del nome che distingue la forma (es. `mega-x`, `alola`); vuota per la forma base. */
+  form_name: string;
+  is_mega: boolean;
+  form_names: { name: string; language: NamedAPIResource }[];
 };
 
 export type ItemResponse = {

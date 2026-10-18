@@ -11,7 +11,7 @@ import { primaryType, TYPE_COLORS, typeTint } from '@/theme/typeColors';
 import type { EvolutionChain as Chain } from '@/types/evolution';
 import type { PokemonLearnset } from '@/types/learnset';
 import type { MoveSummary } from '@/types/move';
-import type { PokemonArtworks, PokemonDetail } from '@/types/pokemon';
+import type { PokemonArtworks, PokemonDetail, PokemonForm } from '@/types/pokemon';
 import type { DefenseGroup } from '@/utils/typeEffectiveness';
 import {
   formatHeight,
@@ -28,6 +28,7 @@ import { EvolutionChain } from './EvolutionChain';
 import { Icon, type IconName } from './Icon';
 import { LearnedMoves } from './moves/LearnedMoves';
 import { PokeBallMark } from './PokeBallMark';
+import { PokemonForms } from './PokemonForms';
 import { SkeletonBlock } from './Skeleton';
 import { StatBar } from './StatBar';
 import { TypeBadge } from './TypeBadge';
@@ -86,6 +87,11 @@ export type PokemonDetailViewProps = {
   isTypeDefenseLoading: boolean;
   typeDefenseErrorMessage: string | null;
   onTypeDefenseRetry: () => void;
+  /** Forme alternative della specie; undefined se ne ha una sola. */
+  forms: PokemonForm[] | undefined;
+  isFormsLoading: boolean;
+  formsErrorMessage: string | null;
+  onFormsRetry: () => void;
 };
 
 export function PokemonDetailView({
@@ -123,6 +129,10 @@ export function PokemonDetailView({
   isTypeDefenseLoading,
   typeDefenseErrorMessage,
   onTypeDefenseRetry,
+  forms,
+  isFormsLoading,
+  formsErrorMessage,
+  onFormsRetry,
 }: PokemonDetailViewProps) {
   const insets = useSafeAreaInsets();
   const [artworkStyle] = useArtworkStyle();
@@ -316,6 +326,15 @@ export function PokemonDetailView({
               isLoading={isTypeDefenseLoading}
               errorMessage={typeDefenseErrorMessage}
               onRetry={onTypeDefenseRetry}
+            />
+
+            <PokemonForms
+              key={pokemon.id}
+              forms={forms}
+              isLoading={isFormsLoading}
+              errorMessage={formsErrorMessage}
+              pokemonName={formatName(pokemon.name)}
+              onRetry={onFormsRetry}
             />
           </>
         ) : (

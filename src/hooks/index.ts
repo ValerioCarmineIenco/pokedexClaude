@@ -17,6 +17,7 @@ export { useNatureSearch } from './useNatureSearch';
 export { usePokemon } from './usePokemon';
 export { usePokemonArtworks } from './usePokemonArtworks';
 export { usePokemonDetail } from './usePokemonDetail';
+export { usePokemonForms } from './usePokemonForms';
 export { usePokemonLearnset } from './usePokemonLearnset';
 export { filterPokemonByName, usePokemonSearch } from './usePokemonSearch';
 export { usePokemonList } from './usePokemonList';
