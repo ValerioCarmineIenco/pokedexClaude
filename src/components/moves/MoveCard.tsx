@@ -1,9 +1,11 @@
+import { useTranslation } from 'react-i18next';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 
 import type { ViewMode } from '@/hooks/useViewMode';
+import { t } from '@/i18n';
 import { fonts } from '@/theme/fonts';
 import { typeTint } from '@/theme/typeColors';
-import { TYPE_NAMES_IT } from '@/theme/typeNames';
+import { TYPE_LABELS } from '@/theme/typeNames';
 import type { MoveSummary } from '@/types/move';
 
 import { PokeBallMark } from '../PokeBallMark';
@@ -22,9 +24,20 @@ const formatPower = (power: number | null) => (power === null ? '—' : String(p
 const formatAccuracy = (accuracy: number | null) => (accuracy === null ? '—' : `${accuracy}%`);
 
 export function accessibilityLabelFor(move: MoveSummary): string {
-  const power = move.power === null ? 'nessuna potenza' : `potenza ${move.power}`;
-  const accuracy = move.accuracy === null ? 'non manca mai' : `precisione ${move.accuracy}%`;
-  return `${move.name}, tipo ${TYPE_NAMES_IT[move.type]}, ${move.damageClassLabel}, ${power}, ${accuracy}, ${move.pp} PP`;
+  const power =
+    move.power === null ? t('moves:card.a11yNoPower') : t('moves:card.a11yPower', { power: move.power });
+  const accuracy =
+    move.accuracy === null
+      ? t('moves:card.a11yNeverMisses')
+      : t('moves:card.a11yAccuracy', { accuracy: move.accuracy });
+  return t('moves:card.a11yLabel', {
+    name: move.name,
+    type: TYPE_LABELS[move.type],
+    damageClass: move.damageClassLabel,
+    power,
+    accuracy,
+    pp: move.pp,
+  });
 }
 
 function Stat({ caption, value, compact }: { caption: string; value: string; compact: boolean }) {
@@ -43,11 +56,12 @@ function Stat({ caption, value, compact }: { caption: string; value: string; com
  * schiacciare nome e tipo. In griglia si dividono la larghezza della scheda.
  */
 function Stats({ move, compact = false }: { move: MoveSummary; compact?: boolean }) {
+  const { t } = useTranslation('moves');
   return (
     <View style={[styles.stats, compact && styles.statsCompact]}>
-      <Stat caption="Pot." value={formatPower(move.power)} compact={compact} />
-      <Stat caption="Prec." value={formatAccuracy(move.accuracy)} compact={compact} />
-      <Stat caption="PP" value={String(move.pp)} compact={compact} />
+      <Stat caption={t('card.power')} value={formatPower(move.power)} compact={compact} />
+      <Stat caption={t('card.accuracy')} value={formatAccuracy(move.accuracy)} compact={compact} />
+      <Stat caption={t('card.pp')} value={String(move.pp)} compact={compact} />
     </View>
   );
 }

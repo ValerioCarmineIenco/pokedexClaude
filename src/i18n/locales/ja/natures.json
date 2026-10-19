@@ -1,0 +1,34 @@
+{
+  "flavors": {
+    "spicy": "からい",
+    "dry": "しぶい",
+    "sweet": "あまい",
+    "bitter": "にがい",
+    "sour": "すっぱい"
+  },
+  "list": {
+    "count_one": "{{count}}種類のせいかく",
+    "count_other": "{{count}}種類のせいかく",
+    "results_one": "{{count}}件",
+    "results_other": "{{count}}件",
+    "searchLabel": "せいかくを名前でさがす",
+    "noResultsTitle": "見つかりません",
+    "noResults": "「{{query}}」という名前のせいかくはありません。",
+    "clearSearch": "検索をクリア"
+  },
+  "card": {
+    "neutral": "無補正",
+    "neutralText": "能力は変わらず、好きな味もありません。",
+    "neutralLabel": "{{name}}。無補正のせいかく：能力は変わらず、好きな味もありません。",
+    "label": "{{name}}。{{increased}}が上がり、{{decreased}}が下がる。{{liked}}味が好きで、{{disliked}}味が苦手。",
+    "increases": "上がる",
+    "decreases": "下がる",
+    "likedFlavor": "好きな味",
+    "dislikedFlavor": "苦手な味"
+  },
+  "errors": {
+    "notFound": "せいかくが見つかりません。",
+    "offlineTitle": "接続されていません",
+    "retry": "再試行"
+  }
+}

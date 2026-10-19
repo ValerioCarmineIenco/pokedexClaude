@@ -1,7 +1,9 @@
 import { FlashList } from '@shopify/flash-list';
+import { useTranslation } from 'react-i18next';
 import { StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
+import { useScrollRestoration } from '@/hooks/useScrollRestoration';
 import type { ViewMode } from '@/hooks/useViewMode';
 import { colors } from '@/theme/colors';
 import { fonts } from '@/theme/fonts';
@@ -16,8 +18,6 @@ import { MoveCard } from './MoveCard';
 const COLUMNS = 2;
 const GAP = 10;
 const SIDE = 12;
-
-const countLabel = (n: number) => `${n} ${n === 1 ? 'mossa' : 'mosse'}`;
 
 export type MoveListViewProps = {
   moves: MoveSummary[];
@@ -44,13 +44,13 @@ export function MoveListView({
   onViewModeChange,
   onPressMove,
 }: MoveListViewProps) {
+  const { t } = useTranslation('moves');
   const insets = useSafeAreaInsets();
   const isGrid = viewMode === 'grid';
   const count = totalCount ?? moves.length;
   const isSearching = searchText.trim().length > 0;
-  const caption = isSearching
-    ? `${count} ${count === 1 ? 'risultato' : 'risultati'}`
-    : countLabel(count);
+  const caption = isSearching ? t('list.results', { count }) : t('count', { count });
+  const { ref: scrollRef, onScroll } = useScrollRestoration();
 
   return (
     <View style={[styles.screen, { paddingTop: insets.top }]}>
@@ -61,7 +61,7 @@ export function MoveListView({
         <SearchBar
           value={searchText}
           onChangeText={onSearchTextChange}
-          accessibilityLabel="Cerca una mossa per nome"
+          accessibilityLabel={t('list.searchLabel')}
         />
         <View style={styles.captionRow}>
           <Text style={styles.caption} numberOfLines={1}>
@@ -72,6 +72,8 @@ export function MoveListView({
       </View>
       <FlashList
         key={viewMode}
+        ref={scrollRef}
+        onScroll={onScroll}
         data={moves}
         numColumns={isGrid ? COLUMNS : 1}
         keyExtractor={(move) => String(move.id)}
@@ -88,9 +90,9 @@ export function MoveListView({
         ListEmptyComponent={
           isSearching ? (
             <ErrorState
-              title="Nessun risultato"
-              message={`Nessuna mossa si chiama "${searchText.trim()}".`}
-              actionLabel="Cancella ricerca"
+              title={t('list.noResultsTitle')}
+              message={t('list.noResultsMessage', { query: searchText.trim() })}
+              actionLabel={t('list.clearSearch')}
               actionStyle="ghost"
               onAction={() => onSearchTextChange('')}
             />

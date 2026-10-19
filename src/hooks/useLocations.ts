@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 
-import { getLocations, getLocationSections, LOCATION_REGIONS } from '@/api/locations';
+import { getLocationRegions, getLocations, getLocationSections } from '@/api/locations';
 
 /**
  * Elenco delle località, in ordine alfabetico, filtrato per regione (slug, es. `kanto`;
@@ -18,7 +18,7 @@ export function useLocations({ region = null, search = '' }: { region?: string |
     locations,
     sections,
     /** Regioni da offrire nel selettore, in ordine (Kanto, Johto, Hoenn…). */
-    regions: LOCATION_REGIONS,
+    regions: getLocationRegions(),
     total: locations.length,
   };
 }

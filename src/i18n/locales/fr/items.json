@@ -1,0 +1,46 @@
+{
+  "categories": {
+    "remedies": "Soins",
+    "tm": "CT",
+    "megaStones": "Méga-Gemmes",
+    "pokeballs": "Poké Balls",
+    "battle": "Objets de combat",
+    "berries": "Baies",
+    "evolution": "Évolution",
+    "other": "Autres objets"
+  },
+  "list": {
+    "count_one": "{{count}} objet",
+    "count_other": "{{count}} objets",
+    "results_one": "{{count}} résultat",
+    "results_other": "{{count}} résultats",
+    "categoryCount_one": "{{count}} catégorie",
+    "categoryCount_other": "{{count}} catégories",
+    "searchLabel": "Rechercher un objet par nom",
+    "noResultsTitle": "Aucun résultat",
+    "noResults": "Aucun objet ne s’appelle « {{query}} ».",
+    "noResultsInCategory": "Aucun objet de « {{category}} » ne s’appelle « {{query}} ».",
+    "clearSearch": "Effacer la recherche"
+  },
+  "picker": {
+    "allCategories": "Toutes les catégories",
+    "all": "Toutes",
+    "label": "Catégorie : {{category}}",
+    "labelAll": "Catégorie : toutes",
+    "hint": "Ouvre le choix de la catégorie"
+  },
+  "detail": {
+    "back": "Retour aux objets",
+    "notFoundTitle": "Objet introuvable",
+    "notFoundMessage": "Cet objet n’existe pas dans le Pokédex.",
+    "imageLabel": "Image de {{name}}",
+    "noDescription": "Aucune description en français disponible.",
+    "related": "Objets similaires"
+  },
+  "errors": {
+    "notFound": "Objet introuvable.",
+    "offlineTitle": "Pas de connexion",
+    "offlineMessage": "Impossible de joindre le Pokédex. Vérifiez votre réseau et réessayez.",
+    "retry": "Réessayer"
+  }
+}

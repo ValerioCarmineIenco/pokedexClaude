@@ -1,14 +1,18 @@
 import { Image } from 'expo-image';
+import { useTranslation } from 'react-i18next';
 import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { getArtworkUrl } from '@/api/pokemon';
 import { useArtworkStyle } from '@/hooks/useArtworkStyle';
+import { useLanguage } from '@/i18n';
+import { pokemonName } from '@/i18n/names';
 import type { Ability, AbilityPokemon } from '@/types/ability';
 import { colors } from '@/theme/colors';
 import { fonts } from '@/theme/fonts';
-import { formatName, formatNumber } from '@/utils/format';
+import { formatNumber } from '@/utils/format';
 import { romanNumeral } from '@/utils/generation';
+import { useScrollRestoration } from '@/hooks/useScrollRestoration';
 
 import { ErrorState } from '../ErrorState';
 import { Icon } from '../Icon';
@@ -48,14 +52,19 @@ export function AbilityDetailView({
   onBack,
   onRetry,
 }: AbilityDetailViewProps) {
+  const { t } = useTranslation('abilities');
+  const language = useLanguage();
   const insets = useSafeAreaInsets();
+  const { ref: scrollRef, onScroll } = useScrollRestoration();
+  // L'effetto per esteso spesso c'è solo in inglese: lo si dice accanto al titolo.
+  const isEffectFallback = !!ability?.effectLanguage && language !== 'en' && ability.effectLanguage === 'en';
 
   const backButton = (
     <Pressable
       onPress={onBack}
       hitSlop={6}
       accessibilityRole="button"
-      accessibilityLabel="Torna alle abilità"
+      accessibilityLabel={t('detail.back')}
       style={({ pressed }) => [styles.backButton, pressed && styles.pressed]}>
       <Icon name="back" size={18} color={colors.text} />
     </Pressable>
@@ -67,17 +76,17 @@ export function AbilityDetailView({
         <View style={[styles.nav, styles.navPadding]}>{backButton}</View>
         {isInvalidId ? (
           <ErrorState
-            title="Abilità non trovata"
-            message="Questa abilità non esiste nel Pokédex."
-            actionLabel="Torna alle abilità"
+            title={t('detail.notFoundTitle')}
+            message={t('detail.notFoundMessage')}
+            actionLabel={t('detail.back')}
             actionStyle="ghost"
             onAction={onBack}
           />
         ) : (
           <ErrorState
-            title="Nessuna connessione"
-            message={errorMessage ?? 'Non riesco a raggiungere il Pokédex. Controlla la rete e riprova.'}
-            actionLabel="Riprova"
+            title={t('errors.offlineTitle')}
+            message={errorMessage ?? t('errors.offlineMessage')}
+            actionLabel={t('errors.retry')}
             onAction={onRetry}
           />
         )}
@@ -87,6 +96,8 @@ export function AbilityDetailView({
 
   return (
     <ScrollView
+      ref={scrollRef}
+      onScroll={onScroll}
       style={styles.screen}
       contentContainerStyle={{ flexGrow: 1, paddingBottom: insets.bottom }}
       showsVerticalScrollIndicator={false}>
@@ -100,7 +111,9 @@ export function AbilityDetailView({
             </Text>
             <View style={styles.badges}>
               <View style={styles.badge}>
-                <Text style={styles.badgeLabel}>Gen {romanNumeral(ability.generation)}</Text>
+                <Text style={styles.badgeLabel}>
+                  {t('detail.generation', { numeral: romanNumeral(ability.generation) })}
+                </Text>
               </View>
             </View>
           </>
@@ -121,7 +134,7 @@ export function AbilityDetailView({
       <View style={styles.sheet}>
         {ability ? (
           <Text style={styles.description}>
-            {ability.description || 'Nessuna descrizione in italiano disponibile.'}
+            {ability.description || t('detail.noDescription')}
           </Text>
         ) : (
           <View style={styles.descriptionSkeleton}>
@@ -134,7 +147,8 @@ export function AbilityDetailView({
         {ability?.effect && (
           <View style={styles.section}>
             <Text style={styles.sectionTitle} accessibilityRole="header">
-              Effetto <Text style={styles.sectionNote}>in inglese</Text>
+              {t('detail.effect')}
+              {isEffectFallback && <Text style={styles.sectionNote}> {t('detail.effectNote')}</Text>}
             </Text>
             <View style={styles.effectBox}>
               <Text style={styles.effect}>{ability.effect}</Text>
@@ -145,7 +159,7 @@ export function AbilityDetailView({
         {(isLoading || (ability && ability.pokemon.length > 0)) && (
           <View style={styles.section}>
             <Text style={styles.sectionTitle} accessibilityRole="header">
-              Pokémon con questa abilità
+              {t('detail.pokemonWith')}
               {ability ? <Text style={styles.sectionCount}>  {ability.pokemon.length}</Text> : null}
             </Text>
             <ScrollView
@@ -173,13 +187,17 @@ export function AbilityDetailView({
 }
 
 function PokemonTile({ pokemon, onPress }: { pokemon: AbilityPokemon; onPress: () => void }) {
+  const { t } = useTranslation('abilities');
   const [artworkStyle] = useArtworkStyle();
-  const name = formatName(pokemon.name);
+  const name = pokemonName(pokemon.id, pokemon.name);
   return (
     <Pressable
       onPress={onPress}
       accessibilityRole="button"
-      accessibilityLabel={`${name}, numero ${pokemon.id}${pokemon.isHidden ? ', abilità nascosta' : ''}`}
+      accessibilityLabel={t(pokemon.isHidden ? 'detail.pokemonLabelHidden' : 'detail.pokemonLabel', {
+        name,
+        number: pokemon.id,
+      })}
       style={({ pressed }) => [
         styles.relatedTile,
         { backgroundColor: ABILITY_SOFT },
@@ -187,7 +205,7 @@ function PokemonTile({ pokemon, onPress }: { pokemon: AbilityPokemon; onPress: (
       ]}>
       {pokemon.isHidden && (
         <View style={styles.hiddenBadge}>
-          <Text style={styles.hiddenLabel}>Nascosta</Text>
+          <Text style={styles.hiddenLabel}>{t('detail.hidden')}</Text>
         </View>
       )}
       <Image

@@ -1,0 +1,115 @@
+{
+  "common": {
+    "retry": "Reintentar",
+    "close": "Cerrar",
+    "all": "Todas",
+    "settings": "Ajustes",
+    "loading": "Cargando la Pokédex",
+    "loadingShort": "Cargando…"
+  },
+  "search": {
+    "placeholder": "Buscar por nombre",
+    "accessibilityLabel": "Buscar un Pokémon por nombre",
+    "clear": "Borrar la búsqueda"
+  },
+  "generation": {
+    "short": "Gen. {{numeral}}",
+    "allGenerations": "Todas las generaciones",
+    "pickerLabel": "Generación: {{name}}",
+    "pickerLabelAll": "Generación: todas",
+    "pickerHint": "Abre la selección de generación"
+  },
+  "sectionMenu": {
+    "heading": "¿Qué quieres ver?",
+    "titleLabel": "{{title}}, cambiar de sección"
+  },
+  "viewToggle": {
+    "grid": "Vista en cuadrícula",
+    "row": "Vista en lista"
+  },
+  "card": {
+    "accessibilityLabelOneType": "{{name}}, número {{number}}, tipo {{type}}",
+    "accessibilityLabelTwoTypes": "{{name}}, número {{number}}, tipo {{type1}} y {{type2}}"
+  },
+  "header": {
+    "favoritesOnly": "Solo favoritos",
+    "filters": "Filtros",
+    "filtersActive_one": "Filtros, {{count}} activo",
+    "filtersActive_other": "Filtros, {{count}} activos",
+    "filtersHint": "Abre tipos, categoría y orden",
+    "shinyOnly": "Solo variocolor obtenidos, {{count}} de {{total}}"
+  },
+  "caption": {
+    "all": "{{total}} Pokémon · {{generations}} generaciones",
+    "generation": "{{count}} Pokémon · {{name}} · {{region}}",
+    "search_one": "{{count}} resultado entre {{total}} Pokémon",
+    "search_other": "{{count}} resultados entre {{total}} Pokémon",
+    "searchInRegion_one": "{{count}} resultado entre {{total}} Pokémon de {{region}}",
+    "searchInRegion_other": "{{count}} resultados entre {{total}} Pokémon de {{region}}",
+    "searchFavorites_one": "{{count}} resultado entre los favoritos",
+    "searchFavorites_other": "{{count}} resultados entre los favoritos",
+    "searchShiny_one": "{{count}} resultado entre los variocolor obtenidos",
+    "searchShiny_other": "{{count}} resultados entre los variocolor obtenidos",
+    "pokemon_one": "{{count}} Pokémon",
+    "pokemon_other": "{{count}} Pokémon",
+    "favorites_one": "{{count}} favorito",
+    "favorites_other": "{{count}} favoritos",
+    "shiny_one": "{{count}} variocolor obtenido",
+    "shiny_other": "{{count}} variocolor obtenidos",
+    "sortedBy": "por {{sort}}",
+    "sortedByReversed": "por {{sort}} (inverso)"
+  },
+  "empty": {
+    "noConnection": "Sin conexión",
+    "noResults": "Sin resultados",
+    "searchPokemon": "Ningún Pokémon se llama «{{query}}».",
+    "searchPokemonInRegion": "Ningún Pokémon de {{region}} se llama «{{query}}».",
+    "searchFavorites": "Ningún favorito se llama «{{query}}».",
+    "searchFavoritesInRegion": "Ningún favorito de {{region}} se llama «{{query}}».",
+    "searchShiny": "Ningún variocolor obtenido se llama «{{query}}».",
+    "searchShinyInRegion": "Ningún variocolor obtenido de {{region}} se llama «{{query}}».",
+    "clearSearch": "Borrar búsqueda",
+    "noFilterMatches": "Ningún Pokémon con estos filtros",
+    "filtersHint": "Prueba a quitar un tipo o la categoría.",
+    "filtersHintWithScope": "Prueba a quitar un tipo o la categoría, o a cambiar la generación y la colección.",
+    "resetFilters": "Restablecer filtros",
+    "noFavorites": "Ningún favorito",
+    "noFavoritesInRegion": "Ningún favorito de {{region}}",
+    "favoritesHint": "Abre la ficha de un Pokémon y toca el corazón de arriba para añadirlo a favoritos.",
+    "noShiny": "Ningún variocolor obtenido",
+    "noShinyInRegion": "Ningún variocolor obtenido de {{region}}",
+    "shinyHint": "Abre la ficha de un Pokémon y toca «Marcar variocolor obtenido» debajo de la ilustración.",
+    "showAll": "Mostrar todos los Pokémon"
+  },
+  "filters": {
+    "title": "Filtros",
+    "close": "Cerrar los filtros",
+    "reset": "Restablecer",
+    "types": "Tipos",
+    "bothTypes": "Ambos tipos",
+    "upToTwoTypes": "Hasta dos tipos",
+    "generation": "Generación",
+    "allGenerations": "Todas",
+    "category": "Categoría",
+    "allCategories": "Todos",
+    "sortBy": "Ordenar por",
+    "reverseOrder": "Orden inverso",
+    "descending": "Descendente",
+    "ascending": "Ascendente",
+    "nameAscending": "A → Z",
+    "nameDescending": "Z → A",
+    "noPokemon": "Ningún Pokémon",
+    "show_one": "Mostrar {{count}} Pokémon",
+    "show_other": "Mostrar {{count}} Pokémon",
+    "categories": {
+      "legendary": "Legendarios",
+      "mythical": "Singulares",
+      "baby": "Bebés"
+    },
+    "sort": {
+      "number": "Número",
+      "name": "Nombre",
+      "total": "Total"
+    }
+  }
+}

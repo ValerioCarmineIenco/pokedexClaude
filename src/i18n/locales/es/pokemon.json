@@ -1,0 +1,106 @@
+{
+  "detail": {
+    "back": "Volver a la lista",
+    "addFavorite": "Añadir a favoritos",
+    "removeFavorite": "Quitar de favoritos",
+    "previous": "Pokémon anterior, {{number}}",
+    "noPrevious": "Ninguno anterior",
+    "next": "Pokémon siguiente, {{number}}",
+    "noNext": "Ninguno siguiente",
+    "notFoundTitle": "Pokémon no encontrado",
+    "invalidId": "Esta Pokédex solo contiene los {{total}} Pokémon de {{regions}}.",
+    "regionList": "{{list}} y {{last}}",
+    "listSeparator": ", ",
+    "offlineTitle": "Sin conexión",
+    "offlineMessage": "No se puede acceder a la Pokédex. Comprueba la conexión y vuelve a intentarlo.",
+    "retry": "Reintentar",
+    "artworkLabel": "Ilustración de {{name}}",
+    "artworkShinyLabel": "Ilustración variocolor de {{name}}",
+    "noDescription": "No hay descripción disponible.",
+    "height": "Altura",
+    "weight": "Peso",
+    "compareLabel": "Comparar a {{name}} con otro Pokémon",
+    "compare": "Comparar con otro Pokémon",
+    "abilities": "Habilidades",
+    "hiddenAbilityLabel": "{{name}}, habilidad oculta",
+    "openAbility": "Abre la habilidad",
+    "hidden": "Oculta",
+    "baseStats": "Estadísticas base",
+    "total": "Total"
+  },
+  "tabs": {
+    "info": "Info",
+    "evolutions": "Evoluciones",
+    "moves": "Movimientos",
+    "artwork": "Ilustraciones"
+  },
+  "shiny": {
+    "show": "Ver variocolor",
+    "caught": "Variocolor conseguido",
+    "markCaught": "Marcar variocolor conseguido"
+  },
+  "typeDefense": {
+    "title": "Eficacia de tipos",
+    "hint": "Daño recibido de los movimientos de cada tipo. Los demás tipos hacen daño normal (×1).",
+    "rows": {
+      "quadruple": "Muy débil a",
+      "double": "Débil a",
+      "half": "Resistente a",
+      "quarter": "Muy resistente a",
+      "immune": "Inmune a"
+    },
+    "noTypes": "Ningún tipo"
+  },
+  "artwork": {
+    "unavailableTitle": "Ilustraciones no disponibles",
+    "unavailableMessage": "No se pueden cargar las imágenes. Comprueba la conexión y vuelve a intentarlo.",
+    "imageCount_one": "{{count}} imagen",
+    "imageCount_other": "{{count}} imágenes",
+    "generationLabel_one": "{{title}}, {{count}} imagen",
+    "generationLabel_other": "{{title}}, {{count}} imágenes",
+    "gameSprites": "Sprites de los juegos",
+    "close": "Cerrar imagen",
+    "groups": {
+      "official": "Ilustración oficial",
+      "base": "Sprites básicos",
+      "animated": "{{title}} · animados",
+      "icons": "{{title}} · iconos"
+    },
+    "games": {
+      "pair": "{{first}} y {{second}}",
+      "icons": "Iconos"
+    },
+    "variants": {
+      "normal": "Normal",
+      "female": "Hembra",
+      "front": "Frente",
+      "back": "Espalda",
+      "sideWithModifiers": "{{side}} {{modifiers}}"
+    },
+    "modifiers": {
+      "shiny": "variocolor",
+      "female": "♀",
+      "gray": "en gris",
+      "gbc": "en color (GBC)"
+    }
+  },
+  "forms": {
+    "title": "Formas",
+    "kinds": {
+      "base": "Forma base",
+      "mega": "Megaevolución",
+      "regional": "Forma regional",
+      "gmax": "Gigamax",
+      "special": "Forma especial"
+    },
+    "mega": "Mega",
+    "megaVariant": "Mega {{variant}}",
+    "artworkLabel": "Ilustración de {{name}}, {{form}}",
+    "difference": "{{value}} respecto a la forma base"
+  },
+  "encounters": {
+    "title": "Dónde encontrarlo",
+    "empty": "{{name}} no aparece en estado salvaje en ningún juego: se obtiene haciendo evolucionar a otro Pokémon, de un Huevo o en un evento especial.",
+    "openLocation": "Abre la ubicación"
+  }
+}

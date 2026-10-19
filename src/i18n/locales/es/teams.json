@@ -1,0 +1,61 @@
+{
+  "defaultName": "Equipo {{number}}",
+  "list": {
+    "newA11y": "Nuevo equipo",
+    "new": "Nuevo",
+    "emptyTitle": "Ningún equipo",
+    "emptyMessage": "Crea un equipo de {{size}} Pokémon para ver sus debilidades y los tipos que no cubre.",
+    "emptyAction": "Crear el primer equipo",
+    "cardA11y": "{{name}}, {{count}} de {{size}} Pokémon",
+    "cardEmpty": "Equipo vacío: tócalo para añadir Pokémon",
+    "cardWeak_one": "{{count}} Pokémon débil a {{type}}",
+    "cardWeak_other": "{{count}} Pokémon débiles a {{type}}",
+    "cardNoWeakness": "Ninguna debilidad compartida"
+  },
+  "editor": {
+    "back": "Atrás",
+    "share": "Compartir el equipo",
+    "copied": "Equipo copiado al portapapeles",
+    "shareFailed": "No se pudo compartir",
+    "nameLabel": "Nombre del equipo",
+    "caption": "{{count}} / {{size}} Pokémon",
+    "captionDrag": "{{count}} / {{size}} Pokémon · arrastra ≡ para reordenar",
+    "add": "Añadir un Pokémon",
+    "addFree_one": "Añadir un Pokémon (último hueco)",
+    "addFree_other": "Añadir un Pokémon ({{count}} huecos libres)",
+    "confirmDelete": "Toca de nuevo para eliminar",
+    "delete": "Eliminar equipo",
+    "notFoundTitle": "Equipo no encontrado",
+    "notFoundMessage": "Este equipo ya no existe en este dispositivo.",
+    "backToTeams": "Volver a los equipos",
+    "addTo": "Añadir a {{name}}"
+  },
+  "slots": {
+    "moveA11y": "Mover a {{name}}",
+    "moveHint": "Arrastra para cambiar el orden",
+    "moveDown": "Bajar",
+    "moveUp": "Subir",
+    "removeA11y": "Quitar a {{name}} del equipo"
+  },
+  "analysis": {
+    "title": "Cobertura de tipos",
+    "emptyHint": "Añade Pokémon para ver las debilidades y los tipos sin cubrir.",
+    "sharedTitle": "Debilidades compartidas",
+    "weakA11y_one": "{{count}} Pokémon débil a {{type}}",
+    "weakA11y_other": "{{count}} Pokémon débiles a {{type}}",
+    "weakLine_one": "<bold>{{count}} Pokémon</bold> débil a {{type}}",
+    "weakLine_other": "<bold>{{count}} Pokémon</bold> débiles a {{type}}",
+    "resist_one": "{{count}} resiste",
+    "resist_other": "{{count}} resisten",
+    "sharedEmpty": "Ningún tipo pone en apuros a más de un Pokémon.",
+    "unresistedTitle": "Nadie resiste a",
+    "unresistedHint": "Ningún miembro recibe menos daño de estos tipos.",
+    "unresistedEmpty": "Para cada tipo hay al menos un Pokémon que lo resiste.",
+    "uncoveredTitle": "Tipos sin cubrir",
+    "uncoveredHint": "Ningún miembro los golpea de forma supereficaz con movimientos de su tipo.",
+    "uncoveredEmpty": "Los movimientos de los tipos del equipo golpean ×2 a todos los tipos."
+  },
+  "share": {
+    "line": "{{position}}. {{name}} ({{types}})"
+  }
+}

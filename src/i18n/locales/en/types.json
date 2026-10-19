@@ -1,0 +1,50 @@
+{
+  "typeA11y": "{{type}} type",
+  "chart": {
+    "allTypes": "All types",
+    "allTypesHint": "Tap a type to see its matchups, Pokémon and moves.",
+    "title": "Type chart",
+    "hint": "Rows: move type. Columns: type of the Pokémon hit. Tap an icon for the type’s details. Empty cells are normal damage (×1).",
+    "legend": {
+      "superEffective": "Super effective",
+      "notVeryEffective": "Not very effective",
+      "noEffect": "No effect"
+    },
+    "cellA11y": "{{attacker}} against {{defender}}: {{effect}}",
+    "spoken": {
+      "superEffective": "super effective, times 2",
+      "notVeryEffective": "not very effective, times one half",
+      "noEffect": "no effect",
+      "normal": "normal damage"
+    }
+  },
+  "matchups": {
+    "superEffective": "Super effective against",
+    "notVeryEffective": "Not very effective against",
+    "noEffect": "No effect on",
+    "weakTo": "Weak to",
+    "resists": "Resists",
+    "immuneTo": "Immune to",
+    "noTypes": "None"
+  },
+  "detail": {
+    "back": "Back to types",
+    "notFoundTitle": "Type not found",
+    "notFoundMessage": "This type doesn’t exist in the Pokédex.",
+    "pokemonCount_one": "{{count}} Pokémon",
+    "pokemonCount_other": "{{count}} Pokémon",
+    "movesCount_one": "{{count}} move",
+    "movesCount_other": "{{count}} moves",
+    "attack": "On attack",
+    "attackHint": "Damage of {{type}} moves against each type.",
+    "defense": "On defense",
+    "defenseHint": "Damage taken by a pure {{type}}-type Pokémon.",
+    "tabPokemon": "Pokémon  {{count}}",
+    "tabMoves": "Moves  {{count}}",
+    "emptyPokemon": "No Pokémon of this type.",
+    "emptyMoves": "No moves of this type."
+  },
+  "errors": {
+    "notFound": "Type not found."
+  }
+}

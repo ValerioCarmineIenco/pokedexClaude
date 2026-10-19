@@ -2,6 +2,7 @@ import { FIRST_POKEMON_ID, LAST_POKEMON_ID } from '@/api/pokemon';
 import { getFavorites, replaceFavorites } from '@/hooks/useFavorites';
 import { getShinyCaught, replaceShinyCaught } from '@/hooks/useShinyCaught';
 import { getTeams, replaceTeams, sanitizeTeams } from '@/hooks/useTeams';
+import { t } from '@/i18n';
 import type { Team } from '@/types/team';
 
 const BACKUP_APP = 'pokedex';
@@ -52,14 +53,14 @@ export function parseBackup(text: string): Omit<Backup, 'exportedAt'> {
   try {
     raw = JSON.parse(text);
   } catch {
-    throw new BackupError('Il file non è un backup valido.');
+    throw new BackupError(t('settings:backup.errors.invalid'));
   }
   if (!raw || typeof raw !== 'object' || (raw as Backup).app !== BACKUP_APP) {
-    throw new BackupError('Il file non è un backup di questa app.');
+    throw new BackupError(t('settings:backup.errors.otherApp'));
   }
   const backup = raw as Partial<Backup>;
   if (typeof backup.version !== 'number' || backup.version > BACKUP_VERSION) {
-    throw new BackupError("Il backup è stato creato da una versione più recente dell'app.");
+    throw new BackupError(t('settings:backup.errors.newerVersion'));
   }
   return {
     app: BACKUP_APP,

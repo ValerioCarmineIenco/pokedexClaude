@@ -1,0 +1,50 @@
+{
+  "typeA11y": "Typ {{type}}",
+  "chart": {
+    "allTypes": "Alle Typen",
+    "allTypesHint": "Tippe auf einen Typ, um Effektivität, Pokémon und Attacken zu sehen.",
+    "title": "Typentabelle",
+    "hint": "Zeilen: Typ der Attacke. Spalten: Typ des getroffenen Pokémon. Tippe auf ein Symbol für die Typdetails. Leere Felder bedeuten normalen Schaden (×1).",
+    "legend": {
+      "superEffective": "Sehr effektiv",
+      "notVeryEffective": "Nicht sehr effektiv",
+      "noEffect": "Keine Wirkung"
+    },
+    "cellA11y": "{{attacker}} gegen {{defender}}: {{effect}}",
+    "spoken": {
+      "superEffective": "sehr effektiv, mal 2",
+      "notVeryEffective": "nicht sehr effektiv, mal ein halb",
+      "noEffect": "keine Wirkung",
+      "normal": "normaler Schaden"
+    }
+  },
+  "matchups": {
+    "superEffective": "Sehr effektiv gegen",
+    "notVeryEffective": "Nicht sehr effektiv gegen",
+    "noEffect": "Keine Wirkung auf",
+    "weakTo": "Schwach gegen",
+    "resists": "Resistent gegen",
+    "immuneTo": "Immun gegen",
+    "noTypes": "Keine"
+  },
+  "detail": {
+    "back": "Zurück zu den Typen",
+    "notFoundTitle": "Typ nicht gefunden",
+    "notFoundMessage": "Diesen Typ gibt es im Pokédex nicht.",
+    "pokemonCount_one": "{{count}} Pokémon",
+    "pokemonCount_other": "{{count}} Pokémon",
+    "movesCount_one": "{{count}} Attacke",
+    "movesCount_other": "{{count}} Attacken",
+    "attack": "Im Angriff",
+    "attackHint": "Schaden von {{type}}-Attacken gegen jeden Typ.",
+    "defense": "In der Verteidigung",
+    "defenseHint": "Schaden, den ein reines {{type}}-Pokémon erleidet.",
+    "tabPokemon": "Pokémon  {{count}}",
+    "tabMoves": "Attacken  {{count}}",
+    "emptyPokemon": "Keine Pokémon dieses Typs.",
+    "emptyMoves": "Keine Attacken dieses Typs."
+  },
+  "errors": {
+    "notFound": "Typ nicht gefunden."
+  }
+}

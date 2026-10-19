@@ -2,6 +2,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useSyncExternalStore } from 'react';
 
 import { FIRST_POKEMON_ID, LAST_POKEMON_ID } from '@/api/pokemon';
+import { t } from '@/i18n';
 import { TEAM_SIZE, type Team } from '@/types/team';
 
 const STORAGE_KEY = 'pokedex.teams';
@@ -80,12 +81,12 @@ function updateTeam(id: string, change: (team: Team) => Team) {
 
 const newId = () => `${Date.now().toString(36)}${Math.random().toString(36).slice(2, 6)}`;
 
-/** Crea una squadra vuota («Squadra 1», «Squadra 2»…) e ne restituisce l'id. */
+/** Crea una squadra vuota («Squadra 1», «Squadra 2»… nella lingua in uso) e ne restituisce l'id. */
 export function createTeam(): string {
   const names = new Set(teams.map((team) => team.name));
   let n = teams.length + 1;
-  while (names.has(`Squadra ${n}`)) n += 1;
-  const team: Team = { id: newId(), name: `Squadra ${n}`, members: [] };
+  while (names.has(t('teams:defaultName', { number: n }))) n += 1;
+  const team: Team = { id: newId(), name: t('teams:defaultName', { number: n }), members: [] };
   save([...teams, team]);
   return team.id;
 }

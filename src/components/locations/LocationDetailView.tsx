@@ -1,5 +1,6 @@
 import { Image } from 'expo-image';
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { FlatList, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
@@ -15,7 +16,7 @@ import type {
 import { colors } from '@/theme/colors';
 import { fonts } from '@/theme/fonts';
 import { getVersionColor } from '@/theme/versionColors';
-import { formatName } from '@/utils/format';
+import { useScrollRestoration } from '@/hooks/useScrollRestoration';
 
 import { ErrorState } from '../ErrorState';
 import { Icon } from '../Icon';
@@ -58,7 +59,9 @@ export function LocationDetailView({
   onBack,
   onRetry,
 }: LocationDetailViewProps) {
+  const { t } = useTranslation('locations');
   const insets = useSafeAreaInsets();
+  const { ref: scrollRef, onScroll } = useScrollRestoration();
   const [areaIndex, setAreaIndex] = useState(0);
 
   const header = location ?? summary;
@@ -71,12 +74,12 @@ export function LocationDetailView({
         onPress={onBack}
         hitSlop={6}
         accessibilityRole="button"
-        accessibilityLabel="Torna alle località"
+        accessibilityLabel={t('detail.back')}
         style={({ pressed }) => [styles.backButton, pressed && styles.pressed]}>
         <Icon name="back" size={18} color={colors.text} />
       </Pressable>
       <Text style={styles.title} numberOfLines={2} accessibilityRole="header">
-        {header?.name.toUpperCase() ?? ''}
+        {header?.name.toLocaleUpperCase() ?? ''}
       </Text>
       <View style={styles.navSide}>
         {header?.region && (
@@ -96,17 +99,17 @@ export function LocationDetailView({
         {nav}
         {isInvalidId ? (
           <ErrorState
-            title="Località non trovata"
-            message="Questa località non esiste nel Pokédex."
-            actionLabel="Torna alle località"
+            title={t('detail.invalidTitle')}
+            message={t('detail.invalidMessage')}
+            actionLabel={t('detail.back')}
             actionStyle="ghost"
             onAction={onBack}
           />
         ) : (
           <ErrorState
-            title="Nessuna connessione"
-            message={errorMessage ?? 'Non riesco a raggiungere il Pokédex. Controlla la rete e riprova.'}
-            actionLabel="Riprova"
+            title={t('detail.offlineTitle')}
+            message={errorMessage ?? t('detail.offlineMessage')}
+            actionLabel={t('detail.retry')}
             onAction={onRetry}
           />
         )}
@@ -119,6 +122,8 @@ export function LocationDetailView({
       {nav}
       {location ? (
         <FlatList
+          ref={scrollRef}
+          onScroll={onScroll}
           data={area?.methods ?? []}
           keyExtractor={(group) => group.method.name}
           renderItem={({ item }) => <MethodCard group={item} onOpenPokemon={onOpenPokemon} />}
@@ -128,7 +133,7 @@ export function LocationDetailView({
             ) : null
           }
           ListEmptyComponent={
-            <Text style={styles.empty}>Nessun Pokémon selvatico in questa località.</Text>
+            <Text style={styles.empty}>{t('detail.empty')}</Text>
           }
           contentContainerStyle={[styles.content, { paddingBottom: insets.bottom + 24 }]}
           showsVerticalScrollIndicator={false}
@@ -151,12 +156,13 @@ function AreaTabs({
   selected: number | undefined;
   onSelect: (index: number) => void;
 }) {
+  const { t } = useTranslation('locations');
   return (
     <View style={styles.areas}>
       <View style={styles.areasTitleRow}>
         <Icon name="map" size={16} color={colors.text} />
         <Text style={styles.areasTitle} accessibilityRole="header">
-          Aree
+          {t('detail.areas')}
         </Text>
       </View>
       <ScrollView
@@ -228,10 +234,12 @@ function EncounterRow({
   description: string;
   onOpenPokemon: (id: number) => void;
 }) {
+  const { t } = useTranslation('locations');
   const [artworkStyle] = useArtworkStyle();
   const { pokemon, minLevel, maxLevel, chance } = encounter;
-  const name = formatName(pokemon.name);
+  const name = pokemon.label;
   const level = minLevel === maxLevel ? `${minLevel}` : `${minLevel}-${maxLevel}`;
+  const percent = chance !== null ? t('detail.percent', { value: chance }) : null;
   const conditions = encounter.conditions.filter((c) => !c.isDefault);
 
   return (
@@ -239,7 +247,7 @@ function EncounterRow({
       onPress={pokemon.inPokedex ? () => onOpenPokemon(pokemon.id) : undefined}
       disabled={!pokemon.inPokedex}
       accessibilityRole={pokemon.inPokedex ? 'button' : undefined}
-      accessibilityLabel={`${name}, livello ${level}, probabilità ${chance !== null ? `${chance}%` : 'non indicata'}`}
+      accessibilityLabel={t('detail.encounterA11y', { name, level, chance: percent ?? t('detail.chanceUnknown') })}
       style={({ pressed }) => [styles.row, pressed && styles.rowPressed]}>
       <Image
         source={pokemon.inPokedex ? getArtworkUrl(pokemon.id, artworkStyle) : pokemon.artworkUrl}
@@ -265,7 +273,7 @@ function EncounterRow({
           <View style={styles.statsColumn}>
             <View style={[styles.pill, { backgroundColor: LOCATION_SOFT }]}>
               <Text style={[styles.pillText, styles.centered, { color: LOCATION_COLOR }]}>
-                Livello {level}
+                {t('detail.level', { level })}
               </Text>
             </View>
             <View
@@ -276,7 +284,7 @@ function EncounterRow({
                   styles.centered,
                   { color: chance !== null ? RATE_COLOR : colors.textSubtle },
                 ]}>
-                Prob. {chance !== null ? `${chance}%` : '-'}
+                {t('detail.chance', { chance: percent ?? '-' })}
               </Text>
             </View>
           </View>

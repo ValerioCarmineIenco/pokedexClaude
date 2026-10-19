@@ -1,10 +1,12 @@
 import { FlashList } from '@shopify/flash-list';
+import { useTranslation } from 'react-i18next';
 import { RefreshControl, StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import type { ViewMode } from '@/hooks/useViewMode';
 import { colors } from '@/theme/colors';
 import { fonts } from '@/theme/fonts';
+import { useScrollRestoration } from '@/hooks/useScrollRestoration';
 
 import { ErrorState } from '../ErrorState';
 import { ErrorToast } from '../ErrorToast';
@@ -22,8 +24,6 @@ import {
 const COLUMNS = 2;
 const GAP = 10;
 const SIDE = 12;
-
-const countLabel = (n: number) => `${n} abilità`;
 
 export type AbilityListViewProps = {
   abilities: AbilityListEntry[];
@@ -64,13 +64,13 @@ export function AbilityListView({
   onRetry,
   onPressAbility,
 }: AbilityListViewProps) {
+  const { t } = useTranslation('abilities');
   const insets = useSafeAreaInsets();
+  const { ref: scrollRef, onScroll } = useScrollRestoration();
   const isGrid = viewMode === 'grid';
   const count = totalCount ?? abilities.length;
   const isSearching = searchText.trim().length > 0;
-  const caption = isSearching
-    ? `${count} ${count === 1 ? 'risultato' : 'risultati'}`
-    : countLabel(count);
+  const caption = isSearching ? t('list.results', { count }) : t('list.count', { count });
 
   const header = (compact = false) => (
     <View style={styles.header}>
@@ -82,7 +82,7 @@ export function AbilityListView({
           <SearchBar
             value={searchText}
             onChangeText={onSearchTextChange}
-            accessibilityLabel="Cerca un'abilità per nome"
+            accessibilityLabel={t('list.searchLabel')}
           />
           <View style={styles.captionRow}>
             <Text style={styles.caption} numberOfLines={1}>
@@ -100,9 +100,9 @@ export function AbilityListView({
       <View style={[styles.screen, { paddingTop: insets.top }]}>
         {header(true)}
         <ErrorState
-          title="Nessuna connessione"
+          title={t('errors.offlineTitle')}
           message={errorMessage}
-          actionLabel="Riprova"
+          actionLabel={t('errors.retry')}
           onAction={onRetry}
         />
       </View>
@@ -141,6 +141,8 @@ export function AbilityListView({
         skeletons(8)
       ) : (
         <FlashList
+          ref={scrollRef}
+          onScroll={onScroll}
           key={viewMode}
           data={abilities}
           numColumns={isGrid ? COLUMNS : 1}
@@ -161,9 +163,9 @@ export function AbilityListView({
           ListEmptyComponent={
             isSearching ? (
               <ErrorState
-                title="Nessun risultato"
-                message={`Nessuna abilità si chiama "${searchText.trim()}".`}
-                actionLabel="Cancella ricerca"
+                title={t('list.noResultsTitle')}
+                message={t('list.noResults', { query: searchText.trim() })}
+                actionLabel={t('list.clearSearch')}
                 actionStyle="ghost"
                 onAction={() => onSearchTextChange('')}
               />
@@ -184,7 +186,7 @@ export function AbilityListView({
       {errorMessage && abilities.length > 0 && (
         <ErrorToast
           message={errorMessage}
-          actionLabel="Riprova"
+          actionLabel={t('errors.retry')}
           onAction={onRetry}
           bottomInset={insets.bottom}
         />

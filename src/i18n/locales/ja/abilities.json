@@ -1,0 +1,31 @@
+{
+  "list": {
+    "count_one": "{{count}}個のとくせい",
+    "count_other": "{{count}}個のとくせい",
+    "results_one": "{{count}}件",
+    "results_other": "{{count}}件",
+    "searchLabel": "とくせいを名前でさがす",
+    "noResultsTitle": "見つかりません",
+    "noResults": "「{{query}}」という名前のとくせいはありません。",
+    "clearSearch": "検索をクリア"
+  },
+  "detail": {
+    "back": "とくせい一覧にもどる",
+    "notFoundTitle": "とくせいが見つかりません",
+    "notFoundMessage": "このとくせいは図鑑にありません。",
+    "generation": "第{{numeral}}世代",
+    "noDescription": "日本語の説明はありません。",
+    "effect": "効果",
+    "effectNote": "英語",
+    "pokemonWith": "このとくせいを持つポケモン",
+    "pokemonLabel": "{{name}}、No.{{number}}",
+    "pokemonLabelHidden": "{{name}}、No.{{number}}、隠れ特性",
+    "hidden": "隠れ特性"
+  },
+  "errors": {
+    "notFound": "とくせいが見つかりません。",
+    "offlineTitle": "接続されていません",
+    "offlineMessage": "図鑑に接続できません。ネットワークを確認して、もう一度お試しください。",
+    "retry": "再試行"
+  }
+}

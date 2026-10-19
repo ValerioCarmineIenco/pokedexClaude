@@ -1,0 +1,369 @@
+{
+  "list": {
+    "count_one": "{{count}}か所",
+    "count_other": "{{count}}か所",
+    "results_one": "{{count}}けん",
+    "results_other": "{{count}}けん",
+    "searchLabel": "ばしょを なまえで さがす",
+    "noResults": "みつかりません",
+    "emptySearch": "「{{query}}」という ばしょは ありません。",
+    "emptySearchInRegion": "{{region}}に「{{query}}」という ばしょは ありません。",
+    "empty": "であいが きろくされている ばしょは ありません。",
+    "emptyInRegion": "{{region}}に であいが きろくされている ばしょは ありません。",
+    "clearSearch": "けんさくを クリア"
+  },
+  "card": {
+    "pokemon_one": "{{count}}ひき",
+    "pokemon_other": "{{count}}ひき",
+    "games_one": "{{count}}タイトル",
+    "games_other": "{{count}}タイトル",
+    "a11y": "{{name}}。{{pokemon}}、{{games}}。",
+    "a11yWithRegion": "{{name}}、{{region}}。{{pokemon}}、{{games}}。"
+  },
+  "regions": {
+    "all": "すべて",
+    "a11y": "ちほう：{{region}}"
+  },
+  "detail": {
+    "back": "ばしょの いちらんに もどる",
+    "invalidTitle": "ばしょが みつかりません",
+    "invalidMessage": "この ばしょは ずかんに ありません。",
+    "offlineTitle": "せつぞく できません",
+    "offlineMessage": "ずかんに せつぞく できません。ネットワークを かくにんして もういちど おためしください。",
+    "retry": "もういちど",
+    "empty": "この ばしょには やせいの ポケモンが いません。",
+    "areas": "エリア",
+    "mainArea": "メイン",
+    "encounterA11y": "{{name}}、レベル{{level}}、しゅつげんりつ {{chance}}",
+    "chanceUnknown": "ふめい",
+    "level": "Lv. {{level}}",
+    "chance": "しゅつげんりつ {{chance}}",
+    "percent": "{{value}}%"
+  },
+  "errors": {
+    "notFound": "ばしょが みつかりません。"
+  },
+  "conditions": {
+    "fixed": {
+      "swarm-yes": "たいりょうはっせい ちゅう",
+      "swarm-no": "たいりょうはっせい なし",
+      "radar-on": "ポケトレを つかう",
+      "radar-off": "ポケトレを つかわない",
+      "radio-off": "ラジオ オフ",
+      "radio-hoenn": "ラジオで ホウエンの おと",
+      "radio-sinnoh": "ラジオで シンオウの おと",
+      "slot2-none": "GBAカートリッジ なし",
+      "headbutt-tree-common": "ふつうの き",
+      "headbutt-tree-rare": "めずらしい き",
+      "headbutt-tree-secret": "ひみつの き"
+    },
+    "time": {
+      "morning": "あさ",
+      "day": "ひる",
+      "night": "よる"
+    },
+    "season": {
+      "spring": "はる",
+      "summer": "なつ",
+      "autumn": "あき",
+      "winter": "ふゆ"
+    },
+    "weekday": {
+      "monday": "げつようび",
+      "tuesday": "かようび",
+      "wednesday": "すいようび",
+      "thursday": "もくようび",
+      "friday": "きんようび",
+      "saturday": "どようび",
+      "sunday": "にちようび"
+    },
+    "weather": {
+      "normal": "はれ",
+      "overcast": "くもり",
+      "raining": "あめ",
+      "thunderstorm": "かみなりあめ",
+      "snowing": "ゆき",
+      "snowstorm": "ふぶき",
+      "sandstorm": "すなあらし",
+      "intense-sun": "ひざしが つよい",
+      "fog": "きり"
+    },
+    "weatherLabel": "てんき：{{weather}}",
+    "minutes": "{{from}}～{{to}}ふん",
+    "hours": "{{from}}～{{to}}",
+    "coins_one": "コイン {{coins}}まい",
+    "coins_other": "コイン {{coins}}まい",
+    "slot2": "GBAスロットに {{game}}",
+    "starter": "えらんだ さいしょの ポケモン：{{pokemon}}",
+    "trade": "{{pokemon}}と こうかん",
+    "tradeAny": "すきな ポケモンと こうかん",
+    "either": "{{first}}か {{second}}",
+    "regionalForm": "{{name}}（{{region}}のすがた）"
+  },
+  "methods": {
+    "walk": {
+      "label": "くさむら・どうくつ",
+      "description": "くさむらや どうくつを あるく"
+    },
+    "old-rod": {
+      "label": "ボロのつりざお",
+      "description": "ボロのつりざおで つりをする"
+    },
+    "good-rod": {
+      "label": "いいつりざお",
+      "description": "いいつりざおで つりをする"
+    },
+    "super-rod": {
+      "label": "すごいつりざお",
+      "description": "すごいつりざおで つりをする"
+    },
+    "surf": {
+      "label": "なみのり",
+      "description": "なみのりで みずの うえを すすむ"
+    },
+    "rock-smash": {
+      "label": "いわくだき",
+      "description": "ひびの はいった いわに いわくだきを つかう"
+    },
+    "headbutt": {
+      "label": "ずつき",
+      "description": "きに ずつきを する"
+    },
+    "headbutt-low": {
+      "label": "ずつき（まれ）",
+      "description": "きに ずつきを する（でる かくりつ ひくい）"
+    },
+    "headbutt-normal": {
+      "label": "ずつき",
+      "description": "きに ずつきを する"
+    },
+    "headbutt-high": {
+      "label": "ずつき（よく でる）",
+      "description": "きに ずつきを する（でる かくりつ たかい）"
+    },
+    "dark-grass": {
+      "label": "こいくさむら",
+      "description": "こい くさむらを あるく"
+    },
+    "grass-spots": {
+      "label": "ゆれる くさむら",
+      "description": "ゆれている くさむらを あるく"
+    },
+    "cave-spots": {
+      "label": "どうくつの すなけむり",
+      "description": "どうくつで まいあがる すなけむりに ふれる"
+    },
+    "bridge-spots": {
+      "label": "はしの かげ",
+      "description": "はしの うえの かげに ふれる"
+    },
+    "super-rod-spots": {
+      "label": "みなも（つり）",
+      "description": "みなもの ゆらぎで すごいつりざおを つかう"
+    },
+    "surf-spots": {
+      "label": "みなも（なみのり）",
+      "description": "なみのりで みなもの ゆらぎに ふれる"
+    },
+    "yellow-flowers": {
+      "label": "きいろい はなばたけ",
+      "description": "きいろい はなばたけを あるく"
+    },
+    "purple-flowers": {
+      "label": "むらさきの はなばたけ",
+      "description": "むらさきの はなばたけを あるく"
+    },
+    "red-flowers": {
+      "label": "あかい はなばたけ",
+      "description": "あかい はなばたけを あるく"
+    },
+    "rough-terrain": {
+      "label": "あれち",
+      "description": "あれちを あるく"
+    },
+    "gift": {
+      "label": "もらう",
+      "description": "プレゼントで もらう ポケモン"
+    },
+    "gift-egg": {
+      "label": "タマゴを もらう",
+      "description": "プレゼントで もらう タマゴ"
+    },
+    "static": {
+      "label": "シンボル",
+      "description": "きまった ばしょに いる ポケモン"
+    },
+    "pokeflute": {
+      "label": "ポケモンのふえ",
+      "description": "ポケモンのふえで めを さまさせる"
+    },
+    "squirt-bottle": {
+      "label": "ゼニガメじょうろ",
+      "description": "うごく きに ゼニガメじょうろを つかう"
+    },
+    "wailmer-pail": {
+      "label": "ホエルコじょうろ",
+      "description": "うごく きに ホエルコじょうろを つかう"
+    },
+    "seaweed": {
+      "label": "かいそう",
+      "description": "かいそうの なかを ダイビングする"
+    },
+    "roaming-grass": {
+      "label": "はいかい（くさむら）",
+      "description": "はいかいする ポケモン（くさむら）"
+    },
+    "roaming-water": {
+      "label": "はいかい（みず）",
+      "description": "はいかいする ポケモン（みずの うえ）"
+    },
+    "devon-scope": {
+      "label": "デボンスコープ",
+      "description": "みえない ポケモンに デボンスコープを つかう"
+    },
+    "feebas-tile-fishing": {
+      "label": "ヒンバスつり",
+      "description": "かわの とくべつな ばしょで つりをする"
+    },
+    "island-scan": {
+      "label": "しまスキャン",
+      "description": "しまスキャンを つかう"
+    },
+    "sos": {
+      "label": "なかまを よぶ",
+      "description": "やせいの ポケモンに よばれて でてくる"
+    },
+    "bubbling-spots": {
+      "label": "あわ（つり）",
+      "description": "あわの でている ばしょで つりをする"
+    },
+    "berry-trees": {
+      "label": "きのみの き",
+      "description": "きから きのみを とる"
+    },
+    "npc-trade": {
+      "label": "こうかん",
+      "description": "ゲームの じんぶつと こうかんする"
+    },
+    "sos-from-bubbling-spot": {
+      "label": "あわから なかまを よぶ",
+      "description": "あわで つった ポケモンに よばれて でてくる"
+    },
+    "overworld": {
+      "label": "シンボル",
+      "description": "フィールドに みえている ポケモン"
+    },
+    "overworld-water": {
+      "label": "シンボル（みず）",
+      "description": "みずの うえに みえている ポケモン"
+    },
+    "overworld-flying": {
+      "label": "シンボル（そら）",
+      "description": "そらを とんでいる ポケモン"
+    },
+    "overworld-special": {
+      "label": "シンボル（とくべつ）",
+      "description": "とくべつな じょうけんで あらわれる ポケモン"
+    },
+    "overworld-flying-special": {
+      "label": "シンボル（そら・とくべつ）",
+      "description": "とくべつな じょうけんで そらに あらわれる ポケモン"
+    },
+    "overworld-water-special": {
+      "label": "シンボル（みず・とくべつ）",
+      "description": "とくべつな じょうけんで みずの うえに あらわれる ポケモン"
+    },
+    "overworld-dirt": {
+      "label": "シンボル（じめん）",
+      "description": "じめんから でてくる ポケモン"
+    },
+    "horde": {
+      "label": "むれバトル",
+      "description": "5ひきの ポケモンの むれと であう"
+    },
+    "colosseum-bonus-disc-us": {
+      "label": "コロシアム ボーナスディスク（アメリカ）",
+      "description": "アメリカの コロシアム ボーナスディスクから"
+    },
+    "colosseum-bonus-disc-jpn": {
+      "label": "コロシアム ボーナスディスク（にほん）",
+      "description": "にほんの コロシアム ボーナスディスクから"
+    },
+    "pokemon-channel-pal": {
+      "label": "ポケモンチャンネル",
+      "description": "ポケモンチャンネル（ヨーロッパばん）から"
+    },
+    "pokemon-ranger": {
+      "label": "ポケモンレンジャー",
+      "description": "ポケモンレンジャーから おくる"
+    },
+    "pokemon-battle-revolution": {
+      "label": "バトルレボリューション",
+      "description": "ポケモンバトルレボリューションから"
+    },
+    "new-york-pokecenter-wish-eggs": {
+      "label": "ポケモンセンターNYの タマゴ",
+      "description": "ポケモンセンター ニューヨークの イベントの タマゴ"
+    },
+    "snag": {
+      "label": "スナッチ",
+      "description": "スナッチマシンで トレーナーから スナッチする"
+    },
+    "snag-rematch": {
+      "label": "スナッチ（さいせん）",
+      "description": "さいせんで トレーナーから スナッチする"
+    },
+    "pokespot": {
+      "label": "ポケスポット",
+      "description": "ポケスナックで ポケスポットに おびきよせる"
+    },
+    "hidden-grotto": {
+      "label": "かくしあな",
+      "description": "かくしあなで みつける"
+    },
+    "honey-tree": {
+      "label": "あまいミツの き",
+      "description": "きに あまいミツを ぬる"
+    },
+    "wanderer": {
+      "label": "うろつく ポケモン",
+      "description": "あたりを うろついている ポケモン"
+    },
+    "wanderer-water": {
+      "label": "うろつく ポケモン（みず）",
+      "description": "みずの うえを うろついている ポケモン"
+    },
+    "chase-water": {
+      "label": "みずで おいかけてくる",
+      "description": "みずの なかで おいかけてくる ポケモン"
+    },
+    "dynamax-adventure": {
+      "label": "ダイマックスアドベンチャー",
+      "description": "ダイマックスアドベンチャーで であう"
+    },
+    "max-raid": {
+      "label": "マックスレイドバトル",
+      "description": "マックスレイドバトルで であう"
+    },
+    "trash-can-ambush": {
+      "label": "ゴミばこから とびだす",
+      "description": "ゴミばこから とびだしてくる"
+    },
+    "rustling-bush-ambush": {
+      "label": "しげみから とびだす",
+      "description": "ゆれる しげみから とびだしてくる"
+    },
+    "ceiling-ambush": {
+      "label": "てんじょうから おちてくる",
+      "description": "てんじょうから おちてくる"
+    },
+    "ground-ambush": {
+      "label": "じめんから とびだす",
+      "description": "じめんから とびだしてくる"
+    },
+    "sky-ambush": {
+      "label": "そらから おそってくる",
+      "description": "そらから まいおりてくる"
+    }
+  }
+}

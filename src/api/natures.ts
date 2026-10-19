@@ -9,36 +9,42 @@ import type {
   NatureStatName,
 } from '@/types/nature';
 import type { NamedAPIResource, NatureResponse } from '@/types/pokeapi';
+import { labelMap, perLanguage, t } from '@/i18n';
+import { localName } from '@/i18n/names';
 import { formatName } from '@/utils/format';
-import { byLanguage } from '@/utils/pokeapiText';
+import { localized } from '@/utils/pokeapiText';
 import { normalizeSearch } from '@/utils/search';
 
 /**
- * Le 25 nature, in ordine di id, con il nome italiano per la ricerca.
+ * Le 25 nature, in ordine di id, con il nome italiano (fallback se mancano i nomi generati).
  * Generato da `scripts/generate-nature-index.mjs`.
  */
 const INDEX = natureIndex as NatureIndexEntry[];
 
-/** Testo su cui cerca `search`: nome italiano e slug inglese («sicura bold»). */
-const SEARCH_TEXT = new Map(INDEX.map((entry) => [entry.id, normalizeSearch(`${entry.label} ${entry.name}`)]));
+/** Nome della natura nella lingua in uso, dall'indice (senza chiamate). */
+export function getNatureLabel(entry: NatureIndexEntry): string {
+  return localName('nature', entry.id, entry.label);
+}
 
-/** Nomi completi, come nei giochi: in elenco c'è spazio per scriverli per esteso. */
-const STAT_LABELS: Record<NatureStatName, string> = {
-  attack: 'Attacco',
-  defense: 'Difesa',
-  'special-attack': 'Attacco Speciale',
-  'special-defense': 'Difesa Speciale',
-  speed: 'Velocità',
-};
+/**
+ * Testo su cui cerca `search`: nome nella lingua in uso e slug inglese («sicura bold»).
+ * Ricalcolato al cambio di lingua.
+ */
+const searchText = perLanguage(
+  () => new Map(INDEX.map((entry) => [entry.id, normalizeSearch(`${getNatureLabel(entry)} ${entry.name}`)])),
+);
 
-/** PokéAPI non ha i nomi italiani dei sapori: sono quelli dei giochi. */
-const FLAVOR_LABELS: Record<FlavorName, string> = {
-  spicy: 'Piccante',
-  dry: 'Secco',
-  sweet: 'Dolce',
-  bitter: 'Amaro',
-  sour: 'Aspro',
-};
+/** Nomi completi delle statistiche, come nei giochi: in elenco c'è spazio per scriverli per esteso. */
+const STAT_LABELS: Record<NatureStatName, string> = labelMap(
+  ['attack', 'defense', 'special-attack', 'special-defense', 'speed'],
+  (stat) => localName('stat', stat),
+);
+
+/** PokéAPI non ha i nomi dei sapori in tutte le lingue: sono quelli dei giochi, tradotti a mano. */
+const FLAVOR_LABELS: Record<FlavorName, string> = labelMap(
+  ['spicy', 'dry', 'sweet', 'bitter', 'sour'],
+  (flavor) => t(`natures:flavors.${flavor}`),
+);
 
 /**
  * Voci dell'indice il cui nome contiene `search` (anche parziale, senza distinzione di
@@ -47,7 +53,8 @@ const FLAVOR_LABELS: Record<FlavorName, string> = {
 export function getNatureIndex(search = ''): NatureIndexEntry[] {
   const needle = normalizeSearch(search);
   if (!needle) return INDEX;
-  return INDEX.filter((entry) => SEARCH_TEXT.get(entry.id)!.includes(needle));
+  const texts = searchText();
+  return INDEX.filter((entry) => texts.get(entry.id)!.includes(needle));
 }
 
 function toStat(resource: NamedAPIResource | null): NatureStat | null {
@@ -63,8 +70,8 @@ function toFlavor(resource: NamedAPIResource | null): NatureFlavor | null {
 }
 
 export function toNature(raw: NatureResponse): Nature {
-  const name =
-    raw.names.find(byLanguage('it'))?.name ?? raw.names.find(byLanguage('en'))?.name ?? formatName(raw.name);
+  const entry = INDEX.find((indexEntry) => indexEntry.id === raw.id);
+  const name = localized(raw.names)?.name ?? (entry ? getNatureLabel(entry) : formatName(raw.name));
   const increasedStat = toStat(raw.increased_stat);
   const decreasedStat = toStat(raw.decreased_stat);
   // Le neutre arrivano già con null, ma alcune versioni dei dati ripetono la stessa
@@ -83,7 +90,7 @@ export function toNature(raw: NatureResponse): Nature {
 
 /** Una natura. */
 export async function getNature(id: number, signal?: AbortSignal): Promise<Nature> {
-  const raw = await fetchJson<NatureResponse>(`/nature/${id}`, signal, 'Natura non trovata.');
+  const raw = await fetchJson<NatureResponse>(`/nature/${id}`, signal, t('natures:errors.notFound'));
   return toNature(raw);
 }
 

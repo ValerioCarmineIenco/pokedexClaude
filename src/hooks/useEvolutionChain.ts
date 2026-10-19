@@ -4,6 +4,7 @@ import { getErrorMessage } from '@/api/client';
 import { fetchEvolutionChain } from '@/api/evolutions';
 import { fetchPokemonSpecies, parsePokemonId } from '@/api/pokemon';
 import { queryKeys } from '@/api/queryKeys';
+import { t } from '@/i18n';
 import type { PokemonSpecies } from '@/types/pokemon';
 
 /**
@@ -28,7 +29,7 @@ export function useEvolutionChain(
         queryClient.setQueryData(speciesKey, species);
         chainId = species.evolutionChainId;
       }
-      if (chainId == null) throw new Error('Catena evolutiva non disponibile.');
+      if (chainId == null) throw new Error(t('evolution:chain.unavailable'));
       return fetchEvolutionChain(chainId, signal);
     },
     enabled: enabled && id !== null,

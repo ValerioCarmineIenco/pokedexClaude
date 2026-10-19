@@ -1,9 +1,13 @@
+import type { ParseKeys } from 'i18next';
+
 import { fetchJson } from '@/api/client';
 import { getIdFromUrl } from '@/api/pokemon';
 import itemIndex from '@/data/itemIndex.json';
 import locationIndex from '@/data/locationIndex.json';
 import moveIndex from '@/data/moveIndex.json';
-import { TYPE_NAMES_IT } from '@/theme/typeNames';
+import { getLocale, t } from '@/i18n';
+import { localName, pokemonName } from '@/i18n/names';
+import { TYPE_LABELS } from '@/theme/typeNames';
 import type {
   EvolutionChain,
   EvolutionMethod,
@@ -22,9 +26,10 @@ import type {
 import { TYPE_NAMES, type TypeName } from '@/types/pokemon';
 import { formatName } from '@/utils/format';
 
-// Nomi italiani dagli indici locali, per slug: nessuna chiamata per oggetto, mossa o luogo.
+// Voci degli indici locali, per slug: nessuna chiamata per oggetto, mossa o luogo.
+// Il nome si legge nella lingua in uso quando si compone la frase.
 const ITEMS = new Map((itemIndex as ItemIndexEntry[]).map((entry) => [entry.name, entry]));
-const MOVES = new Map((moveIndex as MoveIndexEntry[]).map((entry) => [entry.name, entry.label]));
+const MOVES = new Map((moveIndex as MoveIndexEntry[]).map((entry) => [entry.name, entry]));
 const LOCATIONS = new Map(
   (locationIndex as LocationIndexEntry[]).map((entry) => [entry.name, entry]),
 );
@@ -33,95 +38,133 @@ const LOCATIONS = new Map(
 const MAX_METHODS = 4;
 const MAX_LEGACY_METHODS = 3;
 
-const TIME_OF_DAY: Record<string, string> = {
-  day: 'di giorno',
-  night: 'di notte',
-  dusk: 'al crepuscolo',
-  'full-moon': 'con la luna piena',
-};
+/** Id nazionali dei Pokémon citati nelle frasi dei metodi speciali. */
+const NINCADA = 290;
+const BISHARP = 625;
+const MELTAN = 808;
+const GIMMIGHOUL = 999;
+
+const TIME_OF_DAY = {
+  day: 'condition.day',
+  night: 'condition.night',
+  dusk: 'condition.dusk',
+  'full-moon': 'condition.fullMoon',
+} as const satisfies Record<string, EvolutionKey>;
 
 /** Le rocce di Leafeon e Glaceon (`near_special_rock`). */
-const SPECIAL_ROCKS: Record<string, string> = {
-  leafeon: 'vicino alla roccia di muschio',
-  glaceon: 'vicino alla roccia di ghiaccio',
-};
+const SPECIAL_ROCKS = {
+  leafeon: 'condition.mossRock',
+  glaceon: 'condition.iceRock',
+} as const satisfies Record<string, EvolutionKey>;
+
+type EvolutionKey = ParseKeys<'evolution'>;
 
 const text = (value: string): EvolutionTextPart => ({ kind: 'text', text: value });
+
+// Segnaposto dei collegamenti dentro una frase tradotta (caratteri di uso privato).
+const SLOT_OPEN = '\uE000';
+const SLOT_CLOSE = '\uE001';
+const SLOT = /\uE000(\d+)\uE001/;
+
+/**
+ * Frase intera tradotta, divisa in pezzi: i valori che sono pezzi (oggetti e luoghi da
+ * toccare, o altre frasi già composte) entrano come segnaposto e tornano al loro posto.
+ */
+function phrase(
+  key: EvolutionKey,
+  values: Record<string, string | number | EvolutionTextPart | EvolutionTextPart[]> = {},
+): EvolutionTextPart[] {
+  const slots: EvolutionTextPart[][] = [];
+  const options: Record<string, string | number> = {};
+  for (const [name, value] of Object.entries(values)) {
+    if (typeof value === 'string' || typeof value === 'number') {
+      options[name] = value;
+    } else {
+      options[name] = `${SLOT_OPEN}${slots.length}${SLOT_CLOSE}`;
+      slots.push(Array.isArray(value) ? value : [value]);
+    }
+  }
+  const result: string = t(key, { ns: 'evolution', ...options });
+  return result
+    .split(SLOT)
+    .flatMap((piece, i) => (i % 2 === 1 ? slots[Number(piece)] : piece ? [text(piece)] : []));
+}
 
 function item(resource: NamedAPIResource): EvolutionTextPart {
   const entry = ITEMS.get(resource.name);
   return entry
-    ? { kind: 'item', text: entry.label, itemId: entry.id }
-    : text(formatName(resource.name));
+    ? { kind: 'item', text: localName('item', entry.id, entry.label), itemId: entry.id }
+    : text(localName('item', getIdFromUrl(resource.url), formatName(resource.name)));
 }
 
 function location(resource: NamedAPIResource): EvolutionTextPart {
   const entry = LOCATIONS.get(resource.name);
   return entry
-    ? { kind: 'location', text: entry.label, locationId: entry.id }
-    : text(formatName(resource.name));
+    ? { kind: 'location', text: localName('location', entry.id, entry.label), locationId: entry.id }
+    : text(localName('location', getIdFromUrl(resource.url), formatName(resource.name)));
 }
 
-const move = (resource: NamedAPIResource) => MOVES.get(resource.name) ?? formatName(resource.name);
+function move(resource: NamedAPIResource): string {
+  const entry = MOVES.get(resource.name);
+  return entry ? localName('move', entry.id, entry.label) : formatName(resource.name);
+}
+
+const species = (resource: NamedAPIResource) => pokemonName(getIdFromUrl(resource.url), resource.name);
 
 function typeName(resource: NamedAPIResource): string {
   return (TYPE_NAMES as readonly string[]).includes(resource.name)
-    ? TYPE_NAMES_IT[resource.name as TypeName]
+    ? TYPE_LABELS[resource.name as TypeName]
     : formatName(resource.name);
 }
 
 /** Inizio della frase, dal tipo di evoluzione (`trigger`). */
 function describeTrigger(detail: EvolutionDetailResponse): EvolutionTextPart[] {
   const level = detail.min_level;
-  const times = detail.min_move_count ? ` ${detail.min_move_count} volte` : '';
+  const count = detail.min_move_count;
+  const damage = detail.min_damage_taken;
   switch (detail.trigger.name) {
     case 'level-up':
-      return [text(level ? `Livello ${level}` : 'Sale di livello')];
+      return level ? phrase('trigger.level', { level }) : phrase('trigger.levelUp');
     case 'in-battle-level-up':
-      return [text(level ? `Livello ${level} durante una lotta` : 'Sale di livello durante una lotta')];
+      return level ? phrase('trigger.battleLevel', { level }) : phrase('trigger.battleLevelUp');
     case 'use-item':
-      return detail.item ? [text('Usa '), item(detail.item)] : [text('Usa uno strumento')];
+      return detail.item ? phrase('trigger.useItem', { item: item(detail.item) }) : phrase('trigger.useAnyItem');
     case 'trade':
-      return [text('Scambio')];
+      return phrase('trigger.trade');
     case 'shed':
-      return [text("Compare all'evoluzione di Nincada con un posto libero in squadra e una Poké Ball")];
+      return phrase('trigger.shed', { nincada: pokemonName(NINCADA) });
     case 'spin':
-      return [text('Fai una giravolta')];
+      return phrase('trigger.spin');
     case 'tower-of-darkness':
-      return [text('Supera la Torre del Buio')];
+      return phrase('trigger.towerOfDarkness');
     case 'tower-of-waters':
-      return [text("Supera la Torre dell'Acqua")];
+      return phrase('trigger.towerOfWaters');
     case 'three-critical-hits':
-      return [text('3 brutti colpi nella stessa lotta')];
+      return phrase('trigger.threeCriticalHits');
     case 'take-damage':
-      return [
-        text(
-          detail.min_damage_taken
-            ? `Subisci almeno ${detail.min_damage_taken} PS di danni senza andare KO`
-            : 'Subisci danni senza andare KO',
-        ),
-      ];
+      return damage ? phrase('trigger.takeDamageMin', { damage }) : phrase('trigger.takeDamage');
     case 'recoil-damage':
-      return [
-        text(
-          detail.min_damage_taken
-            ? `Subisci almeno ${detail.min_damage_taken} PS di danni da contraccolpo`
-            : 'Subisci danni da contraccolpo',
-        ),
-      ];
+      return damage ? phrase('trigger.recoilDamageMin', { damage }) : phrase('trigger.recoilDamage');
     case 'agile-style-move':
     case 'strong-style-move': {
-      const style = detail.trigger.name === 'agile-style-move' ? 'Stile Rapido' : 'Stile Forte';
-      return [text(detail.used_move ? `Usa ${move(detail.used_move)} in ${style}${times}` : `Usa una mossa in ${style}`)];
+      const style = t(detail.trigger.name === 'agile-style-move' ? 'evolution:styles.agile' : 'evolution:styles.strong');
+      if (!detail.used_move) return phrase('trigger.styleAnyMove', { style });
+      const usedMove = move(detail.used_move);
+      return count
+        ? phrase('trigger.styleMoveTimes', { move: usedMove, style, count })
+        : phrase('trigger.styleMove', { move: usedMove, style });
     }
     case 'use-move':
-      return [text(detail.used_move ? `Usa ${move(detail.used_move)}${times}` : 'Usa una mossa')];
+      if (!detail.used_move) return phrase('trigger.useAnyMove');
+      return count
+        ? phrase('trigger.useMoveTimes', { move: move(detail.used_move), count })
+        : phrase('trigger.useMove', { move: move(detail.used_move) });
     case 'three-defeated-bisharp':
-      return [text('Sconfiggi 3 Bisharp capobanda')];
+      return phrase('trigger.defeatBisharp', { bisharp: pokemonName(BISHARP) });
     case 'meltan-candies':
-      return [text('400 caramelle Meltan in Pokémon GO')];
+      return phrase('trigger.meltanCandies', { meltan: pokemonName(MELTAN) });
     case 'gimmighoul-coins':
-      return [text('Raccogli 999 Monete di Gimmighoul')];
+      return phrase('trigger.gimmighoulCoins', { gimmighoul: pokemonName(GIMMIGHOUL) });
     default:
       return [text(formatName(detail.trigger.name))];
   }
@@ -137,32 +180,38 @@ function describeConditions(
   generalLocation: boolean,
 ): EvolutionTextPart[][] {
   const conditions: EvolutionTextPart[][] = [];
-  const add = (...parts: EvolutionTextPart[]) => conditions.push(parts);
+  const add = (parts: EvolutionTextPart[]) => conditions.push(parts);
 
-  if (detail.trade_species) add(text(`con ${formatName(detail.trade_species.name)}`));
-  if (detail.held_item) add(text('tenendo '), item(detail.held_item));
-  if (detail.min_happiness) add(text('con amicizia alta'));
-  if (detail.min_affection) add(text('con affetto alto'));
-  if (detail.min_beauty) add(text('con Bellezza alta'));
-  if (detail.known_move) add(text(`conoscendo ${move(detail.known_move)}`));
-  if (detail.known_move_type) add(text(`conoscendo una mossa di tipo ${typeName(detail.known_move_type)}`));
-  if (detail.near_special_rock) {
-    add(text(SPECIAL_ROCKS[speciesName] ?? 'vicino a una roccia speciale'));
-  } else if (detail.location) {
-    if (generalLocation) add(text('in luoghi particolari'));
-    else add(text('a '), location(detail.location));
+  if (detail.trade_species) add(phrase('condition.tradeWith', { pokemon: species(detail.trade_species) }));
+  if (detail.held_item) add(phrase('condition.holding', { item: item(detail.held_item) }));
+  if (detail.min_happiness) add(phrase('condition.happiness'));
+  if (detail.min_affection) add(phrase('condition.affection'));
+  if (detail.min_beauty) add(phrase('condition.beauty'));
+  if (detail.known_move) add(phrase('condition.knowsMove', { move: move(detail.known_move) }));
+  if (detail.known_move_type) {
+    add(phrase('condition.knowsMoveType', { type: typeName(detail.known_move_type) }));
   }
-  if (detail.time_of_day && TIME_OF_DAY[detail.time_of_day]) add(text(TIME_OF_DAY[detail.time_of_day]));
-  if (detail.relative_physical_stats === 1) add(text('con Attacco maggiore di Difesa'));
-  if (detail.relative_physical_stats === -1) add(text('con Attacco minore di Difesa'));
-  if (detail.relative_physical_stats === 0) add(text('con Attacco uguale a Difesa'));
-  if (detail.party_species) add(text(`con ${formatName(detail.party_species.name)} in squadra`));
-  if (detail.party_type) add(text(`con un Pokémon di tipo ${typeName(detail.party_type)} in squadra`));
-  if (detail.needs_overworld_rain) add(text('mentre piove'));
-  if (detail.turn_upside_down) add(text('tenendo la console capovolta'));
-  if (detail.needs_multiplayer) add(text('giocando in multigiocatore'));
-  if (detail.min_steps) add(text(`dopo ${detail.min_steps.toLocaleString('it-IT')} passi in modalità Let's Go`));
-  if (detail.allowed_natures?.length) add(text('con certe nature'));
+  if (detail.near_special_rock) {
+    const rock = SPECIAL_ROCKS[speciesName as keyof typeof SPECIAL_ROCKS];
+    add(phrase(rock ?? 'condition.specialRock'));
+  } else if (detail.location) {
+    if (generalLocation) add(phrase('condition.specialPlaces'));
+    else add(phrase('condition.at', { location: location(detail.location) }));
+  }
+  const time = TIME_OF_DAY[detail.time_of_day as keyof typeof TIME_OF_DAY];
+  if (time) add(phrase(time));
+  if (detail.relative_physical_stats === 1) add(phrase('condition.attackHigher'));
+  if (detail.relative_physical_stats === -1) add(phrase('condition.attackLower'));
+  if (detail.relative_physical_stats === 0) add(phrase('condition.attackEqual'));
+  if (detail.party_species) add(phrase('condition.partySpecies', { pokemon: species(detail.party_species) }));
+  if (detail.party_type) add(phrase('condition.partyType', { type: typeName(detail.party_type) }));
+  if (detail.needs_overworld_rain) add(phrase('condition.rain'));
+  if (detail.turn_upside_down) add(phrase('condition.upsideDown'));
+  if (detail.needs_multiplayer) add(phrase('condition.multiplayer'));
+  if (detail.min_steps) {
+    add(phrase('condition.steps', { steps: detail.min_steps.toLocaleString(getLocale()) }));
+  }
+  if (detail.allowed_natures?.length) add(phrase('condition.natures'));
   return conditions;
 }
 
@@ -172,14 +221,17 @@ function describe(
   speciesName: string,
   generalLocation = false,
 ): EvolutionMethod {
-  const parts = describeTrigger(detail);
-  describeConditions(detail, speciesName, generalLocation).forEach((condition, i) => {
-    parts.push(text(i === 0 ? ' ' : ', '), ...condition);
-  });
-  if (detail.gender === 1) parts.push(text(' (solo femmine)'));
-  if (detail.gender === 2) parts.push(text(' (solo maschi)'));
+  let parts = describeTrigger(detail);
+  const conditions = describeConditions(detail, speciesName, generalLocation);
+  if (conditions.length) {
+    const separator = text(t('evolution:method.separator'));
+    const joined = conditions.flatMap((condition, i) => (i === 0 ? condition : [separator, ...condition]));
+    parts = phrase('method.full', { trigger: parts, conditions: joined });
+  }
+  if (detail.gender === 1) parts = phrase('method.femaleOnly', { method: parts });
+  if (detail.gender === 2) parts = phrase('method.maleOnly', { method: parts });
   const chance = detail.condition_expression?.percentage_chance;
-  if (chance) parts.push(text(` (${chance.toLocaleString('it-IT')}% di probabilità)`));
+  if (chance) parts = phrase('method.chance', { method: parts, chance: chance.toLocaleString(getLocale()) });
 
   // Unisce i pezzi di testo vicini: restano separati solo i collegamenti.
   return parts.reduce<EvolutionMethod>((merged, part) => {
@@ -227,7 +279,7 @@ function toMethods(details: EvolutionDetailResponse[], speciesName: string) {
   let methods = uniqueMethods(main.map((detail) => describe(detail, speciesName)));
   if (methods.length > MAX_METHODS) {
     const others = methods.length - (MAX_METHODS - 1);
-    methods = [...methods.slice(0, MAX_METHODS - 1), [text(`…e altri ${others} modi`)]];
+    methods = [...methods.slice(0, MAX_METHODS - 1), phrase('method.more', { count: others })];
   }
   const legacyMethods = uniqueMethods(
     baseForm.filter((detail) => !main.includes(detail)).map((detail) => describe(detail, speciesName, true)),
@@ -258,7 +310,7 @@ export async function fetchEvolutionChain(id: number, signal?: AbortSignal): Pro
   const raw = await fetchJson<EvolutionChainResponse>(
     `/evolution-chain/${id}`,
     signal,
-    'Catena evolutiva non trovata.',
+    t('evolution:chain.notFound'),
   );
   return toEvolutionChain(raw);
 }

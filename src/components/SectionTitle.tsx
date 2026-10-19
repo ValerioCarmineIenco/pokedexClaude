@@ -1,4 +1,5 @@
 import { router } from 'expo-router';
+import { useTranslation } from 'react-i18next';
 import { Pressable, StyleSheet, Text } from 'react-native';
 
 import { getSection, type SectionKey } from '@/navigation/sections';
@@ -14,13 +15,14 @@ type Props = {
 
 /** Titolo in alto a sinistra: toccandolo si apre il menu per cambiare sezione. */
 export function SectionTitle({ section }: Props) {
+  const { t } = useTranslation('pokedex');
   const { title } = getSection(section);
   return (
     <Pressable
       onPress={() => router.push({ pathname: '/menu', params: { current: section } })}
       hitSlop={6}
       accessibilityRole="button"
-      accessibilityLabel={`${title}, cambia sezione`}
+      accessibilityLabel={t('sectionMenu.titleLabel', { title })}
       style={({ pressed }) => [styles.container, pressed && styles.pressed]}>
       <PokeBallLogo />
       <Text style={styles.title} accessibilityRole="header">

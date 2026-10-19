@@ -1,5 +1,6 @@
 import { router, useLocalSearchParams } from 'expo-router';
 import { useMemo, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { PokemonPicker } from '@/components/compare/PokemonPicker';
 import { ErrorState } from '@/components/ErrorState';
@@ -15,6 +16,7 @@ import {
 
 /** Dettaglio di una squadra (`/teams/[teamId]`), con la scelta dei Pokémon da aggiungere. */
 export default function TeamEditorScreen() {
+  const { t } = useTranslation('teams');
   const { teamId } = useLocalSearchParams<{ teamId?: string }>();
   const { team, isLoaded } = useTeam(teamId);
   const [picking, setPicking] = useState(false);
@@ -27,9 +29,9 @@ export default function TeamEditorScreen() {
     if (!isLoaded) return null;
     return (
       <ErrorState
-        title="Squadra non trovata"
-        message="Questa squadra non esiste più su questo dispositivo."
-        actionLabel="Torna alle squadre"
+        title={t('editor.notFoundTitle')}
+        message={t('editor.notFoundMessage')}
+        actionLabel={t('editor.backToTeams')}
         onAction={() => router.replace('/teams')}
       />
     );
@@ -38,7 +40,7 @@ export default function TeamEditorScreen() {
   if (picking) {
     return (
       <PokemonPicker
-        title={`Aggiungi a ${team.name}`}
+        title={t('editor.addTo', { name: team.name })}
         excludeIds={memberIds}
         onPick={(pokemon) => {
           addTeamMember(team.id, pokemon.id);

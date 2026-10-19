@@ -1,0 +1,106 @@
+{
+  "detail": {
+    "back": "Retour à la liste",
+    "addFavorite": "Ajouter aux favoris",
+    "removeFavorite": "Retirer des favoris",
+    "previous": "Pokémon précédent, {{number}}",
+    "noPrevious": "Aucun précédent",
+    "next": "Pokémon suivant, {{number}}",
+    "noNext": "Aucun suivant",
+    "notFoundTitle": "Pokémon introuvable",
+    "invalidId": "Ce Pokédex ne contient que les {{total}} Pokémon de {{regions}}.",
+    "regionList": "{{list}} et {{last}}",
+    "listSeparator": ", ",
+    "offlineTitle": "Pas de connexion",
+    "offlineMessage": "Impossible de joindre le Pokédex. Vérifiez le réseau et réessayez.",
+    "retry": "Réessayer",
+    "artworkLabel": "Illustration de {{name}}",
+    "artworkShinyLabel": "Illustration chromatique de {{name}}",
+    "noDescription": "Aucune description disponible.",
+    "height": "Taille",
+    "weight": "Poids",
+    "compareLabel": "Comparer {{name}} avec un autre Pokémon",
+    "compare": "Comparer avec un autre Pokémon",
+    "abilities": "Talents",
+    "hiddenAbilityLabel": "{{name}}, talent caché",
+    "openAbility": "Ouvre le talent",
+    "hidden": "Caché",
+    "baseStats": "Statistiques de base",
+    "total": "Total"
+  },
+  "tabs": {
+    "info": "Infos",
+    "evolutions": "Évolutions",
+    "moves": "Capacités",
+    "artwork": "Illustrations"
+  },
+  "shiny": {
+    "show": "Afficher chromatique",
+    "caught": "Chromatique obtenu",
+    "markCaught": "Marquer chromatique obtenu"
+  },
+  "typeDefense": {
+    "title": "Efficacité des types",
+    "hint": "Dégâts subis par les capacités de chaque type. Tous les autres types infligent des dégâts normaux (×1).",
+    "rows": {
+      "quadruple": "Très vulnérable à",
+      "double": "Vulnérable à",
+      "half": "Résiste à",
+      "quarter": "Résiste fortement à",
+      "immune": "Immunisé contre"
+    },
+    "noTypes": "Aucun type"
+  },
+  "artwork": {
+    "unavailableTitle": "Illustrations indisponibles",
+    "unavailableMessage": "Impossible de charger les images. Vérifiez le réseau et réessayez.",
+    "imageCount_one": "{{count}} image",
+    "imageCount_other": "{{count}} images",
+    "generationLabel_one": "{{title}}, {{count}} image",
+    "generationLabel_other": "{{title}}, {{count}} images",
+    "gameSprites": "Sprites des jeux",
+    "close": "Fermer l'image",
+    "groups": {
+      "official": "Illustration officielle",
+      "base": "Sprites de base",
+      "animated": "{{title}} · animés",
+      "icons": "{{title}} · icônes"
+    },
+    "games": {
+      "pair": "{{first}} et {{second}}",
+      "icons": "Icônes"
+    },
+    "variants": {
+      "normal": "Normal",
+      "female": "Femelle",
+      "front": "Face",
+      "back": "Dos",
+      "sideWithModifiers": "{{side}} {{modifiers}}"
+    },
+    "modifiers": {
+      "shiny": "chromatique",
+      "female": "♀",
+      "gray": "en gris",
+      "gbc": "en couleur (GBC)"
+    }
+  },
+  "forms": {
+    "title": "Formes",
+    "kinds": {
+      "base": "Forme de base",
+      "mega": "Méga-Évolution",
+      "regional": "Forme régionale",
+      "gmax": "Gigamax",
+      "special": "Forme spéciale"
+    },
+    "mega": "Méga",
+    "megaVariant": "Méga {{variant}}",
+    "artworkLabel": "Illustration de {{name}}, {{form}}",
+    "difference": "{{value}} par rapport à la forme de base"
+  },
+  "encounters": {
+    "title": "Où le trouver",
+    "empty": "{{name}} ne se rencontre à l'état sauvage dans aucun jeu : on l'obtient en faisant évoluer un autre Pokémon, dans un Œuf ou lors d'un événement spécial.",
+    "openLocation": "Ouvre le lieu"
+  }
+}

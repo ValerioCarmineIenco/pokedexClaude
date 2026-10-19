@@ -1,0 +1,106 @@
+{
+  "detail": {
+    "back": "Zurück zur Liste",
+    "addFavorite": "Zu Favoriten hinzufügen",
+    "removeFavorite": "Aus Favoriten entfernen",
+    "previous": "Vorheriges Pokémon, {{number}}",
+    "noPrevious": "Kein vorheriges",
+    "next": "Nächstes Pokémon, {{number}}",
+    "noNext": "Kein nächstes",
+    "notFoundTitle": "Pokémon nicht gefunden",
+    "invalidId": "Dieser Pokédex enthält nur die {{total}} Pokémon aus {{regions}}.",
+    "regionList": "{{list}} und {{last}}",
+    "listSeparator": ", ",
+    "offlineTitle": "Keine Verbindung",
+    "offlineMessage": "Der Pokédex ist nicht erreichbar. Prüfe die Verbindung und versuche es erneut.",
+    "retry": "Erneut versuchen",
+    "artworkLabel": "Artwork von {{name}}",
+    "artworkShinyLabel": "Schillerndes Artwork von {{name}}",
+    "noDescription": "Keine Beschreibung verfügbar.",
+    "height": "Größe",
+    "weight": "Gewicht",
+    "compareLabel": "{{name}} mit einem anderen Pokémon vergleichen",
+    "compare": "Mit einem anderen Pokémon vergleichen",
+    "abilities": "Fähigkeiten",
+    "hiddenAbilityLabel": "{{name}}, versteckte Fähigkeit",
+    "openAbility": "Öffnet die Fähigkeit",
+    "hidden": "Versteckt",
+    "baseStats": "Basiswerte",
+    "total": "Gesamt"
+  },
+  "tabs": {
+    "info": "Info",
+    "evolutions": "Entwicklungen",
+    "moves": "Attacken",
+    "artwork": "Artwork"
+  },
+  "shiny": {
+    "show": "Schillernd zeigen",
+    "caught": "Schillerndes erhalten",
+    "markCaught": "Schillerndes als erhalten markieren"
+  },
+  "typeDefense": {
+    "title": "Typ-Effektivität",
+    "hint": "Schaden durch Attacken jedes Typs. Alle anderen Typen richten normalen Schaden an (×1).",
+    "rows": {
+      "quadruple": "Sehr schwach gegen",
+      "double": "Schwach gegen",
+      "half": "Resistent gegen",
+      "quarter": "Sehr resistent gegen",
+      "immune": "Immun gegen"
+    },
+    "noTypes": "Keine Typen"
+  },
+  "artwork": {
+    "unavailableTitle": "Artwork nicht verfügbar",
+    "unavailableMessage": "Die Bilder können nicht geladen werden. Prüfe die Verbindung und versuche es erneut.",
+    "imageCount_one": "{{count}} Bild",
+    "imageCount_other": "{{count}} Bilder",
+    "generationLabel_one": "{{title}}, {{count}} Bild",
+    "generationLabel_other": "{{title}}, {{count}} Bilder",
+    "gameSprites": "Spiel-Sprites",
+    "close": "Bild schließen",
+    "groups": {
+      "official": "Offizielles Artwork",
+      "base": "Basis-Sprites",
+      "animated": "{{title}} · animiert",
+      "icons": "{{title}} · Icons"
+    },
+    "games": {
+      "pair": "{{first}} und {{second}}",
+      "icons": "Icons"
+    },
+    "variants": {
+      "normal": "Normal",
+      "female": "Weiblich",
+      "front": "Vorne",
+      "back": "Hinten",
+      "sideWithModifiers": "{{side}} {{modifiers}}"
+    },
+    "modifiers": {
+      "shiny": "schillernd",
+      "female": "♀",
+      "gray": "grau",
+      "gbc": "farbig (GBC)"
+    }
+  },
+  "forms": {
+    "title": "Formen",
+    "kinds": {
+      "base": "Basisform",
+      "mega": "Mega-Entwicklung",
+      "regional": "Regionalform",
+      "gmax": "Gigadynamax",
+      "special": "Spezialform"
+    },
+    "mega": "Mega",
+    "megaVariant": "Mega {{variant}}",
+    "artworkLabel": "Artwork von {{name}}, {{form}}",
+    "difference": "{{value}} gegenüber der Basisform"
+  },
+  "encounters": {
+    "title": "Fundorte",
+    "empty": "{{name}} kommt in keinem Spiel in freier Wildbahn vor: Man erhält es durch die Entwicklung eines anderen Pokémon, aus einem Ei oder bei einem Sonderevent.",
+    "openLocation": "Öffnet den Ort"
+  }
+}

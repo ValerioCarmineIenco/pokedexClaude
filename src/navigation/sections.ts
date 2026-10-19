@@ -1,6 +1,7 @@
 import type { Href } from 'expo-router';
 
 import type { IconName } from '@/components/Icon';
+import { t } from '@/i18n';
 
 /** Sezioni dell'app che si scelgono dal menu del titolo. */
 export type SectionKey = 'pokedex' | 'items' | 'abilities' | 'moves' | 'natures' | 'locations' | 'types' | 'teams';
@@ -16,63 +17,58 @@ export type Section = {
 };
 
 // Per aggiungere una sezione basta una voce qui e la sua schermata in src/app.
-export const SECTIONS: Section[] = [
+const ENTRIES: Omit<Section, 'title' | 'description'>[] = [
   {
     key: 'pokedex',
-    title: 'Pokédex',
-    description: 'Tutti i Pokémon, per generazione',
     href: '/',
   },
   {
     key: 'items',
-    title: 'Oggetti',
-    description: 'Strumenti, rimedi, MT e megapietre',
     href: '/items',
     icon: 'bag',
   },
   {
     key: 'abilities',
-    title: 'Abilità',
-    description: 'Tutte le abilità dei Pokémon',
     href: '/abilities',
     icon: 'sparkles',
   },
   {
     key: 'moves',
-    title: 'Mosse',
-    description: 'Tipo, potenza, precisione e PP di ogni mossa',
     href: '/moves',
     icon: 'bolt',
   },
   {
     key: 'natures',
-    title: 'Nature',
-    description: 'Statistiche e sapori di ogni natura',
     href: '/natures',
     icon: 'leaf',
   },
   {
     key: 'locations',
-    title: 'Località',
-    description: 'Dove trovare i Pokémon, regione per regione',
     href: '/locations',
     icon: 'location',
   },
   {
     key: 'types',
-    title: 'Tipi',
-    description: 'Efficacie in attacco e in difesa di ogni tipo',
     href: '/types',
     icon: 'types',
   },
   {
     key: 'teams',
-    title: 'Squadre',
-    description: 'Squadre da 6 e la loro copertura di tipo',
     href: '/teams',
     icon: 'team',
   },
 ];
+
+// Titolo e descrizione si leggono nella lingua in uso a ogni accesso.
+export const SECTIONS: Section[] = ENTRIES.map((entry) => ({
+  ...entry,
+  get title() {
+    return t(`common:sections.${entry.key}.title`);
+  },
+  get description() {
+    return t(`common:sections.${entry.key}.description`);
+  },
+}));
 
 export function getSection(key: SectionKey): Section {
   return SECTIONS.find((section) => section.key === key) ?? SECTIONS[0];

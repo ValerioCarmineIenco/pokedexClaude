@@ -1,0 +1,46 @@
+{
+  "categories": {
+    "remedies": "Medizin",
+    "tm": "TMs",
+    "megaStones": "Mega-Steine",
+    "pokeballs": "Pokébälle",
+    "battle": "Kampfitems",
+    "berries": "Beeren",
+    "evolution": "Entwicklung",
+    "other": "Andere Items"
+  },
+  "list": {
+    "count_one": "{{count}} Item",
+    "count_other": "{{count}} Items",
+    "results_one": "{{count}} Ergebnis",
+    "results_other": "{{count}} Ergebnisse",
+    "categoryCount_one": "{{count}} Kategorie",
+    "categoryCount_other": "{{count}} Kategorien",
+    "searchLabel": "Item nach Namen suchen",
+    "noResultsTitle": "Keine Ergebnisse",
+    "noResults": "Kein Item heißt „{{query}}“.",
+    "noResultsInCategory": "Kein Item in „{{category}}“ heißt „{{query}}“.",
+    "clearSearch": "Suche löschen"
+  },
+  "picker": {
+    "allCategories": "Alle Kategorien",
+    "all": "Alle",
+    "label": "Kategorie: {{category}}",
+    "labelAll": "Kategorie: alle",
+    "hint": "Öffnet die Kategorieauswahl"
+  },
+  "detail": {
+    "back": "Zurück zu den Items",
+    "notFoundTitle": "Item nicht gefunden",
+    "notFoundMessage": "Dieses Item gibt es im Pokédex nicht.",
+    "imageLabel": "Bild von {{name}}",
+    "noDescription": "Keine deutsche Beschreibung verfügbar.",
+    "related": "Ähnliche Items"
+  },
+  "errors": {
+    "notFound": "Item nicht gefunden.",
+    "offlineTitle": "Keine Verbindung",
+    "offlineMessage": "Der Pokédex ist nicht erreichbar. Prüfe dein Netzwerk und versuche es erneut.",
+    "retry": "Erneut versuchen"
+  }
+}

@@ -1,10 +1,12 @@
 import { FlashList } from '@shopify/flash-list';
+import { useTranslation } from 'react-i18next';
 import { RefreshControl, StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import type { Nature } from '@/types/nature';
 import { colors } from '@/theme/colors';
 import { fonts } from '@/theme/fonts';
+import { useScrollRestoration } from '@/hooks/useScrollRestoration';
 
 import { ErrorState } from '../ErrorState';
 import { ErrorToast } from '../ErrorToast';
@@ -14,8 +16,6 @@ import { SkeletonBlock } from '../Skeleton';
 import { NATURE_CARD_HEIGHT, NatureCard } from './NatureCard';
 
 const SIDE = 12;
-
-const countLabel = (n: number) => `${n} ${n === 1 ? 'natura' : 'nature'}`;
 
 export type NatureListViewProps = {
   natures: Nature[];
@@ -47,12 +47,12 @@ export function NatureListView({
   onRefresh,
   onRetry,
 }: NatureListViewProps) {
+  const { t } = useTranslation('natures');
   const insets = useSafeAreaInsets();
+  const { ref: scrollRef, onScroll } = useScrollRestoration();
   const count = totalCount ?? natures.length;
   const isSearching = searchText.trim().length > 0;
-  const caption = isSearching
-    ? `${count} ${count === 1 ? 'risultato' : 'risultati'}`
-    : countLabel(count);
+  const caption = isSearching ? t('list.results', { count }) : t('list.count', { count });
 
   const header = (compact = false) => (
     <View style={styles.header}>
@@ -64,7 +64,7 @@ export function NatureListView({
           <SearchBar
             value={searchText}
             onChangeText={onSearchTextChange}
-            accessibilityLabel="Cerca una natura per nome"
+            accessibilityLabel={t('list.searchLabel')}
           />
           <Text style={styles.caption} numberOfLines={1}>
             {caption}
@@ -79,9 +79,9 @@ export function NatureListView({
       <View style={[styles.screen, { paddingTop: insets.top }]}>
         {header(true)}
         <ErrorState
-          title="Nessuna connessione"
+          title={t('errors.offlineTitle')}
           message={errorMessage}
-          actionLabel="Riprova"
+          actionLabel={t('errors.retry')}
           onAction={onRetry}
         />
       </View>
@@ -116,6 +116,8 @@ export function NatureListView({
         skeletons
       ) : (
         <FlashList
+          ref={scrollRef}
+          onScroll={onScroll}
           data={natures}
           keyExtractor={(nature) => String(nature.id)}
           renderItem={({ item: nature }) => (
@@ -131,9 +133,9 @@ export function NatureListView({
           ListEmptyComponent={
             isSearching ? (
               <ErrorState
-                title="Nessun risultato"
-                message={`Nessuna natura si chiama "${searchText.trim()}".`}
-                actionLabel="Cancella ricerca"
+                title={t('list.noResultsTitle')}
+                message={t('list.noResults', { query: searchText.trim() })}
+                actionLabel={t('list.clearSearch')}
                 actionStyle="ghost"
                 onAction={() => onSearchTextChange('')}
               />
@@ -154,7 +156,7 @@ export function NatureListView({
       {errorMessage && natures.length > 0 && (
         <ErrorToast
           message={errorMessage}
-          actionLabel="Riprova"
+          actionLabel={t('errors.retry')}
           onAction={onRetry}
           bottomInset={insets.bottom}
         />

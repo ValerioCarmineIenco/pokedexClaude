@@ -1,4 +1,5 @@
 import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { useTranslation } from 'react-i18next';
 
 import { colors } from '@/theme/colors';
 import { fonts } from '@/theme/fonts';
@@ -26,17 +27,15 @@ export function PokemonEncounters({
   onOpenLocation,
   onRetry,
 }: PokemonEncountersProps) {
+  const { t } = useTranslation('pokemon');
   return (
     <View style={styles.section}>
       <Text style={styles.sectionTitle} accessibilityRole="header">
-        Dove trovarlo
+        {t('encounters.title')}
       </Text>
       {groups && groups.length === 0 ? (
         <View style={styles.box}>
-          <Text style={styles.emptyText}>
-            {pokemonName} non si incontra in natura in nessun gioco: si ottiene evolvendo un altro
-            Pokémon, da un uovo o con un evento speciale.
-          </Text>
+          <Text style={styles.emptyText}>{t('encounters.empty', { name: pokemonName })}</Text>
         </View>
       ) : groups ? (
         <View style={styles.groups}>
@@ -60,7 +59,7 @@ export function PokemonEncounters({
                     onPress={() => onOpenLocation(location.id)}
                     accessibilityRole="link"
                     accessibilityLabel={`${location.name}, ${methods}`}
-                    accessibilityHint="Apre la località"
+                    accessibilityHint={t('encounters.openLocation')}
                     style={({ pressed }) => [styles.location, pressed && styles.pressed]}>
                     <Icon name="location" size={16} color={colors.textSubtle} />
                     <View style={styles.locationText}>
@@ -84,7 +83,7 @@ export function PokemonEncounters({
             hitSlop={6}
             accessibilityRole="button"
             style={({ pressed }) => [styles.retry, pressed && styles.retryPressed]}>
-            <Text style={styles.retryLabel}>Riprova</Text>
+            <Text style={styles.retryLabel}>{t('detail.retry')}</Text>
           </Pressable>
         </View>
       ) : null}

@@ -1,0 +1,46 @@
+{
+  "categories": {
+    "remedies": "かいふく",
+    "tm": "わざマシン",
+    "megaStones": "メガストーン",
+    "pokeballs": "モンスターボール",
+    "battle": "バトル用どうぐ",
+    "berries": "きのみ",
+    "evolution": "しんか用どうぐ",
+    "other": "そのほかのどうぐ"
+  },
+  "list": {
+    "count_one": "{{count}}個のどうぐ",
+    "count_other": "{{count}}個のどうぐ",
+    "results_one": "{{count}}件",
+    "results_other": "{{count}}件",
+    "categoryCount_one": "{{count}}カテゴリ",
+    "categoryCount_other": "{{count}}カテゴリ",
+    "searchLabel": "どうぐを名前でさがす",
+    "noResultsTitle": "見つかりません",
+    "noResults": "「{{query}}」という名前のどうぐはありません。",
+    "noResultsInCategory": "「{{category}}」に「{{query}}」という名前のどうぐはありません。",
+    "clearSearch": "検索をクリア"
+  },
+  "picker": {
+    "allCategories": "すべてのカテゴリ",
+    "all": "すべて",
+    "label": "カテゴリ：{{category}}",
+    "labelAll": "カテゴリ：すべて",
+    "hint": "カテゴリの選択を開きます"
+  },
+  "detail": {
+    "back": "どうぐ一覧にもどる",
+    "notFoundTitle": "どうぐが見つかりません",
+    "notFoundMessage": "このどうぐは図鑑にありません。",
+    "imageLabel": "{{name}}の画像",
+    "noDescription": "日本語の説明はありません。",
+    "related": "関連するどうぐ"
+  },
+  "errors": {
+    "notFound": "どうぐが見つかりません。",
+    "offlineTitle": "接続されていません",
+    "offlineMessage": "図鑑に接続できません。ネットワークを確認して、もう一度お試しください。",
+    "retry": "再試行"
+  }
+}

@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
@@ -15,11 +16,12 @@ type Props = {
 
 /** Contenuto del bottom sheet: una riga per ogni sezione dell'app. */
 export function SectionMenu({ current, onSelect }: Props) {
+  const { t } = useTranslation('pokedex');
   const insets = useSafeAreaInsets();
   return (
     <View style={[styles.container, { paddingBottom: Math.max(insets.bottom, 16) + 8 }]}>
       <Text style={styles.heading} accessibilityRole="header">
-        Cosa vuoi vedere?
+        {t('sectionMenu.heading')}
       </Text>
       {SECTIONS.map((section) => {
         const selected = section.key === current;

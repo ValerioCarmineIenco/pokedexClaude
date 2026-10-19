@@ -1,0 +1,34 @@
+{
+  "flavors": {
+    "spicy": "Picante",
+    "dry": "Seco",
+    "sweet": "Dulce",
+    "bitter": "Amargo",
+    "sour": "Ácido"
+  },
+  "list": {
+    "count_one": "{{count}} naturaleza",
+    "count_other": "{{count}} naturalezas",
+    "results_one": "{{count}} resultado",
+    "results_other": "{{count}} resultados",
+    "searchLabel": "Buscar una naturaleza por nombre",
+    "noResultsTitle": "Sin resultados",
+    "noResults": "Ninguna naturaleza se llama \"{{query}}\".",
+    "clearSearch": "Borrar búsqueda"
+  },
+  "card": {
+    "neutral": "Neutra",
+    "neutralText": "No cambia las características y no tiene sabores favoritos.",
+    "neutralLabel": "{{name}}. Naturaleza neutra: no cambia las características y no tiene sabores favoritos.",
+    "label": "{{name}}. Aumenta {{increased}}, disminuye {{decreased}}. Le gusta el sabor {{liked}}, no le gusta el sabor {{disliked}}.",
+    "increases": "Aumenta",
+    "decreases": "Disminuye",
+    "likedFlavor": "Sabor favorito",
+    "dislikedFlavor": "Sabor que no le gusta"
+  },
+  "errors": {
+    "notFound": "Naturaleza no encontrada.",
+    "offlineTitle": "Sin conexión",
+    "retry": "Reintentar"
+  }
+}

@@ -1,0 +1,115 @@
+{
+  "common": {
+    "retry": "Erneut versuchen",
+    "close": "Schließen",
+    "all": "Alle",
+    "settings": "Einstellungen",
+    "loading": "Pokédex wird geladen",
+    "loadingShort": "Wird geladen…"
+  },
+  "search": {
+    "placeholder": "Nach Namen suchen",
+    "accessibilityLabel": "Pokémon nach Namen suchen",
+    "clear": "Suche löschen"
+  },
+  "generation": {
+    "short": "Gen. {{numeral}}",
+    "allGenerations": "Alle Generationen",
+    "pickerLabel": "Generation: {{name}}",
+    "pickerLabelAll": "Generation: alle",
+    "pickerHint": "Öffnet die Auswahl der Generation"
+  },
+  "sectionMenu": {
+    "heading": "Was möchtest du sehen?",
+    "titleLabel": "{{title}}, Bereich wechseln"
+  },
+  "viewToggle": {
+    "grid": "Rasteransicht",
+    "row": "Listenansicht"
+  },
+  "card": {
+    "accessibilityLabelOneType": "{{name}}, Nummer {{number}}, Typ {{type}}",
+    "accessibilityLabelTwoTypes": "{{name}}, Nummer {{number}}, Typ {{type1}} und {{type2}}"
+  },
+  "header": {
+    "favoritesOnly": "Nur Favoriten",
+    "filters": "Filter",
+    "filtersActive_one": "Filter, {{count}} aktiv",
+    "filtersActive_other": "Filter, {{count}} aktiv",
+    "filtersHint": "Öffnet Typen, Kategorie und Sortierung",
+    "shinyOnly": "Nur gefangene Schillernde, {{count}} von {{total}}"
+  },
+  "caption": {
+    "all": "{{total}} Pokémon · {{generations}} Generationen",
+    "generation": "{{count}} Pokémon · {{name}} · {{region}}",
+    "search_one": "{{count}} Treffer unter {{total}} Pokémon",
+    "search_other": "{{count}} Treffer unter {{total}} Pokémon",
+    "searchInRegion_one": "{{count}} Treffer unter {{total}} Pokémon aus {{region}}",
+    "searchInRegion_other": "{{count}} Treffer unter {{total}} Pokémon aus {{region}}",
+    "searchFavorites_one": "{{count}} Treffer unter den Favoriten",
+    "searchFavorites_other": "{{count}} Treffer unter den Favoriten",
+    "searchShiny_one": "{{count}} Treffer unter den gefangenen Schillernden",
+    "searchShiny_other": "{{count}} Treffer unter den gefangenen Schillernden",
+    "pokemon_one": "{{count}} Pokémon",
+    "pokemon_other": "{{count}} Pokémon",
+    "favorites_one": "{{count}} Favorit",
+    "favorites_other": "{{count}} Favoriten",
+    "shiny_one": "{{count}} gefangenes Schillerndes",
+    "shiny_other": "{{count}} gefangene Schillernde",
+    "sortedBy": "nach {{sort}}",
+    "sortedByReversed": "nach {{sort}} (umgekehrt)"
+  },
+  "empty": {
+    "noConnection": "Keine Verbindung",
+    "noResults": "Keine Treffer",
+    "searchPokemon": "Kein Pokémon heißt „{{query}}“.",
+    "searchPokemonInRegion": "Kein Pokémon aus {{region}} heißt „{{query}}“.",
+    "searchFavorites": "Kein Favorit heißt „{{query}}“.",
+    "searchFavoritesInRegion": "Kein Favorit aus {{region}} heißt „{{query}}“.",
+    "searchShiny": "Kein gefangenes Schillerndes heißt „{{query}}“.",
+    "searchShinyInRegion": "Kein gefangenes Schillerndes aus {{region}} heißt „{{query}}“.",
+    "clearSearch": "Suche löschen",
+    "noFilterMatches": "Keine Pokémon mit diesen Filtern",
+    "filtersHint": "Entferne einen Typ oder die Kategorie.",
+    "filtersHintWithScope": "Entferne einen Typ oder die Kategorie oder wechsle Generation und Sammlung.",
+    "resetFilters": "Filter zurücksetzen",
+    "noFavorites": "Keine Favoriten",
+    "noFavoritesInRegion": "Keine Favoriten aus {{region}}",
+    "favoritesHint": "Öffne die Seite eines Pokémon und tippe oben auf das Herz, um es zu deinen Favoriten hinzuzufügen.",
+    "noShiny": "Keine gefangenen Schillernden",
+    "noShinyInRegion": "Keine gefangenen Schillernden aus {{region}}",
+    "shinyHint": "Öffne die Seite eines Pokémon und tippe unter dem Artwork auf „Schillerndes als gefangen markieren“.",
+    "showAll": "Alle Pokémon anzeigen"
+  },
+  "filters": {
+    "title": "Filter",
+    "close": "Filter schließen",
+    "reset": "Zurücksetzen",
+    "types": "Typen",
+    "bothTypes": "Beide Typen",
+    "upToTwoTypes": "Bis zu zwei Typen",
+    "generation": "Generation",
+    "allGenerations": "Alle",
+    "category": "Kategorie",
+    "allCategories": "Alle",
+    "sortBy": "Sortieren nach",
+    "reverseOrder": "Umgekehrte Reihenfolge",
+    "descending": "Absteigend",
+    "ascending": "Aufsteigend",
+    "nameAscending": "A → Z",
+    "nameDescending": "Z → A",
+    "noPokemon": "Keine Pokémon",
+    "show_one": "{{count}} Pokémon anzeigen",
+    "show_other": "{{count}} Pokémon anzeigen",
+    "categories": {
+      "legendary": "Legendär",
+      "mythical": "Mysteriös",
+      "baby": "Baby"
+    },
+    "sort": {
+      "number": "Nummer",
+      "name": "Name",
+      "total": "Gesamt"
+    }
+  }
+}

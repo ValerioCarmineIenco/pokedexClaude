@@ -1,5 +1,6 @@
 import { FlashList, type ViewToken } from '@shopify/flash-list';
 import { useCallback, useMemo, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { RefreshControl, StyleSheet, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
@@ -7,7 +8,8 @@ import { GENERATIONS, getGenerationById, LAST_POKEMON_ID } from '@/api/generatio
 import type { ViewMode } from '@/hooks/useViewMode';
 import { colors } from '@/theme/colors';
 import { getIndexStat } from '@/api/pokemon';
-import { TYPE_NAMES_IT } from '@/theme/typeNames';
+import { t as translate } from '@/i18n';
+import { TYPE_LABELS } from '@/theme/typeNames';
 import {
   DEFAULT_POKEMON_FILTERS,
   type Generation,
@@ -17,6 +19,7 @@ import {
 } from '@/types/pokemon';
 import { formatNumber } from '@/utils/format';
 import { generationSize } from '@/utils/generation';
+import { useScrollRestoration } from '@/hooks/useScrollRestoration';
 
 import { ErrorState } from './ErrorState';
 import { ErrorToast } from './ErrorToast';
@@ -117,7 +120,9 @@ export function PokemonListView({
   onPressPokemon,
   onOpenSettings,
 }: PokemonListViewProps) {
+  const { t } = useTranslation('pokedex');
   const insets = useSafeAreaInsets();
+  const { ref: scrollRef, onScroll } = useScrollRestoration();
   const isGrid = viewMode === 'grid';
   const isSearching = searchText.trim().length > 0;
   const generation = generationId == null ? undefined : getGenerationById(generationId);
@@ -169,14 +174,22 @@ export function PokemonListView({
   const caption = isFiltering
     ? filterCaption(filters, pokemon.length, collection, generation)
     : collection
-    ? collectionCaption(collection, pokemon.length, isSearching, generation)
-    : isSearching
-      ? `${pokemon.length} ${pokemon.length === 1 ? 'risultato' : 'risultati'} tra ${
-          generation ? `${generationSize(generation)} Pokémon di ${generation.region}` : `${LAST_POKEMON_ID} Pokémon`
-        }`
-      : generation
-        ? `${generationSize(generation)} Pokémon · ${generation.name} · ${generation.region}`
-        : `${LAST_POKEMON_ID} Pokémon · ${GENERATIONS.length} generazioni`;
+      ? collectionCaption(collection, pokemon.length, isSearching, generation)
+      : isSearching
+        ? generation
+          ? t('caption.searchInRegion', {
+              count: pokemon.length,
+              total: generationSize(generation),
+              region: generation.region,
+            })
+          : t('caption.search', { count: pokemon.length, total: LAST_POKEMON_ID })
+        : generation
+          ? t('caption.generation', {
+              count: generationSize(generation),
+              name: generation.name,
+              region: generation.region,
+            })
+          : t('caption.all', { total: LAST_POKEMON_ID, generations: GENERATIONS.length });
 
   const header = (compact = false) => (
     <ListHeader
@@ -207,9 +220,9 @@ export function PokemonListView({
       <View style={[styles.screen, { paddingTop: insets.top }]}>
         {header(true)}
         <ErrorState
-          title="Nessuna connessione"
+          title={t('empty.noConnection')}
           message={errorMessage}
-          actionLabel="Riprova"
+          actionLabel={t('common.retry')}
           onAction={onRetry}
         />
       </View>
@@ -233,6 +246,8 @@ export function PokemonListView({
         skeletons(isGrid ? 8 : 9)
       ) : (
         <FlashList
+          ref={scrollRef}
+          onScroll={onScroll}
           key={`${viewMode}-${generationId ?? 'all'}-${collection ?? 'all'}-${filters.types.join('+')}-${filters.category ?? 'all'}-${filters.sort}-${filters.reversed}`}
           data={items}
           numColumns={isGrid ? 2 : 1}
@@ -279,26 +294,32 @@ export function PokemonListView({
           ListEmptyComponent={
             isSearching ? (
               <ErrorState
-                title="Nessun risultato"
-                message={`Nessun ${collection ? COLLECTION_TEXT[collection].one : 'Pokémon'} ${generation ? `di ${generation.region} ` : ''}si chiama "${searchText.trim()}".`}
-                actionLabel="Cancella ricerca"
+                title={t('empty.noResults')}
+                message={searchEmptyMessage(collection, generation, searchText.trim())}
+                actionLabel={t('empty.clearSearch')}
                 actionStyle="ghost"
                 onAction={() => onSearchTextChange('')}
               />
             ) : isFiltering ? (
               <ErrorState
-                title="Nessun Pokémon con questi filtri"
-                message={`Prova a togliere un tipo o la categoria${generation || collection ? ', o a cambiare generazione e raccolta' : ''}.`}
-                actionLabel="Azzera filtri"
+                title={t('empty.noFilterMatches')}
+                message={generation || collection ? t('empty.filtersHintWithScope') : t('empty.filtersHint')}
+                actionLabel={t('empty.resetFilters')}
                 actionStyle="ghost"
                 onAction={() => changeFilters(DEFAULT_POKEMON_FILTERS)}
               />
             ) : collection ? (
               <ErrorState
-                title={`${COLLECTION_TEXT[collection].none}${collectionCount === 0 ? '' : ` di ${generation?.region}`}`}
-                message={COLLECTION_TEXT[collection].hint}
-                glyph={COLLECTION_TEXT[collection].glyph}
-                actionLabel="Mostra tutti i Pokémon"
+                title={
+                  collectionCount > 0 && generation
+                    ? t(collection === 'favorites' ? 'empty.noFavoritesInRegion' : 'empty.noShinyInRegion', {
+                        region: generation.region,
+                      })
+                    : t(collection === 'favorites' ? 'empty.noFavorites' : 'empty.noShiny')
+                }
+                message={t(collection === 'favorites' ? 'empty.favoritesHint' : 'empty.shinyHint')}
+                glyph={COLLECTION_GLYPHS[collection]}
+                actionLabel={t('empty.showAll')}
                 actionStyle="ghost"
                 onAction={() => changeCollection(null)}
               />
@@ -321,7 +342,7 @@ export function PokemonListView({
       {errorMessage && loadedCount > 0 && usesNetwork && (
         <ErrorToast
           message={errorMessage}
-          actionLabel="Riprova"
+          actionLabel={t('common.retry')}
           onAction={onRetry}
           bottomInset={insets.bottom}
         />
@@ -339,6 +360,13 @@ export function PokemonListView({
   );
 }
 
+/** Conteggio della raccolta mostrata: «12 Pokémon», «3 preferiti», «1 shiny ottenuto». */
+function countLabel(collection: PokemonCollection | null, count: number): string {
+  if (collection === 'favorites') return translate('pokedex:caption.favorites', { count });
+  if (collection === 'shiny') return translate('pokedex:caption.shiny', { count });
+  return translate('pokedex:caption.pokemon', { count });
+}
+
 /** «12 Pokémon · Fuoco + Volante · Leggendari · per Velocità · Kanto». */
 function filterCaption(
   filters: PokemonFilters,
@@ -346,31 +374,47 @@ function filterCaption(
   collection: PokemonCollection | null,
   generation: Generation | undefined,
 ): string {
-  const noun = collection === 'favorites' ? 'preferiti' : collection === 'shiny' ? 'shiny ottenuti' : 'Pokémon';
-  const parts = [`${shown} ${noun}`];
-  if (filters.types.length) parts.push(filters.types.map((t) => TYPE_NAMES_IT[t]).join(' + '));
+  const parts = [countLabel(collection, shown)];
+  if (filters.types.length) parts.push(filters.types.map((t) => TYPE_LABELS[t]).join(' + '));
   if (filters.category) parts.push(CATEGORY_LABELS[filters.category]);
   if (filters.sort !== 'number' || filters.reversed) {
-    parts.push(`per ${SORT_LABELS[filters.sort]}${filters.reversed ? ' (inverso)' : ''}`);
+    const sort = SORT_LABELS[filters.sort];
+    parts.push(
+      filters.reversed
+        ? translate('pokedex:caption.sortedByReversed', { sort })
+        : translate('pokedex:caption.sortedBy', { sort }),
+    );
   }
   if (generation) parts.push(generation.region);
   return parts.join(' · ');
 }
 
-const COLLECTION_TEXT: Record<PokemonCollection, { one: string; none: string; hint: string; glyph: string }> = {
-  favorites: {
-    one: 'preferito',
-    none: 'Nessun preferito',
-    hint: 'Apri la scheda di un Pokémon e tocca il cuore in alto per aggiungerlo ai preferiti.',
-    glyph: '♡',
-  },
-  shiny: {
-    one: 'shiny ottenuto',
-    none: 'Nessuno shiny ottenuto',
-    hint: "Apri la scheda di un Pokémon e tocca «Segna shiny ottenuto» sotto l'artwork.",
-    glyph: '✦',
-  },
+const COLLECTION_GLYPHS: Record<PokemonCollection, string> = {
+  favorites: '♡',
+  shiny: '✦',
 };
+
+/** «Nessun preferito di Kanto si chiama "pika".» */
+function searchEmptyMessage(
+  collection: PokemonCollection | null,
+  generation: Generation | undefined,
+  query: string,
+): string {
+  const region = generation?.region;
+  if (collection === 'favorites') {
+    return region
+      ? translate('pokedex:empty.searchFavoritesInRegion', { region, query })
+      : translate('pokedex:empty.searchFavorites', { query });
+  }
+  if (collection === 'shiny') {
+    return region
+      ? translate('pokedex:empty.searchShinyInRegion', { region, query })
+      : translate('pokedex:empty.searchShiny', { query });
+  }
+  return region
+    ? translate('pokedex:empty.searchPokemonInRegion', { region, query })
+    : translate('pokedex:empty.searchPokemon', { query });
+}
 
 function collectionCaption(
   collection: PokemonCollection,
@@ -378,13 +422,12 @@ function collectionCaption(
   isSearching: boolean,
   generation: Generation | undefined,
 ): string {
-  const where = generation ? ` · ${generation.name} · ${generation.region}` : '';
-  if (isSearching) {
-    const among = collection === 'favorites' ? 'i preferiti' : 'gli shiny ottenuti';
-    return `${shown} ${shown === 1 ? 'risultato' : 'risultati'} tra ${among}${where}`;
-  }
-  if (collection === 'shiny') return `${shown} ${shown === 1 ? 'shiny ottenuto' : 'shiny ottenuti'}${where}`;
-  return `${shown} ${shown === 1 ? 'preferito' : 'preferiti'}${where}`;
+  const count = isSearching
+    ? collection === 'favorites'
+      ? translate('pokedex:caption.searchFavorites', { count: shown })
+      : translate('pokedex:caption.searchShiny', { count: shown })
+    : countLabel(collection, shown);
+  return generation ? [count, generation.name, generation.region].join(' · ') : count;
 }
 
 const styles = StyleSheet.create({

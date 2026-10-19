@@ -1,9 +1,12 @@
 import { getAbilityIndexEntry } from '@/api/abilities';
 import { fetchJson } from '@/api/client';
 import { getIdFromUrl, isStatName, isTypeName } from '@/api/pokemon';
+import { t } from '@/i18n';
+import { localName } from '@/i18n/names';
 import type { PokemonFormResponse, PokemonResponse } from '@/types/pokeapi';
 import type { PokemonForm, PokemonFormKind, PokemonVariety } from '@/types/pokemon';
 import { formatName } from '@/utils/format';
+import { localized } from '@/utils/pokeapiText';
 
 const SPRITES_BASE_URL = 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon';
 
@@ -18,18 +21,18 @@ function getFormKind(form: PokemonFormResponse, isDefault: boolean): PokemonForm
 }
 
 /**
- * Nome italiano della forma. PokéAPI ha «Forma di Alola», «Forma Attacco», «Rotom Calore»,
- * ma per le Mega ripete la specie («MegaCharizard X») e per i Gigamax non ha l'italiano.
+ * Nome della forma nella lingua in uso. PokéAPI ha «Forma di Alola», «Forma Attacco», «Rotom Calore»,
+ * ma per le Mega ripete la specie («MegaCharizard X») e per i Gigamax spesso non ha la lingua.
  */
 function getFormLabel(form: PokemonFormResponse, kind: PokemonFormKind): string {
   if (kind === 'mega') {
     const suffix = form.form_name.match(/^mega-(\w+)$/)?.[1];
-    return suffix ? `Mega ${suffix.toUpperCase()}` : 'Mega';
+    return suffix ? t('pokemon:forms.megaVariant', { variant: suffix.toUpperCase() }) : t('pokemon:forms.mega');
   }
-  if (kind === 'gmax') return 'Gigamax';
-  const italian = form.form_names.find((entry) => entry.language.name === 'it')?.name;
-  if (italian) return italian;
-  if (!form.form_name) return 'Forma base';
+  if (kind === 'gmax') return t('pokemon:forms.kinds.gmax');
+  const name = localized(form.form_names)?.name;
+  if (name) return name;
+  if (!form.form_name) return t('pokemon:forms.kinds.base');
   return formatName(form.form_name);
 }
 
@@ -51,11 +54,14 @@ export function toPokemonForm(
       .filter(isTypeName),
     abilities: [...raw.abilities]
       .sort((a, b) => a.slot - b.slot)
-      .map((a) => ({
-        name: a.ability.name,
-        label: getAbilityIndexEntry(getIdFromUrl(a.ability.url))?.label ?? formatName(a.ability.name),
-        isHidden: a.is_hidden,
-      })),
+      .map((a) => {
+        const abilityId = getIdFromUrl(a.ability.url);
+        return {
+          name: a.ability.name,
+          label: localName('ability', abilityId, getAbilityIndexEntry(abilityId)?.label ?? formatName(a.ability.name)),
+          isHidden: a.is_hidden,
+        };
+      }),
     stats: raw.stats.flatMap((s) =>
       isStatName(s.stat.name) ? [{ name: s.stat.name, value: s.base_stat }] : [],
     ),

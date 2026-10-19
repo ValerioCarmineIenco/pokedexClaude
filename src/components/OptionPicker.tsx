@@ -1,4 +1,5 @@
 import { useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Modal, Pressable, ScrollView, StyleSheet, Text, useWindowDimensions, View } from 'react-native';
 
 import { colors, radius } from '@/theme/colors';
@@ -37,6 +38,7 @@ export function OptionPicker<T extends string | number>({
   accessibilityLabel,
   accessibilityHint,
 }: Props<T>) {
+  const { t } = useTranslation('pokedex');
   const buttonRef = useRef<View>(null);
   const { width: windowWidth, height: windowHeight } = useWindowDimensions();
   const [anchor, setAnchor] = useState<Anchor | null>(null);
@@ -64,7 +66,7 @@ export function OptionPicker<T extends string | number>({
       </Pressable>
 
       <Modal visible={anchor != null} transparent animationType="fade" onRequestClose={close}>
-        <Pressable style={styles.backdrop} onPress={close} accessibilityLabel="Chiudi" />
+        <Pressable style={styles.backdrop} onPress={close} accessibilityLabel={t('common.close')} />
         {anchor && (
           // Non esce dallo schermo: le voci in più scorrono e i titoli lunghi vanno a capo
           // (es. i giochi nella tab Mosse).

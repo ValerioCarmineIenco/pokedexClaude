@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 
 import type { LocationSummary } from '@/types/location';
@@ -8,9 +9,6 @@ import { Icon } from '../Icon';
 
 /** Altezza della scheda, per lo scheletro di caricamento. */
 export const LOCATION_CARD_HEIGHT = 84;
-
-const pokemonLabel = (n: number) => `${n} Pokémon`;
-const gamesLabel = (n: number) => `${n} ${n === 1 ? 'gioco' : 'giochi'}`;
 
 type Props = {
   location: LocationSummary;
@@ -31,10 +29,13 @@ function Badge({ label, background, color }: { label: string; background: string
 
 /** Località dell'elenco: nome e due badge con il numero di Pokémon e di giochi. */
 export function LocationCard({ location, showRegion = false, onPress }: Props) {
+  const { t } = useTranslation('locations');
   const region = showRegion ? location.region?.label : undefined;
-  const accessibilityLabel =
-    `${location.name}${region ? `, ${region}` : ''}. ` +
-    `${pokemonLabel(location.pokemonCount)}, ${gamesLabel(location.gameCount)}.`;
+  const pokemonLabel = t('card.pokemon', { count: location.pokemonCount });
+  const gamesLabel = t('card.games', { count: location.gameCount });
+  const accessibilityLabel = region
+    ? t('card.a11yWithRegion', { name: location.name, region, pokemon: pokemonLabel, games: gamesLabel })
+    : t('card.a11y', { name: location.name, pokemon: pokemonLabel, games: gamesLabel });
 
   return (
     <Pressable
@@ -48,12 +49,12 @@ export function LocationCard({ location, showRegion = false, onPress }: Props) {
         </Text>
         <View style={styles.badges}>
           <Badge
-            label={pokemonLabel(location.pokemonCount)}
+            label={pokemonLabel}
             background={colors.pokemonBadge}
             color={colors.pokemonBadgeText}
           />
           <Badge
-            label={gamesLabel(location.gameCount)}
+            label={gamesLabel}
             background={colors.gamesBadge}
             color={colors.gamesBadgeText}
           />

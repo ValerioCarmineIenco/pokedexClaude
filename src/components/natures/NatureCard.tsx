@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import { StyleSheet, Text, View } from 'react-native';
 
 import type { Nature } from '@/types/nature';
@@ -42,11 +43,17 @@ function Fact({
  * diminuita sopra, sapore preferito e non gradito sotto; le neutre lo dicono in una riga.
  */
 export function NatureCard({ nature }: Props) {
+  const { t } = useTranslation('natures');
   const { increasedStat, decreasedStat, likedFlavor, dislikedFlavor } = nature;
   const accessibilityLabel = nature.isNeutral
-    ? `${nature.name}. Natura neutra: non cambia le statistiche e non ha sapori preferiti.`
-    : `${nature.name}. Aumenta ${increasedStat?.label}, diminuisce ${decreasedStat?.label}. ` +
-      `Piace il sapore ${likedFlavor?.label}, non piace il sapore ${dislikedFlavor?.label}.`;
+    ? t('card.neutralLabel', { name: nature.name })
+    : t('card.label', {
+        name: nature.name,
+        increased: increasedStat?.label,
+        decreased: decreasedStat?.label,
+        liked: likedFlavor?.label,
+        disliked: dislikedFlavor?.label,
+      });
 
   return (
     <View style={styles.card} accessible accessibilityLabel={accessibilityLabel}>
@@ -59,27 +66,32 @@ export function NatureCard({ nature }: Props) {
         </Text>
         {nature.isNeutral && (
           <View style={styles.neutralTag}>
-            <Text style={styles.neutralTagText}>Neutra</Text>
+            <Text style={styles.neutralTagText}>{t('card.neutral')}</Text>
           </View>
         )}
       </View>
 
       {nature.isNeutral ? (
-        <Text style={styles.neutralText}>Non cambia le statistiche e non ha sapori preferiti.</Text>
+        <Text style={styles.neutralText}>{t('card.neutralText')}</Text>
       ) : (
         <View style={styles.facts}>
           <View style={styles.factRow}>
-            <Fact caption="Aumenta" value={increasedStat?.label ?? '—'} icon="up" tint={colors.statUp} />
             <Fact
-              caption="Diminuisce"
+              caption={t('card.increases')}
+              value={increasedStat?.label ?? '—'}
+              icon="up"
+              tint={colors.statUp}
+            />
+            <Fact
+              caption={t('card.decreases')}
               value={decreasedStat?.label ?? '—'}
               icon="down"
               tint={colors.statDown}
             />
           </View>
           <View style={styles.factRow}>
-            <Fact caption="Sapore preferito" value={likedFlavor?.label ?? '—'} />
-            <Fact caption="Sapore non gradito" value={dislikedFlavor?.label ?? '—'} />
+            <Fact caption={t('card.likedFlavor')} value={likedFlavor?.label ?? '—'} />
+            <Fact caption={t('card.dislikedFlavor')} value={dislikedFlavor?.label ?? '—'} />
           </View>
         </View>
       )}

@@ -1,4 +1,5 @@
 import { Image } from 'expo-image';
+import { useTranslation } from 'react-i18next';
 import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
@@ -6,6 +7,7 @@ import type { Item } from '@/types/item';
 import { getCategoryColors } from '@/theme/categoryColors';
 import { colors } from '@/theme/colors';
 import { fonts } from '@/theme/fonts';
+import { useScrollRestoration } from '@/hooks/useScrollRestoration';
 
 import { CategoryBadge } from './CategoryBadge';
 import { ErrorState } from './ErrorState';
@@ -46,7 +48,9 @@ export function ItemDetailView({
   onBack,
   onRetry,
 }: ItemDetailViewProps) {
+  const { t } = useTranslation('items');
   const insets = useSafeAreaInsets();
+  const { ref: scrollRef, onScroll } = useScrollRestoration();
   const palette = item ? getCategoryColors(item.category) : null;
 
   const backButton = (
@@ -54,7 +58,7 @@ export function ItemDetailView({
       onPress={onBack}
       hitSlop={6}
       accessibilityRole="button"
-      accessibilityLabel="Torna agli oggetti"
+      accessibilityLabel={t('detail.back')}
       style={({ pressed }) => [styles.backButton, pressed && styles.pressed]}>
       <Icon name="back" size={18} color={colors.text} />
     </Pressable>
@@ -66,17 +70,17 @@ export function ItemDetailView({
         <View style={[styles.nav, styles.navPadding]}>{backButton}</View>
         {isInvalidId ? (
           <ErrorState
-            title="Oggetto non trovato"
-            message="Questo oggetto non esiste nel Pokédex."
-            actionLabel="Torna agli oggetti"
+            title={t('detail.notFoundTitle')}
+            message={t('detail.notFoundMessage')}
+            actionLabel={t('detail.back')}
             actionStyle="ghost"
             onAction={onBack}
           />
         ) : (
           <ErrorState
-            title="Nessuna connessione"
-            message={errorMessage ?? 'Non riesco a raggiungere il Pokédex. Controlla la rete e riprova.'}
-            actionLabel="Riprova"
+            title={t('errors.offlineTitle')}
+            message={errorMessage ?? t('errors.offlineMessage')}
+            actionLabel={t('errors.retry')}
             onAction={onRetry}
           />
         )}
@@ -86,6 +90,8 @@ export function ItemDetailView({
 
   return (
     <ScrollView
+      ref={scrollRef}
+      onScroll={onScroll}
       style={styles.screen}
       contentContainerStyle={{ flexGrow: 1, paddingBottom: insets.bottom }}
       showsVerticalScrollIndicator={false}>
@@ -120,7 +126,7 @@ export function ItemDetailView({
                 style={styles.image}
                 contentFit="contain"
                 transition={200}
-                accessibilityLabel={`Immagine di ${item.name}`}
+                accessibilityLabel={t('detail.imageLabel', { name: item.name })}
               />
             ) : (
               <SkeletonBlock width={96} height={96} radius={20} />
@@ -132,7 +138,7 @@ export function ItemDetailView({
       <View style={styles.sheet}>
         {item ? (
           <Text style={styles.description}>
-            {item.description || 'Nessuna descrizione in italiano disponibile.'}
+            {item.description || t('detail.noDescription')}
           </Text>
         ) : (
           <View style={styles.descriptionSkeleton}>
@@ -145,7 +151,7 @@ export function ItemDetailView({
         {(isLoading || isRelatedLoading || (related && related.length > 0)) && (
           <View style={styles.section}>
             <Text style={styles.sectionTitle} accessibilityRole="header">
-              Correlati
+              {t('detail.related')}
             </Text>
             <ScrollView
               horizontal

@@ -1,0 +1,106 @@
+{
+  "detail": {
+    "back": "リストに戻る",
+    "addFavorite": "お気に入りに追加",
+    "removeFavorite": "お気に入りから外す",
+    "previous": "前のポケモン、{{number}}",
+    "noPrevious": "前のポケモンはありません",
+    "next": "次のポケモン、{{number}}",
+    "noNext": "次のポケモンはありません",
+    "notFoundTitle": "ポケモンが見つかりません",
+    "invalidId": "この図鑑には{{regions}}の{{total}}匹のポケモンだけが載っています。",
+    "regionList": "{{list}}、{{last}}",
+    "listSeparator": "、",
+    "offlineTitle": "接続されていません",
+    "offlineMessage": "図鑑に接続できません。ネットワークを確認して、もう一度お試しください。",
+    "retry": "再試行",
+    "artworkLabel": "{{name}}のイラスト",
+    "artworkShinyLabel": "{{name}}の色違いのイラスト",
+    "noDescription": "説明はありません。",
+    "height": "高さ",
+    "weight": "重さ",
+    "compareLabel": "{{name}}をほかのポケモンと比べる",
+    "compare": "ほかのポケモンと比べる",
+    "abilities": "とくせい",
+    "hiddenAbilityLabel": "{{name}}、隠れ特性",
+    "openAbility": "とくせいを開く",
+    "hidden": "隠れ特性",
+    "baseStats": "種族値",
+    "total": "合計"
+  },
+  "tabs": {
+    "info": "情報",
+    "evolutions": "進化",
+    "moves": "わざ",
+    "artwork": "イラスト"
+  },
+  "shiny": {
+    "show": "色違いを表示",
+    "caught": "色違いゲット済み",
+    "markCaught": "色違いゲットを記録"
+  },
+  "typeDefense": {
+    "title": "タイプ相性",
+    "hint": "各タイプのわざから受けるダメージ。ほかのタイプはふつうのダメージ（×1）。",
+    "rows": {
+      "quadruple": "とても弱い",
+      "double": "弱い",
+      "half": "耐性あり",
+      "quarter": "とても強い耐性",
+      "immune": "効果なし"
+    },
+    "noTypes": "なし"
+  },
+  "artwork": {
+    "unavailableTitle": "イラストを表示できません",
+    "unavailableMessage": "画像を読み込めません。ネットワークを確認して、もう一度お試しください。",
+    "imageCount_one": "画像{{count}}枚",
+    "imageCount_other": "画像{{count}}枚",
+    "generationLabel_one": "{{title}}、画像{{count}}枚",
+    "generationLabel_other": "{{title}}、画像{{count}}枚",
+    "gameSprites": "ゲームのドット絵",
+    "close": "画像を閉じる",
+    "groups": {
+      "official": "公式イラスト",
+      "base": "基本のドット絵",
+      "animated": "{{title}}・アニメーション",
+      "icons": "{{title}}・アイコン"
+    },
+    "games": {
+      "pair": "{{first}}・{{second}}",
+      "icons": "アイコン"
+    },
+    "variants": {
+      "normal": "通常",
+      "female": "メス",
+      "front": "正面",
+      "back": "背面",
+      "sideWithModifiers": "{{side}}（{{modifiers}}）"
+    },
+    "modifiers": {
+      "shiny": "色違い",
+      "female": "♀",
+      "gray": "グレー",
+      "gbc": "カラー（GBC）"
+    }
+  },
+  "forms": {
+    "title": "フォルム",
+    "kinds": {
+      "base": "通常のすがた",
+      "mega": "メガシンカ",
+      "regional": "リージョンフォーム",
+      "gmax": "キョダイマックス",
+      "special": "特別なすがた"
+    },
+    "mega": "メガ",
+    "megaVariant": "メガ{{variant}}",
+    "artworkLabel": "{{name}}のイラスト、{{form}}",
+    "difference": "通常のすがたより{{value}}"
+  },
+  "encounters": {
+    "title": "出現場所",
+    "empty": "{{name}}はどのゲームでも野生では出現しません。ほかのポケモンを進化させるか、タマゴから、または特別なイベントで手に入ります。",
+    "openLocation": "場所を開く"
+  }
+}

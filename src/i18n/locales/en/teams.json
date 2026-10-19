@@ -1,0 +1,61 @@
+{
+  "defaultName": "Team {{number}}",
+  "list": {
+    "newA11y": "New team",
+    "new": "New",
+    "emptyTitle": "No teams",
+    "emptyMessage": "Create a team of {{size}} Pokémon to see its weaknesses and the types it doesn’t cover.",
+    "emptyAction": "Create your first team",
+    "cardA11y": "{{name}}, {{count}} of {{size}} Pokémon",
+    "cardEmpty": "Empty team: tap it to add Pokémon",
+    "cardWeak_one": "{{count}} Pokémon weak to {{type}}",
+    "cardWeak_other": "{{count}} Pokémon weak to {{type}}",
+    "cardNoWeakness": "No shared weaknesses"
+  },
+  "editor": {
+    "back": "Back",
+    "share": "Share the team",
+    "copied": "Team copied to the clipboard",
+    "shareFailed": "Couldn't share",
+    "nameLabel": "Team name",
+    "caption": "{{count}} / {{size}} Pokémon",
+    "captionDrag": "{{count}} / {{size}} Pokémon · drag ≡ to reorder",
+    "add": "Add a Pokémon",
+    "addFree_one": "Add a Pokémon (last slot)",
+    "addFree_other": "Add a Pokémon ({{count}} free slots)",
+    "confirmDelete": "Tap again to delete",
+    "delete": "Delete team",
+    "notFoundTitle": "Team not found",
+    "notFoundMessage": "This team no longer exists on this device.",
+    "backToTeams": "Back to teams",
+    "addTo": "Add to {{name}}"
+  },
+  "slots": {
+    "moveA11y": "Move {{name}}",
+    "moveHint": "Drag to change the order",
+    "moveDown": "Move down",
+    "moveUp": "Move up",
+    "removeA11y": "Remove {{name}} from the team"
+  },
+  "analysis": {
+    "title": "Type coverage",
+    "emptyHint": "Add some Pokémon to see weaknesses and uncovered types.",
+    "sharedTitle": "Shared weaknesses",
+    "weakA11y_one": "{{count}} Pokémon weak to {{type}}",
+    "weakA11y_other": "{{count}} Pokémon weak to {{type}}",
+    "weakLine_one": "<bold>{{count}} Pokémon</bold> weak to {{type}}",
+    "weakLine_other": "<bold>{{count}} Pokémon</bold> weak to {{type}}",
+    "resist_one": "{{count}} resists",
+    "resist_other": "{{count}} resist",
+    "sharedEmpty": "No type troubles more than one Pokémon.",
+    "unresistedTitle": "Nobody resists",
+    "unresistedHint": "No member takes reduced damage from these types.",
+    "unresistedEmpty": "Every type is resisted by at least one Pokémon.",
+    "uncoveredTitle": "Uncovered types",
+    "uncoveredHint": "No member hits them super effectively with moves of its own type.",
+    "uncoveredEmpty": "Moves of the team’s types hit every type for ×2."
+  },
+  "share": {
+    "line": "{{position}}. {{name}} ({{types}})"
+  }
+}
