@@ -45,5 +45,79 @@
     "data": "Daten und Bilder von <link>PokéAPI</link>, einem freien und kostenlosen Projekt der Community.",
     "unofficial": "Dies ist eine inoffizielle, nicht kommerzielle Fan-App, die weder mit Nintendo, Creatures Inc., GAME FREAK inc. oder The Pokémon Company verbunden noch von ihnen genehmigt ist.",
     "trademarks": "Pokémon und die Namen der Charaktere sind Marken von Nintendo, Creatures Inc. und GAME FREAK inc. © 1995–{{year}} Nintendo / Creatures Inc. / GAME FREAK inc."
+  },
+  "appearance": {
+    "title": "Aussehen & Premium",
+    "theme": "Design",
+    "icon": "App-Symbol",
+    "auto": "Automatisch",
+    "premium": "Pokédex Premium",
+    "premiumHint": "Werbung entfernen und Designs und Symbole freischalten",
+    "premiumOwned": "Danke für deine Unterstützung!"
+  },
+  "themes": {
+    "title": "Designs",
+    "hint": "Ändert die Farben der ganzen App. Die Typfarben bleiben die offiziellen.",
+    "auto": "Automatisch",
+    "autoHint": "Tagsüber Klassisch, Nacht im Dunkelmodus des Telefons",
+    "free": "Kostenlos",
+    "premium": "Premium",
+    "premiumHint": "Im Stil-Paket und in Pokédex Pro enthalten",
+    "locked": "Gesperrt. Tippen zum Freischalten",
+    "unlock": "Freischalten",
+    "names": {
+      "classic": "Klassisch",
+      "night": "Nacht",
+      "ocean": "Ozean",
+      "shinyGold": "Schillerndes Gold",
+      "retro": "Retro",
+      "spectre": "Phantom"
+    },
+    "descriptions": {
+      "classic": "Hell, Pokéball-Rot",
+      "night": "Dunkel, für den Abend",
+      "ocean": "Hell, Meeresblau",
+      "shinyGold": "Dunkel und golden",
+      "retro": "Grün wie LCD-Bildschirme",
+      "spectre": "Nachtviolett und Magenta"
+    },
+    "icon": {
+      "title": "App-Symbol",
+      "hint": "Das Symbol auf dem Home-Bildschirm.",
+      "simulated": "Vorschau: Das echte Symbol ändert sich mit dem 2.0-Build.",
+      "names": {
+        "default": "Klassisch",
+        "gold": "Gold",
+        "retro": "Retro",
+        "spectre": "Phantom"
+      }
+    }
+  },
+  "premium": {
+    "title": "Premium",
+    "subtitle": "Unterstütze die App und gestalte sie. Einmalkäufe, keine Abos.",
+    "bestValue": "Bestes Angebot",
+    "buy": "Kaufen für {{price}}",
+    "owned": "Gekauft",
+    "restore": "Käufe wiederherstellen",
+    "restored_one": "{{count}} Kauf wiederhergestellt.",
+    "restored_other": "{{count}} Käufe wiederhergestellt.",
+    "nothingToRestore": "Keine Käufe zum Wiederherstellen.",
+    "simulated": "Testversion: Käufe sind simuliert und kostenlos.",
+    "reset": "Simulierte Käufe zurücksetzen",
+    "products": {
+      "pokedex_pro": {
+        "title": "Pokédex Pro",
+        "description": "Alles: keine Werbung, Premium-Designs und -Symbole und kommende Pro-Funktionen."
+      },
+      "remove_ads": {
+        "title": "Werbung entfernen",
+        "description": "Kein Banner unten und keine Vollbildwerbung."
+      },
+      "style_pack": {
+        "title": "Stil-Paket",
+        "description": "Die Designs Schillerndes Gold, Retro und Phantom und alternative App-Symbole."
+      }
+    }
   }
 }

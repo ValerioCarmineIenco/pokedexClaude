@@ -1,3 +1,4 @@
+import { tintColor } from './colors';
 import { ITEM_CATEGORY_LABELS, type ItemCategory } from '@/types/item';
 
 /** Colore pieno di ciascuna categoria di oggetti, nello stesso spirito dei colori per tipo. */
@@ -31,12 +32,6 @@ export type CategoryColors = {
   label: string;
 };
 
-/** Mescola un colore esadecimale col bianco: `amount` è la quota di colore (0–1). */
-function mixWithWhite(hex: string, amount: number): string {
-  const n = parseInt(hex.slice(1), 16);
-  const mix = (c: number) => Math.round(c * amount + 255 * (1 - amount));
-  return `rgb(${mix(n >> 16)}, ${mix((n >> 8) & 255)}, ${mix(n & 255)})`;
-}
 
 /** Tutte le tonalità di una categoria. Categorie sconosciute ricadono su "other". */
 export function getCategoryColors(category: ItemCategory): CategoryColors {
@@ -45,8 +40,8 @@ export function getCategoryColors(category: ItemCategory): CategoryColors {
   return {
     color,
     text: LIGHT_CATEGORIES.has(key) ? DARK_TEXT : LIGHT_TEXT,
-    tint: mixWithWhite(color, 0.42),
-    soft: mixWithWhite(color, 0.16),
+    tint: tintColor(color, 0.42),
+    soft: tintColor(color, 0.16),
     label: ITEM_CATEGORY_LABELS[key],
   };
 }

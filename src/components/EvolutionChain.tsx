@@ -1,5 +1,5 @@
 import { Image } from 'expo-image';
-import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { Pressable, Text, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 
 import { getArtworkUrl, parsePokemonId } from '@/api/pokemon';
@@ -7,6 +7,7 @@ import { pokemonName } from '@/i18n/names';
 import { useArtworkStyle } from '@/hooks/useArtworkStyle';
 import { colors } from '@/theme/colors';
 import { fonts } from '@/theme/fonts';
+import { themedStyles } from '@/theme/styles';
 import type { EvolutionChain as Chain, EvolutionMethod, EvolutionStage } from '@/types/evolution';
 import { formatNumber } from '@/utils/format';
 
@@ -208,7 +209,7 @@ function MethodText({
   );
 }
 
-const styles = StyleSheet.create({
+const styles = themedStyles(() => ({
   chain: {
     gap: 14,
   },
@@ -309,4 +310,4 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     gap: 8,
   },
-});
+}));

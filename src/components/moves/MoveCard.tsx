@@ -1,11 +1,13 @@
 import { useTranslation } from 'react-i18next';
-import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { Pressable, Text, View } from 'react-native';
 
 import type { ViewMode } from '@/hooks/useViewMode';
 import { t } from '@/i18n';
+import { colors } from '@/theme/colors';
 import { fonts } from '@/theme/fonts';
 import { typeTint } from '@/theme/typeColors';
 import { TYPE_LABELS } from '@/theme/typeNames';
+import { themedStyles } from '@/theme/styles';
 import type { MoveSummary } from '@/types/move';
 
 import { PokeBallMark } from '../PokeBallMark';
@@ -120,7 +122,7 @@ export function MoveCard({ move, variant, onPress }: Props) {
   );
 }
 
-const styles = StyleSheet.create({
+const styles = themedStyles(() => ({
   grid: {
     height: GRID_MOVE_HEIGHT,
     borderRadius: 16,
@@ -160,7 +162,7 @@ const styles = StyleSheet.create({
   name: {
     fontFamily: fonts.display,
     fontSize: 16,
-    color: '#1D1C22',
+    color: colors.text,
   },
   typeRow: {
     flexDirection: 'row',
@@ -172,7 +174,7 @@ const styles = StyleSheet.create({
     fontFamily: fonts.bodyBold,
     fontSize: 11,
     letterSpacing: 0.2,
-    color: 'rgba(29, 28, 34, 0.6)',
+    color: colors.textMuted,
   },
   stats: {
     flexDirection: 'row',
@@ -186,7 +188,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 4,
     paddingVertical: 4,
     borderRadius: 10,
-    backgroundColor: 'rgba(255, 255, 255, 0.6)',
+    backgroundColor: colors.veilStrong,
     alignItems: 'center',
   },
   statFill: {
@@ -200,11 +202,11 @@ const styles = StyleSheet.create({
     fontSize: 9,
     letterSpacing: 0.5,
     textTransform: 'uppercase',
-    color: 'rgba(29, 28, 34, 0.55)',
+    color: colors.textMuted,
   },
   statValue: {
     fontFamily: fonts.monoBold,
     fontSize: 13,
-    color: '#1D1C22',
+    color: colors.text,
   },
-});
+}));

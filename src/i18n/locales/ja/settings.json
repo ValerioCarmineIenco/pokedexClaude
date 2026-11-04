@@ -45,5 +45,79 @@
     "data": "データと画像は<link>PokéAPI</link>より。コミュニティが運営する無料のオープンなプロジェクトです。",
     "unofficial": "これはファンが作った非公式・非営利のアプリで、任天堂、クリーチャーズ、ゲームフリーク、株式会社ポケモンとは関係がなく、承認も受けていません。",
     "trademarks": "ポケモンおよびキャラクターの名前は任天堂、クリーチャーズ、ゲームフリークの商標です。© 1995–{{year}} Nintendo / Creatures Inc. / GAME FREAK inc."
+  },
+  "appearance": {
+    "title": "外観とプレミアム",
+    "theme": "テーマ",
+    "icon": "アプリアイコン",
+    "auto": "自動",
+    "premium": "ポケモン図鑑 プレミアム",
+    "premiumHint": "広告を消して、テーマとアイコンを解放",
+    "premiumOwned": "ご支援ありがとうございます！"
+  },
+  "themes": {
+    "title": "テーマ",
+    "hint": "アプリ全体の色を変えます。タイプの色は公式のままです。",
+    "auto": "自動",
+    "autoHint": "昼はクラシック、ダークモードではナイト",
+    "free": "無料",
+    "premium": "プレミアム",
+    "premiumHint": "スタイルパックと図鑑Proに含まれます",
+    "locked": "ロック中。タップして解放",
+    "unlock": "解放",
+    "names": {
+      "classic": "クラシック",
+      "night": "ナイト",
+      "ocean": "オーシャン",
+      "shinyGold": "色違いゴールド",
+      "retro": "レトロ",
+      "spectre": "スペクター"
+    },
+    "descriptions": {
+      "classic": "明るい、モンスターボールの赤",
+      "night": "暗い、夜向け",
+      "ocean": "明るい、海の青",
+      "shinyGold": "暗くて金色",
+      "retro": "液晶画面の緑",
+      "spectre": "夜の紫とマゼンタ"
+    },
+    "icon": {
+      "title": "アプリアイコン",
+      "hint": "ホーム画面のアイコンです。",
+      "simulated": "プレビュー：実際のアイコンは2.0のビルドで変わります。",
+      "names": {
+        "default": "クラシック",
+        "gold": "ゴールド",
+        "retro": "レトロ",
+        "spectre": "スペクター"
+      }
+    }
+  },
+  "premium": {
+    "title": "プレミアム",
+    "subtitle": "アプリを応援して、自分好みに。買い切りで、サブスクはありません。",
+    "bestValue": "おすすめ",
+    "buy": "{{price}}で購入",
+    "owned": "購入済み",
+    "restore": "購入を復元",
+    "restored_one": "{{count}}件の購入を復元しました。",
+    "restored_other": "{{count}}件の購入を復元しました。",
+    "nothingToRestore": "復元する購入はありません。",
+    "simulated": "テスト版：購入はシミュレーションで無料です。",
+    "reset": "シミュレーションの購入をリセット",
+    "products": {
+      "pokedex_pro": {
+        "title": "図鑑Pro",
+        "description": "すべて：広告なし、プレミアムのテーマとアイコン、今後のPro機能。"
+      },
+      "remove_ads": {
+        "title": "広告を削除",
+        "description": "下のバナーも全画面広告もなくなります。"
+      },
+      "style_pack": {
+        "title": "スタイルパック",
+        "description": "色違いゴールド・レトロ・スペクターのテーマと別アイコン。"
+      }
+    }
   }
 }

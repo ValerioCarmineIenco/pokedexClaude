@@ -1,8 +1,9 @@
-import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { Pressable, Text, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 
 import { colors } from '@/theme/colors';
 import { fonts } from '@/theme/fonts';
+import { themedStyles } from '@/theme/styles';
 
 import { Icon, type IconName } from './Icon';
 
@@ -64,7 +65,7 @@ function Toggle({
   );
 }
 
-const styles = StyleSheet.create({
+const styles = themedStyles(() => ({
   row: {
     flexDirection: 'row',
     justifyContent: 'center',
@@ -94,4 +95,4 @@ const styles = StyleSheet.create({
   labelOn: {
     color: colors.shinyText,
   },
-});
+}));

@@ -1,8 +1,9 @@
 import { useTranslation } from 'react-i18next';
-import { Pressable, StyleSheet, View } from 'react-native';
+import { Pressable, View } from 'react-native';
 
 import type { ViewMode } from '@/hooks/useViewMode';
 import { colors } from '@/theme/colors';
+import { themedStyles } from '@/theme/styles';
 
 import { Icon, type IconName } from './Icon';
 
@@ -39,7 +40,7 @@ export function ViewToggle({ value, onChange }: Props) {
   );
 }
 
-const styles = StyleSheet.create({
+const styles = themedStyles(() => ({
   track: {
     flexDirection: 'row',
     backgroundColor: colors.field,
@@ -58,4 +59,4 @@ const styles = StyleSheet.create({
     backgroundColor: colors.surface,
     boxShadow: '0 1px 2px rgba(0, 0, 0, 0.12)',
   },
-});
+}));

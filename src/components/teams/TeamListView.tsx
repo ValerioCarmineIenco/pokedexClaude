@@ -1,7 +1,7 @@
 import { Image } from 'expo-image';
 import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { FlatList, Pressable, StyleSheet, Text, View } from 'react-native';
+import { FlatList, Pressable, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { getArtworkUrl } from '@/api/pokemon';
@@ -9,6 +9,7 @@ import { useArtworkStyle } from '@/hooks/useArtworkStyle';
 import { colors } from '@/theme/colors';
 import { fonts } from '@/theme/fonts';
 import { TYPE_LABELS } from '@/theme/typeNames';
+import { themedStyles } from '@/theme/styles';
 import { TEAM_SIZE, type Team } from '@/types/team';
 import { analyzeTeam, getTeamMembers } from '@/utils/teamAnalysis';
 import { useScrollRestoration } from '@/hooks/useScrollRestoration';
@@ -39,7 +40,7 @@ export function TeamListView({ teams, onCreate, onOpen }: TeamListViewProps) {
           accessibilityRole="button"
           accessibilityLabel={t('list.newA11y')}
           style={({ pressed }) => [styles.newButton, pressed && styles.pressed]}>
-          <Icon name="plus" size={16} color={colors.surface} />
+          <Icon name="plus" size={16} color={colors.onAccent} />
           <Text style={styles.newLabel}>{t('list.new')}</Text>
         </Pressable>
       </View>
@@ -112,7 +113,7 @@ function TeamCard({ team, onPress }: { team: Team; onPress: () => void }) {
   );
 }
 
-const styles = StyleSheet.create({
+const styles = themedStyles(() => ({
   screen: {
     flex: 1,
     backgroundColor: colors.background,
@@ -141,7 +142,7 @@ const styles = StyleSheet.create({
   newLabel: {
     fontFamily: fonts.bodyBold,
     fontSize: 14,
-    color: colors.surface,
+    color: colors.onAccent,
   },
   list: {
     paddingHorizontal: 16,
@@ -194,4 +195,4 @@ const styles = StyleSheet.create({
     fontSize: 13,
     color: colors.textMuted,
   },
-});
+}));

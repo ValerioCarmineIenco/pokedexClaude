@@ -1,7 +1,7 @@
 import { FlashList } from '@shopify/flash-list';
 import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { RefreshControl, StyleSheet, Text, View } from 'react-native';
+import { RefreshControl, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { getItemIndex } from '@/api/items';
@@ -9,6 +9,7 @@ import type { ViewMode } from '@/hooks/useViewMode';
 import { CATEGORY_COLORS } from '@/theme/categoryColors';
 import { colors } from '@/theme/colors';
 import { fonts } from '@/theme/fonts';
+import { themedStyles } from '@/theme/styles';
 import { ITEM_CATEGORIES, ITEM_CATEGORY_LABELS, type Item, type ItemCategory } from '@/types/item';
 import { useScrollRestoration } from '@/hooks/useScrollRestoration';
 
@@ -251,7 +252,7 @@ export function ItemListView({
   );
 }
 
-const styles = StyleSheet.create({
+const styles = themedStyles(() => ({
   screen: {
     flex: 1,
     backgroundColor: colors.background,
@@ -331,4 +332,4 @@ const styles = StyleSheet.create({
     flex: 1,
     gap: 8,
   },
-});
+}));

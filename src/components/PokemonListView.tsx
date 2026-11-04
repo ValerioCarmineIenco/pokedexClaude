@@ -1,7 +1,7 @@
 import { FlashList, type ViewToken } from '@shopify/flash-list';
 import { useCallback, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { RefreshControl, StyleSheet, View } from 'react-native';
+import { RefreshControl, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { GENERATIONS, getGenerationById, LAST_POKEMON_ID } from '@/api/generations';
@@ -10,6 +10,7 @@ import { colors } from '@/theme/colors';
 import { getIndexStat } from '@/api/pokemon';
 import { t as translate } from '@/i18n';
 import { TYPE_LABELS } from '@/theme/typeNames';
+import { themedStyles } from '@/theme/styles';
 import {
   DEFAULT_POKEMON_FILTERS,
   type Generation,
@@ -430,7 +431,7 @@ function collectionCaption(
   return generation ? [count, generation.name, generation.region].join(' · ') : count;
 }
 
-const styles = StyleSheet.create({
+const styles = themedStyles(() => ({
   screen: {
     flex: 1,
     backgroundColor: colors.background,
@@ -456,4 +457,4 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap',
     paddingHorizontal: SIDE - GAP / 2,
   },
-});
+}));

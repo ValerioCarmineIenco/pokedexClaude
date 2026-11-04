@@ -17,7 +17,9 @@
     "typeDetail": "Type details",
     "teams": "Teams",
     "team": "Team",
-    "sections": "Sections"
+    "sections": "Sections",
+    "themes": "Themes",
+    "premium": "Premium"
   },
   "sections": {
     "pokedex": { "title": "Pokédex", "description": "Every Pokémon, by generation" },

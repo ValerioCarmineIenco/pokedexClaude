@@ -1,10 +1,11 @@
 import { useTranslation } from 'react-i18next';
-import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { Pressable, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { SECTIONS, type Section, type SectionKey } from '@/navigation/sections';
 import { colors, radius } from '@/theme/colors';
 import { fonts } from '@/theme/fonts';
+import { themedStyles } from '@/theme/styles';
 
 import { Icon } from './Icon';
 import { PokeBallLogo } from './PokeBallLogo';
@@ -57,7 +58,7 @@ export function SectionMenu({ current, onSelect }: Props) {
   );
 }
 
-const styles = StyleSheet.create({
+const styles = themedStyles(() => ({
   container: {
     paddingHorizontal: 16,
     paddingTop: 24,
@@ -111,4 +112,4 @@ const styles = StyleSheet.create({
     fontSize: 13,
     color: colors.textMuted,
   },
-});
+}));

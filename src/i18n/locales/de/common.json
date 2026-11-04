@@ -17,7 +17,9 @@
     "typeDetail": "Typ-Details",
     "teams": "Teams",
     "team": "Team",
-    "sections": "Bereiche"
+    "sections": "Bereiche",
+    "themes": "Designs",
+    "premium": "Premium"
   },
   "sections": {
     "pokedex": {

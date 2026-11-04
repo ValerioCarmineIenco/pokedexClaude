@@ -1,6 +1,6 @@
 import { Image } from 'expo-image';
 import { useTranslation } from 'react-i18next';
-import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { Pressable, ScrollView, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { getArtworkUrl } from '@/api/pokemon';
@@ -10,6 +10,7 @@ import { pokemonName } from '@/i18n/names';
 import type { Ability, AbilityPokemon } from '@/types/ability';
 import { colors } from '@/theme/colors';
 import { fonts } from '@/theme/fonts';
+import { themedStyles } from '@/theme/styles';
 import { formatNumber } from '@/utils/format';
 import { romanNumeral } from '@/utils/generation';
 import { useScrollRestoration } from '@/hooks/useScrollRestoration';
@@ -222,7 +223,7 @@ function PokemonTile({ pokemon, onPress }: { pokemon: AbilityPokemon; onPress: (
   );
 }
 
-const styles = StyleSheet.create({
+const styles = themedStyles(() => ({
   screen: {
     flex: 1,
     backgroundColor: colors.surface,
@@ -263,7 +264,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   pressed: {
-    backgroundColor: 'rgba(255, 255, 255, 0.4)',
+    backgroundColor: colors.veil,
   },
   name: {
     fontFamily: fonts.displayBold,
@@ -321,7 +322,7 @@ const styles = StyleSheet.create({
     fontFamily: fonts.body,
     fontSize: 15,
     lineHeight: 22,
-    color: '#55525C',
+    color: colors.textMuted,
   },
   descriptionSkeleton: {
     gap: 10,
@@ -404,4 +405,4 @@ const styles = StyleSheet.create({
     fontSize: 9,
     color: '#FFFFFF',
   },
-});
+}));

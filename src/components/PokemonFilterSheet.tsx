@@ -9,6 +9,7 @@ import { fonts } from '@/theme/fonts';
 import { TYPE_COLORS, typeTextColor } from '@/theme/typeColors';
 import { labelMap, t } from '@/i18n';
 import { TYPE_LABELS } from '@/theme/typeNames';
+import { themedStyles } from '@/theme/styles';
 import {
   DEFAULT_POKEMON_FILTERS,
   TYPE_NAMES,
@@ -242,15 +243,15 @@ function Chip({
         pressed && styles.pressed,
       ]}>
       {color && !selected && <View style={[styles.swatch, { backgroundColor: color }]} />}
-      <Text style={[styles.chipLabel, selected && { color: textColor ?? colors.surface }]}>{label}</Text>
+      <Text style={[styles.chipLabel, selected && { color: textColor ?? colors.onAccent }]}>{label}</Text>
     </Pressable>
   );
 }
 
-const styles = StyleSheet.create({
+const styles = themedStyles(() => ({
   backdrop: {
     ...StyleSheet.absoluteFill,
-    backgroundColor: 'rgba(29, 28, 34, 0.28)',
+    backgroundColor: colors.scrim,
   },
   sheet: {
     position: 'absolute',
@@ -363,4 +364,4 @@ const styles = StyleSheet.create({
     fontSize: 15,
     color: colors.surface,
   },
-});
+}));

@@ -1,7 +1,7 @@
 import { FlashList } from '@shopify/flash-list';
 import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { Pressable, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { getMovesOfType, getPokemonOfType, getStaticTypeMatchups } from '@/api/types';
@@ -9,6 +9,7 @@ import { colors } from '@/theme/colors';
 import { fonts } from '@/theme/fonts';
 import { TYPE_COLORS, typeTextColor, typeTint } from '@/theme/typeColors';
 import { TYPE_LABELS } from '@/theme/typeNames';
+import { themedStyles } from '@/theme/styles';
 import type { MatchupType, MoveSummary } from '@/types/move';
 import type { PokemonSummary, TypeName } from '@/types/pokemon';
 import { useScrollRestoration } from '@/hooks/useScrollRestoration';
@@ -268,7 +269,7 @@ function TabButton({ label, selected, onPress }: { label: string; selected: bool
   );
 }
 
-const styles = StyleSheet.create({
+const styles = themedStyles(() => ({
   screen: {
     flex: 1,
     backgroundColor: colors.surface,
@@ -298,7 +299,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   backPressed: {
-    backgroundColor: 'rgba(255, 255, 255, 0.4)',
+    backgroundColor: colors.veil,
   },
   name: {
     fontFamily: fonts.displayBold,
@@ -317,7 +318,7 @@ const styles = StyleSheet.create({
     borderRadius: 999,
     paddingHorizontal: 12,
     paddingVertical: 4,
-    backgroundColor: 'rgba(255, 255, 255, 0.65)',
+    backgroundColor: colors.veilStrong,
   },
   badgeLabel: {
     fontFamily: fonts.bodyBold,
@@ -426,4 +427,4 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingVertical: 12,
   },
-});
+}));

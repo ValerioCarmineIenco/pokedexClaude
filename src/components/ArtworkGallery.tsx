@@ -1,11 +1,12 @@
 import { Image } from 'expo-image';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Modal, Pressable, StyleSheet, Text, useWindowDimensions, View } from 'react-native';
+import { Modal, Pressable, Text, useWindowDimensions, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { colors } from '@/theme/colors';
 import { fonts } from '@/theme/fonts';
+import { themedStyles } from '@/theme/styles';
 import type { ArtworkGeneration, ArtworkGroup, ArtworkImage, PokemonArtworks } from '@/types/pokemon';
 
 import { ErrorState } from './ErrorState';
@@ -203,7 +204,7 @@ function ArtworkViewer({
   );
 }
 
-const styles = StyleSheet.create({
+const styles = themedStyles(() => ({
   gallery: {
     gap: 18,
   },
@@ -309,4 +310,4 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: 'rgba(255, 255, 255, 0.7)',
   },
-});
+}));

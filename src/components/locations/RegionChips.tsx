@@ -1,9 +1,10 @@
 import { useTranslation } from 'react-i18next';
-import { Pressable, ScrollView, StyleSheet, Text } from 'react-native';
+import { Pressable, ScrollView, Text } from 'react-native';
 
 import type { LocationRegion } from '@/types/location';
 import { colors } from '@/theme/colors';
 import { fonts } from '@/theme/fonts';
+import { themedStyles } from '@/theme/styles';
 
 type Props = {
   regions: LocationRegion[];
@@ -48,7 +49,7 @@ export function RegionChips({ regions, value, onChange }: Props) {
   );
 }
 
-const styles = StyleSheet.create({
+const styles = themedStyles(() => ({
   scroll: {
     flexGrow: 0,
     marginHorizontal: -16,
@@ -80,4 +81,4 @@ const styles = StyleSheet.create({
     fontFamily: fonts.bodyBold,
     color: colors.surface,
   },
-});
+}));

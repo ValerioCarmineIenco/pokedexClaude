@@ -2,6 +2,9 @@ import { StyleSheet, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { colors } from '@/theme/colors';
+import { themedStyles } from '@/theme/styles';
+
+import { useEntitlements } from '@/purchases/store';
 
 import { adsConfig } from './config';
 import { nativeAds } from './nativeAds';
@@ -12,7 +15,9 @@ import { nativeAds } from './nativeAds';
  */
 export function AdBanner() {
   const insets = useSafeAreaInsets();
-  if (!nativeAds) return null;
+  const entitlements = useEntitlements();
+  // «Rimuovi pubblicità» o Pokédex Pro: niente banner.
+  if (!nativeAds || entitlements.has('noAds')) return null;
   const { BannerAd, BannerAdSize } = nativeAds;
 
   return (
@@ -22,11 +27,11 @@ export function AdBanner() {
   );
 }
 
-const styles = StyleSheet.create({
+const styles = themedStyles(() => ({
   container: {
     alignItems: 'center',
     backgroundColor: colors.surface,
     borderTopWidth: StyleSheet.hairlineWidth,
     borderTopColor: colors.line,
   },
-});
+}));

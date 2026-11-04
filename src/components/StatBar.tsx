@@ -1,7 +1,8 @@
-import { StyleSheet, Text, View } from 'react-native';
+import { Text, View } from 'react-native';
 
 import { colors } from '@/theme/colors';
 import { fonts } from '@/theme/fonts';
+import { themedStyles } from '@/theme/styles';
 import { MAX_STAT } from '@/utils/format';
 
 type Props = {
@@ -26,7 +27,7 @@ export function StatBar({ label, value, color }: Props) {
   );
 }
 
-const styles = StyleSheet.create({
+const styles = themedStyles(() => ({
   row: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -57,4 +58,4 @@ const styles = StyleSheet.create({
     height: '100%',
     borderRadius: 4,
   },
-});
+}));
