@@ -1,18 +1,27 @@
+import { useEffect } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { colors } from '@/theme/colors';
 
 import { adsConfig } from './config';
+import { startAds, useAdsState } from './consent';
 import { nativeAds } from './nativeAds';
 
 /**
  * Banner fisso in fondo allo schermo, sotto i contenuti (non li copre: le schermate
  * finiscono sopra di lui). Sta sopra la barra di sistema grazie al margine sicuro.
+ * Compare solo dopo il consenso (vedi `consent.ts`).
  */
 export function AdBanner() {
   const insets = useSafeAreaInsets();
-  if (!nativeAds) return null;
+  const { adsReady } = useAdsState();
+
+  useEffect(() => {
+    void startAds();
+  }, []);
+
+  if (!nativeAds || !adsReady) return null;
   const { BannerAd, BannerAdSize } = nativeAds;
 
   return (

@@ -40,6 +40,13 @@
       "newerVersion": "The backup was created by a newer version of the app."
     }
   },
+  "adsPrivacy": {
+    "title": "Privacy and ads",
+    "hint": "Ads keep the app free. You can change your consent to personalized ads at any time: if you decline, you'll still see ads, just not based on your data.",
+    "manageConsent": "Manage consent",
+    "tracking": "Tracking permission",
+    "trackingHint": "Turn tracking on or off in iOS Settings, under Pokédex."
+  },
   "credits": {
     "title": "Credits and copyright",
     "data": "Data and images from <link>PokéAPI</link>, a free and open project maintained by the community.",

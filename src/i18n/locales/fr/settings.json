@@ -40,6 +40,13 @@
       "newerVersion": "La sauvegarde a été créée par une version plus récente de l'app."
     }
   },
+  "adsPrivacy": {
+    "title": "Confidentialité et publicité",
+    "hint": "Les publicités permettent à l'app de rester gratuite. Vous pouvez modifier à tout moment votre consentement aux publicités personnalisées : si vous refusez, vous verrez toujours des publicités, mais pas basées sur vos données.",
+    "manageConsent": "Gérer le consentement",
+    "tracking": "Autorisation de suivi",
+    "trackingHint": "Le suivi s'active ou se désactive dans les Réglages d'iOS, à la rubrique Pokédex."
+  },
   "credits": {
     "title": "Crédits et copyright",
     "data": "Données et images issues de <link>PokéAPI</link>, projet libre et gratuit maintenu par la communauté.",

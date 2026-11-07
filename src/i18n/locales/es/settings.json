@@ -40,6 +40,13 @@
       "newerVersion": "La copia se creó con una versión más reciente de la app."
     }
   },
+  "adsPrivacy": {
+    "title": "Privacidad y publicidad",
+    "hint": "Los anuncios mantienen la app gratuita. Puedes cambiar en cualquier momento tu consentimiento a los anuncios personalizados: si lo rechazas, seguirás viendo anuncios, pero no basados en tus datos.",
+    "manageConsent": "Gestionar consentimiento",
+    "tracking": "Permiso de seguimiento",
+    "trackingHint": "El seguimiento se activa o desactiva en los Ajustes de iOS, en Pokédex."
+  },
   "credits": {
     "title": "Créditos y copyright",
     "data": "Datos e imágenes de <link>PokéAPI</link>, un proyecto libre y gratuito mantenido por la comunidad.",

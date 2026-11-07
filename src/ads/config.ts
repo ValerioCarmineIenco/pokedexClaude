@@ -24,6 +24,21 @@ export const adsConfig = {
   /** Interruttore generale: `false` toglie banner e interstiziali. */
   enabled: true,
   unitIds: TEST_UNIT_IDS,
+  /**
+   * Consenso GDPR (modulo di Google, UMP). Il testo e le finalità si configurano
+   * nella console AdMob, «Privacy e messaggi»: lì va creato il messaggio GDPR,
+   * altrimenti il modulo non compare.
+   */
+  consent: {
+    /**
+     * Per provare il modulo fuori dall'Europa: `'EEA'` simula lo SEE, `'other'` un
+     * Paese senza obblighi. Funziona solo su simulatori e dispositivi di prova.
+     * Da lasciare `'off'` nelle build pubblicate.
+     */
+    debugGeography: 'off' as 'off' | 'EEA' | 'other',
+    /** ID dei dispositivi fisici di prova, letti dal log di UMP. */
+    testDeviceIdentifiers: [] as string[],
+  },
   interstitial: {
     /** Tempo passato nell'app (in primo piano) dopo cui mostrare un interstiziale. */
     afterActiveMs: 30 * 60 * 1000,
