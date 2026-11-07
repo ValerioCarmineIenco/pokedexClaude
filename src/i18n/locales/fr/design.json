@@ -1,0 +1,30 @@
+{
+  "title": "Composants",
+  "hint": "Les composants de base du design 2.0 « Collection ». Cet écran n'existe que dans les versions de développement.",
+  "theme": "Thème",
+  "back": "Retour",
+  "sections": {
+    "headers": "En-têtes",
+    "typography": "Polices",
+    "cards": "Cartes",
+    "chips": "Puces",
+    "buttons": "Boutons",
+    "panels": "Panneaux",
+    "rows": "Lignes",
+    "stats": "Statistiques",
+    "tabs": "Onglets",
+    "tiles": "Tuiles"
+  },
+  "demo": {
+    "all": "Tous",
+    "favorites": "Favoris",
+    "secondary": "Annuler",
+    "inverted": "Appliquer",
+    "disabled": "Indisponible",
+    "strengths": "Bonnes couvertures",
+    "weaknesses": "Faiblesses",
+    "team": "Équipe Kanto",
+    "sample": "Pokémon Flamme · 1,7 m · 90,5 kg",
+    "body": "Space Grotesk pour le texte, Anton pour les titres et les nombres."
+  }
+}

@@ -1,6 +1,9 @@
 /**
  * I sei temi dell'app (2.0): tre gratuiti e tre del Pacchetto stile.
  *
+ * Classico e Notte sono le due tavolozze del design «Collezione» (chiara e scura); gli altri
+ * temi ne ereditano le chiavi e cambiano i colori.
+ *
  * Ogni tema è una tavolozza completa con le stesse chiavi; i colori di tipi, categorie e
  * giochi restano quelli ufficiali in tutti i temi, perché servono a riconoscere le cose.
  */
@@ -45,6 +48,15 @@ export type Palette = {
   scrim: string;
   /** Ombre e bordi leggeri su superfici colorate. */
   hairline: string;
+  /** Stato selezionato di chip e schede (Collezione: invertito rispetto allo sfondo). */
+  selected: string;
+  onSelected: string;
+  /** Bordo sottile di campi, pannelli e chip non selezionati. */
+  outline: string;
+  /** Verso cosa sfuma il colore del tipo nelle carte: nero nei temi scuri, bianco in quelli chiari. */
+  cardShade: string;
+  /** Quanta sfumatura arriva in fondo alla carta (0–1). */
+  cardShadeAmount: number;
 };
 
 export type ThemeId = 'classic' | 'night' | 'ocean' | 'shinyGold' | 'retro' | 'spectre';
@@ -60,18 +72,18 @@ export type Theme = {
 const classic: Palette = {
   accent: '#E3350D',
   onAccent: '#FFFFFF',
-  background: '#F7F6F4',
+  background: '#F2F1EE',
   surface: '#FFFFFF',
-  text: '#1D1C22',
-  textMuted: '#6B6873',
-  textSubtle: '#8A8792',
-  field: '#EBE9E6',
-  line: '#E1DED9',
-  divider: '#EEEAE6',
-  factBackground: '#F6F4F1',
-  skeleton: '#EFECE8',
-  skeletonLine: '#E2DED9',
-  toast: '#1D1C22',
+  text: '#131317',
+  textMuted: '#6E6C76',
+  textSubtle: '#8F8D97',
+  field: '#FFFFFF',
+  line: '#E2E0DB',
+  divider: '#EAE8E4',
+  factBackground: '#F7F6F3',
+  skeleton: '#E9E7E3',
+  skeletonLine: '#DCDAD5',
+  toast: '#131317',
   toastText: '#FFFFFF',
   toastAction: '#FFB39F',
   statUp: '#2F9E62',
@@ -88,24 +100,29 @@ const classic: Palette = {
   veilStrong: 'rgba(255, 255, 255, 0.7)',
   scrim: 'rgba(29, 28, 34, 0.28)',
   hairline: 'rgba(29, 28, 34, 0.08)',
+  selected: '#131317',
+  onSelected: '#FFFFFF',
+  outline: '#DFDDD8',
+  cardShade: '#FFFFFF',
+  cardShadeAmount: 0.3,
 };
 
 const night: Palette = {
-  accent: '#FF5A3C',
+  accent: '#FF5533',
   onAccent: '#FFFFFF',
-  background: '#121116',
-  surface: '#1D1C22',
-  text: '#F2F0F5',
-  textMuted: '#AAA6B3',
-  textSubtle: '#817D8B',
-  field: '#28272E',
-  line: '#302F37',
-  divider: '#28272E',
-  factBackground: '#232228',
-  skeleton: '#26252C',
-  skeletonLine: '#313038',
-  toast: '#F2F0F5',
-  toastText: '#1D1C22',
+  background: '#0E0E12',
+  surface: '#1A1A1F',
+  text: '#F2F1F6',
+  textMuted: '#9A98A5',
+  textSubtle: '#76747F',
+  field: '#1A1A1F',
+  line: '#2A2A31',
+  divider: '#24242A',
+  factBackground: '#1F1F25',
+  skeleton: '#1F1F25',
+  skeletonLine: '#2A2A31',
+  toast: '#F2F1F6',
+  toastText: '#131317',
   toastAction: '#D6402B',
   statUp: '#4CC487',
   statDown: '#FF6B57',
@@ -115,12 +132,17 @@ const night: Palette = {
   gamesBadgeText: '#F2A848',
   shiny: '#3A3112',
   shinyText: '#F5C94A',
-  tintBase: '#1D1C22',
+  tintBase: '#1A1A1F',
   tintStrength: 1.1,
   veil: 'rgba(255, 255, 255, 0.08)',
   veilStrong: 'rgba(255, 255, 255, 0.14)',
   scrim: 'rgba(0, 0, 0, 0.55)',
   hairline: 'rgba(255, 255, 255, 0.1)',
+  selected: '#F2F1F6',
+  onSelected: '#0E0E12',
+  outline: '#2A2A31',
+  cardShade: '#000000',
+  cardShadeAmount: 0.32,
 };
 
 const ocean: Palette = {
@@ -142,6 +164,9 @@ const ocean: Palette = {
   tintBase: '#FFFFFF',
   scrim: 'rgba(19, 34, 46, 0.3)',
   hairline: 'rgba(19, 34, 46, 0.08)',
+  selected: '#13222E',
+  onSelected: '#FFFFFF',
+  outline: '#D3E0EA',
 };
 
 const shinyGold: Palette = {
@@ -165,6 +190,9 @@ const shinyGold: Palette = {
   shiny: '#4A3A10',
   shinyText: '#FFD45C',
   tintBase: '#211C13',
+  selected: '#F8F0DA',
+  onSelected: '#15120C',
+  outline: '#3B3221',
 };
 
 const retro: Palette = {
@@ -199,6 +227,11 @@ const retro: Palette = {
   veilStrong: 'rgba(226, 234, 196, 0.8)',
   scrim: 'rgba(28, 47, 16, 0.35)',
   hairline: 'rgba(28, 47, 16, 0.12)',
+  selected: '#1C2F10',
+  onSelected: '#E2EAC4',
+  outline: '#AFBE82',
+  cardShade: '#E2EAC4',
+  cardShadeAmount: 0.35,
 };
 
 const spectre: Palette = {
@@ -222,6 +255,9 @@ const spectre: Palette = {
   statUp: '#5AD39A',
   statDown: '#FF6E8A',
   tintBase: '#1D162D',
+  selected: '#F2EBFF',
+  onSelected: '#120D1D',
+  outline: '#33294B',
 };
 
 export const THEMES: Theme[] = [

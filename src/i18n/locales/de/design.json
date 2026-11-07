@@ -1,0 +1,30 @@
+{
+  "title": "Komponenten",
+  "hint": "Die Basiskomponenten des 2.0-Designs „Sammlung“. Dieser Bildschirm existiert nur in Entwicklungs-Builds.",
+  "theme": "Design",
+  "back": "Zurück",
+  "sections": {
+    "headers": "Kopfzeilen",
+    "typography": "Schriften",
+    "cards": "Karten",
+    "chips": "Chips",
+    "buttons": "Schaltflächen",
+    "panels": "Felder",
+    "rows": "Zeilen",
+    "stats": "Werte",
+    "tabs": "Tabs",
+    "tiles": "Kacheln"
+  },
+  "demo": {
+    "all": "Alle",
+    "favorites": "Favoriten",
+    "secondary": "Abbrechen",
+    "inverted": "Anwenden",
+    "disabled": "Nicht verfügbar",
+    "strengths": "Starke Abdeckung",
+    "weaknesses": "Schwächen",
+    "team": "Team Kanto",
+    "sample": "Flammen-Pokémon · 1,7 m · 90,5 kg",
+    "body": "Space Grotesk für Text, Anton für Titel und Zahlen."
+  }
+}
