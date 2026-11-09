@@ -90,14 +90,23 @@
     },
     "icon": {
       "title": "Icona dell'app",
-      "hint": "L'icona sulla schermata Home del telefono.",
-      "simulated": "Anteprima: l'icona vera cambierà con la build 2.0.",
+      "hint": "L'icona sulla schermata Home del telefono. Collezione, Classica e Notte sono gratis.",
       "names": {
-        "default": "Classica",
-        "gold": "Oro",
+        "collection": "Collezione",
+        "classic": "Classica",
+        "night": "Notte",
+        "shinyGold": "Oro Shiny",
         "retro": "Retrò",
-        "spectre": "Spettro"
-      }
+        "spectre": "Spettro",
+        "device": "Dispositivo"
+      },
+      "access": {
+        "free": "Gratis",
+        "styles": "Con il Pacchetto stile o Pokédex Pro. Tocca per sbloccare",
+        "deviceTheme": "Solo con il tema Dispositivo"
+      },
+      "unsupported": "Qui l'icona del telefono non cambia: serve l'app installata dallo store.",
+      "web": "Sul web l'icona non si può cambiare: vale per l'app sul telefono."
     }
   },
   "premium": {

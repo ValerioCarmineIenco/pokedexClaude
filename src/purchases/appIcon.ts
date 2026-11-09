@@ -1,37 +1,105 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import Constants, { ExecutionEnvironment } from 'expo-constants';
+import type { ImageSourcePropType } from 'react-native';
 import { useSyncExternalStore } from 'react';
 
 /**
- * Icone alternative dell'app (Pacchetto stile). **Per ora simulate**: la scelta si salva e si
- * vede nelle Impostazioni, ma l'icona sulla schermata Home non cambia.
+ * Icone dell'app (2.0). Le immagini e i nomi nativi sono dichiarati nel plugin
+ * `expo-alternate-app-icons` in `app.json`; le genera `scripts/generate-app-icons.mjs`.
  *
- * Per quelle vere: `npx expo install expo-alternate-app-icons`, le immagini delle icone nel
- * plugin in `app.json`, e in `setAppIcon` la chiamata `setAlternateAppIcon(id)` (con `null` per
- * l'icona predefinita).
+ * Il cambio vero dell'icona sulla schermata Home serve una development build (o la build
+ * dello store): in Expo Go e sul web la scelta si salva e si vede nelle Impostazioni, ma
+ * l'icona del telefono non cambia (`ALTERNATE_ICONS_SUPPORTED` è `false`).
  */
 
-export type AppIconId = 'default' | 'gold' | 'retro' | 'spectre';
+export type AppIconId = 'collection' | 'classic' | 'night' | 'shinyGold' | 'retro' | 'spectre' | 'device';
+
+/**
+ * Cosa serve per usare un'icona: niente, il Pacchetto stile (o Pro), oppure il tema
+ * Dispositivo, che si compra a parte e non è incluso in Pro.
+ */
+export type AppIconAccess = 'free' | 'styles' | 'deviceTheme';
 
 export type AppIcon = {
   id: AppIconId;
-  premium: boolean;
-  /** Colori della Poké Ball disegnata nell'anteprima: sfondo, metà superiore, bordo e centro. */
-  background: string;
-  top: string;
-  bottom: string;
-  ink: string;
+  /** Nome dell'icona alternativa nel progetto nativo; `null` per quella predefinita. */
+  nativeName: string | null;
+  access: AppIconAccess;
+  preview: ImageSourcePropType;
 };
 
 export const APP_ICONS: AppIcon[] = [
-  { id: 'default', premium: false, background: '#E3350D', top: '#E3350D', bottom: '#FFFFFF', ink: '#1D1C22' },
-  { id: 'gold', premium: true, background: '#211C13', top: '#E8B830', bottom: '#F8F0DA', ink: '#15120C' },
-  { id: 'retro', premium: true, background: '#CDD8A6', top: '#3E6B1F', bottom: '#E2EAC4', ink: '#1C2F10' },
-  { id: 'spectre', premium: true, background: '#120D1D', top: '#E64FD1', bottom: '#2C2245', ink: '#F2EBFF' },
+  {
+    id: 'collection',
+    nativeName: null,
+    access: 'free',
+    preview: require('../../assets/images/app-icons/collection-preview.png'),
+  },
+  {
+    id: 'classic',
+    nativeName: 'Classic',
+    access: 'free',
+    preview: require('../../assets/images/app-icons/classic-preview.png'),
+  },
+  {
+    id: 'night',
+    nativeName: 'Night',
+    access: 'free',
+    preview: require('../../assets/images/app-icons/night-preview.png'),
+  },
+  {
+    id: 'shinyGold',
+    nativeName: 'ShinyGold',
+    access: 'styles',
+    preview: require('../../assets/images/app-icons/shinyGold-preview.png'),
+  },
+  {
+    id: 'retro',
+    nativeName: 'Retro',
+    access: 'styles',
+    preview: require('../../assets/images/app-icons/retro-preview.png'),
+  },
+  {
+    id: 'spectre',
+    nativeName: 'Spectre',
+    access: 'styles',
+    preview: require('../../assets/images/app-icons/spectre-preview.png'),
+  },
+  {
+    id: 'device',
+    nativeName: 'Device',
+    access: 'deviceTheme',
+    preview: require('../../assets/images/app-icons/device-preview.png'),
+  },
 ];
+
+const DEFAULT_ICON: AppIconId = 'collection';
+
+/** Id salvati dalla scelta simulata della PR 50, prima delle icone definitive. */
+const LEGACY_IDS: Record<string, AppIconId> = { default: 'collection', gold: 'shinyGold' };
+
+type IconsModule = typeof import('expo-alternate-app-icons');
+
+/**
+ * Il modulo nativo, o `null` dove non c'è: Expo Go non lo include e importarlo lì farebbe
+ * crashare l'app; sul web il pacchetto ha una versione finta che non cambia nulla.
+ */
+const iconsModule: IconsModule | null = (() => {
+  if (Constants.executionEnvironment === ExecutionEnvironment.StoreClient) return null;
+  try {
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
+    return require('expo-alternate-app-icons') as IconsModule;
+  } catch {
+    return null;
+  }
+})();
+
+/** `true` se il telefono può davvero cambiare l'icona sulla schermata Home. */
+export const ALTERNATE_ICONS_SUPPORTED = iconsModule?.supportsAlternateIcons ?? false;
 
 const STORAGE_KEY = 'pokedex.appIcon';
 
-let current: AppIconId = 'default';
+let current: AppIconId = DEFAULT_ICON;
 const listeners = new Set<() => void>();
 
 function emit(value: AppIconId) {
@@ -39,9 +107,29 @@ function emit(value: AppIconId) {
   listeners.forEach((listener) => listener());
 }
 
+const findIcon = (id: AppIconId) => APP_ICONS.find((icon) => icon.id === id);
+
+function parseId(value: string | null): AppIconId | null {
+  if (!value) return null;
+  if (value in LEGACY_IDS) return LEGACY_IDS[value];
+  return APP_ICONS.some((icon) => icon.id === value) ? (value as AppIconId) : null;
+}
+
+/** L'icona attiva sul telefono, letta dal sistema: vince sulla scelta salvata. */
+function nativeIconId(): AppIconId | null {
+  if (!ALTERNATE_ICONS_SUPPORTED || !iconsModule) return null;
+  try {
+    const name = iconsModule.getAppIconName();
+    return APP_ICONS.find((icon) => icon.nativeName === name)?.id ?? DEFAULT_ICON;
+  } catch {
+    return null;
+  }
+}
+
 AsyncStorage.getItem(STORAGE_KEY)
   .then((saved) => {
-    if (APP_ICONS.some((icon) => icon.id === saved)) emit(saved as AppIconId);
+    const id = nativeIconId() ?? parseId(saved);
+    if (id) emit(id);
   })
   .catch(() => {});
 
@@ -54,7 +142,16 @@ function subscribe(listener: () => void) {
 
 const getSnapshot = () => current;
 
+/**
+ * Cambia l'icona dell'app. Su iOS il sistema mostra un avviso dopo il cambio. Se il cambio
+ * nativo fallisce, la scelta precedente resta e l'errore risale a chi chiama.
+ */
 export async function setAppIcon(id: AppIconId) {
+  const icon = findIcon(id);
+  if (!icon) return;
+  if (ALTERNATE_ICONS_SUPPORTED && iconsModule) {
+    await iconsModule.setAlternateAppIcon(icon.nativeName);
+  }
   emit(id);
   await AsyncStorage.setItem(STORAGE_KEY, id).catch(() => {});
 }

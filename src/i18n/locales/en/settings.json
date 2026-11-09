@@ -90,14 +90,23 @@
     },
     "icon": {
       "title": "App icon",
-      "hint": "The icon on your phone's Home screen.",
-      "simulated": "Preview: the real icon will change with the 2.0 build.",
+      "hint": "The icon on your phone's Home screen. Collection, Classic and Night are free.",
       "names": {
-        "default": "Classic",
-        "gold": "Gold",
+        "collection": "Collection",
+        "classic": "Classic",
+        "night": "Night",
+        "shinyGold": "Shiny Gold",
         "retro": "Retro",
-        "spectre": "Spectre"
-      }
+        "spectre": "Spectre",
+        "device": "Device"
+      },
+      "access": {
+        "free": "Free",
+        "styles": "With the Style pack or Pokédex Pro. Tap to unlock",
+        "deviceTheme": "Only with the Device theme"
+      },
+      "unsupported": "The phone icon can't change here: you need the app installed from the store.",
+      "web": "The icon can't be changed on the web: it applies to the phone app."
     }
   },
   "premium": {

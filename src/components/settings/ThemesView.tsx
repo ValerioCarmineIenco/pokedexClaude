@@ -1,9 +1,9 @@
 import { useTranslation } from 'react-i18next';
-import { Pressable, ScrollView, Text, View } from 'react-native';
+import { Platform, Pressable, ScrollView, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-import { APP_ICONS, useAppIcon, type AppIcon } from '@/purchases/appIcon';
-import { PURCHASES_SIMULATED, useEntitlements } from '@/purchases/store';
+import { ALTERNATE_ICONS_SUPPORTED, APP_ICONS, useAppIcon, type AppIcon, type AppIconAccess } from '@/purchases/appIcon';
+import { useEntitlements } from '@/purchases/store';
 import { colors, radius } from '@/theme/colors';
 import { fonts } from '@/theme/fonts';
 import { themedStyles } from '@/theme/styles';
@@ -146,33 +146,39 @@ function ThemeCard({
   );
 }
 
+/** Se un'icona è sbloccata. */
+function iconUnlocked(access: AppIconAccess, styles: boolean) {
+  if (access === 'free') return true;
+  if (access === 'styles') return styles;
+  // L'icona Dispositivo si sblocca con il tema Dispositivo, che arriva con il suo modulo.
+  return false;
+}
+
 function AppIconSection({ unlocked, onUnlock }: { unlocked: boolean; onUnlock: () => void }) {
   const { t } = useTranslation('settings');
   const [current, setCurrent] = useAppIcon();
   const choose = (icon: AppIcon) => {
-    if (icon.premium && !unlocked) onUnlock();
-    else void setCurrent(icon.id);
+    if (!iconUnlocked(icon.access, unlocked)) onUnlock();
+    else if (icon.id !== current) setCurrent(icon.id).catch(() => {});
   };
   return (
     <View style={styles.iconSection}>
-      <View style={styles.premiumHeader}>
-        <Icon name="star" size={16} color={colors.accent} />
-        <Text style={styles.sectionTitle} accessibilityRole="header">
-          {t('themes.icon.title')}
-        </Text>
-      </View>
+      <Text style={styles.sectionTitle} accessibilityRole="header">
+        {t('themes.icon.title')}
+      </Text>
       <Text style={styles.sectionHint}>{t('themes.icon.hint')}</Text>
       <View style={styles.icons} accessibilityRole="radiogroup">
         {APP_ICONS.map((icon) => {
           const selected = icon.id === current;
-          const locked = icon.premium && !unlocked;
+          const locked = !iconUnlocked(icon.access, unlocked);
+          const name = t(`themes.icon.names.${icon.id}`);
           return (
             <Pressable
               key={icon.id}
               onPress={() => choose(icon)}
               accessibilityRole="radio"
               accessibilityState={{ selected }}
-              accessibilityLabel={t(`themes.icon.names.${icon.id}`)}
+              accessibilityLabel={locked ? `${name}. ${t(`themes.icon.access.${icon.access}`)}` : name}
               style={({ pressed }) => [styles.iconOption, pressed && styles.pressed]}>
               <View style={[styles.iconRing, selected && styles.iconRingSelected]}>
                 <AppIconPreview icon={icon} size={58} />
@@ -182,14 +188,16 @@ function AppIconSection({ unlocked, onUnlock }: { unlocked: boolean; onUnlock: (
                   </View>
                 ) : null}
               </View>
-              <Text style={[styles.iconLabel, selected && styles.iconLabelSelected]}>
-                {t(`themes.icon.names.${icon.id}`)}
+              <Text style={[styles.iconLabel, selected && styles.iconLabelSelected]} numberOfLines={1}>
+                {name}
               </Text>
             </Pressable>
           );
         })}
       </View>
-      {PURCHASES_SIMULATED ? <Text style={styles.note}>{t('themes.icon.simulated')}</Text> : null}
+      {ALTERNATE_ICONS_SUPPORTED ? null : (
+        <Text style={styles.note}>{t(Platform.OS === 'web' ? 'themes.icon.web' : 'themes.icon.unsupported')}</Text>
+      )}
     </View>
   );
 }
@@ -330,9 +338,13 @@ const styles = themedStyles(() => ({
   },
   icons: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    flexWrap: 'wrap',
+    rowGap: 14,
+    marginHorizontal: -4,
   },
   iconOption: {
+    width: '25%',
+    paddingHorizontal: 4,
     alignItems: 'center',
     gap: 6,
   },
