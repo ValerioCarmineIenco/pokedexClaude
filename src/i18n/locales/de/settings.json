@@ -103,12 +103,14 @@
     "restored_one": "{{count}} Kauf wiederhergestellt.",
     "restored_other": "{{count}} Käufe wiederhergestellt.",
     "nothingToRestore": "Keine Käufe zum Wiederherstellen.",
+    "failed": "Der Kauf hat nicht geklappt. Prüfe deine Verbindung und versuche es erneut.",
+    "restoreFailed": "Käufe konnten nicht wiederhergestellt werden. Prüfe deine Verbindung und versuche es erneut.",
     "simulated": "Testversion: Käufe sind simuliert und kostenlos.",
     "reset": "Simulierte Käufe zurücksetzen",
     "products": {
       "pokedex_pro": {
         "title": "Pokédex Pro",
-        "description": "Alles: keine Werbung, Premium-Designs und -Symbole und kommende Pro-Funktionen."
+        "description": "Alles in einem: keine Werbung, Premium-Designs und -Icons und die Pro-Funktionen. Das Gerät-Design gibt es separat."
       },
       "remove_ads": {
         "title": "Werbung entfernen",
@@ -117,7 +119,21 @@
       "style_pack": {
         "title": "Stil-Paket",
         "description": "Die Designs Schillerndes Gold, Retro und Phantom und alternative App-Symbole."
+      },
+      "device_theme": {
+        "title": "Gerät-Design",
+        "description": "Macht die App zu einem Pokédex zum In-der-Hand-Halten, mit Bildschirm und Tasten. Separat erhältlich: nicht in Pro enthalten."
       }
+    },
+    "web": {
+      "note": "Im Web sind keine Käufe möglich. Um Designs und Funktionen freizuschalten, lade die App für iPhone oder Android.",
+      "title": "Vollständige Vorschau",
+      "hint": "Du hast das Passwort? Schalte alles in diesem Browser frei, um es auszuprobieren.",
+      "password": "Passwort",
+      "unlock": "Freischalten",
+      "wrong": "Falsches Passwort.",
+      "unlocked": "Vorschau in diesem Browser freigeschaltet: kostenpflichtige Designs, Icons und Funktionen sind aktiv.",
+      "lock": "Wieder sperren"
     }
   }
 }

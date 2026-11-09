@@ -103,12 +103,14 @@
     "restored_one": "{{count}} achat restauré.",
     "restored_other": "{{count}} achats restaurés.",
     "nothingToRestore": "Aucun achat à restaurer.",
+    "failed": "L'achat n'a pas abouti. Vérifiez votre connexion et réessayez.",
+    "restoreFailed": "Impossible de restaurer les achats. Vérifiez votre connexion et réessayez.",
     "simulated": "Version de test : les achats sont simulés et gratuits.",
     "reset": "Réinitialiser les achats simulés",
     "products": {
       "pokedex_pro": {
         "title": "Pokédex Pro",
-        "description": "Tout : sans pubs, thèmes et icônes premium, et les futures fonctions Pro."
+        "description": "Tout en un : sans publicité, thèmes et icônes premium, et les fonctions Pro. Le thème Appareil est vendu à part."
       },
       "remove_ads": {
         "title": "Supprimer les pubs",
@@ -117,7 +119,21 @@
       "style_pack": {
         "title": "Pack style",
         "description": "Les thèmes Or Chromatique, Rétro et Spectre et les icônes alternatives."
+      },
+      "device_theme": {
+        "title": "Thème Appareil",
+        "description": "L'app devient un Pokédex à tenir en main, avec écran et boutons. Vendu à part : non inclus dans Pro."
       }
+    },
+    "web": {
+      "note": "Les achats ne sont pas disponibles sur le web. Pour débloquer thèmes et fonctions, téléchargez l'app pour iPhone ou Android.",
+      "title": "Aperçu complet",
+      "hint": "Vous avez le mot de passe ? Débloquez tout dans ce navigateur pour l'essayer.",
+      "password": "Mot de passe",
+      "unlock": "Débloquer",
+      "wrong": "Mot de passe incorrect.",
+      "unlocked": "Aperçu débloqué dans ce navigateur : thèmes, icônes et fonctions payants sont actifs.",
+      "lock": "Verrouiller à nouveau"
     }
   }
 }

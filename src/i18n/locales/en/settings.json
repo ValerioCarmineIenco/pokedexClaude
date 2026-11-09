@@ -103,12 +103,14 @@
     "restored_one": "Restored {{count}} purchase.",
     "restored_other": "Restored {{count}} purchases.",
     "nothingToRestore": "No purchases to restore.",
+    "failed": "The purchase didn't go through. Check your connection and try again.",
+    "restoreFailed": "Couldn't restore purchases. Check your connection and try again.",
     "simulated": "Test build: purchases are simulated and free.",
     "reset": "Reset simulated purchases",
     "products": {
       "pokedex_pro": {
         "title": "Pokédex Pro",
-        "description": "Everything: no ads, premium themes and icons, plus upcoming Pro features."
+        "description": "Everything in one: no ads, premium themes and icons, and the Pro features. The Device theme is sold separately."
       },
       "remove_ads": {
         "title": "Remove ads",
@@ -117,7 +119,21 @@
       "style_pack": {
         "title": "Style pack",
         "description": "The Shiny Gold, Retro and Spectre themes and the alternate app icons."
+      },
+      "device_theme": {
+        "title": "Device theme",
+        "description": "Turns the app into a handheld Pokédex, with a screen and buttons. Sold separately: not included in Pro."
       }
+    },
+    "web": {
+      "note": "Purchases aren't available on the web. To unlock themes and features, get the app for iPhone or Android.",
+      "title": "Full preview",
+      "hint": "Have the password? Unlock everything in this browser to try it out.",
+      "password": "Password",
+      "unlock": "Unlock",
+      "wrong": "Wrong password.",
+      "unlocked": "Preview unlocked in this browser: paid themes, icons and features are on.",
+      "lock": "Lock again"
     }
   }
 }

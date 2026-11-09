@@ -37,6 +37,15 @@ jobs:
             app.expo.experiments = { ...app.expo.experiments, baseUrl: process.env.BASE_URL };
             fs.writeFileSync("app.json", JSON.stringify(app, null, 2));
           '
+      # Premium themes and Pro features stay locked on the web; the WEB_PREVIEW_PASSWORD
+      # secret unlocks a preview in the browser. Only its SHA-256 goes into the bundle.
+      - name: Set web preview password hash
+        env:
+          WEB_PREVIEW_PASSWORD: ${{ secrets.WEB_PREVIEW_PASSWORD }}
+        run: |
+          if [ -n "$WEB_PREVIEW_PASSWORD" ]; then
+            echo "EXPO_PUBLIC_WEB_PREVIEW_PASSWORD_SHA256=$(printf '%s' "$WEB_PREVIEW_PASSWORD" | sha256sum | cut -d' ' -f1)" >> "$GITHUB_ENV"
+          fi
       - run: npx expo export --platform web
       # Pages has no rewrites: unknown paths (e.g. /pokemon/25) fall back to
       # 404.html, which boots the router and renders the right screen.
