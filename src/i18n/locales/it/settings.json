@@ -45,5 +45,79 @@
     "data": "Dati e immagini da <link>PokéAPI</link>, progetto libero e gratuito mantenuto dalla comunità.",
     "unofficial": "Questa è un'app non ufficiale creata da fan, senza scopo di lucro, non affiliata né approvata da Nintendo, Creatures Inc., GAME FREAK inc. o The Pokémon Company.",
     "trademarks": "Pokémon e i nomi dei personaggi sono marchi registrati di Nintendo, Creatures Inc. e GAME FREAK inc. © 1995–{{year}} Nintendo / Creatures Inc. / GAME FREAK inc."
+  },
+  "appearance": {
+    "title": "Aspetto e Premium",
+    "theme": "Tema",
+    "icon": "Icona dell'app",
+    "auto": "Automatico",
+    "premium": "Pokédex Premium",
+    "premiumHint": "Togli la pubblicità e sblocca temi e icone",
+    "premiumOwned": "Grazie per il supporto!"
+  },
+  "themes": {
+    "title": "Temi",
+    "hint": "Cambia i colori di tutta l'app. I colori dei tipi restano quelli ufficiali.",
+    "auto": "Automatico",
+    "autoHint": "Classico di giorno, Notte quando il telefono è in modalità scura",
+    "free": "Gratuiti",
+    "premium": "Premium",
+    "premiumHint": "Inclusi nel Pacchetto stile e in Pokédex Pro",
+    "locked": "Bloccato. Tocca per sbloccare",
+    "unlock": "Sblocca",
+    "names": {
+      "classic": "Classico",
+      "night": "Notte",
+      "ocean": "Oceano",
+      "shinyGold": "Oro Shiny",
+      "retro": "Retrò",
+      "spectre": "Spettro"
+    },
+    "descriptions": {
+      "classic": "Chiaro, rosso Poké Ball",
+      "night": "Scuro, per la sera",
+      "ocean": "Chiaro, azzurro mare",
+      "shinyGold": "Scuro e dorato",
+      "retro": "Verde degli schermi LCD",
+      "spectre": "Viola notte e magenta"
+    },
+    "icon": {
+      "title": "Icona dell'app",
+      "hint": "L'icona sulla schermata Home del telefono.",
+      "simulated": "Anteprima: l'icona vera cambierà con la build 2.0.",
+      "names": {
+        "default": "Classica",
+        "gold": "Oro",
+        "retro": "Retrò",
+        "spectre": "Spettro"
+      }
+    }
+  },
+  "premium": {
+    "title": "Premium",
+    "subtitle": "Sostieni l'app e personalizzala. Acquisti una tantum, niente abbonamenti.",
+    "bestValue": "Conviene",
+    "buy": "Acquista a {{price}}",
+    "owned": "Acquistato",
+    "restore": "Ripristina acquisti",
+    "restored_one": "Ripristinato {{count}} acquisto.",
+    "restored_other": "Ripristinati {{count}} acquisti.",
+    "nothingToRestore": "Nessun acquisto da ripristinare.",
+    "simulated": "Versione di prova: gli acquisti sono simulati e non costano nulla.",
+    "reset": "Azzera acquisti simulati",
+    "products": {
+      "pokedex_pro": {
+        "title": "Pokédex Pro",
+        "description": "Tutto: niente pubblicità, temi e icone premium, e le funzioni Pro in arrivo."
+      },
+      "remove_ads": {
+        "title": "Rimuovi pubblicità",
+        "description": "Niente banner in basso e niente annunci a schermo intero."
+      },
+      "style_pack": {
+        "title": "Pacchetto stile",
+        "description": "I temi Oro Shiny, Retrò e Spettro e le icone alternative dell'app."
+      }
+    }
   }
 }

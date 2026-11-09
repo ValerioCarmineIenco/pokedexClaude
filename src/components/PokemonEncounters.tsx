@@ -1,9 +1,10 @@
-import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { Pressable, Text, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 
 import { colors } from '@/theme/colors';
 import { fonts } from '@/theme/fonts';
 import { getVersionColor } from '@/theme/versionColors';
+import { themedStyles } from '@/theme/styles';
 import type { PokemonEncounterGroup } from '@/types/location';
 
 import { Icon } from './Icon';
@@ -91,7 +92,7 @@ export function PokemonEncounters({
   );
 }
 
-const styles = StyleSheet.create({
+const styles = themedStyles(() => ({
   section: {
     gap: 10,
   },
@@ -177,4 +178,4 @@ const styles = StyleSheet.create({
     fontSize: 13,
     color: colors.surface,
   },
-});
+}));

@@ -1,11 +1,12 @@
 import { useTranslation } from 'react-i18next';
-import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { Pressable, ScrollView, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { getEffectiveness } from '@/api/types';
 import { colors } from '@/theme/colors';
 import { fonts } from '@/theme/fonts';
 import { TYPE_LABELS } from '@/theme/typeNames';
+import { themedStyles } from '@/theme/styles';
 import { TYPE_NAMES, type TypeName } from '@/types/pokemon';
 import { useScrollRestoration } from '@/hooks/useScrollRestoration';
 
@@ -22,9 +23,10 @@ type Effect = 'superEffective' | 'notVeryEffective' | 'noEffect';
 
 /** Aspetto delle caselle diverse da ×1; `effect` dà la legenda e il testo letto dallo screen reader. */
 const CELL_STYLES: Record<number, { label: string; background: string; text: string; effect: Effect }> = {
-  2: { label: '2', background: colors.statUp, text: '#FFFFFF', effect: 'superEffective' },
-  0.5: { label: '½', background: colors.statDown, text: '#FFFFFF', effect: 'notVeryEffective' },
-  0: { label: '0', background: colors.text, text: '#FFFFFF', effect: 'noEffect' },
+  // Getter: i colori seguono il tema attivo.
+  2: { label: '2', get background() { return colors.statUp; }, text: '#FFFFFF', effect: 'superEffective' },
+  0.5: { label: '½', get background() { return colors.statDown; }, text: '#FFFFFF', effect: 'notVeryEffective' },
+  0: { label: '0', get background() { return colors.text; }, get text() { return colors.background; }, effect: 'noEffect' },
 };
 
 export type TypeChartViewProps = {
@@ -147,7 +149,7 @@ export function TypeChartView({ onPressType }: TypeChartViewProps) {
   );
 }
 
-const styles = StyleSheet.create({
+const styles = themedStyles(() => ({
   screen: {
     flex: 1,
     backgroundColor: colors.background,
@@ -242,4 +244,4 @@ const styles = StyleSheet.create({
     fontFamily: fonts.monoBold,
     fontSize: 13,
   },
-});
+}));

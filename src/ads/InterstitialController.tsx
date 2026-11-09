@@ -2,6 +2,8 @@ import { usePathname, useSegments } from 'expo-router';
 import { useEffect, useRef, useState } from 'react';
 import { AppState } from 'react-native';
 
+import { useEntitlements } from '@/purchases/store';
+
 import { adsConfig } from './config';
 import { initAds } from './initAds';
 import { createInterstitialPolicy } from './interstitialPolicy';
@@ -17,7 +19,9 @@ import { nativeAds } from './nativeAds';
 const policy = createInterstitialPolicy(adsConfig.interstitial, Date.now());
 
 export function InterstitialController() {
-  return nativeAds ? <Interstitial ads={nativeAds} /> : null;
+  const entitlements = useEntitlements();
+  // «Rimuovi pubblicità» o Pokédex Pro: niente interstiziali.
+  return nativeAds && !entitlements.has('noAds') ? <Interstitial ads={nativeAds} /> : null;
 }
 
 function Interstitial({ ads }: { ads: NonNullable<typeof nativeAds> }) {

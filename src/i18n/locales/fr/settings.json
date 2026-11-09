@@ -45,5 +45,79 @@
     "data": "Données et images issues de <link>PokéAPI</link>, projet libre et gratuit maintenu par la communauté.",
     "unofficial": "Ceci est une app non officielle créée par des fans, à but non lucratif, ni affiliée ni approuvée par Nintendo, Creatures Inc., GAME FREAK inc. ou The Pokémon Company.",
     "trademarks": "Pokémon et les noms des personnages sont des marques déposées de Nintendo, Creatures Inc. et GAME FREAK inc. © 1995–{{year}} Nintendo / Creatures Inc. / GAME FREAK inc."
+  },
+  "appearance": {
+    "title": "Apparence et Premium",
+    "theme": "Thème",
+    "icon": "Icône de l'app",
+    "auto": "Automatique",
+    "premium": "Pokédex Premium",
+    "premiumHint": "Supprimez les pubs et débloquez thèmes et icônes",
+    "premiumOwned": "Merci pour votre soutien !"
+  },
+  "themes": {
+    "title": "Thèmes",
+    "hint": "Change les couleurs de toute l'app. Les couleurs des types restent officielles.",
+    "auto": "Automatique",
+    "autoHint": "Classique le jour, Nuit quand le téléphone est en mode sombre",
+    "free": "Gratuits",
+    "premium": "Premium",
+    "premiumHint": "Inclus dans le Pack style et Pokédex Pro",
+    "locked": "Verrouillé. Touchez pour débloquer",
+    "unlock": "Débloquer",
+    "names": {
+      "classic": "Classique",
+      "night": "Nuit",
+      "ocean": "Océan",
+      "shinyGold": "Or Chromatique",
+      "retro": "Rétro",
+      "spectre": "Spectre"
+    },
+    "descriptions": {
+      "classic": "Clair, rouge Poké Ball",
+      "night": "Sombre, pour le soir",
+      "ocean": "Clair, bleu océan",
+      "shinyGold": "Sombre et doré",
+      "retro": "Vert des écrans LCD",
+      "spectre": "Violet nuit et magenta"
+    },
+    "icon": {
+      "title": "Icône de l'app",
+      "hint": "L'icône sur l'écran d'accueil du téléphone.",
+      "simulated": "Aperçu : la vraie icône changera avec la version 2.0.",
+      "names": {
+        "default": "Classique",
+        "gold": "Or",
+        "retro": "Rétro",
+        "spectre": "Spectre"
+      }
+    }
+  },
+  "premium": {
+    "title": "Premium",
+    "subtitle": "Soutenez l'app et personnalisez-la. Achats uniques, sans abonnement.",
+    "bestValue": "Meilleure offre",
+    "buy": "Acheter pour {{price}}",
+    "owned": "Acheté",
+    "restore": "Restaurer les achats",
+    "restored_one": "{{count}} achat restauré.",
+    "restored_other": "{{count}} achats restaurés.",
+    "nothingToRestore": "Aucun achat à restaurer.",
+    "simulated": "Version de test : les achats sont simulés et gratuits.",
+    "reset": "Réinitialiser les achats simulés",
+    "products": {
+      "pokedex_pro": {
+        "title": "Pokédex Pro",
+        "description": "Tout : sans pubs, thèmes et icônes premium, et les futures fonctions Pro."
+      },
+      "remove_ads": {
+        "title": "Supprimer les pubs",
+        "description": "Plus de bannière en bas ni de pubs plein écran."
+      },
+      "style_pack": {
+        "title": "Pack style",
+        "description": "Les thèmes Or Chromatique, Rétro et Spectre et les icônes alternatives."
+      }
+    }
   }
 }

@@ -17,7 +17,9 @@
     "typeDetail": "Ficha del tipo",
     "teams": "Equipos",
     "team": "Equipo",
-    "sections": "Secciones"
+    "sections": "Secciones",
+    "themes": "Temas",
+    "premium": "Premium"
   },
   "sections": {
     "pokedex": {

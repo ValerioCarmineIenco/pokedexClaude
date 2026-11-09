@@ -1,11 +1,12 @@
 import { Image } from 'expo-image';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { Pressable, ScrollView, Text, View } from 'react-native';
 
 import { colors } from '@/theme/colors';
 import { fonts } from '@/theme/fonts';
 import { primaryType, TYPE_COLORS, typeTextColor, typeTint } from '@/theme/typeColors';
+import { themedStyles } from '@/theme/styles';
 import type { PokemonForm } from '@/types/pokemon';
 import { STAT_LABELS } from '@/utils/format';
 
@@ -169,7 +170,7 @@ function FormCard({
   );
 }
 
-const styles = StyleSheet.create({
+const styles = themedStyles(() => ({
   section: {
     gap: 10,
   },
@@ -327,4 +328,4 @@ const styles = StyleSheet.create({
     fontSize: 13,
     color: colors.surface,
   },
-});
+}));

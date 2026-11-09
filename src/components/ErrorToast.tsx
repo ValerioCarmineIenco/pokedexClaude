@@ -1,7 +1,8 @@
-import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { Pressable, Text, View } from 'react-native';
 
 import { colors } from '@/theme/colors';
 import { fonts } from '@/theme/fonts';
+import { themedStyles } from '@/theme/styles';
 
 type Props = {
   message: string;
@@ -24,7 +25,7 @@ export function ErrorToast({ message, actionLabel, onAction, bottomInset = 0 }: 
   );
 }
 
-const styles = StyleSheet.create({
+const styles = themedStyles(() => ({
   toast: {
     position: 'absolute',
     left: 12,
@@ -43,11 +44,11 @@ const styles = StyleSheet.create({
     flex: 1,
     fontFamily: fonts.body,
     fontSize: 14,
-    color: '#FFFFFF',
+    color: colors.toastText,
   },
   action: {
     fontFamily: fonts.bodyBold,
     fontSize: 14,
     color: colors.toastAction,
   },
-});
+}));

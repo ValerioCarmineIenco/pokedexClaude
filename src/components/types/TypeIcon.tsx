@@ -1,7 +1,8 @@
 import { Image } from 'expo-image';
-import { StyleSheet, View } from 'react-native';
+import { View } from 'react-native';
 
 import { TYPE_COLORS, typeTextColor } from '@/theme/typeColors';
+import { themedStyles } from '@/theme/styles';
 import type { TypeName } from '@/types/pokemon';
 
 /** Icone dei tipi (vedi assets/images/types/README.md): glifi bianchi, ricolorati con `tintColor`. */
@@ -50,9 +51,9 @@ export function TypeIcon({ type, size }: Props) {
   );
 }
 
-const styles = StyleSheet.create({
+const styles = themedStyles(() => ({
   square: {
     alignItems: 'center',
     justifyContent: 'center',
   },
-});
+}));

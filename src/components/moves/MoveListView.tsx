@@ -1,12 +1,13 @@
 import { FlashList } from '@shopify/flash-list';
 import { useTranslation } from 'react-i18next';
-import { StyleSheet, Text, View } from 'react-native';
+import { Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { useScrollRestoration } from '@/hooks/useScrollRestoration';
 import type { ViewMode } from '@/hooks/useViewMode';
 import { colors } from '@/theme/colors';
 import { fonts } from '@/theme/fonts';
+import { themedStyles } from '@/theme/styles';
 import type { MoveSummary } from '@/types/move';
 
 import { ErrorState } from '../ErrorState';
@@ -105,7 +106,7 @@ export function MoveListView({
   );
 }
 
-const styles = StyleSheet.create({
+const styles = themedStyles(() => ({
   screen: {
     flex: 1,
     backgroundColor: colors.background,
@@ -141,4 +142,4 @@ const styles = StyleSheet.create({
   rowCell: {
     paddingBottom: 8,
   },
-});
+}));

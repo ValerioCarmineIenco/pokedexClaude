@@ -1,13 +1,15 @@
 import { Image } from 'expo-image';
-import { Pressable, StyleSheet, Text, View, type StyleProp, type ViewStyle } from 'react-native';
+import { Pressable, Text, View, type StyleProp, type ViewStyle } from 'react-native';
 
 import { getArtworkUrl } from '@/api/pokemon';
 import { t } from '@/i18n';
 import { pokemonName } from '@/i18n/names';
 import { useArtworkStyle } from '@/hooks/useArtworkStyle';
+import { colors } from '@/theme/colors';
 import { fonts } from '@/theme/fonts';
 import { primaryType, typeTint } from '@/theme/typeColors';
 import { TYPE_LABELS } from '@/theme/typeNames';
+import { themedStyles } from '@/theme/styles';
 import type { ViewMode } from '@/hooks/useViewMode';
 import type { PokemonSummary } from '@/types/pokemon';
 import { formatNumber } from '@/utils/format';
@@ -113,14 +115,14 @@ function StatPill({ stat, style }: { stat: { label: string; value: number }; sty
   );
 }
 
-const styles = StyleSheet.create({
+const styles = themedStyles(() => ({
   stat: {
     alignItems: 'center',
     minWidth: 44,
     paddingHorizontal: 6,
     paddingVertical: 2,
     borderRadius: 8,
-    backgroundColor: 'rgba(255, 255, 255, 0.7)',
+    backgroundColor: colors.veilStrong,
   },
   gridStat: {
     position: 'absolute',
@@ -130,12 +132,12 @@ const styles = StyleSheet.create({
   statLabel: {
     fontFamily: fonts.bodyBold,
     fontSize: 9,
-    color: 'rgba(29, 28, 34, 0.6)',
+    color: colors.textMuted,
   },
   statValue: {
     fontFamily: fonts.monoBold,
     fontSize: 13,
-    color: '#1D1C22',
+    color: colors.text,
   },
   grid: {
     height: GRID_CARD_HEIGHT,
@@ -169,12 +171,12 @@ const styles = StyleSheet.create({
   number: {
     fontFamily: fonts.monoBold,
     fontSize: 11,
-    color: 'rgba(29, 28, 34, 0.6)',
+    color: colors.textMuted,
   },
   name: {
     fontFamily: fonts.display,
     fontSize: 16,
-    color: '#1D1C22',
+    color: colors.text,
   },
   gridTypes: {
     gap: 4,
@@ -199,4 +201,4 @@ const styles = StyleSheet.create({
     gap: 4,
     alignItems: 'flex-end',
   },
-});
+}));

@@ -1,7 +1,8 @@
-import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { Pressable, Text, View } from 'react-native';
 
 import { colors } from '@/theme/colors';
 import { fonts } from '@/theme/fonts';
+import { themedStyles } from '@/theme/styles';
 
 type Props = {
   title: string;
@@ -50,7 +51,7 @@ export function ErrorState({
   );
 }
 
-const styles = StyleSheet.create({
+const styles = themedStyles(() => ({
   container: {
     flex: 1,
     alignItems: 'center',
@@ -65,7 +66,7 @@ const styles = StyleSheet.create({
     borderRadius: 44,
     borderWidth: 6,
     borderStyle: 'dashed',
-    borderColor: '#D8D4CF',
+    borderColor: colors.line,
     alignItems: 'center',
     justifyContent: 'center',
     marginBottom: 4,
@@ -73,7 +74,7 @@ const styles = StyleSheet.create({
   glyph: {
     fontFamily: fonts.displayBold,
     fontSize: 32,
-    color: '#B9B4AD',
+    color: colors.textSubtle,
   },
   title: {
     fontFamily: fonts.displayBold,
@@ -101,7 +102,7 @@ const styles = StyleSheet.create({
   buttonGhost: {
     backgroundColor: 'transparent',
     borderWidth: 1,
-    borderColor: '#D8D4CF',
+    borderColor: colors.line,
   },
   pressed: {
     opacity: 0.8,
@@ -109,9 +110,9 @@ const styles = StyleSheet.create({
   buttonLabel: {
     fontFamily: fonts.bodyBold,
     fontSize: 15,
-    color: '#FFFFFF',
+    color: colors.onAccent,
   },
   buttonLabelGhost: {
     color: colors.text,
   },
-});
+}));

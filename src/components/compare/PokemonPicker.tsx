@@ -1,12 +1,13 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { FlatList, Pressable, StyleSheet, Text, View } from 'react-native';
+import { FlatList, Pressable, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { FIRST_POKEMON_ID, getPokemonSummaries, LAST_POKEMON_ID } from '@/api/pokemon';
 import { usePokemonSearch } from '@/hooks/usePokemonSearch';
 import { colors } from '@/theme/colors';
 import { fonts } from '@/theme/fonts';
+import { themedStyles } from '@/theme/styles';
 import type { PokemonSummary } from '@/types/pokemon';
 
 import { ErrorState } from '../ErrorState';
@@ -87,7 +88,7 @@ function Separator() {
   return <View style={{ height: ROW_GAP }} />;
 }
 
-const styles = StyleSheet.create({
+const styles = themedStyles(() => ({
   screen: {
     flex: 1,
     backgroundColor: colors.background,
@@ -122,4 +123,4 @@ const styles = StyleSheet.create({
   list: {
     paddingHorizontal: 16,
   },
-});
+}));

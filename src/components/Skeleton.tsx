@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { StyleSheet, View, type DimensionValue, type StyleProp, type ViewStyle } from 'react-native';
+import { View, type DimensionValue, type StyleProp, type ViewStyle } from 'react-native';
 import Animated, {
   useAnimatedStyle,
   useReducedMotion,
@@ -10,6 +10,7 @@ import Animated, {
 
 import type { ViewMode } from '@/hooks/useViewMode';
 import { colors } from '@/theme/colors';
+import { themedStyles } from '@/theme/styles';
 
 import { GRID_CARD_HEIGHT, ROW_CARD_HEIGHT } from './PokemonCard';
 
@@ -70,7 +71,7 @@ export function SkeletonCard({ variant }: { variant: ViewMode }) {
   );
 }
 
-const styles = StyleSheet.create({
+const styles = themedStyles(() => ({
   card: {
     backgroundColor: colors.skeleton,
     borderRadius: 16,
@@ -94,4 +95,4 @@ const styles = StyleSheet.create({
   spacer: {
     flex: 1,
   },
-});
+}));

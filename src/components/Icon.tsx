@@ -36,6 +36,11 @@ const ICONS = {
   trash: { ios: 'trash', android: 'delete', web: 'delete' },
   plus: { ios: 'plus', android: 'add', web: 'add' },
   remove: { ios: 'minus.circle.fill', android: 'remove_circle', web: 'remove_circle' },
+  lock: { ios: 'lock.fill', android: 'lock', web: 'lock' },
+  palette: { ios: 'paintpalette.fill', android: 'palette', web: 'palette' },
+  star: { ios: 'star.fill', android: 'star', web: 'star' },
+  noAds: { ios: 'nosign', android: 'block', web: 'block' },
+  restore: { ios: 'arrow.clockwise', android: 'refresh', web: 'refresh' },
 } satisfies Record<string, SymbolName>;
 
 export type IconName = keyof typeof ICONS;

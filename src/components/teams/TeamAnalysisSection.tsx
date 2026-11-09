@@ -1,9 +1,10 @@
 import { Trans, useTranslation } from 'react-i18next';
-import { StyleSheet, Text, View } from 'react-native';
+import { Text, View } from 'react-native';
 
 import { colors } from '@/theme/colors';
 import { fonts } from '@/theme/fonts';
 import { TYPE_LABELS } from '@/theme/typeNames';
+import { themedStyles } from '@/theme/styles';
 import type { TypeName } from '@/types/pokemon';
 import type { TeamAnalysis } from '@/utils/teamAnalysis';
 
@@ -106,7 +107,7 @@ function TypeList({
   );
 }
 
-const styles = StyleSheet.create({
+const styles = themedStyles(() => ({
   section: {
     gap: 10,
   },
@@ -174,4 +175,4 @@ const styles = StyleSheet.create({
     fontSize: 13,
     color: colors.textMuted,
   },
-});
+}));

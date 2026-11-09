@@ -10,6 +10,7 @@ import { useArtworkStyle } from '@/hooks/useArtworkStyle';
 import { colors } from '@/theme/colors';
 import { fonts } from '@/theme/fonts';
 import { primaryType, TYPE_COLORS, typeTint } from '@/theme/typeColors';
+import { themedStyles } from '@/theme/styles';
 import { TYPE_NAMES, type Pokemon, type TypeName } from '@/types/pokemon';
 import { formatName, formatNumber, STAT_LABELS } from '@/utils/format';
 import { type DefenseGroup, type DefenseMultiplier, formatMultiplier } from '@/utils/typeEffectiveness';
@@ -357,7 +358,7 @@ function Section({ title, children }: { title: string; children: React.ReactNode
   );
 }
 
-const styles = StyleSheet.create({
+const styles = themedStyles(() => ({
   screen: {
     flex: 1,
     backgroundColor: colors.surface,
@@ -382,7 +383,7 @@ const styles = StyleSheet.create({
     color: colors.text,
   },
   pressed: {
-    backgroundColor: 'rgba(29, 28, 34, 0.08)',
+    backgroundColor: colors.hairline,
   },
   body: {
     paddingHorizontal: 16,
@@ -417,7 +418,7 @@ const styles = StyleSheet.create({
   number: {
     fontFamily: fonts.monoBold,
     fontSize: 12,
-    color: 'rgba(29, 28, 34, 0.6)',
+    color: colors.textMuted,
   },
   name: {
     fontFamily: fonts.displayBold,
@@ -435,7 +436,7 @@ const styles = StyleSheet.create({
     borderRadius: 999,
     paddingHorizontal: 14,
     paddingVertical: 6,
-    backgroundColor: 'rgba(255, 255, 255, 0.7)',
+    backgroundColor: colors.veilStrong,
   },
   changeLabel: {
     fontFamily: fonts.bodyBold,
@@ -594,4 +595,4 @@ const styles = StyleSheet.create({
   worseText: {
     color: colors.statDown,
   },
-});
+}));

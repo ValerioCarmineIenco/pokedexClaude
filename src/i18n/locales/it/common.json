@@ -17,7 +17,9 @@
     "typeDetail": "Dettaglio tipo",
     "teams": "Squadre",
     "team": "Squadra",
-    "sections": "Sezioni"
+    "sections": "Sezioni",
+    "themes": "Temi",
+    "premium": "Premium"
   },
   "sections": {
     "pokedex": { "title": "Pokédex", "description": "Tutti i Pokémon, per generazione" },

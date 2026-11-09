@@ -1,10 +1,11 @@
 import { useTranslation } from 'react-i18next';
-import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { Pressable, Text, View } from 'react-native';
 
 import type { ViewMode } from '@/hooks/useViewMode';
 import type { PokemonCollection } from '@/types/pokemon';
 import { colors } from '@/theme/colors';
 import { fonts } from '@/theme/fonts';
+import { themedStyles } from '@/theme/styles';
 
 import { GenerationPicker } from './GenerationPicker';
 import { Icon, type IconName } from './Icon';
@@ -160,7 +161,7 @@ function CollectionButton({
   );
 }
 
-const styles = StyleSheet.create({
+const styles = themedStyles(() => ({
   container: {
     paddingHorizontal: 16,
     paddingTop: 8,
@@ -214,7 +215,7 @@ const styles = StyleSheet.create({
   badgeLabel: {
     fontFamily: fonts.monoBold,
     fontSize: 11,
-    color: colors.surface,
+    color: colors.onAccent,
   },
   iconButtonActive: {
     backgroundColor: colors.accent,
@@ -253,4 +254,4 @@ const styles = StyleSheet.create({
     letterSpacing: 0.2,
     color: colors.textSubtle,
   },
-});
+}));

@@ -1,11 +1,12 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { StyleSheet, Text, View } from 'react-native';
+import { Text, View } from 'react-native';
 
 import { LEARN_METHOD_LABELS, LEARN_METHODS } from '@/api/learnset';
 import { getMoveSummary } from '@/api/moves';
 import { colors } from '@/theme/colors';
 import { fonts } from '@/theme/fonts';
+import { themedStyles } from '@/theme/styles';
 import type { LearnedMove, PokemonLearnset } from '@/types/learnset';
 import type { MoveSummary } from '@/types/move';
 import { romanNumeral } from '@/utils/generation';
@@ -158,7 +159,7 @@ function LearnedMoveRow({
   );
 }
 
-const styles = StyleSheet.create({
+const styles = themedStyles(() => ({
   list: {
     gap: 18,
   },
@@ -225,4 +226,4 @@ const styles = StyleSheet.create({
     flex: 1,
     minWidth: 0,
   },
-});
+}));

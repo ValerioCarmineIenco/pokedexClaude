@@ -25,6 +25,7 @@ import { localName, pokemonName } from '@/i18n/names';
 import { colors } from '@/theme/colors';
 import { fonts } from '@/theme/fonts';
 import { primaryType, TYPE_COLORS, typeTint } from '@/theme/typeColors';
+import { themedStyles } from '@/theme/styles';
 import type { EvolutionChain as Chain } from '@/types/evolution';
 import type { PokemonLearnset } from '@/types/learnset';
 import type { PokemonEncounterGroup } from '@/types/location';
@@ -593,7 +594,7 @@ function NavButton({
   onPress?: () => void;
 }) {
   const disabled = !onPress;
-  const tint = disabled ? 'rgba(29, 28, 34, 0.25)' : color;
+  const tint = disabled ? colors.textSubtle : color;
   return (
     <Pressable
       onPress={onPress}
@@ -633,7 +634,7 @@ function Section({ title, children }: { title: string; children: React.ReactNode
   );
 }
 
-const styles = StyleSheet.create({
+const styles = themedStyles(() => ({
   screen: {
     flex: 1,
     backgroundColor: colors.surface,
@@ -675,7 +676,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingHorizontal: 8,
     borderBottomWidth: StyleSheet.hairlineWidth,
-    borderBottomColor: 'rgba(29, 28, 34, 0.12)',
+    borderBottomColor: colors.hairline,
   },
   compactTitle: {
     flex: 1,
@@ -710,7 +711,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row-reverse',
   },
   pressed: {
-    backgroundColor: 'rgba(255, 255, 255, 0.4)',
+    backgroundColor: colors.veil,
   },
   navText: {
     fontFamily: fonts.mono,
@@ -733,7 +734,7 @@ const styles = StyleSheet.create({
   number: {
     fontFamily: fonts.monoBold,
     fontSize: 16,
-    color: 'rgba(29, 28, 34, 0.6)',
+    color: colors.textMuted,
     marginBottom: 6,
   },
   types: {
@@ -771,7 +772,7 @@ const styles = StyleSheet.create({
     fontFamily: fonts.body,
     fontSize: 15,
     lineHeight: 22,
-    color: '#55525C',
+    color: colors.textMuted,
   },
   descriptionSkeleton: {
     gap: 10,
@@ -877,4 +878,4 @@ const styles = StyleSheet.create({
     fontSize: 13,
     color: colors.text,
   },
-});
+}));

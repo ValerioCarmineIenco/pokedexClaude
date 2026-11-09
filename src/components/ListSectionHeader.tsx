@@ -2,6 +2,7 @@ import { StyleSheet, Text, View } from 'react-native';
 
 import { colors } from '@/theme/colors';
 import { fonts } from '@/theme/fonts';
+import { themedStyles } from '@/theme/styles';
 
 type Props = {
   title: string;
@@ -29,7 +30,7 @@ export function ListSectionHeader({ title, meta, isFirst, inset, swatch }: Props
   );
 }
 
-const styles = StyleSheet.create({
+const styles = themedStyles(() => ({
   header: {
     flexDirection: 'row',
     alignItems: 'baseline',
@@ -64,4 +65,4 @@ const styles = StyleSheet.create({
     backgroundColor: colors.line,
     alignSelf: 'center',
   },
-});
+}));

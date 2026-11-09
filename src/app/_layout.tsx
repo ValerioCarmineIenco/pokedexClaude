@@ -1,6 +1,5 @@
 import { Stack } from 'expo-router';
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, View } from 'react-native';
+import { View } from 'react-native';
 
 import { AdBanner } from '@/ads/AdBanner';
 import { InterstitialController } from '@/ads/InterstitialController';
@@ -8,17 +7,19 @@ import { QueryProvider } from '@/api/QueryProvider';
 import { FontsGate } from '@/components/FontsGate';
 import { LanguageGate } from '@/components/LanguageGate';
 import { StartupLoader } from '@/components/LoadingScreen';
+import { ThemeGate } from '@/components/ThemeGate';
 import { t } from '@/i18n';
 import { colors, radius } from '@/theme/colors';
+import { themedStyles } from '@/theme/styles';
 
 export default function RootLayout() {
   return (
     <QueryProvider>
       <FontsGate>
+        <ThemeGate>
         {/* Le schermate occupano lo spazio sopra il banner pubblicitario, che non le copre. */}
         <View style={styles.screens}>
           <LanguageGate>
-            <StatusBar style="dark" />
             <Stack
               screenOptions={{
                 headerShown: false,
@@ -32,6 +33,9 @@ export default function RootLayout() {
               {/* Confronto tra due Pokémon (param a e b, i due id). */}
               <Stack.Screen name="compare" options={{ title: t('common:screens.compare') }} />
               <Stack.Screen name="settings" options={{ title: t('common:screens.settings') }} />
+              {/* 2.0: scelta del tema e dell'icona, e negozio degli acquisti in-app. */}
+              <Stack.Screen name="themes" options={{ title: t('common:screens.themes') }} />
+              <Stack.Screen name="premium" options={{ title: t('common:screens.premium') }} />
               {/* Sezione Oggetti: elenco (ItemsList) e dettaglio (ItemDetail, param itemId). */}
               <Stack.Screen name="items/index" options={{ title: t('common:screens.items') }} />
               <Stack.Screen
@@ -92,11 +96,12 @@ export default function RootLayout() {
         <InterstitialController />
         {/* Schermata di caricamento iniziale, sopra lo Stack finché la cache non è pronta. */}
         <StartupLoader />
+        </ThemeGate>
       </FontsGate>
     </QueryProvider>
   );
 }
 
-const styles = StyleSheet.create({
+const styles = themedStyles(() => ({
   screens: { flex: 1 },
-});
+}));

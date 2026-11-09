@@ -4,6 +4,7 @@ import { Modal, Pressable, ScrollView, StyleSheet, Text, useWindowDimensions, Vi
 
 import { colors, radius } from '@/theme/colors';
 import { fonts } from '@/theme/fonts';
+import { themedStyles } from '@/theme/styles';
 
 import { Icon } from './Icon';
 
@@ -120,7 +121,7 @@ export function OptionPicker<T extends string | number>({
   );
 }
 
-const styles = StyleSheet.create({
+const styles = themedStyles(() => ({
   button: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -201,4 +202,4 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: colors.textSubtle,
   },
-});
+}));

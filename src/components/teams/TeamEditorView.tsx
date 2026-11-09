@@ -1,12 +1,13 @@
 import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Platform, Pressable, ScrollView, Share, StyleSheet, Text, TextInput, View } from 'react-native';
+import { Platform, Pressable, ScrollView, Share, Text, TextInput, View } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { t as translate } from '@/i18n';
 import { colors } from '@/theme/colors';
 import { fonts } from '@/theme/fonts';
+import { themedStyles } from '@/theme/styles';
 import { TEAM_SIZE, type Team } from '@/types/team';
 import type { PokemonSummary } from '@/types/pokemon';
 import { analyzeTeam, formatTeamText, getTeamMembers } from '@/utils/teamAnalysis';
@@ -163,7 +164,7 @@ export function TeamEditorView({
   );
 }
 
-const styles = StyleSheet.create({
+const styles = themedStyles(() => ({
   screen: {
     flex: 1,
     backgroundColor: colors.background,
@@ -182,7 +183,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   pressed: {
-    backgroundColor: 'rgba(29, 28, 34, 0.08)',
+    backgroundColor: colors.hairline,
   },
   disabled: {
     opacity: 0.35,
@@ -253,6 +254,6 @@ const styles = StyleSheet.create({
     color: colors.statDown,
   },
   deleteLabelConfirm: {
-    color: colors.surface,
+    color: '#FFFFFF',
   },
-});
+}));
