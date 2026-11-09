@@ -19,10 +19,6 @@
     "pickerLabelAll": "Generation: alle",
     "pickerHint": "Öffnet die Auswahl der Generation"
   },
-  "sectionMenu": {
-    "heading": "Was möchtest du sehen?",
-    "titleLabel": "{{title}}, Bereich wechseln"
-  },
   "viewToggle": {
     "grid": "Rasteransicht",
     "row": "Listenansicht"

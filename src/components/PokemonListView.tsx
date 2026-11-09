@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { RefreshControl, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
+import { useTabBarInset } from '@/components/navigation/TabBar';
 import { GENERATIONS, getGenerationById, LAST_POKEMON_ID } from '@/api/generations';
 import type { ViewMode } from '@/hooks/useViewMode';
 import { colors } from '@/theme/colors';
@@ -123,6 +124,7 @@ export function PokemonListView({
 }: PokemonListViewProps) {
   const { t } = useTranslation('pokedex');
   const insets = useSafeAreaInsets();
+  const tabBarInset = useTabBarInset();
   const { ref: scrollRef, onScroll } = useScrollRestoration();
   const isGrid = viewMode === 'grid';
   const isSearching = searchText.trim().length > 0;
@@ -286,7 +288,7 @@ export function PokemonListView({
           contentContainerStyle={{
             paddingHorizontal: isGrid ? SIDE - GAP / 2 : SIDE,
             paddingTop: 2,
-            paddingBottom: insets.bottom + 24,
+            paddingBottom: tabBarInset,
           }}
           onViewableItemsChanged={onViewableItemsChanged}
           onEndReached={usesNetwork && hasNextPage ? onEndReached : undefined}
@@ -345,7 +347,7 @@ export function PokemonListView({
           message={errorMessage}
           actionLabel={t('common.retry')}
           onAction={onRetry}
-          bottomInset={insets.bottom}
+          bottomInset={tabBarInset - 16}
         />
       )}
       <PokemonFilterSheet

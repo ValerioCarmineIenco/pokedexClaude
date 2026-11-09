@@ -19,10 +19,6 @@
     "pickerLabelAll": "Generation: all",
     "pickerHint": "Opens the generation picker"
   },
-  "sectionMenu": {
-    "heading": "What do you want to see?",
-    "titleLabel": "{{title}}, change section"
-  },
   "viewToggle": {
     "grid": "Grid view",
     "row": "Single-row view"

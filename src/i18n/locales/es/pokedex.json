@@ -19,10 +19,6 @@
     "pickerLabelAll": "Generación: todas",
     "pickerHint": "Abre la selección de generación"
   },
-  "sectionMenu": {
-    "heading": "¿Qué quieres ver?",
-    "titleLabel": "{{title}}, cambiar de sección"
-  },
   "viewToggle": {
     "grid": "Vista en cuadrícula",
     "row": "Vista en lista"

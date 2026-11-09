@@ -19,10 +19,6 @@
     "pickerLabelAll": "世代：すべて",
     "pickerHint": "世代の選択を開きます"
   },
-  "sectionMenu": {
-    "heading": "何を見ますか？",
-    "titleLabel": "{{title}}、セクションを切り替え"
-  },
   "viewToggle": {
     "grid": "グリッド表示",
     "row": "リスト表示"

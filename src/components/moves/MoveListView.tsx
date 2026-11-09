@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
+import { useTabBarInset } from '@/components/navigation/TabBar';
 import { useScrollRestoration } from '@/hooks/useScrollRestoration';
 import type { ViewMode } from '@/hooks/useViewMode';
 import { colors } from '@/theme/colors';
@@ -47,6 +48,7 @@ export function MoveListView({
 }: MoveListViewProps) {
   const { t } = useTranslation('moves');
   const insets = useSafeAreaInsets();
+  const tabBarInset = useTabBarInset();
   const isGrid = viewMode === 'grid';
   const count = totalCount ?? moves.length;
   const isSearching = searchText.trim().length > 0;
@@ -86,7 +88,7 @@ export function MoveListView({
         contentContainerStyle={{
           paddingHorizontal: isGrid ? SIDE - GAP / 2 : SIDE,
           paddingTop: 2,
-          paddingBottom: insets.bottom + 24,
+          paddingBottom: tabBarInset,
         }}
         ListEmptyComponent={
           isSearching ? (
