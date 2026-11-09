@@ -1,9 +1,10 @@
-import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { Pressable, Text, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 
 import { colors } from '@/theme/colors';
 import { fonts } from '@/theme/fonts';
 import { TYPE_COLORS, typeTextColor, typeTint } from '@/theme/typeColors';
+import { themedStyles } from '@/theme/styles';
 import type { TypeName } from '@/types/pokemon';
 import { type DefenseGroup, type DefenseMultiplier, formatMultiplier } from '@/utils/typeEffectiveness';
 
@@ -73,7 +74,7 @@ export function TypeDefenseSection({ type, groups, isLoading, errorMessage, onRe
   );
 }
 
-const styles = StyleSheet.create({
+const styles = themedStyles(() => ({
   section: {
     gap: 10,
   },
@@ -119,4 +120,4 @@ const styles = StyleSheet.create({
     fontSize: 13,
     color: colors.surface,
   },
-});
+}));

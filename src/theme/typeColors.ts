@@ -1,3 +1,4 @@
+import { tintColor } from './colors';
 import type { TypeName } from '@/types/pokemon';
 
 /** Colore pieno di ciascuno dei 18 tipi. */
@@ -41,11 +42,9 @@ export function typeTextColor(type: TypeName): string {
   return LIGHT_TYPES.has(type) ? DARK_TEXT : LIGHT_TEXT;
 }
 
-/** Mescola il colore del tipo col bianco: `amount` è la quota di colore (0–1). */
+/** Mescola il colore del tipo con la base del tema (bianco nei temi chiari): `amount` è la quota di colore (0–1). */
 export function typeTint(type: TypeName, amount = 0.28): string {
-  const n = parseInt(TYPE_COLORS[type].slice(1), 16);
-  const mix = (c: number) => Math.round(c * amount + 255 * (1 - amount));
-  return `rgb(${mix(n >> 16)}, ${mix((n >> 8) & 255)}, ${mix(n & 255)})`;
+  return tintColor(TYPE_COLORS[type], amount);
 }
 
 export function primaryType(types: TypeName[]): TypeName {

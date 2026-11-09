@@ -1,9 +1,10 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { ActivityIndicator, Linking, Platform, Pressable, StyleSheet, Text, View } from 'react-native';
+import { ActivityIndicator, Linking, Platform, Pressable, Text, View } from 'react-native';
 
 import { colors, radius } from '@/theme/colors';
 import { fonts } from '@/theme/fonts';
+import { themedStyles } from '@/theme/styles';
 
 import { showAdsPrivacyOptions, useAdsState } from './consent';
 
@@ -82,7 +83,7 @@ function PrivacyButton({
 }
 
 // Stessi stili delle altre sezioni di `SettingsView`.
-const styles = StyleSheet.create({
+const styles = themedStyles(() => ({
   section: {
     gap: 8,
   },
@@ -125,4 +126,4 @@ const styles = StyleSheet.create({
     lineHeight: 18,
     color: colors.textSubtle,
   },
-});
+}));

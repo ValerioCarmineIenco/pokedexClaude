@@ -52,5 +52,79 @@
     "data": "Data and images from <link>PokéAPI</link>, a free and open project maintained by the community.",
     "unofficial": "This is an unofficial, non-profit fan-made app, not affiliated with or endorsed by Nintendo, Creatures Inc., GAME FREAK inc. or The Pokémon Company.",
     "trademarks": "Pokémon and character names are trademarks of Nintendo, Creatures Inc. and GAME FREAK inc. © 1995–{{year}} Nintendo / Creatures Inc. / GAME FREAK inc."
+  },
+  "appearance": {
+    "title": "Appearance & Premium",
+    "theme": "Theme",
+    "icon": "App icon",
+    "auto": "Automatic",
+    "premium": "Pokédex Premium",
+    "premiumHint": "Remove ads and unlock themes and icons",
+    "premiumOwned": "Thanks for your support!"
+  },
+  "themes": {
+    "title": "Themes",
+    "hint": "Changes the colors of the whole app. Type colors stay the official ones.",
+    "auto": "Automatic",
+    "autoHint": "Classic by day, Night when your phone is in dark mode",
+    "free": "Free",
+    "premium": "Premium",
+    "premiumHint": "Included in the Style pack and Pokédex Pro",
+    "locked": "Locked. Tap to unlock",
+    "unlock": "Unlock",
+    "names": {
+      "classic": "Classic",
+      "night": "Night",
+      "ocean": "Ocean",
+      "shinyGold": "Shiny Gold",
+      "retro": "Retro",
+      "spectre": "Spectre"
+    },
+    "descriptions": {
+      "classic": "Light, Poké Ball red",
+      "night": "Dark, for the evening",
+      "ocean": "Light, sea blue",
+      "shinyGold": "Dark and golden",
+      "retro": "LCD screen green",
+      "spectre": "Night purple and magenta"
+    },
+    "icon": {
+      "title": "App icon",
+      "hint": "The icon on your phone's Home screen.",
+      "simulated": "Preview: the real icon will change with the 2.0 build.",
+      "names": {
+        "default": "Classic",
+        "gold": "Gold",
+        "retro": "Retro",
+        "spectre": "Spectre"
+      }
+    }
+  },
+  "premium": {
+    "title": "Premium",
+    "subtitle": "Support the app and make it yours. One-time purchases, no subscriptions.",
+    "bestValue": "Best value",
+    "buy": "Buy for {{price}}",
+    "owned": "Purchased",
+    "restore": "Restore purchases",
+    "restored_one": "Restored {{count}} purchase.",
+    "restored_other": "Restored {{count}} purchases.",
+    "nothingToRestore": "No purchases to restore.",
+    "simulated": "Test build: purchases are simulated and free.",
+    "reset": "Reset simulated purchases",
+    "products": {
+      "pokedex_pro": {
+        "title": "Pokédex Pro",
+        "description": "Everything: no ads, premium themes and icons, plus upcoming Pro features."
+      },
+      "remove_ads": {
+        "title": "Remove ads",
+        "description": "No banner at the bottom and no full-screen ads."
+      },
+      "style_pack": {
+        "title": "Style pack",
+        "description": "The Shiny Gold, Retro and Spectre themes and the alternate app icons."
+      }
+    }
   }
 }

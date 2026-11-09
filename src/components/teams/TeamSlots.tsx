@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Pressable, StyleSheet, View } from 'react-native';
+import { Pressable, View } from 'react-native';
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import Animated, {
   type SharedValue,
@@ -12,6 +12,7 @@ import Animated, {
 import { scheduleOnRN } from 'react-native-worklets';
 
 import { colors } from '@/theme/colors';
+import { themedStyles } from '@/theme/styles';
 import type { PokemonSummary } from '@/types/pokemon';
 import { pokemonName } from '@/i18n/names';
 
@@ -164,7 +165,7 @@ function DraggableRow({
   );
 }
 
-const styles = StyleSheet.create({
+const styles = themedStyles(() => ({
   row: {
     position: 'absolute',
     left: 0,
@@ -198,4 +199,4 @@ const styles = StyleSheet.create({
   pressed: {
     backgroundColor: colors.field,
   },
-});
+}));

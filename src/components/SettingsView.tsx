@@ -1,19 +1,24 @@
 import { Image } from 'expo-image';
+import { router } from 'expo-router';
 import { openBrowserAsync } from 'expo-web-browser';
 import { useState } from 'react';
 import { Trans, useTranslation } from 'react-i18next';
-import { ActivityIndicator, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { ActivityIndicator, Pressable, ScrollView, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { AdsPrivacySection } from '@/ads/AdsPrivacySection';
 import { ARTWORK_STYLES, getArtworkUrl, type ArtworkStyle } from '@/api/pokemon';
 import { getDeviceLanguage, LANGUAGES, useLanguagePreference, type LanguagePreference } from '@/i18n';
+import { useAppIcon } from '@/purchases/appIcon';
+import { usePurchases } from '@/purchases/store';
 import { colors, radius } from '@/theme/colors';
+import { useThemePreference } from '@/theme/themeStore';
 import { backupFileName, BackupError, createBackup, restoreBackup } from '@/utils/backup';
 import { pickBackupFile, saveBackupFile } from '@/utils/backupFile';
 import { fonts } from '@/theme/fonts';
+import { themedStyles } from '@/theme/styles';
 
-import { Icon } from './Icon';
+import { Icon, type IconName } from './Icon';
 import { PokeBallLogo } from './PokeBallLogo';
 
 /** Pokémon usato per l'anteprima di ogni stile. */
@@ -50,6 +55,7 @@ export function SettingsView({ artworkStyle, onArtworkStyleChange, onBack }: Pro
         </Text>
       </View>
 
+      <AppearanceSection />
       <LanguageSection />
 
       <View style={styles.section}>
@@ -99,6 +105,68 @@ export function SettingsView({ artworkStyle, onArtworkStyleChange, onBack }: Pro
       <AdsPrivacySection />
       <CreditsSection />
     </ScrollView>
+  );
+}
+
+/** Tema, icona e negozio (2.0): due voci che aprono le loro schermate. */
+function AppearanceSection() {
+  const { t } = useTranslation('settings');
+  const [preference] = useThemePreference();
+  const [appIcon] = useAppIcon();
+  const { owned } = usePurchases();
+  const themeName = preference === 'system' ? t('themes.auto') : t(`themes.names.${preference}`);
+  return (
+    <View style={styles.section}>
+      <Text style={styles.sectionTitle} accessibilityRole="header">
+        {t('appearance.title')}
+      </Text>
+      <View style={styles.options}>
+        <NavRow
+          icon="palette"
+          label={t('appearance.theme')}
+          value={`${themeName} · ${t(`themes.icon.names.${appIcon}`)}`}
+          onPress={() => router.push('/themes')}
+        />
+        <NavRow
+          icon="star"
+          label={t('appearance.premium')}
+          value={owned.length > 0 ? t('appearance.premiumOwned') : t('appearance.premiumHint')}
+          highlighted
+          onPress={() => router.push('/premium')}
+        />
+      </View>
+    </View>
+  );
+}
+
+function NavRow({
+  icon,
+  label,
+  value,
+  highlighted,
+  onPress,
+}: {
+  icon: IconName;
+  label: string;
+  value: string;
+  highlighted?: boolean;
+  onPress: () => void;
+}) {
+  return (
+    <Pressable
+      onPress={onPress}
+      accessibilityRole="button"
+      accessibilityLabel={`${label}. ${value}`}
+      style={({ pressed }) => [styles.option, styles.languageOption, pressed && styles.pressed]}>
+      <View style={[styles.navIcon, highlighted && styles.navIconHighlighted]}>
+        <Icon name={icon} size={18} color={highlighted ? colors.onAccent : colors.accent} />
+      </View>
+      <View style={styles.optionText}>
+        <Text style={styles.optionLabel}>{label}</Text>
+        <Text style={styles.optionDescription}>{value}</Text>
+      </View>
+      <Icon name="next" size={18} color={colors.textSubtle} />
+    </Pressable>
   );
 }
 
@@ -294,7 +362,7 @@ function CreditsSection() {
   );
 }
 
-const styles = StyleSheet.create({
+const styles = themedStyles(() => ({
   screen: {
     flex: 1,
     backgroundColor: colors.background,
@@ -371,6 +439,17 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  navIcon: {
+    width: 36,
+    height: 36,
+    borderRadius: 10,
+    backgroundColor: colors.field,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  navIconHighlighted: {
+    backgroundColor: colors.accent,
+  },
   previewImage: {
     width: 48,
     height: 48,
@@ -445,4 +524,4 @@ const styles = StyleSheet.create({
     borderColor: colors.line,
     marginHorizontal: 1,
   },
-});
+}));

@@ -1,8 +1,9 @@
-import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { Pressable, Text, View } from 'react-native';
 
 import type { ViewMode } from '@/hooks/useViewMode';
 import { colors } from '@/theme/colors';
 import { fonts } from '@/theme/fonts';
+import { themedStyles } from '@/theme/styles';
 
 import { Icon } from '../Icon';
 
@@ -74,7 +75,7 @@ export function AbilityCard({ ability, variant, onPress }: Props) {
   );
 }
 
-const styles = StyleSheet.create({
+const styles = themedStyles(() => ({
   grid: {
     height: GRID_ABILITY_HEIGHT,
     borderRadius: 16,
@@ -122,4 +123,4 @@ const styles = StyleSheet.create({
     lineHeight: 17,
     color: colors.textMuted,
   },
-});
+}));

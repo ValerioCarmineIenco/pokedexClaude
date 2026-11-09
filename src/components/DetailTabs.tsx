@@ -1,8 +1,9 @@
-import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { Pressable, Text, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 
 import { colors } from '@/theme/colors';
 import { fonts } from '@/theme/fonts';
+import { themedStyles } from '@/theme/styles';
 
 export type DetailTab = 'info' | 'evolutions' | 'moves' | 'artwork';
 
@@ -41,7 +42,7 @@ export function DetailTabs({ value, onChange }: Props) {
   );
 }
 
-const styles = StyleSheet.create({
+const styles = themedStyles(() => ({
   track: {
     flexDirection: 'row',
     backgroundColor: colors.field,
@@ -68,4 +69,4 @@ const styles = StyleSheet.create({
   labelSelected: {
     color: colors.text,
   },
-});
+}));

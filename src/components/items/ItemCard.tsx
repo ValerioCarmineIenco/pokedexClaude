@@ -1,10 +1,11 @@
 import { Image } from 'expo-image';
-import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { Pressable, Text, View } from 'react-native';
 
 import type { ViewMode } from '@/hooks/useViewMode';
 import { getCategoryColors } from '@/theme/categoryColors';
 import { colors } from '@/theme/colors';
 import { fonts } from '@/theme/fonts';
+import { themedStyles } from '@/theme/styles';
 import type { Item } from '@/types/item';
 
 export const ROW_ITEM_HEIGHT = 84;
@@ -75,7 +76,7 @@ export function ItemCard({ item, variant, onPress }: Props) {
   );
 }
 
-const styles = StyleSheet.create({
+const styles = themedStyles(() => ({
   grid: {
     gap: 6,
   },
@@ -135,4 +136,4 @@ const styles = StyleSheet.create({
     height: 8,
     borderRadius: 4,
   },
-});
+}));

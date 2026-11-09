@@ -16,6 +16,7 @@ import Animated, {
 
 import { colors } from '@/theme/colors';
 import { fonts } from '@/theme/fonts';
+import { themedStyles } from '@/theme/styles';
 
 const BALL = 120;
 const HALF = BALL / 2;
@@ -183,7 +184,7 @@ function LoadingScreen({ phase, reduceMotion }: { phase: Phase; reduceMotion: bo
   );
 }
 
-const styles = StyleSheet.create({
+const styles = themedStyles(() => ({
   screen: {
     ...StyleSheet.absoluteFill,
     alignItems: 'center',
@@ -287,7 +288,7 @@ const styles = StyleSheet.create({
   title: {
     fontFamily: fonts.displayBold,
     fontSize: 40,
-    color: colors.surface,
+    color: '#FFFFFF',
   },
   subtitle: {
     marginTop: 6,
@@ -295,4 +296,4 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: 'rgba(255, 255, 255, 0.8)',
   },
-});
+}));

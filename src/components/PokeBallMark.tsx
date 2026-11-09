@@ -1,4 +1,5 @@
-import { StyleSheet, View, type StyleProp, type ViewStyle } from 'react-native';
+import { View, type StyleProp, type ViewStyle } from 'react-native';
+import { themedStyles } from '@/theme/styles';
 
 type Props = {
   size: number;
@@ -20,9 +21,9 @@ export function PokeBallMark({ size, thickness, style }: Props) {
   );
 }
 
-const styles = StyleSheet.create({
+const styles = themedStyles(() => ({
   ring: {
     position: 'absolute',
     borderColor: 'rgba(255, 255, 255, 0.35)',
   },
-});
+}));

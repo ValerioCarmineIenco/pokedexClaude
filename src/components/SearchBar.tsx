@@ -1,8 +1,9 @@
 import { useTranslation } from 'react-i18next';
-import { Pressable, StyleSheet, TextInput, View } from 'react-native';
+import { Pressable, TextInput, View } from 'react-native';
 
 import { colors, radius } from '@/theme/colors';
 import { fonts } from '@/theme/fonts';
+import { themedStyles } from '@/theme/styles';
 
 import { Icon } from './Icon';
 
@@ -43,7 +44,7 @@ export function SearchBar({ value, onChangeText, accessibilityLabel }: Props) {
   );
 }
 
-const styles = StyleSheet.create({
+const styles = themedStyles(() => ({
   field: {
     height: 44,
     borderRadius: radius.field,
@@ -60,4 +61,4 @@ const styles = StyleSheet.create({
     fontSize: 15,
     color: colors.text,
   },
-});
+}));

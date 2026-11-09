@@ -13,6 +13,7 @@ import type { TypeName } from '@/types/pokemon';
 import { colors } from '@/theme/colors';
 import { fonts } from '@/theme/fonts';
 import { TYPE_COLORS, typeTextColor, typeTint } from '@/theme/typeColors';
+import { themedStyles } from '@/theme/styles';
 import { formatNumber } from '@/utils/format';
 import { romanNumeral } from '@/utils/generation';
 import { useScrollRestoration } from '@/hooks/useScrollRestoration';
@@ -111,11 +112,11 @@ export function MoveDetailView({
         </Text>
         <View style={styles.badges}>
           <TypeBadge type={type} size="large" />
-          <View style={[styles.badge, { backgroundColor: 'rgba(255, 255, 255, 0.65)' }]}>
+          <View style={[styles.badge, { backgroundColor: colors.veilStrong }]}>
             <Text style={[styles.badgeLabel, { color: colors.text }]}>{head.damageClassLabel}</Text>
           </View>
           {head.generation > 0 && (
-            <View style={[styles.badge, { backgroundColor: 'rgba(255, 255, 255, 0.65)' }]}>
+            <View style={[styles.badge, { backgroundColor: colors.veilStrong }]}>
               <Text style={[styles.badgeLabel, { color: colors.text }]}>
                 {t('generation', { numeral: romanNumeral(head.generation), number: head.generation })}
               </Text>
@@ -376,7 +377,7 @@ function PokemonTile({
   );
 }
 
-const styles = StyleSheet.create({
+const styles = themedStyles(() => ({
   screen: {
     flex: 1,
     backgroundColor: colors.surface,
@@ -416,7 +417,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   pressed: {
-    backgroundColor: 'rgba(255, 255, 255, 0.4)',
+    backgroundColor: colors.veil,
   },
   name: {
     fontFamily: fonts.displayBold,
@@ -483,7 +484,7 @@ const styles = StyleSheet.create({
     fontFamily: fonts.body,
     fontSize: 15,
     lineHeight: 22,
-    color: '#55525C',
+    color: colors.textMuted,
   },
   descriptionSkeleton: {
     gap: 10,
@@ -588,4 +589,4 @@ const styles = StyleSheet.create({
     fontSize: 10,
     color: colors.textMuted,
   },
-});
+}));

@@ -1,8 +1,9 @@
-import { StyleSheet, Text, View } from 'react-native';
+import { Text, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 
 import { colors } from '@/theme/colors';
 import { fonts } from '@/theme/fonts';
+import { themedStyles } from '@/theme/styles';
 import type { MatchupType } from '@/types/move';
 
 import { TypeBadge } from './TypeBadge';
@@ -43,7 +44,7 @@ export function MatchupRow({
   );
 }
 
-const styles = StyleSheet.create({
+const styles = themedStyles(() => ({
   matchupRow: {
     gap: 8,
   },
@@ -78,4 +79,4 @@ const styles = StyleSheet.create({
     fontSize: 13,
     color: colors.textMuted,
   },
-});
+}));

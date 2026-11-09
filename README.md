@@ -44,6 +44,15 @@ Banner fisso in fondo allo schermo e interstiziali con AdMob (`react-native-goog
 - Configurazione in `src/ads/config.ts`: interruttore, soglie, rotte che contano come dettaglio e ID delle unità. Ora ci sono gli ID di prova di Google; gli ID dell'app vanno anche nelle opzioni del plugin in `app.json`.
 - AdMob ha codice nativo: serve una development build (`npx expo run:android|ios` o `npx eas-cli@latest build --profile development`). In Expo Go e sul web l'app funziona normalmente, senza pubblicità.
 
+## Temi e acquisti (2.0)
+
+Sei temi in `src/theme/themes.ts`: Classico, Notte e Oceano gratuiti; Oro Shiny, Retrò e Spettro sbloccati dal Pacchetto stile o da Pokédex Pro. Si scelgono in Impostazioni → Tema (anche «Automatico», che segue la modalità scura del telefono).
+
+- `colors` (in `src/theme/colors.ts`) legge sempre la tavolozza del tema attivo. Gli stili a livello di modulo si creano con `themedStyles(() => ({ … }))` di `src/theme/styles.ts` al posto di `StyleSheet.create`: si ricalcolano al cambio di tema. I colori dei tipi si schiariscono (o scuriscono) con `typeTint`/`tintColor`, che seguono il tema.
+- `ThemeGate` rimonta le schermate a ogni cambio di tema, come `LanguageGate` per la lingua.
+- Acquisti in `src/purchases/`: prodotti in `catalog.ts` (`remove_ads`, `style_pack`, `pokedex_pro`), diritti letti con `useEntitlements()` (`noAds`, `styles`). **Per ora gli acquisti sono simulati** (`PURCHASES_SIMULATED` in `store.ts`) e lo stesso vale per il cambio icona (`appIcon.ts`): istruzioni per collegare RevenueCat ed `expo-alternate-app-icons` nei commenti dei due file.
+- Con `noAds` banner e interstiziali non compaiono.
+
 ## Livello dati
 
 Gli schermi usano solo gli hook di `src/hooks` (React Query); i tipi restituiti sono in `src/types/pokemon.ts` e ricalcano i view model della UI.

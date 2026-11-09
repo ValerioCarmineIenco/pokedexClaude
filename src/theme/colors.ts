@@ -1,31 +1,34 @@
-// Colori dell'interfaccia (solo tema chiaro nella v1).
-export const colors = {
-  accent: '#E3350D',
-  background: '#F7F6F4',
-  surface: '#FFFFFF',
-  text: '#1D1C22',
-  textMuted: '#6B6873',
-  textSubtle: '#8A8792',
-  field: '#EBE9E6',
-  line: '#E1DED9',
-  divider: '#EEEAE6',
-  factBackground: '#F6F4F1',
-  skeleton: '#EFECE8',
-  skeletonLine: '#E2DED9',
-  toast: '#1D1C22',
-  toastAction: '#FFB39F',
-  /** Statistica aumentata / diminuita dalla natura. */
-  statUp: '#2F9E62',
-  statDown: '#D6402B',
-  /** Badge delle località: numero di Pokémon e di giochi. */
-  pokemonBadge: '#D7EFEE',
-  pokemonBadgeText: '#1E8C88',
-  gamesBadge: '#FDEBD3',
-  gamesBadgeText: '#C26A0A',
-  /** Shiny tracker: interruttori attivi e contatore. */
-  shiny: '#FCEFC4',
-  shinyText: '#9A6B00',
-} as const;
+import { getTheme, DEFAULT_THEME_ID, type Palette, type Theme } from './themes';
+
+// Colori dell'interfaccia: la tavolozza del tema attivo (vedi `themes.ts`).
+//
+// `colors.x` si legge sempre al momento dell'uso, quindi segue il tema; gli stili a livello di
+// modulo vanno creati con `themedStyles` (in `styles.ts`), che li ricalcola a ogni cambio di tema.
+
+let activeTheme: Theme = getTheme(DEFAULT_THEME_ID);
+
+/** Cambia la tavolozza in uso. Lo chiama solo `ThemeGate`, che poi rimonta le schermate. */
+export function setActiveTheme(theme: Theme) {
+  activeTheme = theme;
+}
+
+export function getActiveTheme(): Theme {
+  return activeTheme;
+}
+
+export const colors = {} as Readonly<Palette>;
+for (const key of Object.keys(activeTheme.palette) as (keyof Palette)[]) {
+  Object.defineProperty(colors, key, { get: () => activeTheme.palette[key], enumerable: true });
+}
+
+/** Mescola un colore esadecimale con la base delle tinte del tema: `amount` è la quota di colore (0–1). */
+export function tintColor(hex: string, amount: number): string {
+  const base = parseInt(activeTheme.palette.tintBase.slice(1), 16);
+  const n = parseInt(hex.slice(1), 16);
+  const share = Math.min(1, amount * activeTheme.palette.tintStrength);
+  const mix = (c: number, b: number) => Math.round(c * share + b * (1 - share));
+  return `rgb(${mix(n >> 16, base >> 16)}, ${mix((n >> 8) & 255, (base >> 8) & 255)}, ${mix(n & 255, base & 255)})`;
+}
 
 export const radius = {
   card: 16,

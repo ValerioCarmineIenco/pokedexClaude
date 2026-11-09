@@ -16,6 +16,7 @@ import type {
 import { colors } from '@/theme/colors';
 import { fonts } from '@/theme/fonts';
 import { getVersionColor } from '@/theme/versionColors';
+import { themedStyles } from '@/theme/styles';
 import { useScrollRestoration } from '@/hooks/useScrollRestoration';
 
 import { ErrorState } from '../ErrorState';
@@ -23,8 +24,6 @@ import { Icon } from '../Icon';
 import { SkeletonBlock } from '../Skeleton';
 
 /** Verde acqua delle località: badge della regione, etichette dei metodi, livelli. */
-const LOCATION_COLOR = colors.pokemonBadgeText;
-const LOCATION_SOFT = colors.pokemonBadge;
 /** Barra sotto l'area selezionata. */
 const TAB_ACCENT = '#5E7A8A';
 const RATE_COLOR = '#2E8B57';
@@ -271,8 +270,8 @@ function EncounterRow({
         )}
         <View style={styles.stats}>
           <View style={styles.statsColumn}>
-            <View style={[styles.pill, { backgroundColor: LOCATION_SOFT }]}>
-              <Text style={[styles.pillText, styles.centered, { color: LOCATION_COLOR }]}>
+            <View style={[styles.pill, { backgroundColor: colors.pokemonBadge }]}>
+              <Text style={[styles.pillText, styles.centered, { color: colors.pokemonBadgeText }]}>
                 {t('detail.level', { level })}
               </Text>
             </View>
@@ -332,7 +331,7 @@ function LoadingCards() {
   );
 }
 
-const styles = StyleSheet.create({
+const styles = themedStyles(() => ({
   screen: {
     flex: 1,
     backgroundColor: colors.background,
@@ -371,12 +370,12 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     paddingHorizontal: 10,
     paddingVertical: 5,
-    backgroundColor: LOCATION_SOFT,
+    backgroundColor: colors.pokemonBadge,
   },
   regionLabel: {
     fontFamily: fonts.bodyBold,
     fontSize: 13,
-    color: LOCATION_COLOR,
+    color: colors.pokemonBadgeText,
   },
   content: {
     paddingHorizontal: 16,
@@ -460,13 +459,13 @@ const styles = StyleSheet.create({
     paddingHorizontal: 18,
     borderRadius: 999,
     borderWidth: 2,
-    borderColor: LOCATION_COLOR,
+    borderColor: colors.pokemonBadgeText,
     backgroundColor: colors.surface,
   },
   methodLabelText: {
     fontFamily: fonts.display,
     fontSize: 17,
-    color: LOCATION_COLOR,
+    color: colors.pokemonBadgeText,
   },
   row: {
     flexDirection: 'row',
@@ -539,4 +538,4 @@ const styles = StyleSheet.create({
     width: StyleSheet.hairlineWidth * 2,
     backgroundColor: colors.line,
   },
-});
+}));

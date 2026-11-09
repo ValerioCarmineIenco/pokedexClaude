@@ -1,9 +1,10 @@
 import { useTranslation } from 'react-i18next';
-import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { Pressable, Text, View } from 'react-native';
 
 import type { LocationSummary } from '@/types/location';
 import { colors } from '@/theme/colors';
 import { fonts } from '@/theme/fonts';
+import { themedStyles } from '@/theme/styles';
 
 import { Icon } from '../Icon';
 
@@ -66,7 +67,7 @@ export function LocationCard({ location, showRegion = false, onPress }: Props) {
   );
 }
 
-const styles = StyleSheet.create({
+const styles = themedStyles(() => ({
   card: {
     height: LOCATION_CARD_HEIGHT,
     flexDirection: 'row',
@@ -103,4 +104,4 @@ const styles = StyleSheet.create({
     fontSize: 12,
     letterSpacing: 0.2,
   },
-});
+}));

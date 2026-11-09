@@ -1,11 +1,12 @@
 import { FlashList } from '@shopify/flash-list';
 import { useTranslation } from 'react-i18next';
-import { RefreshControl, StyleSheet, Text, View } from 'react-native';
+import { RefreshControl, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import type { Nature } from '@/types/nature';
 import { colors } from '@/theme/colors';
 import { fonts } from '@/theme/fonts';
+import { themedStyles } from '@/theme/styles';
 import { useScrollRestoration } from '@/hooks/useScrollRestoration';
 
 import { ErrorState } from '../ErrorState';
@@ -165,7 +166,7 @@ export function NatureListView({
   );
 }
 
-const styles = StyleSheet.create({
+const styles = themedStyles(() => ({
   screen: {
     flex: 1,
     backgroundColor: colors.background,
@@ -211,4 +212,4 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     paddingRight: '12%',
   },
-});
+}));

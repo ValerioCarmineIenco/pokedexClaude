@@ -1,8 +1,9 @@
-import { StyleSheet, Text, View } from 'react-native';
+import { Text, View } from 'react-native';
 
 import type { ItemCategory } from '@/types/item';
 import { getCategoryColors } from '@/theme/categoryColors';
 import { fonts } from '@/theme/fonts';
+import { themedStyles } from '@/theme/styles';
 
 type Props = {
   category: ItemCategory;
@@ -22,7 +23,7 @@ export function CategoryBadge({ category, size = 'small' }: Props) {
   );
 }
 
-const styles = StyleSheet.create({
+const styles = themedStyles(() => ({
   badge: {
     alignSelf: 'flex-start',
     borderRadius: 999,
@@ -41,4 +42,4 @@ const styles = StyleSheet.create({
   labelLarge: {
     fontSize: 13,
   },
-});
+}));

@@ -1,6 +1,7 @@
-import { StyleSheet, View } from 'react-native';
+import { View } from 'react-native';
 
 import { colors } from '@/theme/colors';
+import { themedStyles } from '@/theme/styles';
 
 /** Piccola Poké Ball accanto al titolo. */
 export function PokeBallLogo({ size = 22 }: { size?: number }) {
@@ -21,7 +22,7 @@ export function PokeBallLogo({ size = 22 }: { size?: number }) {
   );
 }
 
-const styles = StyleSheet.create({
+const styles = themedStyles(() => ({
   ball: {
     overflow: 'hidden',
     backgroundColor: colors.surface,
@@ -49,4 +50,4 @@ const styles = StyleSheet.create({
     backgroundColor: colors.surface,
     borderColor: colors.text,
   },
-});
+}));

@@ -1,9 +1,10 @@
 import { useTranslation } from 'react-i18next';
-import { StyleSheet, Text, View } from 'react-native';
+import { Text, View } from 'react-native';
 
 import type { Nature } from '@/types/nature';
 import { colors } from '@/theme/colors';
 import { fonts } from '@/theme/fonts';
+import { themedStyles } from '@/theme/styles';
 
 import { Icon, type IconName } from '../Icon';
 
@@ -99,7 +100,7 @@ export function NatureCard({ nature }: Props) {
   );
 }
 
-const styles = StyleSheet.create({
+const styles = themedStyles(() => ({
   card: {
     borderRadius: 16,
     backgroundColor: colors.surface,
@@ -173,4 +174,4 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: colors.text,
   },
-});
+}));

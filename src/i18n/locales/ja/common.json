@@ -17,7 +17,9 @@
     "typeDetail": "タイプのくわしい情報",
     "teams": "チーム",
     "team": "チーム",
-    "sections": "メニュー"
+    "sections": "メニュー",
+    "themes": "テーマ",
+    "premium": "プレミアム"
   },
   "sections": {
     "pokedex": {

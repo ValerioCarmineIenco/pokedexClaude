@@ -1,8 +1,9 @@
-import { StyleSheet, Text, View } from 'react-native';
+import { Text, View } from 'react-native';
 
 import { fonts } from '@/theme/fonts';
 import { TYPE_COLORS, typeTextColor } from '@/theme/typeColors';
 import { TYPE_LABELS } from '@/theme/typeNames';
+import { themedStyles } from '@/theme/styles';
 import type { TypeName } from '@/types/pokemon';
 
 type Props = {
@@ -26,7 +27,7 @@ export function TypeBadge({ type, size = 'small' }: Props) {
   );
 }
 
-const styles = StyleSheet.create({
+const styles = themedStyles(() => ({
   badge: {
     alignSelf: 'flex-start',
     borderRadius: 999,
@@ -45,4 +46,4 @@ const styles = StyleSheet.create({
   labelLarge: {
     fontSize: 13,
   },
-});
+}));

@@ -1,10 +1,11 @@
 import { router } from 'expo-router';
 import { useTranslation } from 'react-i18next';
-import { Pressable, StyleSheet, Text } from 'react-native';
+import { Pressable, Text } from 'react-native';
 
 import { getSection, type SectionKey } from '@/navigation/sections';
 import { colors } from '@/theme/colors';
 import { fonts } from '@/theme/fonts';
+import { themedStyles } from '@/theme/styles';
 
 import { Icon } from './Icon';
 import { PokeBallLogo } from './PokeBallLogo';
@@ -33,7 +34,7 @@ export function SectionTitle({ section }: Props) {
   );
 }
 
-const styles = StyleSheet.create({
+const styles = themedStyles(() => ({
   container: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -50,4 +51,4 @@ const styles = StyleSheet.create({
     letterSpacing: -0.6,
     color: colors.text,
   },
-});
+}));
