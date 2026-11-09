@@ -1,11 +1,11 @@
 import { usePathname, useSegments } from 'expo-router';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
 import { AppState } from 'react-native';
 
 import { useEntitlements } from '@/purchases/store';
 
 import { adsConfig } from './config';
-import { initAds } from './initAds';
+import { startAds, useAdsState } from './consent';
 import { createInterstitialPolicy } from './interstitialPolicy';
 import { nativeAds } from './nativeAds';
 
@@ -25,10 +25,11 @@ export function InterstitialController() {
 }
 
 function Interstitial({ ads }: { ads: NonNullable<typeof nativeAds> }) {
-  const [sdkReady, setSdkReady] = useState(false);
+  // Nessuna richiesta finché il consenso non è raccolto e l'SDK non è avviato.
+  const { adsReady } = useAdsState();
   const { status, show, load } = ads.useInterstitialAd({
     adUnitId: adsConfig.unitIds.interstitial,
-    autoLoad: sdkReady,
+    autoLoad: adsReady,
   });
   const route = useSegments().join('/');
   // Il percorso completo cambia anche passando da un Pokémon all'altro sulla stessa rotta.
@@ -36,7 +37,7 @@ function Interstitial({ ads }: { ads: NonNullable<typeof nativeAds> }) {
   const isFirstScreen = useRef(true);
 
   useEffect(() => {
-    void initAds().then(setSdkReady);
+    void startAds();
   }, []);
 
   // Il tempo conta solo con l'app in primo piano.
@@ -55,7 +56,7 @@ function Interstitial({ ads }: { ads: NonNullable<typeof nativeAds> }) {
       isFirstScreen.current = false;
       return;
     }
-    if (!policy.isDue(Date.now())) return;
+    if (!adsReady || !policy.isDue(Date.now())) return;
     if (status === 'loaded') show();
     // Se l'annuncio non era pronto, ne chiede un altro: andrà alla prossima schermata.
     else if (status === 'error' || status === 'no-fill') load();

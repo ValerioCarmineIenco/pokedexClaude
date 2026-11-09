@@ -6,6 +6,7 @@ import { Trans, useTranslation } from 'react-i18next';
 import { ActivityIndicator, Pressable, ScrollView, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
+import { AdsPrivacySection } from '@/ads/AdsPrivacySection';
 import { ARTWORK_STYLES, getArtworkUrl, type ArtworkStyle } from '@/api/pokemon';
 import { getDeviceLanguage, LANGUAGES, useLanguagePreference, type LanguagePreference } from '@/i18n';
 import { useAppIcon } from '@/purchases/appIcon';
@@ -101,6 +102,7 @@ export function SettingsView({ artworkStyle, onArtworkStyleChange, onBack }: Pro
       </View>
 
       <BackupSection />
+      <AdsPrivacySection />
       <CreditsSection />
     </ScrollView>
   );

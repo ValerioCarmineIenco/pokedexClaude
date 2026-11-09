@@ -40,6 +40,13 @@
       "newerVersion": "Das Backup wurde mit einer neueren Version der App erstellt."
     }
   },
+  "adsPrivacy": {
+    "title": "Datenschutz und Werbung",
+    "hint": "Werbung hält die App kostenlos. Du kannst deine Einwilligung zu personalisierter Werbung jederzeit ändern: Wenn du ablehnst, siehst du weiterhin Werbung, aber nicht auf Basis deiner Daten.",
+    "manageConsent": "Einwilligung verwalten",
+    "tracking": "Tracking-Berechtigung",
+    "trackingHint": "Tracking lässt sich in den iOS-Einstellungen unter Pokédex ein- oder ausschalten."
+  },
   "credits": {
     "title": "Credits und Copyright",
     "data": "Daten und Bilder von <link>PokéAPI</link>, einem freien und kostenlosen Projekt der Community.",
