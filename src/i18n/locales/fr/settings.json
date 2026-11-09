@@ -90,14 +90,23 @@
     },
     "icon": {
       "title": "Icône de l'app",
-      "hint": "L'icône sur l'écran d'accueil du téléphone.",
-      "simulated": "Aperçu : la vraie icône changera avec la version 2.0.",
+      "hint": "L'icône sur l'écran d'accueil du téléphone. Collection, Classique et Nuit sont gratuites.",
       "names": {
-        "default": "Classique",
-        "gold": "Or",
+        "collection": "Collection",
+        "classic": "Classique",
+        "night": "Nuit",
+        "shinyGold": "Or Chromatique",
         "retro": "Rétro",
-        "spectre": "Spectre"
-      }
+        "spectre": "Spectre",
+        "device": "Appareil"
+      },
+      "access": {
+        "free": "Gratuite",
+        "styles": "Avec le Pack style ou Pokédex Pro. Touchez pour débloquer",
+        "deviceTheme": "Uniquement avec le thème Appareil"
+      },
+      "unsupported": "L'icône du téléphone ne peut pas changer ici : il faut l'app installée depuis le store.",
+      "web": "L'icône ne peut pas être changée sur le web : elle concerne l'app sur téléphone."
     }
   },
   "premium": {

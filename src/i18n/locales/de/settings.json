@@ -90,14 +90,23 @@
     },
     "icon": {
       "title": "App-Symbol",
-      "hint": "Das Symbol auf dem Home-Bildschirm.",
-      "simulated": "Vorschau: Das echte Symbol ändert sich mit dem 2.0-Build.",
+      "hint": "Das Symbol auf dem Home-Bildschirm. Sammlung, Klassisch und Nacht sind kostenlos.",
       "names": {
-        "default": "Klassisch",
-        "gold": "Gold",
+        "collection": "Sammlung",
+        "classic": "Klassisch",
+        "night": "Nacht",
+        "shinyGold": "Schillerndes Gold",
         "retro": "Retro",
-        "spectre": "Phantom"
-      }
+        "spectre": "Phantom",
+        "device": "Gerät"
+      },
+      "access": {
+        "free": "Kostenlos",
+        "styles": "Mit dem Stil-Paket oder Pokédex Pro. Zum Freischalten tippen",
+        "deviceTheme": "Nur mit dem Design „Gerät“"
+      },
+      "unsupported": "Hier kann sich das Symbol nicht ändern: Dafür brauchst du die App aus dem Store.",
+      "web": "Im Web lässt sich das Symbol nicht ändern: Es gilt für die App auf dem Handy."
     }
   },
   "premium": {

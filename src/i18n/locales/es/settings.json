@@ -90,14 +90,23 @@
     },
     "icon": {
       "title": "Icono de la app",
-      "hint": "El icono en la pantalla de inicio del teléfono.",
-      "simulated": "Vista previa: el icono real cambiará con la versión 2.0.",
+      "hint": "El icono en la pantalla de inicio del móvil. Colección, Clásico y Noche son gratis.",
       "names": {
-        "default": "Clásico",
-        "gold": "Oro",
+        "collection": "Colección",
+        "classic": "Clásico",
+        "night": "Noche",
+        "shinyGold": "Oro Variocolor",
         "retro": "Retro",
-        "spectre": "Espectro"
-      }
+        "spectre": "Espectro",
+        "device": "Dispositivo"
+      },
+      "access": {
+        "free": "Gratis",
+        "styles": "Con el Pack de estilo o Pokédex Pro. Toca para desbloquear",
+        "deviceTheme": "Solo con el tema Dispositivo"
+      },
+      "unsupported": "Aquí el icono del móvil no cambia: necesitas la app instalada desde la tienda.",
+      "web": "En la web el icono no se puede cambiar: se aplica a la app del móvil."
     }
   },
   "premium": {

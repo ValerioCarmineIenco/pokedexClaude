@@ -8,12 +8,12 @@
     "scheme": "pokedex",
     "userInterfaceStyle": "light",
     "ios": {
-      "icon": "./assets/expo.icon",
+      "icon": "./assets/images/icon.png",
       "bundleIdentifier": "com.anonymous.pokedex"
     },
     "android": {
       "adaptiveIcon": {
-        "backgroundColor": "#E6F4FE",
+        "backgroundColor": "#A11E0A",
         "foregroundImage": "./assets/images/android-icon-foreground.png",
         "backgroundImage": "./assets/images/android-icon-background.png",
         "monochromeImage": "./assets/images/android-icon-monochrome.png"
@@ -21,7 +21,8 @@
       "predictiveBackGestureEnabled": false,
       "permissions": [
         "com.google.android.gms.permission.AD_ID"
-      ]
+      ],
+      "package": "com.anonymous.pokedex"
     },
     "web": {
       "output": "static",
@@ -52,6 +53,59 @@
         {
           "userTrackingPermission": "This permission is only used to show you more relevant ads. The app stays free if you decline."
         }
+      ],
+      [
+        "expo-alternate-app-icons",
+        [
+          {
+            "name": "Classic",
+            "ios": "./assets/images/app-icons/classic.png",
+            "android": {
+              "foregroundImage": "./assets/images/app-icons/classic-foreground.png",
+              "backgroundColor": "#E9E6DF"
+            }
+          },
+          {
+            "name": "Night",
+            "ios": "./assets/images/app-icons/night.png",
+            "android": {
+              "foregroundImage": "./assets/images/app-icons/night-foreground.png",
+              "backgroundColor": "#0E0D11"
+            }
+          },
+          {
+            "name": "ShinyGold",
+            "ios": "./assets/images/app-icons/shinyGold.png",
+            "android": {
+              "foregroundImage": "./assets/images/app-icons/shinyGold-foreground.png",
+              "backgroundColor": "#17130B"
+            }
+          },
+          {
+            "name": "Retro",
+            "ios": "./assets/images/app-icons/retro.png",
+            "android": {
+              "foregroundImage": "./assets/images/app-icons/retro-foreground.png",
+              "backgroundColor": "#C3CF98"
+            }
+          },
+          {
+            "name": "Spectre",
+            "ios": "./assets/images/app-icons/spectre.png",
+            "android": {
+              "foregroundImage": "./assets/images/app-icons/spectre-foreground.png",
+              "backgroundColor": "#140D24"
+            }
+          },
+          {
+            "name": "Device",
+            "ios": "./assets/images/app-icons/device.png",
+            "android": {
+              "foregroundImage": "./assets/images/app-icons/device-foreground.png",
+              "backgroundColor": "#B00C29"
+            }
+          }
+        ]
       ]
     ],
     "experiments": {
