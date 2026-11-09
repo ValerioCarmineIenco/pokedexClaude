@@ -110,12 +110,14 @@
     "restored_one": "Ripristinato {{count}} acquisto.",
     "restored_other": "Ripristinati {{count}} acquisti.",
     "nothingToRestore": "Nessun acquisto da ripristinare.",
+    "failed": "Acquisto non riuscito. Controlla la connessione e riprova.",
+    "restoreFailed": "Impossibile ripristinare gli acquisti. Controlla la connessione e riprova.",
     "simulated": "Versione di prova: gli acquisti sono simulati e non costano nulla.",
     "reset": "Azzera acquisti simulati",
     "products": {
       "pokedex_pro": {
         "title": "Pokédex Pro",
-        "description": "Tutto: niente pubblicità, temi e icone premium, e le funzioni Pro in arrivo."
+        "description": "Tutto in uno: niente pubblicità, temi e icone premium e le funzioni Pro. Il tema Dispositivo si compra a parte."
       },
       "remove_ads": {
         "title": "Rimuovi pubblicità",
@@ -124,7 +126,21 @@
       "style_pack": {
         "title": "Pacchetto stile",
         "description": "I temi Oro Shiny, Retrò e Spettro e le icone alternative dell'app."
+      },
+      "device_theme": {
+        "title": "Tema Dispositivo",
+        "description": "L'app diventa un Pokédex da tenere in mano, con schermo e tasti. Si compra a parte: non è incluso in Pro."
       }
+    },
+    "web": {
+      "note": "Sul web non si possono fare acquisti: per sbloccare temi e funzioni scarica l'app per iPhone o Android.",
+      "title": "Anteprima completa",
+      "hint": "Hai la password? Sblocca tutto in questo browser per provarlo.",
+      "password": "Password",
+      "unlock": "Sblocca",
+      "wrong": "Password sbagliata.",
+      "unlocked": "Anteprima sbloccata in questo browser: temi, icone e funzioni a pagamento sono attivi.",
+      "lock": "Blocca di nuovo"
     }
   }
 }

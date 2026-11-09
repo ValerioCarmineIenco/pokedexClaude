@@ -110,12 +110,14 @@
     "restored_one": "{{count}} compra restaurada.",
     "restored_other": "{{count}} compras restauradas.",
     "nothingToRestore": "No hay compras que restaurar.",
+    "failed": "La compra no se ha completado. Comprueba la conexión y vuelve a intentarlo.",
+    "restoreFailed": "No se han podido restaurar las compras. Comprueba la conexión y vuelve a intentarlo.",
     "simulated": "Versión de prueba: las compras son simuladas y gratuitas.",
     "reset": "Borrar compras simuladas",
     "products": {
       "pokedex_pro": {
         "title": "Pokédex Pro",
-        "description": "Todo: sin anuncios, temas e iconos premium y las próximas funciones Pro."
+        "description": "Todo en uno: sin anuncios, temas e iconos premium y las funciones Pro. El tema Dispositivo se compra aparte."
       },
       "remove_ads": {
         "title": "Quitar anuncios",
@@ -124,7 +126,21 @@
       "style_pack": {
         "title": "Pack de estilo",
         "description": "Los temas Oro Variocolor, Retro y Espectro y los iconos alternativos."
+      },
+      "device_theme": {
+        "title": "Tema Dispositivo",
+        "description": "Convierte la app en una Pokédex de mano, con pantalla y botones. Se compra aparte: no está incluido en Pro."
       }
+    },
+    "web": {
+      "note": "En la web no se pueden hacer compras. Para desbloquear temas y funciones, descarga la app para iPhone o Android.",
+      "title": "Vista previa completa",
+      "hint": "¿Tienes la contraseña? Desbloquea todo en este navegador para probarlo.",
+      "password": "Contraseña",
+      "unlock": "Desbloquear",
+      "wrong": "Contraseña incorrecta.",
+      "unlocked": "Vista previa desbloqueada en este navegador: los temas, iconos y funciones de pago están activos.",
+      "lock": "Volver a bloquear"
     }
   }
 }

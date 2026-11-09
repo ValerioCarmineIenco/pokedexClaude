@@ -41,6 +41,8 @@ const ICONS = {
   star: { ios: 'star.fill', android: 'star', web: 'star' },
   noAds: { ios: 'nosign', android: 'block', web: 'block' },
   restore: { ios: 'arrow.clockwise', android: 'refresh', web: 'refresh' },
+  device: { ios: 'iphone', android: 'smartphone', web: 'smartphone' },
+  key: { ios: 'key.fill', android: 'key', web: 'key' },
 } satisfies Record<string, SymbolName>;
 
 export type IconName = keyof typeof ICONS;
