@@ -1,0 +1,30 @@
+{
+  "title": "コンポーネント",
+  "hint": "2.0 デザイン「コレクション」の基本コンポーネントです。この画面は開発ビルドにのみ存在します。",
+  "theme": "テーマ",
+  "back": "戻る",
+  "sections": {
+    "headers": "ヘッダー",
+    "typography": "書体",
+    "cards": "カード",
+    "chips": "チップ",
+    "buttons": "ボタン",
+    "panels": "パネル",
+    "rows": "行",
+    "stats": "ステータス",
+    "tabs": "タブ",
+    "tiles": "タイル"
+  },
+  "demo": {
+    "all": "すべて",
+    "favorites": "お気に入り",
+    "secondary": "キャンセル",
+    "inverted": "適用",
+    "disabled": "利用不可",
+    "strengths": "有利なタイプ",
+    "weaknesses": "弱点",
+    "team": "カントーチーム",
+    "sample": "かえんポケモン · 1.7 m · 90.5 kg",
+    "body": "本文は Space Grotesk、見出しと数字は Anton。"
+  }
+}
