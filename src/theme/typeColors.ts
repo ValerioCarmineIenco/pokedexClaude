@@ -1,4 +1,4 @@
-import { tintColor } from './colors';
+import { getActiveTheme, luminance, mixColors, tintColor } from './colors';
 import type { TypeName } from '@/types/pokemon';
 
 /** Colore pieno di ciascuno dei 18 tipi. */
@@ -49,4 +49,35 @@ export function typeTint(type: TypeName, amount = 0.28): string {
 
 export function primaryType(types: TypeName[]): TypeName {
   return types[0] ?? 'normal';
+}
+
+/** Testo scuro delle carte sui tipi molto chiari (Elettro, Ghiaccio): il bianco non si leggerebbe. */
+const CARD_DARK_TEXT = '#131317';
+const CARD_LIGHT_TEXT = '#FFFFFF';
+
+export type TypeCardColors = {
+  /** Sfumatura della carta, dall'alto a sinistra al basso a destra. */
+  gradient: readonly [string, string];
+  /** Nome, numero ed etichette sopra la carta. */
+  text: string;
+  /** Fondo delle etichette dei tipi sopra la carta. */
+  pill: string;
+  /** Numero grande in filigrana. */
+  watermark: string;
+};
+
+/**
+ * Colori di una carta «Collezione» nel colore del tipo: pieno in alto a sinistra, che sfuma
+ * verso il nero (temi scuri) o il bianco (temi chiari) in basso a destra.
+ */
+export function typeCardColors(type: TypeName): TypeCardColors {
+  const { cardShade, cardShadeAmount } = getActiveTheme().palette;
+  const base = TYPE_COLORS[type];
+  const dark = luminance(base) > 0.55;
+  return {
+    gradient: [base, mixColors(base, cardShade, 1 - cardShadeAmount)],
+    text: dark ? CARD_DARK_TEXT : CARD_LIGHT_TEXT,
+    pill: dark ? 'rgba(19, 19, 23, 0.14)' : 'rgba(0, 0, 0, 0.2)',
+    watermark: dark ? 'rgba(19, 19, 23, 0.1)' : 'rgba(255, 255, 255, 0.12)',
+  };
 }

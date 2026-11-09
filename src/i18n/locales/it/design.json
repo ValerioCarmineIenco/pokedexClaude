@@ -1,0 +1,30 @@
+{
+  "title": "Componenti",
+  "hint": "I componenti base del design 2.0 «Collezione». Questa schermata esiste solo nelle build di sviluppo.",
+  "theme": "Tema",
+  "back": "Indietro",
+  "sections": {
+    "headers": "Intestazioni",
+    "typography": "Caratteri",
+    "cards": "Carte",
+    "chips": "Chip",
+    "buttons": "Pulsanti",
+    "panels": "Pannelli",
+    "rows": "Righe",
+    "stats": "Statistiche",
+    "tabs": "Schede",
+    "tiles": "Riquadri"
+  },
+  "demo": {
+    "all": "Tutti",
+    "favorites": "Preferiti",
+    "secondary": "Annulla",
+    "inverted": "Applica",
+    "disabled": "Non disponibile",
+    "strengths": "Coperture forti",
+    "weaknesses": "Debolezze",
+    "team": "Squadra Kanto",
+    "sample": "Pokémon Fiamma · 1,7 m · 90,5 kg",
+    "body": "Space Grotesk per il testo, Anton per titoli e numeri."
+  }
+}

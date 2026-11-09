@@ -1,0 +1,30 @@
+{
+  "title": "Components",
+  "hint": "The base components of the 2.0 “Collection” design. This screen only exists in development builds.",
+  "theme": "Theme",
+  "back": "Back",
+  "sections": {
+    "headers": "Headers",
+    "typography": "Typefaces",
+    "cards": "Cards",
+    "chips": "Chips",
+    "buttons": "Buttons",
+    "panels": "Panels",
+    "rows": "Rows",
+    "stats": "Stats",
+    "tabs": "Tabs",
+    "tiles": "Tiles"
+  },
+  "demo": {
+    "all": "All",
+    "favorites": "Favorites",
+    "secondary": "Cancel",
+    "inverted": "Apply",
+    "disabled": "Unavailable",
+    "strengths": "Strong coverage",
+    "weaknesses": "Weaknesses",
+    "team": "Kanto team",
+    "sample": "Flame Pokémon · 1.7 m · 90.5 kg",
+    "body": "Space Grotesk for text, Anton for titles and numbers."
+  }
+}

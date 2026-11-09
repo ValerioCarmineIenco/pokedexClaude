@@ -36,6 +36,8 @@ export default function RootLayout() {
               {/* 2.0: scelta del tema e dell'icona, e negozio degli acquisti in-app. */}
               <Stack.Screen name="themes" options={{ title: t('common:screens.themes') }} />
               <Stack.Screen name="premium" options={{ title: t('common:screens.premium') }} />
+              {/* Catalogo dei componenti del design 2.0, solo in sviluppo. */}
+              <Stack.Screen name="design" options={{ title: t('design:title') }} />
               {/* Sezione Oggetti: elenco (ItemsList) e dettaglio (ItemDetail, param itemId). */}
               <Stack.Screen name="items/index" options={{ title: t('common:screens.items') }} />
               <Stack.Screen

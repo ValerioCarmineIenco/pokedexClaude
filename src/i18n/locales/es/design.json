@@ -1,0 +1,30 @@
+{
+  "title": "Componentes",
+  "hint": "Los componentes básicos del diseño 2.0 «Colección». Esta pantalla solo existe en las versiones de desarrollo.",
+  "theme": "Tema",
+  "back": "Atrás",
+  "sections": {
+    "headers": "Encabezados",
+    "typography": "Tipografías",
+    "cards": "Tarjetas",
+    "chips": "Chips",
+    "buttons": "Botones",
+    "panels": "Paneles",
+    "rows": "Filas",
+    "stats": "Estadísticas",
+    "tabs": "Pestañas",
+    "tiles": "Mosaicos"
+  },
+  "demo": {
+    "all": "Todos",
+    "favorites": "Favoritos",
+    "secondary": "Cancelar",
+    "inverted": "Aplicar",
+    "disabled": "No disponible",
+    "strengths": "Buenas coberturas",
+    "weaknesses": "Debilidades",
+    "team": "Equipo Kanto",
+    "sample": "Pokémon Llama · 1,7 m · 90,5 kg",
+    "body": "Space Grotesk para el texto, Anton para títulos y números."
+  }
+}

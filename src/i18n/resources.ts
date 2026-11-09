@@ -13,6 +13,7 @@ import en_locations from './locales/en/locations.json';
 import en_teams from './locales/en/teams.json';
 import en_compare from './locales/en/compare.json';
 import en_settings from './locales/en/settings.json';
+import en_design from './locales/en/design.json';
 import it_common from './locales/it/common.json';
 import it_pokedex from './locales/it/pokedex.json';
 import it_pokemon from './locales/it/pokemon.json';
@@ -26,6 +27,7 @@ import it_locations from './locales/it/locations.json';
 import it_teams from './locales/it/teams.json';
 import it_compare from './locales/it/compare.json';
 import it_settings from './locales/it/settings.json';
+import it_design from './locales/it/design.json';
 import fr_common from './locales/fr/common.json';
 import fr_pokedex from './locales/fr/pokedex.json';
 import fr_pokemon from './locales/fr/pokemon.json';
@@ -39,6 +41,7 @@ import fr_locations from './locales/fr/locations.json';
 import fr_teams from './locales/fr/teams.json';
 import fr_compare from './locales/fr/compare.json';
 import fr_settings from './locales/fr/settings.json';
+import fr_design from './locales/fr/design.json';
 import de_common from './locales/de/common.json';
 import de_pokedex from './locales/de/pokedex.json';
 import de_pokemon from './locales/de/pokemon.json';
@@ -52,6 +55,7 @@ import de_locations from './locales/de/locations.json';
 import de_teams from './locales/de/teams.json';
 import de_compare from './locales/de/compare.json';
 import de_settings from './locales/de/settings.json';
+import de_design from './locales/de/design.json';
 import es_common from './locales/es/common.json';
 import es_pokedex from './locales/es/pokedex.json';
 import es_pokemon from './locales/es/pokemon.json';
@@ -65,6 +69,7 @@ import es_locations from './locales/es/locations.json';
 import es_teams from './locales/es/teams.json';
 import es_compare from './locales/es/compare.json';
 import es_settings from './locales/es/settings.json';
+import es_design from './locales/es/design.json';
 import ja_common from './locales/ja/common.json';
 import ja_pokedex from './locales/ja/pokedex.json';
 import ja_pokemon from './locales/ja/pokemon.json';
@@ -78,6 +83,7 @@ import ja_locations from './locales/ja/locations.json';
 import ja_teams from './locales/ja/teams.json';
 import ja_compare from './locales/ja/compare.json';
 import ja_settings from './locales/ja/settings.json';
+import ja_design from './locales/ja/design.json';
 
 export const resources = {
   en: {
@@ -94,6 +100,7 @@ export const resources = {
     teams: en_teams,
     compare: en_compare,
     settings: en_settings,
+    design: en_design,
   },
   it: {
     common: it_common,
@@ -109,6 +116,7 @@ export const resources = {
     teams: it_teams,
     compare: it_compare,
     settings: it_settings,
+    design: it_design,
   },
   fr: {
     common: fr_common,
@@ -124,6 +132,7 @@ export const resources = {
     teams: fr_teams,
     compare: fr_compare,
     settings: fr_settings,
+    design: fr_design,
   },
   de: {
     common: de_common,
@@ -139,6 +148,7 @@ export const resources = {
     teams: de_teams,
     compare: de_compare,
     settings: de_settings,
+    design: de_design,
   },
   es: {
     common: es_common,
@@ -154,6 +164,7 @@ export const resources = {
     teams: es_teams,
     compare: es_compare,
     settings: es_settings,
+    design: es_design,
   },
   ja: {
     common: ja_common,
@@ -169,6 +180,7 @@ export const resources = {
     teams: ja_teams,
     compare: ja_compare,
     settings: ja_settings,
+    design: ja_design,
   },
 } as const;
 
