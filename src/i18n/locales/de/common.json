@@ -1,4 +1,5 @@
 {
+  "back": "Zurück",
   "screens": {
     "pokedex": "Pokédex",
     "pokemonDetail": "Details",
@@ -17,9 +18,9 @@
     "typeDetail": "Typ-Details",
     "teams": "Teams",
     "team": "Team",
-    "sections": "Bereiche",
     "themes": "Designs",
-    "premium": "Premium"
+    "premium": "Premium",
+    "more": "Mehr"
   },
   "sections": {
     "pokedex": {
@@ -53,6 +54,10 @@
     "teams": {
       "title": "Teams",
       "description": "Teams aus 6 Pokémon und ihre Typabdeckung"
+    },
+    "compare": {
+      "title": "Vergleichen",
+      "description": "Zwei Pokémon im Vergleich, Wert für Wert"
     }
   },
   "generation": "Generation {{number}}",
@@ -100,5 +105,20 @@
     "offline": "Keine Verbindung. Prüfe das Netzwerk und versuch es erneut.",
     "server": "Serverfehler ({{status}}). Versuch es gleich noch einmal.",
     "generic": "Etwas ist schiefgelaufen. Versuch es erneut."
+  },
+  "tabs": {
+    "pokedex": "Pokédex",
+    "moves": "Attacken",
+    "teams": "Teams",
+    "more": "Mehr"
+  },
+  "more": {
+    "title": "Mehr",
+    "themes": "Designs und Symbol",
+    "themesSummary": "{{theme}} · Symbol {{icon}}",
+    "premium": "Premium",
+    "premiumHint": "Werbung entfernen, Designs und Pro-Funktionen freischalten",
+    "settings": "Einstellungen",
+    "settingsHint": "Sprache, Artwork, Backup"
   }
 }

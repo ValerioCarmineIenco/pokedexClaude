@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { FlatList, Pressable, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
+import { useTabBarInset } from '@/components/navigation/TabBar';
 import { getArtworkUrl } from '@/api/pokemon';
 import { useArtworkStyle } from '@/hooks/useArtworkStyle';
 import { colors } from '@/theme/colors';
@@ -28,6 +29,7 @@ export type TeamListViewProps = {
 export function TeamListView({ teams, onCreate, onOpen }: TeamListViewProps) {
   const { t } = useTranslation('teams');
   const insets = useSafeAreaInsets();
+  const tabBarInset = useTabBarInset();
   const { ref: scrollRef, onScroll } = useScrollRestoration();
 
   return (
@@ -50,7 +52,7 @@ export function TeamListView({ teams, onCreate, onOpen }: TeamListViewProps) {
         data={teams}
         keyExtractor={(team) => team.id}
         renderItem={({ item }) => <TeamCard team={item} onPress={() => onOpen(item)} />}
-        contentContainerStyle={[styles.list, { paddingBottom: insets.bottom + 24 }]}
+        contentContainerStyle={[styles.list, { paddingBottom: tabBarInset }]}
         ListEmptyComponent={
           <ErrorState
             title={t('list.emptyTitle')}

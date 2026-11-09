@@ -1,4 +1,5 @@
 {
+  "back": "Retour",
   "screens": {
     "pokedex": "Pokédex",
     "pokemonDetail": "Fiche",
@@ -17,9 +18,9 @@
     "typeDetail": "Fiche du type",
     "teams": "Équipes",
     "team": "Équipe",
-    "sections": "Sections",
     "themes": "Thèmes",
-    "premium": "Premium"
+    "premium": "Premium",
+    "more": "Plus"
   },
   "sections": {
     "pokedex": {
@@ -53,6 +54,10 @@
     "teams": {
       "title": "Équipes",
       "description": "Équipes de 6 et leur couverture de types"
+    },
+    "compare": {
+      "title": "Comparer",
+      "description": "Deux Pokémon face à face, stat par stat"
     }
   },
   "generation": "Génération {{number}}",
@@ -100,5 +105,20 @@
     "offline": "Pas de connexion. Vérifie le réseau et réessaie.",
     "server": "Erreur du serveur ({{status}}). Réessaie dans un instant.",
     "generic": "Une erreur est survenue. Réessaie."
+  },
+  "tabs": {
+    "pokedex": "Pokédex",
+    "moves": "Capacités",
+    "teams": "Équipes",
+    "more": "Plus"
+  },
+  "more": {
+    "title": "Plus",
+    "themes": "Thèmes et icône",
+    "themesSummary": "{{theme}} · icône {{icon}}",
+    "premium": "Premium",
+    "premiumHint": "Supprimez la pub, débloquez thèmes et fonctions Pro",
+    "settings": "Réglages",
+    "settingsHint": "Langue, artwork, sauvegarde"
   }
 }

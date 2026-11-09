@@ -3,8 +3,20 @@ import type { Href } from 'expo-router';
 import type { IconName } from '@/components/Icon';
 import { t } from '@/i18n';
 
-/** Sezioni dell'app che si scelgono dal menu del titolo. */
-export type SectionKey = 'pokedex' | 'items' | 'abilities' | 'moves' | 'natures' | 'locations' | 'types' | 'teams';
+/**
+ * Sezioni dell'app. Pokédex, Mosse e Squadre hanno un pulsante nella barra in basso; le altre
+ * si aprono dai riquadri della schermata Altro (vedi `MORE_SECTIONS`).
+ */
+export type SectionKey =
+  | 'pokedex'
+  | 'items'
+  | 'abilities'
+  | 'moves'
+  | 'natures'
+  | 'locations'
+  | 'types'
+  | 'teams'
+  | 'compare';
 
 export type Section = {
   key: SectionKey;
@@ -16,7 +28,8 @@ export type Section = {
   icon?: IconName;
 };
 
-// Per aggiungere una sezione basta una voce qui e la sua schermata in src/app.
+// Per aggiungere una sezione basta una voce qui, la sua schermata in src/app e, se si apre da
+// Altro, la chiave in `MORE_SECTIONS` e il colore in `SECTION_COLORS`.
 const ENTRIES: Omit<Section, 'title' | 'description'>[] = [
   {
     key: 'pokedex',
@@ -57,6 +70,11 @@ const ENTRIES: Omit<Section, 'title' | 'description'>[] = [
     href: '/teams',
     icon: 'team',
   },
+  {
+    key: 'compare',
+    href: '/compare',
+    icon: 'compare',
+  },
 ];
 
 // Titolo e descrizione si leggono nella lingua in uso a ogni accesso.
@@ -73,3 +91,16 @@ export const SECTIONS: Section[] = ENTRIES.map((entry) => ({
 export function getSection(key: SectionKey): Section {
   return SECTIONS.find((section) => section.key === key) ?? SECTIONS[0];
 }
+
+/** Sezioni con la barra in basso: si aprono come schede, senza pulsante indietro. */
+export const TAB_SECTIONS: readonly SectionKey[] = ['pokedex', 'moves', 'teams'];
+
+/** Riquadri della schermata Altro, nell'ordine in cui compaiono (due per riga). */
+export const MORE_SECTIONS = [
+  'items',
+  'abilities',
+  'natures',
+  'locations',
+  'types',
+  'compare',
+] as const satisfies readonly SectionKey[];

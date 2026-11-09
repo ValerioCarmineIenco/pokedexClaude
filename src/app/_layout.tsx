@@ -9,7 +9,7 @@ import { LanguageGate } from '@/components/LanguageGate';
 import { StartupLoader } from '@/components/LoadingScreen';
 import { ThemeGate } from '@/components/ThemeGate';
 import { t } from '@/i18n';
-import { colors, radius } from '@/theme/colors';
+import { colors } from '@/theme/colors';
 import { themedStyles } from '@/theme/styles';
 
 export default function RootLayout() {
@@ -25,7 +25,8 @@ export default function RootLayout() {
                 headerShown: false,
                 contentStyle: { backgroundColor: colors.background },
               }}>
-              <Stack.Screen name="index" options={{ title: t('common:screens.pokedex') }} />
+              {/* Pokédex, Mosse, Squadre e Altro, con la barra in basso (vedi (tabs)/_layout). */}
+              <Stack.Screen name="(tabs)" options={{ title: t('common:screens.pokedex') }} />
               <Stack.Screen
                 name="pokemon/[id]"
                 options={{ title: t('common:screens.pokemonDetail') }}
@@ -53,8 +54,7 @@ export default function RootLayout() {
                 name="abilities/[abilityId]"
                 options={{ title: t('common:screens.abilityDetail') }}
               />
-              {/* Sezione Mosse: elenco senza categorie e dettaglio (param moveId). */}
-              <Stack.Screen name="moves/index" options={{ title: t('common:screens.moves') }} />
+              {/* Sezione Mosse: dettaglio (param moveId); l'elenco è nella barra in basso. */}
               <Stack.Screen
                 name="moves/[moveId]"
                 options={{ title: t('common:screens.moveDetail') }}
@@ -76,21 +76,8 @@ export default function RootLayout() {
                 name="types/[typeId]"
                 options={{ title: t('common:screens.typeDetail') }}
               />
-              {/* Sezione Squadre: elenco e squadra da modificare (param teamId). */}
-              <Stack.Screen name="teams/index" options={{ title: t('common:screens.teams') }} />
+              {/* Sezione Squadre: squadra da modificare (param teamId); l'elenco è nella barra. */}
               <Stack.Screen name="teams/[teamId]" options={{ title: t('common:screens.team') }} />
-              {/* Menu delle sezioni, aperto toccando il titolo in alto a sinistra. */}
-              <Stack.Screen
-                name="menu"
-                options={{
-                  title: t('common:screens.sections'),
-                  presentation: 'formSheet',
-                  sheetAllowedDetents: 'fitToContents',
-                  sheetGrabberVisible: true,
-                  sheetCornerRadius: radius.sheet,
-                  contentStyle: { backgroundColor: colors.background },
-                }}
-              />
             </Stack>
           </LanguageGate>
         </View>

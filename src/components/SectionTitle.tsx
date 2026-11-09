@@ -1,8 +1,8 @@
 import { router } from 'expo-router';
 import { useTranslation } from 'react-i18next';
-import { Pressable, Text } from 'react-native';
+import { Pressable, Text, View } from 'react-native';
 
-import { getSection, type SectionKey } from '@/navigation/sections';
+import { getSection, TAB_SECTIONS, type SectionKey } from '@/navigation/sections';
 import { colors } from '@/theme/colors';
 import { fonts } from '@/theme/fonts';
 import { themedStyles } from '@/theme/styles';
@@ -14,23 +14,32 @@ type Props = {
   section: SectionKey;
 };
 
-/** Titolo in alto a sinistra: toccandolo si apre il menu per cambiare sezione. */
+/**
+ * Titolo in alto a sinistra. Le sezioni della barra in basso mostrano solo il titolo; quelle
+ * aperte da Altro hanno anche la freccia per tornare indietro.
+ */
 export function SectionTitle({ section }: Props) {
-  const { t } = useTranslation('pokedex');
+  const { t } = useTranslation('common');
   const { title } = getSection(section);
+  const isTab = TAB_SECTIONS.includes(section);
   return (
-    <Pressable
-      onPress={() => router.push({ pathname: '/menu', params: { current: section } })}
-      hitSlop={6}
-      accessibilityRole="button"
-      accessibilityLabel={t('sectionMenu.titleLabel', { title })}
-      style={({ pressed }) => [styles.container, pressed && styles.pressed]}>
-      <PokeBallLogo />
-      <Text style={styles.title} accessibilityRole="header">
+    <View style={styles.container}>
+      {isTab ? (
+        <PokeBallLogo />
+      ) : (
+        <Pressable
+          onPress={() => (router.canGoBack() ? router.back() : router.replace('/more'))}
+          hitSlop={8}
+          accessibilityRole="button"
+          accessibilityLabel={t('back')}
+          style={({ pressed }) => [styles.back, pressed && styles.pressed]}>
+          <Icon name="back" size={18} color={colors.text} />
+        </Pressable>
+      )}
+      <Text style={styles.title} accessibilityRole="header" numberOfLines={1}>
         {title}
       </Text>
-      <Icon name="expand" size={16} color={colors.textSubtle} />
-    </Pressable>
+    </View>
   );
 }
 
@@ -41,10 +50,19 @@ const styles = themedStyles(() => ({
     gap: 8,
     flexShrink: 1,
   },
+  back: {
+    width: 40,
+    height: 40,
+    borderRadius: 12,
+    backgroundColor: colors.field,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
   pressed: {
     opacity: 0.6,
   },
   title: {
+    flexShrink: 1,
     marginLeft: 2,
     fontFamily: fonts.displayBold,
     fontSize: 30,
