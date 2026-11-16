@@ -1,5 +1,6 @@
 import { Stack } from 'expo-router';
-import { View } from 'react-native';
+import type { ReactElement } from 'react';
+import { Platform, View } from 'react-native';
 
 import { AdBanner } from '@/ads/AdBanner';
 import { InterstitialController } from '@/ads/InterstitialController';
@@ -9,6 +10,7 @@ import { LanguageGate } from '@/components/LanguageGate';
 import { StartupLoader } from '@/components/LoadingScreen';
 import { ThemeGate } from '@/components/ThemeGate';
 import { t } from '@/i18n';
+import { MountWhenFocused } from '@/navigation/MountWhenFocused';
 import { colors, radius } from '@/theme/colors';
 import { themedStyles } from '@/theme/styles';
 
@@ -21,6 +23,7 @@ export default function RootLayout() {
         <View style={styles.screens}>
           <LanguageGate>
             <Stack
+              screenLayout={Platform.OS === 'web' ? webScreenLayout : undefined}
               screenOptions={{
                 headerShown: false,
                 contentStyle: { backgroundColor: colors.background },
@@ -102,6 +105,11 @@ export default function RootLayout() {
       </FontsGate>
     </QueryProvider>
   );
+}
+
+/** Sul web una schermata nata coperta si disegna solo quando viene mostrata (vedi `MountWhenFocused`). */
+function webScreenLayout({ children }: { children: ReactElement }) {
+  return <MountWhenFocused>{children}</MountWhenFocused>;
 }
 
 const styles = themedStyles(() => ({
